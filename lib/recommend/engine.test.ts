@@ -1,0 +1,193 @@
+import assert from "node:assert/strict";
+import { test } from "node:test";
+import { recommend, scoreTool, exclusionReason } from "./engine.ts";
+import type { BusinessProfile, CatalogTool, Problem } from "./types.ts";
+
+const business: BusinessProfile = {
+  name: "Mike's Heating & Cooling",
+  industry: "HVAC",
+  state: "MD",
+  county: "Frederick",
+  monthlyBudget: 200,
+  currentTools: ["Square", "QuickBooks"],
+  needsHelp: false,
+  dealBreakers: [],
+};
+const problems: Problem[] = [
+  {
+    id: "calls",
+    useCase: "missed-calls",
+    title: "Missed calls",
+    evidence: "Owner reports missed calls",
+  },
+  {
+    id: "quotes",
+    useCase: "quotes",
+    title: "Slow quotes",
+    evidence: "Owner reports late quotes",
+  },
+];
+const tool = (id: string, changes: Partial<CatalogTool> = {}): CatalogTool => ({
+  id,
+  name: id,
+  category: "Phone",
+  description: "Answers calls",
+  website: "https://example.com",
+  status: "verified",
+  reviewedAt: "2026-11-07",
+  useCases: ["missed-calls"],
+  monthlyPrice: 49,
+  pricingNote: "Example price",
+  integrations: { Square: "native" },
+  setupMinutes: 30,
+  reviewRating: 4.5,
+  reviewCount: 20,
+  languages: ["English"],
+  flags: { recordsCalls: true, announcesRecording: true, dataDeletion: true },
+  privacySummary: "Example policy",
+  setupSummary: "Set up forwarding",
+  demoOnly: true,
+  ...changes,
+});
+
+test("never recommends listed, blocked, or unreviewed tools", () => {
+  const result = recommend(business, problems, [
+    tool("good"),
+    tool("listed", { status: "listed" }),
+    tool("blocked", { status: "blocked" }),
+    tool("unreviewed", { reviewedAt: undefined }),
+  ]);
+  const ids = result.problems.flatMap((p) =>
+    p.options.flatMap((o) => o.choices.map((c) => c.tool.id)),
+  );
+  assert.deepEqual([...new Set(ids)], ["good"]);
+  assert.equal(result.problems[0].excluded.length, 3);
+});
+
+test("Maryland recording, health, food pricing, and owner deal breakers act as hard filters", () => {
+  assert.match(
+    exclusionReason(
+      tool("phone", { flags: { recordsCalls: true } }),
+      business,
+    ) || "",
+    /recording/i,
+  );
+  assert.match(
+    exclusionReason(tool("health"), { ...business, handlesHealthData: true }) ||
+      "",
+    /health/i,
+  );
+  assert.match(
+    exclusionReason(tool("pricing", { flags: { personalizesPrices: true } }), {
+      ...business,
+      industry: "restaurant",
+    }) || "",
+    /pricing/i,
+  );
+  assert.match(
+    exclusionReason(tool("contract", { flags: { requiresContract: true } }), {
+      ...business,
+      dealBreakers: ["no-contract"],
+    }) || "",
+    /contract/i,
+  );
+});
+
+test("Fit Score follows 35/25/20/10/10 weights and budget taper", () => {
+  const max = scoreTool(
+    tool("max", { reviewRating: 5, setupMinutes: 30 }),
+    problems[0],
+    business,
+  );
+  assert.equal(max.total, 100);
+  assert.deepEqual(max.parts, {
+    problem: 35,
+    integration: 25,
+    budget: 20,
+    setup: 10,
+    reviews: 10,
+  });
+  const high = scoreTool(
+    tool("expensive", { monthlyPrice: 300 }),
+    problems[0],
+    business,
+  );
+  assert.equal(high.parts.budget, 0);
+  const via = scoreTool(
+    tool("via", { integrations: { Square: "via-zapier" } }),
+    problems[0],
+    business,
+  );
+  assert.equal(via.parts.integration, 12.5);
+});
+
+test("shows distinct types when eligible and a combined kit within budget", () => {
+  const tools = [
+    tool("square-addon", {
+      existingProduct: "Square",
+      monthlyPrice: 25,
+      setupMinutes: 10,
+    }),
+    tool("phone-pro", { monthlyPrice: 60, reviewRating: 5 }),
+    tool("quote-helper", {
+      useCases: ["quotes"],
+      monthlyPrice: 70,
+      category: "Quotes",
+      integrations: { QuickBooks: "native" },
+    }),
+  ];
+  const result = recommend(business, problems, tools);
+  const kinds = result.problems[0].options.map((o) => o.kind);
+  assert.ok(kinds.includes("already-have"));
+  assert.ok(kinds.includes("quick-fix"));
+  assert.ok(kinds.includes("starter-kit"));
+  assert.ok(kinds.includes("lowest-cost"));
+  const quick = result.problems[0].options.find((o) => o.kind === "quick-fix")!;
+  const existing = result.problems[0].options.find(
+    (o) => o.kind === "already-have",
+  )!;
+  assert.notEqual(quick.choices[0].tool.id, existing.choices[0].tool.id);
+  const kit = result.problems[0].options.find((o) => o.kind === "starter-kit")!;
+  assert.equal(kit.choices.length, 2);
+  assert.ok(kit.monthlyPrice <= business.monthlyBudget);
+  assert.equal(new Set(kit.choices.map((c) => c.tool.id)).size, 2);
+});
+
+test("no eligible tools produces no invented recommendation", () => {
+  const result = recommend(business, problems, [
+    tool("blocked", { status: "blocked" }),
+  ]);
+  assert.deepEqual(result.problems[0].options, []);
+});
+
+test("done for you appears for owners who request help", () => {
+  const result = recommend(
+    { ...business, needsHelp: true },
+    [problems[0]],
+    [tool("good")],
+  );
+  assert.ok(result.problems[0].options.some((o) => o.kind === "done-for-you"));
+});
+
+test("a strict budget suppresses the kit rather than proposing an unaffordable bundle", () => {
+  const result = recommend({ ...business, monthlyBudget: 30 }, problems, [
+    tool("phone", { monthlyPrice: 25 }),
+    tool("quotes", { useCases: ["quotes"], monthlyPrice: 25 }),
+  ]);
+  assert.ok(result.problems[0].options.some((o) => o.kind === "quick-fix"));
+  assert.ok(!result.problems[0].options.some((o) => o.kind === "starter-kit"));
+});
+
+test("outbound AI calls without documented consent are excluded", () => {
+  const result = recommend(
+    business,
+    [problems[0]],
+    [
+      tool("outbound", {
+        flags: { outboundAICalls: true, requiresOutboundConsent: true },
+      }),
+    ],
+  );
+  assert.equal(result.problems[0].options.length, 0);
+  assert.match(result.problems[0].excluded[0].reason, /consent/i);
+});
