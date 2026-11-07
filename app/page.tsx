@@ -7,6 +7,11 @@ import {
   demoProblems,
 } from "../data/mock/recommendations.ts";
 import { recommend } from "../lib/recommend/engine.ts";
+import {
+  BusinessFinder,
+  ProblemsOverview,
+  useLiveBusiness,
+} from "../components/parts23/LiveBusiness.tsx";
 import type {
   BusinessProfile,
   Recommendation,
@@ -118,13 +123,42 @@ export default function Home() {
   const [showExcluded, setShowExcluded] = useState(false);
   const [showCompare, setShowCompare] = useState(false);
   const [lookupUrl, setLookupUrl] = useState("");
+  // Real business from the Parts 2 & 3 backend; Mike's sample stays until one is chosen.
+  const biz = useLiveBusiness();
+  const live = biz.live;
+  const problems = live
+    ? live.recommendationInput.ok
+      ? live.recommendationInput.request.problems
+      : []
+    : demoProblems;
+  const chooseBusiness = async (placeId: string) => {
+    const next = await biz.choose(placeId, {
+      monthlyBudget: business.monthlyBudget,
+      needsHelp: business.needsHelp,
+    });
+    if (next?.recommendationInput.ok) {
+      setBusiness(next.recommendationInput.request.business);
+      setProblemId(next.recommendationInput.request.problems[0]?.id ?? "");
+      setSelected([]);
+      document.getElementById("problems")?.scrollIntoView({ behavior: "smooth" });
+    }
+  };
   const result = useMemo(
-    () => recommend(business, demoProblems, demoCatalog),
-    [business],
+    () => recommend(business, problems, demoCatalog),
+    [business, problems],
   );
   const current =
     result.problems.find((row) => row.problem.id === problemId) ??
     result.problems[0];
+  const toolNames = [
+    ...new Set([
+      "Square",
+      "QuickBooks",
+      "Google Business Profile",
+      ...(live?.analysis.technology.detected.map((t) => t.name) ?? []),
+      ...business.currentTools,
+    ]),
+  ];
   const toggleTool = (name: string) =>
     setBusiness((prev) => ({
       ...prev,
@@ -194,7 +228,7 @@ export default function Home() {
                 the first step.
               </p>
               <a href="#recommendations" className="hero-cta">
-                Explore Mike’s recommendations <span aria-hidden="true">↗</span>
+                Check a real Maryland business <span aria-hidden="true">↗</span>
               </a>
               <div className="hero-meta">
                 <span>✓ Clear monthly costs</span>
@@ -243,9 +277,12 @@ export default function Home() {
         </section>
         <section className="demo-banner" role="note">
           <div>
-            <strong>Interactive demo</strong> · Mike and the catalog below are
-            illustrative. “Verified” badges show how a future human-reviewed
-            catalog would work; they are not real vendor endorsements.
+            <strong>Interactive demo</strong> ·{" "}
+            {live
+              ? `${business.name} is a real business, read from public listings, its website and reviews. The tool catalog below is illustrative.`
+              : "Pick a real Maryland business below, or explore the sample (Mike). The tool catalog is illustrative."}{" "}
+            “Verified” badges show how a future human-reviewed catalog would
+            work; they are not real vendor endorsements.
           </div>
           <a href="#method">See the method ↗</a>
         </section>
@@ -256,20 +293,29 @@ export default function Home() {
               <h2>
                 Let’s make this about <em>your</em> work.
               </h2>
-              <p>Try changing Mike’s details. The options update instantly.</p>
+              <p>
+                {live
+                  ? "Change the budget, tools or setup preference. The options update instantly."
+                  : "Find a business, or try changing Mike’s sample details."}
+              </p>
             </div>
-            <span className="step-chip">Sample business profile</span>
+            <span className="step-chip">
+              {live ? "Real business profile" : "Sample business profile"}
+            </span>
           </div>
-          <div className="profile-panel">
+          <BusinessFinder biz={biz} onChoose={(id) => void chooseBusiness(id)} />
+          <div className="profile-panel" style={{ marginTop: 20 }}>
             <div className="profile-intro">
-              <div className="profile-avatar">M</div>
+              <div className="profile-avatar">{business.name.charAt(0)}</div>
               <div>
                 <strong>{business.name}</strong>
                 <span>
-                  HVAC · {business.county} County, {business.state}
+                  {business.industry} · {business.county} County, {business.state}
                 </span>
               </div>
-              <span className="profile-confirm">Demo profile</span>
+              <span className="profile-confirm">
+                {live ? "Public data" : "Demo profile"}
+              </span>
             </div>
             <div className="profile-controls">
               <div className="control-block">
@@ -299,7 +345,7 @@ export default function Home() {
               <div className="control-block">
                 <span className="control-label">Tools already in use</span>
                 <div className="toggle-row">
-                  {["Square", "QuickBooks", "Google Business Profile"].map(
+                  {toolNames.map(
                     (name) => (
                       <button
                         key={name}
@@ -341,10 +387,31 @@ export default function Home() {
             </div>
           </div>
         </section>
+        <section id="problems" className="workbench">
+          <div className="section-heading">
+            <div>
+              <div className="section-kicker">02 / WHAT MAY BE COSTING YOU</div>
+              <h2>
+                Problems, with <em>proof.</em>
+              </h2>
+              <p>
+                {live
+                  ? "Every finding links to where we saw it. Every dollar figure shows its math."
+                  : "Pick a business above to see evidence-backed problems and what they may be worth."}
+              </p>
+            </div>
+            {live?.analysis.snapshot && (
+              <span className="step-chip">
+                {live.analysis.snapshot.sources.length} public sources
+              </span>
+            )}
+          </div>
+          {live && <ProblemsOverview biz={biz} />}
+        </section>
         <section className="recommend-section">
           <div className="section-heading">
             <div>
-              <div className="section-kicker">02 / RECOMMENDATIONS</div>
+              <div className="section-kicker">03 / RECOMMENDATIONS</div>
               <h2>
                 A few ways forward.
                 <br />
@@ -369,7 +436,7 @@ export default function Home() {
             role="tablist"
             aria-label="Business problems"
           >
-            {demoProblems.map((problem, index) => (
+            {problems.map((problem, index) => (
               <button
                 key={problem.id}
                 role="tab"
@@ -386,13 +453,25 @@ export default function Home() {
               </button>
             ))}
           </div>
+          {!current ? (
+            <div className="empty-state">
+              <h3>No problems to match with tools yet</h3>
+              <p>
+                Say yes to a problem under “Worth checking”, or fix the free
+                items first.
+              </p>
+            </div>
+          ) : (
+          <>
           <div className="problem-context">
             <span className="context-icon">“</span>
             <div>
-              <strong>Why this matters for Mike</strong>
+              <strong>Why this matters for {business.name}</strong>
               <p>{current.problem.evidence}</p>
             </div>
-            <span className="context-tag">Owner reported</span>
+            <span className="context-tag">
+              {live ? "From public evidence" : "Owner reported"}
+            </span>
           </div>
           {current.options.length ? (
             <div className="option-grid">
@@ -448,6 +527,8 @@ export default function Home() {
               </div>
             )}
           </div>
+          </>
+          )}
           <div className="check-tool">
             <div>
               <div className="section-kicker">CHECK A LINK</div>
@@ -479,7 +560,7 @@ export default function Home() {
           </div>
         </section>
         <section id="how-it-works" className="how-section">
-          <div className="section-kicker">03 / HOW IT WORKS</div>
+          <div className="section-kicker">04 / HOW IT WORKS</div>
           <h2>
             Good advice needs <em>good reasons.</em>
           </h2>
