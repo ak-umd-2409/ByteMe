@@ -31,7 +31,7 @@ export const PROBLEMS: Record<ProblemKey, ProblemDefinition> = {
     title: "Replies to customers are slow",
     explanation: "Emails, form requests or messages to {name} wait a long time for an answer. Customers who wait often go elsewhere.",
     category: { key: "customer_communication", label: "Customer communication" },
-    useCase: "missed-calls",
+    useCase: "customer-messaging",
     impactModel: "slow_responses",
   },
   no_online_booking: {

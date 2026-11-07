@@ -4,17 +4,11 @@ import {
   demoCatalog,
 } from "../../../data/mock/recommendations.ts";
 import { recommend } from "../../../lib/recommend/engine.ts";
+import { USE_CASES } from "../../../lib/recommend/types.ts";
 import type { BusinessProfile, Problem } from "../../../lib/recommend/types.ts";
 
 const choices = new Set(["no-recording", "no-contract", "spanish", "offline"]);
-const useCases = new Set([
-  "missed-calls",
-  "quotes",
-  "reviews",
-  "booking",
-  "marketing",
-  "bookkeeping",
-]);
+const useCases = new Set<string>(USE_CASES);
 
 export async function POST(request: NextRequest) {
   let body: unknown;
