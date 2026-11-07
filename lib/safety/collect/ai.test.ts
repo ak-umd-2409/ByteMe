@@ -103,6 +103,16 @@ describe("askAi", () => {
     const no = llm(ABOUT_ANSWER, { ...PRIVACY_ANSWER, trainsOnYourData: { answer: "opt-out", quote: bad } });
     assert.equal((await run(p, no.provider)).trainsOnYourData, "unknown");
   });
+  it("doesn't count opting out of something other than training", async () => {
+    const line = "You may opt out of manual review at any time by contacting support.";
+    const { provider } = llm(ABOUT_ANSWER, { ...PRIVACY_ANSWER, trainsOnYourData: { answer: "opt-out", quote: line } });
+    assert.equal((await run(withPolicy(line), provider)).trainsOnYourData, "unknown");
+  });
+  it("accepts 'names removed' written as 'de identified'", async () => {
+    const line = "We may use data in aggregated or de identified form to train internal systems.";
+    const { provider } = llm(ABOUT_ANSWER, { ...PRIVACY_ANSWER, trainsOnYourData: { answer: "anonymized", quote: line } });
+    assert.notEqual((await run(withPolicy(line), provider)).trainsOnYourData, "unknown");
+  });
   it("reads the company's address from the privacy page", async () => {
     const line = "Our mailing address is 100 Main Street, College Park, MD 20740.";
     const p = withPolicy(line);

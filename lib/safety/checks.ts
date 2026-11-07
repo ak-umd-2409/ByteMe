@@ -52,7 +52,7 @@ export function checkWhoIsBehind(facts: SafetyFacts): SafetyCheckItem {
     ? "We couldn't find an About or Contact page that says who is behind this tool."
     : companyName === "unknown"
       ? "We couldn't tell which company is behind this tool."
-      : `We couldn't find an address for ${companyName.answer}.`;
+      : `We couldn't find an address for ${companyName.answer.replace(/\.$/, "")}.`;
   return item("unknown", reason, evidence.length ? evidence : pageEvidence(about, contact));
 }
 
@@ -86,11 +86,12 @@ export function checkDataUse(facts: SafetyFacts): SafetyCheckItem {
   // A "no" or "names removed" answer must not be contradicted by another sentence
   // about training. The quoted sentence itself is set aside only when it really
   // says what the answer claims; every other risky sentence counts.
-  if (trains !== "unknown" && (trains.answer === "no" || trains.answer === "anonymized")) {
-    const { negationPattern, qualifierPattern, anonymizedPattern } = SAFETY_CONFIG;
+  // ("You can switch it off" is exempt: the off switch covers the training the policy describes.)
+  if (trains !== "unknown" && trains.answer !== "opt-out") {
+    const { negationPattern, qualifierPattern, anonymizedPattern, consentPattern } = SAFETY_CONFIG;
     const quoteOk = trains.answer === "no" ? negationPattern.test(trains.quote) && !qualifierPattern.test(trains.quote) : true;
-    const explained = (s: string) =>
-      (quoteOk && norm(s) === norm(trains.quote)) || (trains.answer === "anonymized" && anonymizedPattern.test(s));
+    const sameCase: Record<string, RegExp | undefined> = { anonymized: anonymizedPattern, "opt-in": consentPattern };
+    const explained = (s: string) => (quoteOk && norm(s) === norm(trains.quote)) || Boolean(sameCase[trains.answer]?.test(s));
     const others = facts.riskySentences.filter((s) => !explained(s));
     if (others.length > 0) {
       const privacy = pageEvidence(facts.pages.privacy);

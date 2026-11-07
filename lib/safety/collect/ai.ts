@@ -76,6 +76,17 @@ function emptyAi(): Ai {
 const STORAGE_WORDS = /\b(stor\w*|process\w*|host\w*|servers?|data cent(er|re)s?|transferr?\w*)\b/i;
 const squash = (text: string) => text.toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
 
+/**
+ * "Only if you say yes", "names removed" and "you can switch it off" must be what
+ * the quote actually says, about training (opting out of "manual review" doesn't count).
+ */
+function trainingQuoteOk(answer: string, quote: string): boolean {
+  const { anonymizedPattern, optOutPattern, consentPattern, trainingTopicPattern } = SAFETY_CONFIG;
+  const special: Record<string, RegExp> = { anonymized: anonymizedPattern, "opt-out": optOutPattern, "opt-in": consentPattern };
+  if (!special[answer]) return true;
+  return special[answer].test(quote) && trainingTopicPattern.test(quote);
+}
+
 /** Keep an answer only if its quote is on one of the source pages. */
 type RawAnswer = { answer: string | null; quote: string | null } | null | undefined;
 
@@ -93,8 +104,7 @@ function verify(key: keyof Ai, raw: RawAnswer, sources: FetchedPageFact[]): AiAn
   // "Where is data stored?" must be answered by a sentence about storage, not an address.
   if (key === "whereStored" && !STORAGE_WORDS.test(quote)) return "unknown";
   // "Names removed" and "you can switch it off" must be what the quote actually says.
-  if (key === "trainsOnYourData" && normalized === "anonymized" && !SAFETY_CONFIG.anonymizedPattern.test(quote)) return "unknown";
-  if (key === "trainsOnYourData" && normalized === "opt-out" && !SAFETY_CONFIG.optOutPattern.test(quote)) return "unknown";
+  if (key === "trainsOnYourData" && !trainingQuoteOk(normalized, quote)) return "unknown";
   const page = sources.find((p) => isVerbatim(quote, p.text));
   return page ? { answer: normalized, quote: quote.trim(), pageUrl: page.finalUrl } : "unknown";
 }

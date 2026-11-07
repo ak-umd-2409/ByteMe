@@ -114,6 +114,21 @@ describe("checkDataUse", () => {
     const f = factsFixture({ riskySentences: [ANON, other], ai: { trainsOnYourData: { answer: "anonymized", quote: ANON } } });
     assert.equal(checkDataUse(f).result, "unknown");
   });
+  it("is unknown when 'only if you say yes' is contradicted by another sentence", () => {
+    const quote = "We only use your recordings to train our models if you opt in.";
+    const other = "We may also use your data for training and improving our Services.";
+    const f = factsFixture({ riskySentences: [quote, other], ai: { trainsOnYourData: { answer: "opt-in", quote } } });
+    assert.equal(checkDataUse(f).result, "unknown");
+  });
+  it("passes 'only if you say yes' when every training sentence asks first", () => {
+    const quote = "We only use your recordings to train our models if you opt in.";
+    const f = factsFixture({ riskySentences: [quote], ai: { trainsOnYourData: { answer: "opt-in", quote } } });
+    assert.equal(checkDataUse(f).result, "pass");
+  });
+  it("writes a company name ending in a period without a double period", () => {
+    const f = factsFixture({ ai: { companyName: { answer: "GoodTool Inc.", quote: "GoodTool Inc. is a software company." }, address: "unknown" } });
+    assert.equal(checkWhoIsBehind(f).reason, "We couldn't find an address for GoodTool Inc.");
+  });
   it("gives no training warning when it doesn't learn from your data", () => {
     assert.equal(trainingWarning(factsFixture()), null);
   });

@@ -36,9 +36,13 @@ export const SAFETY_CONFIG = {
   /** ...and none of these, or a person must read it. */
   qualifierPattern: /\b(unless|except|but|however|may|might|anonymi[sz]ed|aggregated?|de-identified|improve\w*)\b/i,
   /** An "anonymized" training answer needs one of these words in its quote. */
-  anonymizedPattern: /\b(de-?identified|aggregated?|anonymi[sz]\w*|pseudonymi[sz]\w*)\b/i,
+  anonymizedPattern: /\b(de[- ]?identified|aggregated?|anonymi[sz]\w*|pseudonymi[sz]\w*)\b/i,
   /** An "opt-out" training answer needs its quote to say how to stop it. */
   optOutPattern: /\b(opt(ing)?[- ]?out|turn(ing)? (it |this )?off|switch(ing)? (it |this )?off|disable|withdraw)\b/i,
+  /** An "opt-in" training answer needs its quote to say the customer agrees first. */
+  consentPattern: /\b(opts?[- ]?in|opted[- ]?in|consent\w*|agree\w*|permission|allow\w*|authori[sz]\w*|choose)\b/i,
+  /** Any training answer other than "no" must be quoted from a sentence about training or improving AI. */
+  trainingTopicPattern: /\b(train\w*|models?|ai|artificial intelligence|machine learning|improv\w*)\b/i,
   pricePattern: /\$\s?\d/,
   monthlyPattern: /(per month|\/\s?mo\b|monthly|month-to-month)/i,
   contactSalesPattern: /\b(contact sales|talk to sales|request a quote|get a quote)\b/i,
