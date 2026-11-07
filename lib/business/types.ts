@@ -8,6 +8,7 @@
 export type FactSource =
   | "google_places"
   | "mock_places"
+  | "public_listings"
   | "website"
   | "tech_signature"
   | "review_analysis"
@@ -37,7 +38,7 @@ export interface BusinessMatch {
   category: string | null;
   rating: number | null;
   reviewCount: number | null;
-  provider: "google_places" | "mock";
+  provider: "google_places" | "mock" | "public_snapshot";
 }
 
 export interface PostalAddress {
@@ -53,9 +54,24 @@ export interface PostalAddress {
 
 export interface SourceReview {
   id: string;
-  source: "google" | "owner_pasted" | "mock";
+  /** "public_listing": read from a public review page (Birdeye, BBB, Yelp…) and linked by `url`. */
+  source: "google" | "owner_pasted" | "mock" | "public_listing";
   rating: number | null;
+  /**
+   * Exact review text (or an exact excerpt of it). May be "" when we only keep a summary,
+   * e.g. for public pages where we don't copy whole reviews.
+   */
   text: string;
+  /** Where the review was published, e.g. "Facebook (via Birdeye)". */
+  platform?: string | null;
+  /** Link to the page that shows this review. */
+  url?: string | null;
+  /** Plain-language summary written during extraction. Always shown as a summary, never as a quote. */
+  summary?: string | null;
+  /** Themes recorded when the review was extracted (AI or analyst), checked against REVIEW themes. */
+  themes?: ReviewThemeKey[];
+  /** Whether a reply from the business is visible next to the review. */
+  ownerReplied?: boolean | null;
   author: string | null;
   /** Google requires attribution when displaying reviews. */
   authorUrl: string | null;
@@ -79,7 +95,7 @@ export interface PlaceDetails {
   googleMapsUrl: string | null;
   businessStatus: string | null;
   reviews: SourceReview[];
-  provider: "google_places" | "mock";
+  provider: "google_places" | "mock" | "public_snapshot";
 }
 
 // ---------- Reviews ----------
@@ -99,12 +115,18 @@ export type ReviewThemeKey =
   | "praise_quality"
   | "praise_friendly"
   | "praise_responsive"
-  | "praise_value";
+  | "praise_value"
+  | "price_concerns";
 
 export interface ThemeEvidence {
   reviewId: string;
-  /** Exact text copied from the review. Never paraphrased. */
-  quote: string;
+  /** Exact text copied from the review. Never paraphrased. Null when only a summary is kept. */
+  quote: string | null;
+  /** Labelled summary of the review, used when there is no exact quote. */
+  summary?: string | null;
+  url?: string | null;
+  platform?: string | null;
+  relativeTime?: string | null;
   source: SourceReview["source"];
   rating: number | null;
   author: string | null;
@@ -117,13 +139,18 @@ export interface ReviewTheme {
   /** Number of distinct reviews mentioning this theme. */
   mentions: number;
   evidence: ThemeEvidence[];
-  detectedBy: ("rules" | "llm")[];
+  /** "extracted": recorded when the review was read from a public page (see SourceReview.themes). */
+  detectedBy: ("rules" | "llm" | "extracted")[];
 }
 
 export interface ReviewAnalysis {
   reviewCount: number;
   averageRating: number | null;
-  bySource: { google: number; owner_pasted: number; mock: number };
+  bySource: { google: number; owner_pasted: number; mock: number; public_listing: number };
+  /** Where the reviews we read were published, most first. */
+  platforms: { name: string; count: number }[];
+  /** Age of the newest review we could read, e.g. "4 years ago". */
+  newestReview: string | null;
   complaints: ReviewTheme[];
   praise: ReviewTheme[];
   method: "rules" | "rules+llm";
@@ -154,7 +181,9 @@ export interface WebEvidence {
 export interface Finding<T> {
   value: T;
   evidence: WebEvidence;
-  method: "pattern" | "html" | "llm";
+  /** "search_index": text a search engine shows for the page, used when the site blocks scanners. */
+  /** "page_fetch" = read from a captured copy of the page (public snapshots). */
+  method: "pattern" | "html" | "llm" | "search_index" | "page_fetch";
 }
 
 export interface ScannedPage {
@@ -213,7 +242,8 @@ export interface DetectedTech {
   /** Name as used by the recommendation catalog, e.g. "Square". */
   name: string;
   category: TechCategory;
-  evidence: { url: string; matched: string; kind: "script" | "link" | "html" | "header" | "places" }[];
+  /** "listing": seen on a public directory page (e.g. a review profile claimed by the business). */
+  evidence: { url: string; matched: string; kind: "script" | "link" | "html" | "header" | "places" | "listing" }[];
   /** "verified": a product-specific signature was found. */
   confidence: "verified";
 }
@@ -307,9 +337,9 @@ export interface OnboardingProfile {
   };
   dataSensitivity: { level: "low" | "medium" | "high"; reasons: string[] };
   sources: {
-    places: "google_places" | "mock" | "none";
+    places: "google_places" | "mock" | "public_snapshot" | "none";
     website: "scanned" | "unreachable" | "blocked" | "none";
-    reviews: { google: number; owner_pasted: number; mock: number };
+    reviews: { google: number; owner_pasted: number; mock: number; public_listing?: number };
   };
   /** Field paths Part 4 still needs from the owner, e.g. "owner.monthlyBudget". */
   missingForRecommendations: string[];

@@ -69,7 +69,13 @@ export const THEME_RULES: ThemeRule[] = [
     key: "pricing_unclear",
     label: "Unclear pricing",
     polarity: "complaint",
-    pattern: /\b(hidden fees?|surprise (charge|fee|bill)|overcharged|price (kept|was) chang|didn'?t (give|tell) (us |me )?(a |the )?price)/i,
+    pattern: /\b(hidden fees?|surprise (charge|fee|bill)|price (kept|was) chang|didn'?t (give|tell) (us |me )?(a |the )?price)/i,
+  },
+  {
+    key: "price_concerns",
+    label: "Price concerns",
+    polarity: "complaint",
+    pattern: /\b(overcharg\w*|too expensive|price gouging|charged (us|me) \$\d+|rates? (were|was) (extremely |way too |too )?high|\$\d+ to replace a \$\d+)/i,
   },
   {
     key: "billing_problems",
@@ -164,7 +170,7 @@ export function isVerbatim(quote: string, text: string): boolean {
   return q.length >= 8 && normalizeForMatch(text).includes(q);
 }
 
-type Hit = { review: SourceReview; key: ReviewThemeKey; quote: string; by: "rules" | "llm" };
+type Hit = { review: SourceReview; key: ReviewThemeKey; quote: string | null; by: "rules" | "llm" | "extracted" };
 
 function ruleHits(reviews: SourceReview[]): Hit[] {
   const hits: Hit[] = [];
@@ -216,6 +222,46 @@ async function llmHits(reviews: SourceReview[], provider: LlmProvider): Promise<
   return hits;
 }
 
+const PLATFORM_LABEL: Record<SourceReview["source"], string> = {
+  google: "Google",
+  owner_pasted: "Pasted by you",
+  mock: "Sample",
+  public_listing: "Public review page",
+};
+
+/**
+ * Themes recorded when a review was read from a public page. The exact excerpt is used as the
+ * quote only when it literally supports the theme (same rule as everything else); otherwise the
+ * evidence is the labelled summary plus the link to the review.
+ */
+function extractedHits(reviews: SourceReview[]): Hit[] {
+  const hits: Hit[] = [];
+  for (const review of reviews) {
+    for (const key of review.themes ?? []) {
+      const rule = RULE_BY_KEY.get(key);
+      if (!rule) continue;
+      if (rule.polarity === "praise" && review.rating !== null && review.rating < 4) continue;
+      const match = review.text ? rule.pattern.exec(review.text) : null;
+      hits.push({ review, key, quote: match ? quoteAround(review.text, match.index, match[0].length) : null, by: "extracted" });
+    }
+  }
+  return hits;
+}
+
+/** "4 years ago" style ages sort by number of units; ISO dates sort by date. */
+function newestReview(reviews: SourceReview[]): string | null {
+  const UNIT: Record<string, number> = { day: 1, week: 7, month: 30, year: 365 };
+  let best: { days: number; label: string } | null = null;
+  for (const r of reviews) {
+    const label = r.relativeTime ?? null;
+    const m = label?.match(/(\d+|a|an)\s+(day|week|month|year)s?\s+ago/i);
+    const days = m ? (/^\d+$/.test(m[1]) ? Number(m[1]) : 1) * UNIT[m[2].toLowerCase()] : r.publishedAt ? (Date.now() - Date.parse(r.publishedAt)) / 86_400_000 : null;
+    if (days === null || Number.isNaN(days)) continue;
+    if (!best || days < best.days) best = { days, label: label ?? new Date(r.publishedAt!).toLocaleDateString("en-US", { month: "short", year: "numeric" }) };
+  }
+  return best?.label ?? null;
+}
+
 function buildThemes(hits: Hit[]): ReviewTheme[] {
   const themes = new Map<ReviewThemeKey, ReviewTheme>();
   for (const hit of hits) {
@@ -228,6 +274,10 @@ function buildThemes(hits: Hit[]): ReviewTheme[] {
       const evidence: ThemeEvidence = {
         reviewId: hit.review.id,
         quote: hit.quote,
+        summary: hit.quote ? null : (hit.review.summary ?? null),
+        url: hit.review.url ?? null,
+        platform: hit.review.platform ?? null,
+        relativeTime: hit.review.relativeTime,
         source: hit.review.source,
         rating: hit.review.rating,
         author: hit.review.author,
@@ -244,14 +294,23 @@ export async function analyzeReviews(
   reviews: SourceReview[],
   opts: { llm?: LlmProvider } = {},
 ): Promise<ReviewAnalysis> {
-  const usable = reviews.filter((r) => r.text.trim().length > 0);
-  const hits = ruleHits(usable);
-  const fromLlm = opts.llm ? await llmHits(usable, opts.llm) : null;
+  const usable = reviews.filter((r) => r.text.trim().length > 0 || (r.summary ?? "").trim().length > 0);
+  const withText = usable.filter((r) => r.text.trim().length > 0);
+  const hits = ruleHits(withText);
+  const fromLlm = opts.llm ? await llmHits(withText, opts.llm) : null;
   if (fromLlm) hits.push(...fromLlm);
+  hits.push(...extractedHits(usable));
   const themes = buildThemes(hits);
   const rated = usable.filter((r) => r.rating !== null);
-  const bySource = { google: 0, owner_pasted: 0, mock: 0 };
+  const bySource = { google: 0, owner_pasted: 0, mock: 0, public_listing: 0 };
   for (const review of usable) bySource[review.source] += 1;
+  const platformCounts = new Map<string, number>();
+  for (const review of usable) {
+    const name = review.platform ?? PLATFORM_LABEL[review.source];
+    platformCounts.set(name, (platformCounts.get(name) ?? 0) + 1);
+  }
+  const platforms = [...platformCounts.entries()].map(([name, count]) => ({ name, count })).sort((a, b) => b.count - a.count);
+  const newest = newestReview(usable);
 
   const limitations: string[] = [];
   if (usable.length === 0) limitations.push("No reviews were available to analyze.");
@@ -260,13 +319,17 @@ export async function analyzeReviews(
       "Google shares at most 5 reviews per business and doesn't include owner replies, so we can't tell which reviews were answered.",
     );
   if (bySource.mock > 0) limitations.push("These are sample reviews for a fictional business (mock mode).");
-  if (!fromLlm) limitations.push("Themes were found with keyword rules only, so some may be missed.");
+  if (bySource.public_listing > 0)
+    limitations.push("Reviews from public pages are linked to their source. We keep short excerpts or summaries, not full copies.");
+  if (!fromLlm && bySource.public_listing === 0) limitations.push("Themes were found with keyword rules only, so some may be missed.");
   if (usable.length > 0 && usable.length < 5) limitations.push("Only a few reviews were available; patterns are tentative.");
 
   return {
     reviewCount: usable.length,
     averageRating: rated.length ? Math.round((rated.reduce((s, r) => s + (r.rating ?? 0), 0) / rated.length) * 10) / 10 : null,
     bySource,
+    platforms,
+    newestReview: newest,
     complaints: themes.filter((t) => t.polarity === "complaint").map((t) => ({ ...t, evidence: t.evidence.slice(0, 5) })),
     praise: themes.filter((t) => t.polarity === "praise").map((t) => ({ ...t, evidence: t.evidence.slice(0, 5) })),
     method: fromLlm ? "rules+llm" : "rules",

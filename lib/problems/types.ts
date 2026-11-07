@@ -27,6 +27,8 @@ export type EvidenceSource =
   | "google_review"
   | "pasted_review"
   | "sample_review"
+  | "public_review"
+  | "listing"
   | "website"
   | "google_profile"
   | "tech_stack"
@@ -41,8 +43,14 @@ export interface Signal {
   observation: string;
   /** Exact quoted text, when the evidence is text. */
   quote: string | null;
+  /** Labelled summary of a review, when we keep a summary instead of a quote. Never shown as a quote. */
+  summary?: string | null;
+  /** Who/where, for display: "Pat M. · Facebook (via Birdeye) · 7 years ago". */
+  attribution?: string | null;
   /** Where to find it: review id, page URL, or profile field. */
   reference: { reviewId?: string; url?: string; field?: string } | null;
+  /** Extra source links, e.g. every listing that shows the same value. */
+  links?: { label: string; url: string }[];
   /** 0–1: how strongly this signal points to the problem. */
   weight: number;
   /** Directly observed (true) vs inferred from patterns (false). */
@@ -55,6 +63,8 @@ export type ConfidenceLevel = "high" | "medium" | "low";
 export interface ImpactInput {
   key: string;
   label: string;
+  /** 2–4 word label for equation chips. */
+  short?: string;
   value: number;
   unit: "per_week" | "percent" | "usd" | "hours_per_week" | "usd_per_hour" | "per_month";
   source: "owner" | "default" | "derived";
@@ -77,6 +87,18 @@ export interface ImpactEstimate {
   formula: string;
   /** Human-readable arithmetic, e.g. "8 × 25% × $300 × 4.33 = $2,598". */
   calculation: string;
+  /** The equation as ordered terms, for a visual "a × b × c = result" display. */
+  terms: {
+    key: string;
+    short: string;
+    value: number;
+    unit: ImpactInput["unit"] | "constant";
+    source: ImpactInput["source"] | "constant";
+    /** Plain question to ask the owner when they edit this term ("About how many calls a week…?"). Null for constants. */
+    question: string | null;
+    min: number;
+    max: number;
+  }[];
   monthly: { expected: number; low: number; high: number };
   confidence: ConfidenceLevel;
   /** Share of inputs the owner supplied (0–1). */
@@ -112,6 +134,19 @@ export interface ProblemCard {
   /** Hypotheses ask the owner to confirm before recommendations use them. */
   needsOwnerConfirmation: boolean;
   explanationSource: "template" | "llm";
+  /**
+   * What customers say that argues AGAINST this problem (e.g. reviews praising quick replies,
+   * shown next to "calls go unanswered"). Shown so the owner can judge; never hidden.
+   */
+  counterEvidence: { label: string; mentions: number; examples: { text: string; isQuote: boolean; attribution: string | null; url: string | null }[] } | null;
+  /** Short, deterministic labels for the UI (see present.ts). */
+  display: {
+    headline: string;
+    whyItMatters: string;
+    nextStep: string;
+    effort: { kind: "free" | "tool"; label: string };
+    evidenceStrength: { level: 1 | 2 | 3; label: string; sources: { kind: EvidenceSource; count: number; label: string }[] };
+  };
 }
 
 export interface DiscoveryResult {
@@ -130,4 +165,14 @@ export interface DiscoveryResult {
   };
   disclaimer: string;
   limitations: string[];
+  /** One-glance summary for the top of the problems screen. */
+  overview: {
+    headline: string;
+    quickWins: number;
+    needTool: number;
+    toCheck: number;
+    topProblemKey: ProblemKey | null;
+    /** What customers praise most (from reviews). */
+    strengths: { label: string; mentions: number }[];
+  };
 }

@@ -77,6 +77,7 @@ export const api = {
       profile: OnboardingProfile;
       reviews: ReviewAnalysis;
       website: WebsiteAnalysis | null;
+      listings?: OnboardingAnalysis["listings"] | null;
       assumptions?: Partial<Record<ProblemKey, Record<string, number>>>;
       includeHypotheses?: ProblemKey[];
       polish?: boolean;

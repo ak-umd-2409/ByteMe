@@ -69,8 +69,10 @@ export function buildProfile(input: BuildProfileInput): OnboardingProfile {
   const { details, website, technology, reviews } = input;
   const manual = input.manual ?? null;
   const owner = input.owner ?? {};
-  const placeSource: FactSource = details?.provider === "mock" ? "mock_places" : "google_places";
-  const fromGoogle = details?.provider === "mock" ? "Sample Google listing (mock)" : "Google Business Profile";
+  const placeSource: FactSource =
+    details?.provider === "mock" ? "mock_places" : details?.provider === "public_snapshot" ? "public_listings" : "google_places";
+  const fromGoogle =
+    details?.provider === "mock" ? "Sample Google listing (mock)" : details?.provider === "public_snapshot" ? "Public listings (BBB, Birdeye, Yelp)" : "Google Business Profile";
 
   const name = details ? fact(details.name, placeSource, "high", fromGoogle) : fact(manual?.name, "owner", "high", "You told us");
 
@@ -187,7 +189,7 @@ export function buildProfile(input: BuildProfileInput): OnboardingProfile {
     technology: { detected: technology.detected, currentTools, askOwnerAbout: technology.askOwnerAbout },
     dataSensitivity: { level: "low", reasons: [] },
     sources: {
-      places: details ? (details.provider === "mock" ? "mock" : "google_places") : "none",
+      places: details ? (details.provider === "mock" ? "mock" : details.provider) : "none",
       website: !websiteUrl && !website ? "none" : website?.reachable ? "scanned" : website?.pages.some((p) => p.status === "blocked_by_robots") ? "blocked" : "unreachable",
       reviews: { ...reviews.bySource },
     },

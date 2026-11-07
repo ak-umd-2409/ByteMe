@@ -40,6 +40,8 @@ const SOURCE_LABEL: Record<Signal["source"], string> = {
   google_review: "Google review",
   pasted_review: "customer review",
   sample_review: "sample review",
+  public_review: "public review",
+  listing: "public listings",
   website: "website",
   google_profile: "Google listing",
   tech_stack: "your tools",

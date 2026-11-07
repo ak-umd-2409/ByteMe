@@ -2,6 +2,7 @@ import { industryInfo } from "../business/industry.ts";
 import { analyzeBusiness, OnboardingError, type OnboardingDeps } from "../business/onboarding.ts";
 import { getPlacesProvider, PlacesError, type PlacesProvider } from "../business/places.ts";
 import { applyCorrections, type ProfileCorrections } from "../business/profile.ts";
+import type { ListingsCheck } from "../business/listings.ts";
 import type { OnboardingProfile, ReviewAnalysis, WebsiteAnalysis } from "../business/types.ts";
 import { disabledProvider, getLlmProvider, type LlmProvider } from "../llm/client.ts";
 import { PROBLEMS } from "../problems/catalog.ts";
@@ -57,7 +58,10 @@ export async function handleSearch(query: Record<string, string | undefined>, de
   if (!parsed.ok) return invalid(parsed)!;
   try {
     const matches = await deps.places.search(parsed.value.q, parsed.value.near);
-    return { status: 200, body: { query: parsed.value.q, matches, mode: modeOf(deps), sampleData: deps.places.kind === "mock" } };
+    return {
+      status: 200,
+      body: { query: parsed.value.q, matches, mode: modeOf(deps), sampleData: matches.some((m) => m.provider === "mock"), realSnapshot: matches.some((m) => m.provider === "public_snapshot") },
+    };
   } catch (error) {
     if (error instanceof PlacesError) return errorResponse(502, "places_unavailable", error.message);
     throw error;
@@ -121,6 +125,7 @@ export async function handleDiscover(body: unknown, deps: ApiDeps): Promise<ApiR
       profile,
       reviews: input.reviews as unknown as ReviewAnalysis,
       website: input.website as unknown as WebsiteAnalysis | null,
+      listings: (input.listings ?? null) as unknown as ListingsCheck | null,
       assumptions: input.assumptions as Partial<Record<ProblemKey, Record<string, number>>> | undefined,
     },
     deps.now?.(),

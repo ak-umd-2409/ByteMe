@@ -1,4 +1,5 @@
 import { industryInfo } from "../business/industry.ts";
+import type { ListingsCheck } from "../business/listings.ts";
 import type { OnboardingProfile, ReviewAnalysis, ReviewThemeKey, WebsiteAnalysis } from "../business/types.ts";
 import { PROBLEM_KEYS, type EvidenceSource, type ProblemKey, type Signal } from "./types.ts";
 
@@ -14,6 +15,8 @@ export interface SignalInput {
   profile: OnboardingProfile;
   reviews: ReviewAnalysis;
   website: WebsiteAnalysis | null;
+  /** The listings check from onboarding (optional: older clients may not send it). */
+  listings?: ListingsCheck | null;
 }
 
 /** Review theme → problems it is evidence for, with per-mention weight. */
@@ -37,6 +40,7 @@ const REVIEW_SOURCE: Record<string, EvidenceSource> = {
   google: "google_review",
   owner_pasted: "pasted_review",
   mock: "sample_review",
+  public_listing: "public_review",
 };
 
 /** Keywords in the owner's "what eats your week?" answer. */
@@ -104,7 +108,7 @@ const clockLabel = (minutes: number) => {
 
 const digits = (s: string) => s.replace(/\D/g, "").replace(/^1(?=\d{10}$)/, "");
 
-export function collectSignals({ profile, reviews, website }: SignalInput): Signal[] {
+export function collectSignals({ profile, reviews, website, listings }: SignalInput): Signal[] {
   const signals: Signal[] = [];
   let n = 0;
   const push = (s: Omit<Signal, "id">) => signals.push({ ...s, id: `sig-${++n}` });
@@ -119,7 +123,9 @@ export function collectSignals({ profile, reviews, website }: SignalInput): Sign
           source: REVIEW_SOURCE[ev.source] ?? "google_review",
           observation: `A customer review mentions: ${theme.label.toLowerCase()}.`,
           quote: ev.quote,
-          reference: { reviewId: ev.reviewId },
+          summary: ev.quote ? null : (ev.summary ?? null),
+          attribution: [ev.author, ev.platform, ev.relativeTime].filter(Boolean).join(" · ") || null,
+          reference: { reviewId: ev.reviewId, ...(ev.url ? { url: ev.url } : {}) },
           weight,
           verified: true,
         });
@@ -164,31 +170,6 @@ export function collectSignals({ profile, reviews, website }: SignalInput): Sign
         verified: true,
       });
     }
-    const googleClose = googleWeekdayClose(profile.business.hours.source === "website" ? [] : profile.business.hours.value ?? []);
-    const siteClose = websiteWeekdayClose(website.hours.map((h) => h.value));
-    if (googleClose !== null && siteClose && Math.abs(googleClose - siteClose.minutes) >= 30) {
-      push({
-        problem: "inconsistent_business_info",
-        source: "website",
-        observation: `Google says you close at ${clockLabel(googleClose)} on weekdays, but your website says ${clockLabel(siteClose.minutes)}.`,
-        quote: siteClose.line,
-        reference: { url: website.hours.find((h) => h.value === siteClose.line)?.evidence.url ?? home, field: "business.hours" },
-        weight: 0.8,
-        verified: true,
-      });
-    }
-    const googlePhone = profile.business.phone.source === "google_places" || profile.business.phone.source === "mock_places" ? profile.business.phone.value : null;
-    if (googlePhone && website.phones.length > 0 && !website.phones.some((p) => digits(p.value) === digits(googlePhone))) {
-      push({
-        problem: "inconsistent_business_info",
-        source: "website",
-        observation: `The phone number on your website (${website.phones[0].value}) doesn't match Google (${googlePhone}).`,
-        quote: website.phones[0].evidence.snippet,
-        reference: { url: website.phones[0].evidence.url, field: "business.phone" },
-        weight: 0.6,
-        verified: true,
-      });
-    }
     if (website.phones.length > 0 && !website.contactForm.present && website.emails.length === 0) {
       push({
         problem: "missed_inquiries",
@@ -197,6 +178,56 @@ export function collectSignals({ profile, reviews, website }: SignalInput): Sign
         quote: null,
         reference: { url: home },
         weight: 0.2,
+        verified: true,
+      });
+    }
+  }
+
+  // 2b) Listings: the same business on Google, its website and directories. Only real disagreements.
+  for (const issue of listings?.issues ?? []) {
+    const involved = (listings?.listings ?? []).filter((l) => issue.listingIds.includes(l.id));
+    const links = involved.filter((l) => l.url).map((l) => ({ label: l.label, url: l.url! }));
+    if (issue.kind === "rating_gap") {
+      push({
+        problem: "poor_review_management",
+        source: "listing",
+        observation: issue.detail,
+        quote: null,
+        attribution: issue.headline,
+        reference: { url: links[0]?.url, field: "listings" },
+        links,
+        weight: 0.5,
+        verified: true,
+      });
+      continue;
+    }
+    const field = listings!.fields.find((f) => f.field === issue.kind);
+    if (field && field.values.length > 1) {
+      // One evidence item per distinct value, naming every listing that shows it.
+      for (const value of field.values) {
+        const ls = involved.filter((l) => value.listingIds.includes(l.id));
+        push({
+          problem: "inconsistent_business_info",
+          source: "listing",
+          observation: `${ls.map((l) => l.label).join(", ")}: ${value.display}`,
+          quote: null,
+          attribution: issue.headline,
+          reference: { url: ls.find((l) => l.url)?.url ?? undefined, field: `listings.${issue.kind}` },
+          links: ls.filter((l) => l.url).map((l) => ({ label: l.label, url: l.url! })),
+          weight: issue.kind === "hours" ? 0.8 : issue.kind === "address" ? 0.5 : 0.3,
+          verified: true,
+        });
+      }
+    } else {
+      push({
+        problem: "inconsistent_business_info",
+        source: "listing",
+        observation: issue.detail,
+        quote: null,
+        attribution: issue.headline,
+        reference: { url: links[0]?.url, field: `listings.${issue.kind}` },
+        links,
+        weight: 0.5,
         verified: true,
       });
     }
@@ -298,7 +329,7 @@ export function collectSignals({ profile, reviews, website }: SignalInput): Sign
       push({
         problem: key as ProblemKey,
         source: "industry_pattern",
-        observation: `This is common for ${industry.label.toLowerCase()} businesses, but we haven't seen direct evidence of it for you yet.`,
+        observation: `This is common for ${/^[A-Z]{2,}$/.test(industry.label) ? industry.label : industry.label.toLowerCase()} businesses, but we haven't seen direct evidence of it for you yet.`,
         quote: null,
         reference: null,
         weight: 0.2,

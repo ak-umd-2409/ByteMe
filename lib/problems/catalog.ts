@@ -15,6 +15,12 @@ export interface ProblemDefinition {
   /** Impact model id in impact.ts, or null when we don't estimate money. */
   impactModel: string | null;
   noImpactReason?: string;
+  /** ≤ 70 chars: the business consequence, for the card's second line. */
+  whyItMatters: string;
+  /** ≤ 60 chars: the first concrete thing to do. */
+  nextStep: string;
+  /** How big the fix is. "free" = no new tool needed. */
+  effort: { kind: "free" | "tool"; label: string };
 }
 
 export const PROBLEMS: Record<ProblemKey, ProblemDefinition> = {
@@ -25,6 +31,9 @@ export const PROBLEMS: Record<ProblemKey, ProblemDefinition> = {
     category: { key: "customer_communication", label: "Customer communication" },
     useCase: "missed-calls",
     impactModel: "missed_inquiries",
+    whyItMatters: "Every unanswered call can be a job that goes to a competitor.",
+    nextStep: "Make sure every call is answered or called back fast",
+    effort: { kind: "tool", label: "Needs a tool" },
   },
   slow_responses: {
     key: "slow_responses",
@@ -33,6 +42,9 @@ export const PROBLEMS: Record<ProblemKey, ProblemDefinition> = {
     category: { key: "customer_communication", label: "Customer communication" },
     useCase: "customer-messaging",
     impactModel: "slow_responses",
+    whyItMatters: "Customers who wait for a reply often hire whoever answers first.",
+    nextStep: "Reply to every message the same day",
+    effort: { kind: "tool", label: "Needs a tool" },
   },
   no_online_booking: {
     key: "no_online_booking",
@@ -41,6 +53,9 @@ export const PROBLEMS: Record<ProblemKey, ProblemDefinition> = {
     category: { key: "booking_scheduling", label: "Booking and scheduling" },
     useCase: "booking",
     impactModel: "no_online_booking",
+    whyItMatters: "Some customers would rather book online than call.",
+    nextStep: "Let customers pick a time online",
+    effort: { kind: "tool", label: "Needs a tool" },
   },
   scheduling_inefficiency: {
     key: "scheduling_inefficiency",
@@ -49,6 +64,9 @@ export const PROBLEMS: Record<ProblemKey, ProblemDefinition> = {
     category: { key: "booking_scheduling", label: "Booking and scheduling" },
     useCase: "booking",
     impactModel: "time_cost_scheduling",
+    whyItMatters: "Time spent juggling the schedule is time not spent on jobs.",
+    nextStep: "Move scheduling into one shared calendar",
+    effort: { kind: "tool", label: "Needs a tool" },
   },
   slow_quotes: {
     key: "slow_quotes",
@@ -57,6 +75,9 @@ export const PROBLEMS: Record<ProblemKey, ProblemDefinition> = {
     category: { key: "sales_quotes", label: "Quotes and sales" },
     useCase: "quotes",
     impactModel: "time_cost_quotes",
+    whyItMatters: "Customers often go with whoever sends a price first.",
+    nextStep: "Send quotes the same day as the visit",
+    effort: { kind: "tool", label: "Needs a tool" },
   },
   poor_review_management: {
     key: "poor_review_management",
@@ -66,6 +87,9 @@ export const PROBLEMS: Record<ProblemKey, ProblemDefinition> = {
     useCase: "reviews",
     impactModel: null,
     noImpactReason: "We don't estimate money for reviews: the link between replies and revenue is too uncertain to put a fair number on.",
+    whyItMatters: "New customers compare ratings before they call.",
+    nextStep: "Ask happy customers to review you where you rate lowest",
+    effort: { kind: "tool", label: "Needs a tool" },
   },
   no_customer_follow_up: {
     key: "no_customer_follow_up",
@@ -74,6 +98,9 @@ export const PROBLEMS: Record<ProblemKey, ProblemDefinition> = {
     category: { key: "marketing", label: "Marketing and repeat business" },
     useCase: "marketing",
     impactModel: "follow_up",
+    whyItMatters: "Past customers are the cheapest customers to win back.",
+    nextStep: "Send seasonal tune-up reminders to past customers",
+    effort: { kind: "tool", label: "Needs a tool" },
   },
   repetitive_admin: {
     key: "repetitive_admin",
@@ -82,14 +109,19 @@ export const PROBLEMS: Record<ProblemKey, ProblemDefinition> = {
     category: { key: "admin", label: "Admin and bookkeeping" },
     useCase: "bookkeeping",
     impactModel: "time_cost_admin",
+    whyItMatters: "Hours of paperwork take you away from paid work.",
+    nextStep: "Automate invoices and receipts",
+    effort: { kind: "tool", label: "Needs a tool" },
   },
   inconsistent_business_info: {
     key: "inconsistent_business_info",
     title: "Your business details don't match everywhere",
-    explanation: "Google and the website for {name} show different details. Customers may call at the wrong time or use an old number.",
+    explanation: "{name} shows different hours, addresses or phone numbers on different sites. Customers may think you're closed or call an old number.",
     category: { key: "online_presence", label: "Online presence" },
     useCase: null,
-    impactModel: null,
-    noImpactReason: "This is a quick manual fix, so we don't put a money figure on it.",
+    impactModel: "wrong_info",
+    whyItMatters: "People who see “closed” or an old number call someone else.",
+    nextStep: "Make hours, address and phone match on every listing",
+    effort: { kind: "free", label: "Free · about an hour" },
   },
 };

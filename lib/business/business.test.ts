@@ -98,7 +98,7 @@ describe("review analysis", () => {
     ]);
     const missed = analysis.complaints.find((t) => t.key === "missed_calls");
     assert.ok(missed, "missed_calls detected");
-    for (const e of missed!.evidence) assert.ok(isVerbatim(e.quote, "Called three times and got voicemail every time. Never got a call back."));
+    for (const e of missed!.evidence) assert.ok(isVerbatim(e.quote!, "Called three times and got voicemail every time. Never got a call back."));
     assert.equal(missed!.evidence[0]!.reviewId, "a");
     assert.ok(analysis.praise.some((t) => t.key === "praise_friendly"));
     assert.equal(analysis.method, "rules");
