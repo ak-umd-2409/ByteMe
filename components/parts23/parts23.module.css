@@ -1,0 +1,195 @@
+/*
+ * Starter styles for Parts 2 & 3 screens. They extend the tokens already in app/globals.css
+ * (--ink, --green, --cream, --line, --mint) and add only what these screens need.
+ * Contrast ratios are documented in docs/FRONTEND_HANDOFF.md (all text ≥ 4.5:1, borders ≥ 3:1).
+ */
+.root {
+  --text: var(--ink, #203a34);
+  --text-2: #5c6e67; /* 5.18:1 on cream. Use instead of --muted (4.35:1) for body text */
+  --surface: #ffffff;
+  --page: var(--cream, #fbfaf6);
+  --hairline: var(--line, #e6e9e2); /* dividers only, not input borders */
+  --border-input: #839189; /* 3.29:1 on white, meets WCAG 1.4.11 */
+  --accent: var(--green, #255d4a);
+  --focus: #1d6fd1;
+  --ok-fg: #1f5c45;
+  --ok-bg: #e3f1e8;
+  --warn-fg: #7a4b0c;
+  --warn-bg: #fbefd9;
+  --neutral-fg: #4a5560;
+  --neutral-bg: #eef0f2;
+  --danger-fg: #a3342a;
+  --danger-bg: #fdeceb;
+  --radius: 8px;
+  --s1: 4px;
+  --s2: 8px;
+  --s3: 12px;
+  --s4: 16px;
+  --s5: 24px;
+  --s6: 32px;
+  color: var(--text);
+  font: 400 16px/1.5 "DM Sans", system-ui, sans-serif;
+}
+
+.num {
+  font-variant-numeric: tabular-nums;
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius);
+  padding: var(--s5);
+}
+
+.title {
+  font: 600 18px/1.35 Manrope, "DM Sans", sans-serif;
+  margin: 0;
+}
+
+.meta {
+  color: var(--text-2);
+  font-size: 14px;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: var(--s2);
+  flex-wrap: wrap;
+}
+
+.stack {
+  display: grid;
+  gap: var(--s3);
+}
+
+/* ---------- Badges: icon + text, never color alone ---------- */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s1);
+  padding: 2px var(--s2);
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.confirmed {
+  color: var(--ok-fg);
+  background: var(--ok-bg);
+}
+.likely {
+  color: var(--warn-fg);
+  background: var(--warn-bg);
+}
+.hypothesis {
+  color: var(--neutral-fg);
+  background: var(--neutral-bg);
+}
+
+.sourceChip {
+  font-size: 12px;
+  color: var(--text-2);
+  border: 1px solid var(--hairline);
+  border-radius: 999px;
+  padding: 0 var(--s2);
+}
+
+/* ---------- Evidence ---------- */
+.evidence {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: var(--s3);
+}
+.quote {
+  margin: 0;
+  padding-left: var(--s3);
+  border-left: 3px solid var(--accent);
+}
+.unverified {
+  border-left-style: dashed;
+  border-left-color: var(--border-input);
+  color: var(--text-2);
+}
+
+/* ---------- Controls ---------- */
+.button,
+.ghost {
+  min-height: 40px; /* ≥ 24px WCAG 2.5.8; 40px for comfortable touch */
+  padding: 0 var(--s4);
+  border-radius: var(--radius);
+  font-weight: 600;
+  border: 1px solid transparent;
+}
+.button {
+  background: var(--accent);
+  color: #fff;
+}
+.ghost {
+  background: transparent;
+  color: var(--accent);
+  border-color: var(--border-input);
+}
+.button:focus-visible,
+.ghost:focus-visible,
+.input:focus-visible,
+.disclosure:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+.field {
+  display: grid;
+  gap: var(--s1);
+}
+.label {
+  font-size: 14px;
+  font-weight: 600;
+}
+.input {
+  min-height: 40px;
+  padding: 0 var(--s3);
+  border: 1px solid var(--border-input);
+  border-radius: var(--radius);
+  background: #fff;
+  color: var(--text);
+  font: inherit;
+}
+.input[aria-invalid="true"] {
+  border-color: var(--danger-fg);
+}
+.error {
+  color: var(--danger-fg);
+  font-size: 14px;
+}
+
+.disclosure {
+  background: none;
+  border: 0;
+  padding: var(--s1) 0;
+  color: var(--accent);
+  font-weight: 600;
+  min-height: 32px;
+}
+
+.calcLine {
+  font-size: 14px;
+  color: var(--text-2);
+  background: var(--page);
+  border-radius: var(--radius);
+  padding: var(--s2) var(--s3);
+}
+
+.amount {
+  font: 700 28px/1.2 Manrope, "DM Sans", sans-serif;
+  font-variant-numeric: tabular-nums;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .card {
+    transition: border-color 120ms ease;
+  }
+}
