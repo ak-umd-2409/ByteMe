@@ -70,6 +70,15 @@ describe("askAi", () => {
     assert.notEqual(ai.canDeleteData, "unknown");
   });
 
+  it("doesn't take a mailing address as where data is stored", async () => {
+    const p = pages();
+    const privacy = p.privacy as FetchedPageFact;
+    const address = "Write to GoodTool Inc., 100 Main Street, College Park, MD, United States.";
+    p.privacy = { ...privacy, text: `${privacy.text} ${address}` };
+    const { provider } = llm(ABOUT_ANSWER, { ...PRIVACY_ANSWER, whereStored: { answer: "United States", quote: address } });
+    assert.equal((await run(p, provider)).whereStored, "unknown");
+  });
+
   it("rejects an answer outside the allowed values", async () => {
     const { provider } = llm(ABOUT_ANSWER, { ...PRIVACY_ANSWER, canDeleteData: { answer: "maybe", quote: PRIVACY_ANSWER.canDeleteData.quote } });
     assert.equal((await run(pages(), provider)).canDeleteData, "unknown");

@@ -59,6 +59,7 @@ function emptyAi(): Ai {
   };
 }
 
+const STORAGE_WORDS = /\b(stor\w*|process\w*|host\w*|servers?|data cent(er|re)s?|transferr?\w*)\b/i;
 const squash = (text: string) => text.toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
 
 /** Keep an answer only if its quote is on one of the source pages. */
@@ -75,6 +76,8 @@ function verify(key: keyof Ai, raw: RawAnswer, sources: FetchedPageFact[]): AiAn
   if (allowed && !allowed.includes(normalized)) return "unknown";
   // A free-text answer must be backed by its own quote ("Intuit Inc." needs a quote that names Intuit).
   if (!allowed && !squash(quote).includes(squash(answer))) return "unknown";
+  // "Where is data stored?" must be answered by a sentence about storage, not an address.
+  if (key === "whereStored" && !STORAGE_WORDS.test(quote)) return "unknown";
   const page = sources.find((p) => isVerbatim(quote, p.text));
   return page ? { answer: normalized, quote: quote.trim(), pageUrl: page.finalUrl } : "unknown";
 }
