@@ -1,5 +1,7 @@
 # ByteMe — UMD AI for Small Business Hack-a-thon (Team 11)
 
+**Live demo:** https://byte-me-mu.vercel.app (no login). Every merge to `main` updates it; every PR gets its own preview link from Vercel.
+
 Start here: **[docs/HANDOFF_PROMPT.md](docs/HANDOFF_PROMPT.md)** — full context, the Claude Code setup prompt, and role prompts for Persons A, B and C.
 
 Feature list, scoring model and usability metrics: **[docs/FEATURE_SPEC.md](docs/FEATURE_SPEC.md)**.
