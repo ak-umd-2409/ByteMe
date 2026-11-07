@@ -42,6 +42,12 @@ describe("getVerifiedTools", () => {
     assert.deepEqual(getVerifiedTools({}, [r]), []);
   });
 
+  it("rejects blocked and listed tools by badge alone, even with a review date and a price", () => {
+    const blocked = { ...validRecord(), id: "b", badge: "blocked" as const };
+    const listed = { ...validRecord(), id: "l", badge: "listed" as const };
+    assert.deepEqual(getVerifiedTools({}, [blocked, listed]), []);
+  });
+
   it("returns copies, so changing a result doesn't change the catalog", () => {
     const first = getVerifiedTools()[0];
     const original = first.name;

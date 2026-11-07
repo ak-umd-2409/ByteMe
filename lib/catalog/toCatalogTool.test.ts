@@ -25,6 +25,14 @@ describe("toCatalogTool", () => {
     assert.equal(f.hipaaReady, false);
   });
 
+  it("never claims a tool handles outbound-call consent without evidence", () => {
+    const r = validRecord();
+    r.rulesFlags.outboundAiCalls = "unknown";
+    assert.equal(toCatalogTool(r)!.flags.requiresOutboundConsent, false);
+    r.rulesFlags.outboundAiCalls = true;
+    assert.equal(toCatalogTool(r)!.flags.requiresOutboundConsent, false);
+  });
+
   it("treats an unknown contract as requiring one", () => {
     const r = validRecord();
     assert.equal(toCatalogTool(r)!.flags.requiresContract, false);

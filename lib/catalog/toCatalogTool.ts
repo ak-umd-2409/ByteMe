@@ -49,7 +49,8 @@ export function toCatalogTool(record: CatalogRecord): CatalogTool | null {
       recordsCalls: orTrue(f.recordsCalls),
       announcesRecording: orFalse(f.announcesRecording),
       outboundAICalls: outbound,
-      requiresOutboundConsent: outbound,
+      // No record field proves a tool handles call consent, so never claim it.
+      requiresOutboundConsent: false,
       hipaaReady: orFalse(f.hipaaReady),
       baaAvailable: f.hipaaReady === true,
       personalizesPrices: orTrue(f.personalizedPricing),
