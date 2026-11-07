@@ -6,20 +6,27 @@
 import { isVerbatim } from "../../business/reviews.ts";
 import { getLlmProvider, llmJson } from "../../llm/client.ts";
 import { v } from "../../shared/validate.ts";
+import { SAFETY_CONFIG } from "../config.ts";
 import { isFetched, type AiAnswer, type CollectDeps, type FetchedPageFact, type PageFact, type PageKind, type SafetyFacts } from "../types.ts";
 
 type Ai = SafetyFacts["ai"];
 const ABOUT_KEYS = ["companyName", "address", "leaderName"] as const;
-const PRIVACY_KEYS = ["trainsOnYourData", "canDeleteData", "whereStored", "securityCertification"] as const;
+const PRIVACY_KEYS = ["trainsOnYourData", "canDeleteData", "whereStored", "securityCertification", "policyAddress"] as const;
 const ALLOWED: Partial<Record<keyof Ai, string[]>> = {
-  trainsOnYourData: ["yes", "no", "opt-in"],
+  trainsOnYourData: ["yes", "no", "opt-in", "anonymized", "opt-out"],
   canDeleteData: ["yes", "no"],
 };
 
 const answerSchema = v.optional(v.nullable(v.object({ answer: v.nullable(v.string({ max: 300 })), quote: v.nullable(v.string({ max: 1000 })) }, { allowUnknown: true })));
 const aboutSchema = v.object({ companyName: answerSchema, address: answerSchema, leaderName: answerSchema }, { allowUnknown: true });
 const privacySchema = v.object(
-  { trainsOnYourData: answerSchema, canDeleteData: answerSchema, whereStored: answerSchema, securityCertification: answerSchema },
+  {
+    trainsOnYourData: answerSchema,
+    canDeleteData: answerSchema,
+    whereStored: answerSchema,
+    securityCertification: answerSchema,
+    policyAddress: answerSchema,
+  },
   { allowUnknown: true },
 );
 
@@ -37,10 +44,16 @@ Fields, each {"answer": string, "quote": string} or null:
 
 const PRIVACY_SYSTEM = `${RULES}
 Fields, each {"answer": string, "quote": string} or null:
-- trainsOnYourData: "yes", "no" or "opt-in". Does the company use customer data to train or improve AI or machine-learning models? Wording like "we may use your data to improve our services or models" means "yes". "opt-in" only if it happens only when the customer agrees first.
+- trainsOnYourData: does the company use customer data to train or improve AI or machine-learning models? One of:
+  "no" = it says it doesn't.
+  "opt-in" = only when the customer agrees first.
+  "anonymized" = only data with names and personal details removed (de-identified, aggregated, anonymized).
+  "opt-out" = it does by default, but customers can turn it off; quote the sentence that says how.
+  "yes" = it does and the page gives no way to stop it. Wording like "we may use your data to improve our services or models" means "yes".
 - canDeleteData: "yes" or "no". Can customers delete their data or have it deleted?
 - whereStored: the country or region where customer data is stored or processed. Only from a sentence about data storage or processing, never from the company's mailing address.
-- securityCertification: any security certification named (for example SOC 2, ISO 27001, PCI DSS, HIPAA).`;
+- securityCertification: any security certification named (for example SOC 2, ISO 27001, PCI DSS, HIPAA).
+- policyAddress: the company's own street or mailing address, if the page gives one.`;
 
 const fetched = (page: PageFact): FetchedPageFact | null => (isFetched(page) ? page : null);
 const sameText = (a: PageFact, b: PageFact | undefined) =>
@@ -56,6 +69,7 @@ function emptyAi(): Ai {
     canDeleteData: "unknown",
     whereStored: "unknown",
     securityCertification: "unknown",
+    policyAddress: "unknown",
   };
 }
 
@@ -78,6 +92,9 @@ function verify(key: keyof Ai, raw: RawAnswer, sources: FetchedPageFact[]): AiAn
   if (!allowed && !squash(quote).includes(squash(answer))) return "unknown";
   // "Where is data stored?" must be answered by a sentence about storage, not an address.
   if (key === "whereStored" && !STORAGE_WORDS.test(quote)) return "unknown";
+  // "Names removed" and "you can switch it off" must be what the quote actually says.
+  if (key === "trainsOnYourData" && normalized === "anonymized" && !SAFETY_CONFIG.anonymizedPattern.test(quote)) return "unknown";
+  if (key === "trainsOnYourData" && normalized === "opt-out" && !SAFETY_CONFIG.optOutPattern.test(quote)) return "unknown";
   const page = sources.find((p) => isVerbatim(quote, p.text));
   return page ? { answer: normalized, quote: quote.trim(), pageUrl: page.finalUrl } : "unknown";
 }
@@ -110,7 +127,7 @@ export async function askAi(pages: Record<PageKind, PageFact>, deps: CollectDeps
   const aboutTask = async () => {
     if (!aboutSources.length) return;
     if (prev?.ai.ran.about && sameText(pages.about, prev.pages.about) && sameText(pages.contact, prev.pages.contact)) {
-      for (const key of ABOUT_KEYS) ai[key] = prev.ai[key];
+      for (const key of ABOUT_KEYS) ai[key] = prev.ai[key] ?? "unknown";
       ai.ran.about = true;
       return;
     }
@@ -123,7 +140,7 @@ export async function askAi(pages: Record<PageKind, PageFact>, deps: CollectDeps
   const privacyTask = async () => {
     if (!privacySources.length) return;
     if (prev?.ai.ran.privacy && sameText(pages.privacy, prev.pages.privacy)) {
-      for (const key of PRIVACY_KEYS) (ai as Record<string, unknown>)[key] = prev.ai[key];
+      for (const key of PRIVACY_KEYS) (ai as Record<string, unknown>)[key] = prev.ai[key] ?? "unknown";
       ai.ran.privacy = true;
       return;
     }

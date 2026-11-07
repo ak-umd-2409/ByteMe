@@ -18,7 +18,7 @@ describe("judge", () => {
   });
 
   it("notes when the Google unsafe-site check was not run", () => {
-    assert.match(judge(factsFixture()).checks.redFlags.reason, /Google unsafe-site check was not run/);
+    assert.match(judge(factsFixture()).checks.redFlags.reason, /We didn't check Google's list of unsafe websites/);
   });
 
   it("blocks a lookalike even when every other check passes", () => {
@@ -29,12 +29,12 @@ describe("judge", () => {
   });
 
   it("blocked wins over held", () => {
-    const report = judge(factsFixture({ ...LOOKALIKE, ai: { leaderName: "unknown" } }));
+    const report = judge(factsFixture({ ...LOOKALIKE, ai: { address: "unknown" } }));
     assert.equal(report.verdict, "blocked");
   });
 
   const coreCases: [string, DeepPartial<SafetyFacts>][] = [
-    ["whoIsBehind", { ai: { leaderName: "unknown" } }],
+    ["whoIsBehind", { ai: { address: "unknown" } }],
     ["privacyPolicy", { pages: { privacy: { error: "timeout" } } }],
     ["dataUse", { ai: { trainsOnYourData: { answer: "yes" } } }],
     ["securityBasics", { https: false }],
@@ -63,7 +63,21 @@ describe("judge", () => {
   it("warns a sensitive tool with no certification but keeps it ready", () => {
     const report = judge(factsFixture({ input: { handlesSensitiveData: true }, ai: { securityCertification: "unknown" } }));
     assert.equal(report.verdict, "ready");
-    assert.ok(report.warnings.some((w) => w.includes("no security certification")));
+    assert.ok(report.warnings.some((w) => w.includes("checked its security")));
+  });
+
+  it("keeps a tool that only learns from data with names removed ready, with the warning", () => {
+    const quote = "We only use de-identified, aggregated call data to improve our AI.";
+    const report = judge(factsFixture({ riskySentences: [quote], ai: { trainsOnYourData: { answer: "anonymized", quote } } }));
+    assert.equal(report.verdict, "ready");
+    assert.equal(report.warnings.length, 1);
+    assert.match(report.warnings[0], /^This tool learns from how people use it\./);
+  });
+
+  it("keeps a tool with no named leader ready, with a warning", () => {
+    const report = judge(factsFixture({ ai: { leaderName: "unknown" } }));
+    assert.equal(report.verdict, "ready");
+    assert.deepEqual(report.warnings, ["We couldn't find the name of the person who runs this company."]);
   });
 
   it("is deterministic", () => {

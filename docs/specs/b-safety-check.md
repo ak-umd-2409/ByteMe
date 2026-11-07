@@ -107,3 +107,20 @@ The report (existing `SafetyReport` type) gains two fields: `verdict: "blocked" 
 - Finding tools, the admin screen, the review queue UI, and weekly re-checks (problem 8).
 - Filling 60–80 real tools (problem 7).
 - Saving to Supabase (problem 11).
+
+## Follow-up (agreed with Rishabh, Nov 7, after the real-world check)
+
+The first real-world run held every real tool (Square, Rosie, My AI Front Desk, Goodcall), because each says it may use customer data for its AI, and big companies rarely put an address on their About page. We keep the safety bar but make it more precise, and we rewrite every owner-facing sentence in plain words.
+
+1. **Training has four cases** (`trainsOnYourData`: `no`, `opt-in`, `anonymized`, `opt-out`, `yes`):
+
+   | Policy says | `dataUse` | Owner sees |
+   | --- | --- | --- |
+   | No training, or only if you say yes (`no`, `opt-in`) | pass | — |
+   | Only uses data with names removed (`anonymized`) | pass | Warning: **"This tool learns from how people use it."** It may use your customers' calls or messages to get better, but it removes names and phone numbers first. Don't share card numbers or health details with it. |
+   | Uses it unless you switch it off (`opt-out`) | pass | Warning: **"Turn this setting off after you sign up."** This tool may use your customers' calls or messages to get better. You can stop this in its settings. |
+   | Uses it and you can't stop it (`yes`) | fail | — |
+
+   Safeguards: an `anonymized` answer counts only if its quote has a word like "de-identified", "aggregated" or "anonymized". An `opt-out` answer counts only if its quote says how to opt out or turn it off. Otherwise the answer is "unknown". Any *other* sentence about training that the quote doesn't explain still means "a person must read it" (`unknown` → held).
+2. **Who is behind it:** the company's address may also come from the Privacy page (`policyAddress`). Must-pass = company name + address. A missing leader name becomes a warning, not a hold.
+3. **Plain words:** every reason and warning is written for an owner who knows nothing about AI. The first sentence says it all, there are no AI words ("get better", not "train models"), and a warning ends with something to do.

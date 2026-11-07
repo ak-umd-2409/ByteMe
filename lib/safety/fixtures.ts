@@ -84,6 +84,7 @@ export function factsFixture(overrides: DeepPartial<SafetyFacts> = {}): SafetyFa
       },
       whereStored: { answer: "United States", quote: "Your data is stored in the United States.", pageUrl: `${SITE}/privacy` },
       securityCertification: { answer: "SOC 2 Type II", quote: "We are SOC 2 Type II certified.", pageUrl: `${SITE}/privacy` },
+      policyAddress: "unknown",
     },
     riskySentences: [],
     safeBrowsing: "not_run",

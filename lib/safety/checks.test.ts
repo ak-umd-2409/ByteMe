@@ -9,6 +9,8 @@ import {
   checkPrivacyPolicy,
   checkSecurityBasics,
   checkWhoIsBehind,
+  leaderWarning,
+  trainingWarning,
 } from "./checks.ts";
 import { factsFixture } from "./fixtures.ts";
 import type { FetchedPageFact } from "./types.ts";
@@ -47,8 +49,20 @@ describe("checkWhoIsBehind", () => {
   it("is unknown when the AI didn't run", () => {
     assert.equal(checkWhoIsBehind(factsFixture({ ai: { ran: { about: false }, companyName: "unknown" } })).result, "unknown");
   });
-  it("is unknown when only some of the three were found", () => {
-    assert.equal(checkWhoIsBehind(factsFixture({ ai: { leaderName: "unknown" } })).result, "unknown");
+  it("is unknown when the address wasn't found anywhere", () => {
+    assert.equal(checkWhoIsBehind(factsFixture({ ai: { address: "unknown" } })).result, "unknown");
+  });
+  it("passes with the address from the privacy page", () => {
+    const policyAddress = { answer: "100 Main Street, College Park, MD 20740", quote: "GoodTool Inc. Privacy Policy.", pageUrl: "https://goodtool.example/privacy" };
+    assert.equal(checkWhoIsBehind(factsFixture({ ai: { address: "unknown", policyAddress } })).result, "pass");
+  });
+  it("passes without a leader's name, with a warning", () => {
+    const f = factsFixture({ ai: { leaderName: "unknown" } });
+    assert.equal(checkWhoIsBehind(f).result, "pass");
+    assert.equal(leaderWarning(f), "We couldn't find the name of the person who runs this company.");
+  });
+  it("gives no leader warning when the leader is named", () => {
+    assert.equal(leaderWarning(factsFixture()), null);
   });
   it("is unknown when About and Contact are both missing", () => {
     const f = factsFixture({ pages: { about: null, contact: null }, ai: { companyName: "unknown" } });
@@ -83,6 +97,26 @@ describe("checkDataUse", () => {
   it("is unknown when training wasn't found", () => {
     assert.equal(checkDataUse(factsFixture({ ai: { trainsOnYourData: "unknown" } })).result, "unknown");
   });
+  const ANON = "We only use de-identified, aggregated call data to improve our AI.";
+  const OPTOUT = "You can opt out of model training at any time in your account settings.";
+  it("passes when it only learns from data with names removed, with a plain warning", () => {
+    const f = factsFixture({ riskySentences: [ANON], ai: { trainsOnYourData: { answer: "anonymized", quote: ANON } } });
+    assert.equal(checkDataUse(f).result, "pass");
+    assert.match(trainingWarning(f)!, /^This tool learns from how people use it\./);
+  });
+  it("passes when you can switch learning off, with a plain warning", () => {
+    const f = factsFixture({ riskySentences: [OPTOUT], ai: { trainsOnYourData: { answer: "opt-out", quote: OPTOUT } } });
+    assert.equal(checkDataUse(f).result, "pass");
+    assert.match(trainingWarning(f)!, /^Turn this setting off after you sign up\./);
+  });
+  it("is unknown when names are removed but another sentence says it trains on recordings", () => {
+    const other = "We use call recordings to train our models.";
+    const f = factsFixture({ riskySentences: [ANON, other], ai: { trainsOnYourData: { answer: "anonymized", quote: ANON } } });
+    assert.equal(checkDataUse(f).result, "unknown");
+  });
+  it("gives no training warning when it doesn't learn from your data", () => {
+    assert.equal(trainingWarning(factsFixture()), null);
+  });
   it("passes when the only risky sentence is the no-training quote itself", () => {
     const f = factsFixture({ riskySentences: ["We do not use your data to build or tune any models."] });
     assert.equal(checkDataUse(f).result, "pass");
@@ -116,7 +150,7 @@ describe("checkSecurityBasics", () => {
     assert.equal(checkSecurityBasics(f).result, "pass");
     assert.equal(
       certificationWarning(f),
-      "Takes payments or health info, but we found no security certification (like PCI or SOC 2).",
+      "This tool handles payments or health information, but we found no proof that an outside company checked its security (like PCI or SOC 2).",
     );
   });
   it("gives no certification warning for other tools", () => {
@@ -140,7 +174,7 @@ describe("checkDataLocation", () => {
   it("is unknown (never fail) when storage isn't stated", () => {
     const item = checkDataLocation(factsFixture({ ai: { whereStored: "unknown" } }));
     assert.equal(item.result, "unknown");
-    assert.equal(item.reason, "We couldn't find where your data is stored.");
+    assert.equal(item.reason, "We couldn't find which country your information is kept in.");
   });
 });
 

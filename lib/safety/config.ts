@@ -35,6 +35,10 @@ export const SAFETY_CONFIG = {
   negationPattern: /\b(not|never|no)\b|n't\b/i,
   /** ...and none of these, or a person must read it. */
   qualifierPattern: /\b(unless|except|but|however|may|might|anonymi[sz]ed|aggregated?|de-identified|improve\w*)\b/i,
+  /** An "anonymized" training answer needs one of these words in its quote. */
+  anonymizedPattern: /\b(de-?identified|aggregated?|anonymi[sz]\w*|pseudonymi[sz]\w*)\b/i,
+  /** An "opt-out" training answer needs its quote to say how to stop it. */
+  optOutPattern: /\b(opt(ing)?[- ]?out|turn(ing)? (it |this )?off|switch(ing)? (it |this )?off|disable|withdraw)\b/i,
   pricePattern: /\$\s?\d/,
   monthlyPattern: /(per month|\/\s?mo\b|monthly|month-to-month)/i,
   contactSalesPattern: /\b(contact sales|talk to sales|request a quote|get a quote)\b/i,

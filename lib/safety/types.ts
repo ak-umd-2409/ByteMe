@@ -46,10 +46,14 @@ export interface SafetyFacts {
     companyName: AiAnswer<string>;
     address: AiAnswer<string>;
     leaderName: AiAnswer<string>;
-    trainsOnYourData: AiAnswer<"yes" | "no" | "opt-in">;
+    /** no / opt-in: doesn't learn from your data unless you agree. anonymized: only with names removed.
+     *  opt-out: does unless you switch it off. yes: does, and you can't stop it. */
+    trainsOnYourData: AiAnswer<"yes" | "no" | "opt-in" | "anonymized" | "opt-out">;
     canDeleteData: AiAnswer<"yes" | "no">;
     whereStored: AiAnswer<string>;
     securityCertification: AiAnswer<string>;
+    /** The company's address as written in the privacy policy. */
+    policyAddress: AiAnswer<string>;
   };
   riskySentences: string[];
   safeBrowsing: "clean" | "listed" | "not_run";

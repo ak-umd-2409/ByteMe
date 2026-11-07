@@ -64,6 +64,8 @@ report.checks;    // 8 checks, each pass / fail / unknown + reason + evidence (l
 
 - Two layers: `collectFacts()` reads the website (and asks the AI fixed questions); `judge(facts)` decides with plain code, no internet, no AI. Server-side only.
 - Never throws. A page it couldn't read becomes "couldn't tell", never a guess.
+- **Learning from your data has four cases.** "Doesn't" or "only if you say yes" pass. "Only with names removed" and "you can switch it off" also pass, and add a plain warning owners must see (`report.warnings`), e.g. "Turn this setting off after you sign up." "Does, and you can't stop it" fails, so the tool is held.
+- **Reasons and warnings are written for owners.** Show them as they are; don't add AI words.
 - **AI answers need a verbatim quote.** Every AI answer must come with a sentence the code finds word for word on the vendor's page, or it becomes `"unknown"`. With no OpenRouter key, those answers are `"unknown"`, so the tool is `held`.
 
 | Verdict | When | What happens |

@@ -97,7 +97,8 @@
       "quote": "All customer data is stored in data centers in the United States.",
       "pageUrl": "https://booknest.example/privacy"
     },
-    "securityCertification": "unknown"
+    "securityCertification": "unknown",
+    "policyAddress": "unknown"
   },
   "riskySentences": [
     "We do not use customer content to train AI models."
