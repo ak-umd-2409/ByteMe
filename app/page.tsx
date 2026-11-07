@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   demoBusiness,
   demoCatalog,
@@ -11,7 +11,15 @@ import {
   BusinessFinder,
   ProblemsOverview,
   useLiveBusiness,
+  type LiveBusiness,
 } from "../components/parts23/LiveBusiness.tsx";
+import {
+  AboutYou,
+  AddProblem,
+  ContextStrip,
+  RulesPanel,
+} from "../components/parts23/BusinessContext.tsx";
+import { api, type PaybackResult, type ProblemKey } from "../lib/client/parts23.ts";
 import type {
   BusinessProfile,
   Recommendation,
@@ -39,11 +47,13 @@ function OptionCard({
   onCompare,
   onDetails,
   selected,
+  payback,
 }: {
   option: Recommendation;
   onCompare: (id: string) => void;
   onDetails: (choice: ToolChoice) => void;
   selected: string[];
+  payback?: PaybackResult;
 }) {
   return (
     <article className={`option-card ${kindClass[option.kind]}`}>
@@ -58,6 +68,11 @@ function OptionCard({
         </span>
       </div>
       <p className="option-description">{option.description}</p>
+      {payback && payback.days !== null && payback.days > 0 && (
+        <p className="option-description" style={{ fontWeight: 600, color: "var(--green, #255d4a)" }} title={payback.math ?? undefined}>
+          ⏱ {payback.label}
+        </p>
+      )}
       <div className="choice-list">
         {option.choices.map((choice) => (
           <div className="choice" key={choice.tool.id}>
@@ -131,11 +146,22 @@ export default function Home() {
       ? live.recommendationInput.request.problems
       : []
     : demoProblems;
-  const chooseBusiness = async (placeId: string) => {
-    const next = await biz.choose(placeId, {
-      monthlyBudget: business.monthlyBudget,
-      needsHelp: business.needsHelp,
-    });
+  const syncBusiness = (next: LiveBusiness) => {
+    if (!next.recommendationInput.ok) return;
+    const fresh = next.recommendationInput.request.business;
+    setBusiness((prev) => ({
+      ...fresh,
+      monthlyBudget: prev.monthlyBudget,
+      currentTools: prev.currentTools,
+      needsHelp: prev.needsHelp,
+    }));
+  };
+  const chooseBusiness = async (placeId: string, pastedReviews?: string) => {
+    const next = await biz.choose(
+      placeId,
+      { monthlyBudget: business.monthlyBudget, needsHelp: business.needsHelp },
+      pastedReviews,
+    );
     if (next?.recommendationInput.ok) {
       setBusiness(next.recommendationInput.request.business);
       setProblemId(next.recommendationInput.request.problems[0]?.id ?? "");
@@ -150,6 +176,29 @@ export default function Home() {
   const current =
     result.problems.find((row) => row.problem.id === problemId) ??
     result.problems[0];
+  // Spec 3.3: "pays for itself in X days", calculated on the server for the options shown.
+  const [paybacks, setPaybacks] = useState<Record<string, PaybackResult>>({});
+  const currentKey = current?.problem.id.replace(/^problem-/, "") as ProblemKey | undefined;
+  const optionPrices = current?.options.map((o) => `${o.kind}:${o.monthlyPrice}`).join("|") ?? "";
+  useEffect(() => {
+    if (!live || !current || !currentKey) return setPaybacks({});
+    const controller = new AbortController();
+    api
+      .payback(
+        {
+          industry: live.profile.business.industry.value ?? "other",
+          items: current.options.map((o) => ({ problemKey: currentKey, monthlyCost: o.monthlyPrice })),
+          assumptions: biz.assumptions,
+        },
+        controller.signal,
+      )
+      .then((res) =>
+        setPaybacks(Object.fromEntries(current.options.map((o, i) => [o.kind, res.results[i]]))),
+      )
+      .catch(() => setPaybacks({}));
+    return () => controller.abort();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [live, currentKey, optionPrices, biz.assumptions]);
   const toolNames = [
     ...new Set([
       "Square",
@@ -303,7 +352,7 @@ export default function Home() {
               {live ? "Real business profile" : "Sample business profile"}
             </span>
           </div>
-          <BusinessFinder biz={biz} onChoose={(id) => void chooseBusiness(id)} />
+          <BusinessFinder biz={biz} onChoose={(id, pasted) => void chooseBusiness(id, pasted)} />
           <div className="profile-panel" style={{ marginTop: 20 }}>
             <div className="profile-intro">
               <div className="profile-avatar">{business.name.charAt(0)}</div>
@@ -387,6 +436,15 @@ export default function Home() {
             </div>
           </div>
         </section>
+        {live && (
+          <section className="workbench" style={{ paddingTop: 36 }}>
+            <div style={{ display: "grid", gap: 20 }}>
+              <ContextStrip live={live} />
+              <RulesPanel live={live} />
+              <AboutYou key={live.profile.profileId} biz={biz} onSaved={syncBusiness} />
+            </div>
+          </section>
+        )}
         <section id="problems" className="workbench">
           <div className="section-heading">
             <div>
@@ -407,6 +465,11 @@ export default function Home() {
             )}
           </div>
           {live && <ProblemsOverview biz={biz} />}
+          {live && (
+            <div style={{ marginTop: 20 }}>
+              <AddProblem biz={biz} />
+            </div>
+          )}
         </section>
         <section className="recommend-section">
           <div className="section-heading">
@@ -478,6 +541,7 @@ export default function Home() {
               {current.options.map((option) => (
                 <OptionCard
                   key={option.kind}
+                  payback={live ? paybacks[option.kind] : undefined}
                   option={option}
                   onCompare={toggleCompare}
                   onDetails={setDetails}

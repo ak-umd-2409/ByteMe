@@ -738,3 +738,79 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* ---------- Part 2 context panels ---------- */
+.contextGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+@media (max-width: 900px) {
+  .contextGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 560px) {
+  .contextGrid {
+    grid-template-columns: 1fr;
+  }
+}
+.ctxCard {
+  padding: 16px 18px;
+  display: grid;
+  gap: 6px;
+  align-content: start;
+}
+.ctxHead {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 650;
+  color: var(--ink-2);
+}
+.ctxList {
+  margin: 0;
+  padding-left: 18px;
+  display: grid;
+  gap: 4px;
+  font-size: 14px;
+}
+.factList {
+  margin: 4px 0 2px;
+  padding-left: 16px;
+  font-size: 13px;
+  color: var(--ink-2);
+}
+.ruleList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+}
+.rule {
+  display: grid;
+  gap: 6px;
+  padding: 14px 0;
+  border-top: 1px solid var(--hair);
+}
+.rule:first-child {
+  border-top: 0;
+  padding-top: 0;
+}
+.aboutGrid {
+  display: flex;
+  gap: 28px;
+  flex-wrap: wrap;
+}
+.fieldsetBare {
+  border: 0;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+}
+.payback {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--accent);
+  margin: 6px 0 0;
+}

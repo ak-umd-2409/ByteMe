@@ -403,3 +403,24 @@ data/mock/onboarding.ts   fictional businesses + websites for mock mode
 **`discovery.overview`**: `headline` ("We found 1 free fix and 1 problem a tool could help with"), counts (`quickWins`, `needTool`, `toCheck`), `topProblemKey`, and `strengths` (most-praised review themes with counts).
 
 The Part 4 contract is unchanged. Both real businesses produce a valid `/api/recommend` request (`lib/business/realSnapshots.test.ts`).
+
+## Spec checklist status (Parts 2 & 3)
+
+| # | Feature | Where |
+| --- | --- | --- |
+| 2.1 | Business lookup | `/api/business/search`, `/api/business/details` (Google Places, or real public snapshots with no key) |
+| 2.2 | Review scan | `analysis.reviews` |
+| 2.3 | Paste more reviews | `analyze` → `pastedReviews`; "Paste more reviews" on the home page |
+| 2.4 | Website scan | `analysis.website` |
+| 2.5 | Tools you use | `analysis.technology` (pre-checks the home page tool toggles) |
+| 2.6 | Policy scan | `website.policies.{privacy,refund,terms}.facts`: each fact quotes the exact sentence (`lib/business/policies.ts`) |
+| 2.7 | Data sensitivity | `profile.dataSensitivity` (level + reasons) |
+| 2.8 | Rules that apply to you | `analysis.rules`, updated in `discover.rules` (`lib/rules/maryland.ts`, rules as data with sources, checked 2026-11-07, not legal advice) |
+| 2.9 | Location context | `analysis.location`: county, rural (Maryland's 18 rural counties), Maryland SBDC region and contact |
+| 2.10 | Languages nearby | `analysis.location.languages` (Census QuickFacts; Frederick County loaded, other counties say "not available yet") |
+| 2.11 | Internet check | `analysis.location.internet` (county broadband share from Census; favors phone-friendly tools in rural or low-broadband areas) |
+| — | Questions we still ask | `confirm` with `owner` corrections: team size, goals, deal-breakers, "what eats your week", 35,000+ customers |
+| 3.1–3.2 | Evidence cards, ranked | `discover.discovery.problems` |
+| 3.3 | Pays for itself in X days | `POST /api/problems/payback` `{ industry, items: [{ problemKey, monthlyCost }], assumptions? }` → `results[]` with `days`, `label`, `math` |
+| 3.4 | Problems you didn't know about | Listings check (hours, address, phone, services, duplicates) |
+| 3.5 | Add a problem | "Anything else?" → `confirm` with `owner.reportedProblems` (recorded as owner-reported, never as found evidence) |

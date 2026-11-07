@@ -17,7 +17,9 @@ import {
   type OnboardingAnalysis,
   type ProblemKey,
   type RecommendationInputResult,
+  type RulesReport,
 } from "@/lib/client/parts23.ts";
+import type { ProfileCorrections } from "@/lib/business/profile.ts";
 import { OpportunityChart, StrengthBars } from "./charts.tsx";
 import { ProblemCardView } from "./ProblemCardView.tsx";
 import s from "./parts23.module.css";
@@ -27,6 +29,7 @@ export interface LiveBusiness {
   profile: OnboardingProfile;
   discovery: DiscoveryResult;
   recommendationInput: RecommendationInputResult;
+  rules: RulesReport;
 }
 
 export const REAL_BUSINESSES = [
@@ -70,11 +73,12 @@ export function useLiveBusiness() {
 
   /** Read the business, confirm the profile as found, and discover problems. */
   const choose = useCallback(
-    async (placeId: string, owner: { monthlyBudget: number; needsHelp: boolean | null }) =>
+    async (placeId: string, owner: { monthlyBudget: number; needsHelp: boolean | null }, pastedReviews?: string) =>
       run("analyze", async (signal) => {
         const analysis = await api.analyze(
           {
             placeId,
+            ...(pastedReviews?.trim() ? { pastedReviews: pastedReviews.trim() } : {}),
             owner: {
               monthlyBudget: owner.monthlyBudget,
               goals: ["more_customers"],
@@ -84,11 +88,11 @@ export function useLiveBusiness() {
           signal,
         );
         const { profile } = await api.confirm({ profile: analysis.profile }, signal);
-        const { discovery, recommendationInput } = await api.discover(
+        const { discovery, recommendationInput, rules } = await api.discover(
           { profile, reviews: analysis.reviews, website: analysis.website, listings: analysis.listings },
           signal,
         );
-        const next = { analysis, profile, discovery, recommendationInput };
+        const next = { analysis, profile, discovery, recommendationInput, rules };
         setLive(next);
         setMatches(null);
         setAssumptions({});
@@ -102,11 +106,11 @@ export function useLiveBusiness() {
     async (profile: OnboardingProfile, nextAssumptions = assumptions) => {
       if (!live) return null;
       return run("update", async (signal) => {
-        const { discovery, recommendationInput } = await api.discover(
+        const { discovery, recommendationInput, rules } = await api.discover(
           { profile, reviews: live.analysis.reviews, website: live.analysis.website, listings: live.analysis.listings, assumptions: nextAssumptions },
           signal,
         );
-        const next = { ...live, profile, discovery, recommendationInput };
+        const next = { ...live, profile, discovery, recommendationInput, rules };
         setLive(next);
         return next;
       });
@@ -125,6 +129,16 @@ export function useLiveBusiness() {
     [live, refresh, run],
   );
 
+  /** Apply owner answers (team size, goals, deal-breakers, time sink, added problems) and re-run discovery. */
+  const updateOwner = useCallback(
+    async (corrections: ProfileCorrections) => {
+      if (!live) return null;
+      const res = await run("update", (signal) => api.confirm({ profile: live.profile, corrections }, signal));
+      return res ? refresh(res.profile) : null;
+    },
+    [live, refresh, run],
+  );
+
   const reset = useCallback(() => {
     abort.current?.abort();
     setLive(null);
@@ -132,14 +146,15 @@ export function useLiveBusiness() {
     setError(null);
   }, []);
 
-  return { live, matches, busy, error, search, choose, refresh, confirmProblem, reset, assumptions, setAssumptions };
+  return { live, matches, busy, error, search, choose, refresh, confirmProblem, updateOwner, reset, assumptions, setAssumptions };
 }
 
 export type LiveBusinessApi = ReturnType<typeof useLiveBusiness>;
 
 /** Search box, results, and the real businesses captured from public data. */
-export function BusinessFinder({ biz, onChoose }: { biz: LiveBusinessApi; onChoose: (placeId: string) => void }) {
+export function BusinessFinder({ biz, onChoose }: { biz: LiveBusinessApi; onChoose: (placeId: string, pastedReviews?: string) => void }) {
   const [query, setQuery] = useState("");
+  const [pasted, setPasted] = useState("");
   return (
     <div className={`${s.root} ${s.embedded} ${s.panel} ${s.pad} ${s.stack}`} style={{ gap: 16 }}>
       <form
@@ -169,7 +184,7 @@ export function BusinessFinder({ biz, onChoose }: { biz: LiveBusinessApi; onChoo
               onClick={async () => {
                 setQuery(r.query);
                 const found = await biz.search(r.query);
-                if (found?.[0]) onChoose(found[0].placeId);
+                if (found?.[0]) onChoose(found[0].placeId, pasted);
               }}
             >
               {r.label}, {r.place}
@@ -177,12 +192,21 @@ export function BusinessFinder({ biz, onChoose }: { biz: LiveBusinessApi; onChoo
           ))}
         </div>
       </div>
+      <details>
+        <summary className={s.small} style={{ cursor: "pointer" }}>
+          Paste more reviews (optional)
+        </summary>
+        <div className={s.field} style={{ marginTop: 8 }}>
+          <span className={s.tiny}>From Yelp, Facebook or anywhere else. Leave a blank line between reviews; star ratings like “4/5” are read too.</span>
+          <textarea className={s.input} style={{ minHeight: 110, padding: 10 }} value={pasted} onChange={(e) => setPasted(e.target.value)} />
+        </div>
+      </details>
       {biz.matches && biz.busy !== "analyze" && (
         <ul className={s.matchList} aria-live="polite">
           {biz.matches.length === 0 && <li className={s.small}>No match. Try one of the businesses above.</li>}
           {biz.matches.map((m) => (
             <li key={m.placeId}>
-              <button type="button" className={s.match} onClick={() => onChoose(m.placeId)}>
+              <button type="button" className={s.match} onClick={() => onChoose(m.placeId, pasted)}>
                 <span>
                   <strong>{m.name}</strong>
                   <span className={s.small} style={{ display: "block" }}>
