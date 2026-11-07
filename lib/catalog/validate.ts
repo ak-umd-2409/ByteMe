@@ -9,6 +9,7 @@ import { PRIVACY_KEYS, RULES_FLAG_KEYS, SAFETY_CHECK_NAMES } from "./types.ts";
 
 const BADGES = ["verified", "listed", "blocked"];
 const CHECK_RESULTS = ["pass", "fail", "unknown"];
+const VERDICTS = ["blocked", "held", "ready"];
 const WORKS_WITH_TYPES = ["native", "zapier", "none"];
 const CONTRACTS = ["monthly", "annual", "unknown"];
 const SETUP_MODES = ["self_serve", "needs_help"];
@@ -118,6 +119,14 @@ export function validateRecord(record: unknown): string[] {
       if (!isObj(c) || !CHECK_RESULTS.includes(c.result) || typeof c.reason !== "string" || !Array.isArray(c.evidence))
         err(`safetyCheck.checks.${name}`, "needs result, reason and evidence");
     }
+  if (isObj(s)) {
+    if (!VERDICTS.includes(s.verdict)) err("safetyCheck.verdict", "must be blocked, held or ready");
+    else if ((r.badge === "verified" || r.badge === "listed") && s.verdict !== "ready")
+      err("safetyCheck.verdict", "only tools with verdict ready can be listed or verified");
+    else if (r.badge === "blocked" && s.verdict !== "blocked")
+      err("safetyCheck.verdict", "a blocked tool must have verdict blocked");
+    if (!Array.isArray(s.warnings)) err("safetyCheck.warnings", "must be a list");
+  }
   if (r.badge === "blocked" && isObj(s) && Array.isArray(s.redFlags) && s.redFlags.length === 0)
     err("safetyCheck.redFlags", "a blocked tool must say why");
 

@@ -183,7 +183,9 @@
           ]
         }
       },
-      "redFlags": []
+      "redFlags": [],
+      "verdict": "ready",
+      "warnings": []
     },
     "lastChecked": "2026-11-07",
     "sources": [
@@ -375,7 +377,9 @@
           ]
         }
       },
-      "redFlags": []
+      "redFlags": [],
+      "verdict": "ready",
+      "warnings": []
     },
     "lastChecked": "2026-11-07",
     "sources": [
@@ -558,7 +562,9 @@
           ]
         }
       },
-      "redFlags": []
+      "redFlags": [],
+      "verdict": "ready",
+      "warnings": []
     },
     "lastChecked": "2026-11-07",
     "sources": [
@@ -747,7 +753,9 @@
           ]
         }
       },
-      "redFlags": []
+      "redFlags": [],
+      "verdict": "ready",
+      "warnings": []
     },
     "lastChecked": "2026-11-07",
     "sources": [
@@ -929,7 +937,9 @@
           ]
         }
       },
-      "redFlags": []
+      "redFlags": [],
+      "verdict": "ready",
+      "warnings": []
     },
     "lastChecked": "2026-11-07",
     "sources": [
@@ -1107,7 +1117,9 @@
       },
       "redFlags": [
         "Name and website imitate Square (squarre-voice vs. Square)."
-      ]
+      ],
+      "verdict": "blocked",
+      "warnings": []
     },
     "lastChecked": "2026-11-07",
     "sources": [
@@ -1296,7 +1308,9 @@
       },
       "redFlags": [
         "Website is under 6 months old and asks you to download software."
-      ]
+      ],
+      "verdict": "blocked",
+      "warnings": []
     },
     "lastChecked": "2026-11-07",
     "sources": [
@@ -1485,7 +1499,9 @@
       },
       "redFlags": [
         "No privacy policy found."
-      ]
+      ],
+      "verdict": "blocked",
+      "warnings": []
     },
     "lastChecked": "2026-11-07",
     "sources": [
