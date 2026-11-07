@@ -8,7 +8,7 @@
     "build": "next build",
     "start": "next start",
     "typecheck": "tsc --noEmit",
-    "test": "node --experimental-strip-types --test lib/recommend/*.test.ts"
+    "test": "NODE_ENV=test node --experimental-strip-types --no-warnings --test \"lib/**/*.test.ts\""
   },
   "dependencies": {
     "next": "^16.0.0",
