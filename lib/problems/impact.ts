@@ -187,10 +187,84 @@ export const MODELS: Record<string, ModelSpec> = {
       `${num(v.monthly_customers)} customers/month × ${pct(v.repeat_lift)} extra return × ${usd(v.average_job_value)} = ${usd(r)}/month`,
     assumptions: ["Reminders bring back a small share of past customers each month."],
   },
+  wrong_info: {
+    id: "wrong_info",
+    kind: "revenue_opportunity",
+    inputs: [
+      {
+        key: "people_affected",
+        label: "Customers a week who see wrong hours or details",
+        unit: "per_week",
+        min: 0,
+        max: 1_000,
+        default: () => ({ value: 3, low: 3, high: 3, note: PLACEHOLDER }),
+      },
+      share("lost_share", "Share of them who call someone else instead", 0.2, 0.1, 0.3),
+      averageJobValue,
+    ],
+    compute: (v) => v.people_affected * v.lost_share * v.average_job_value * WEEKS_PER_MONTH,
+    formula: "customers who see wrong info per week × share who go elsewhere × average job value × 4.33 weeks",
+    calculation: (v, r) =>
+      `${num(v.people_affected)} customers/week see wrong info × ${pct(v.lost_share)} go elsewhere × ${usd(v.average_job_value)} average job × ${WEEKS_PER_MONTH} weeks = ${usd(r)}/month`,
+    assumptions: [
+      "A month has 4.33 weeks on average.",
+      "Someone who sees “closed” or the wrong number usually calls the next company instead.",
+    ],
+  },
   time_cost_quotes: timeModel("time_cost_quotes", "Hours per week spent writing quotes", [3, 1, 6], [0.5, 0.3, 0.7]),
   time_cost_scheduling: timeModel("time_cost_scheduling", "Hours per week spent on scheduling", [3, 1, 5], [0.5, 0.3, 0.7]),
   time_cost_admin: timeModel("time_cost_admin", "Hours per week on invoices, receipts and data entry", [5, 2, 8], [0.4, 0.25, 0.6]),
 };
+
+/** Short labels for the equation chips in the UI ("6 missed / week × 25% would hire you × $300 avg job"). */
+export const SHORT_LABEL: Record<string, string> = {
+  weekly_inquiries: "inquiries / week",
+  missed_share: "go unanswered",
+  missed_per_week: "missed / week",
+  conversion_rate: "would hire you",
+  average_job_value: "avg job",
+  slow_share: "answered slowly",
+  lost_share: "go elsewhere",
+  online_preference: "prefer online",
+  give_up_share: "give up",
+  monthly_customers: "customers / month",
+  repeat_lift: "come back if reminded",
+  hours_per_week: "hours / week",
+  automatable_share: "time saved",
+  hourly_value: "per hour",
+  people_affected: "see wrong info / week",
+};
+
+/** The question an owner answers to replace a term with their own number. */
+export const QUESTION: Record<string, string> = {
+  weekly_inquiries: "About how many calls, messages and requests do you get in a week?",
+  missed_per_week: "About how many calls or messages a week go unanswered or get no reply?",
+  conversion_rate: "Out of 10 people who can't reach you, how many would have hired you? (as a %)",
+  average_job_value: "What's a typical job or order worth to you?",
+  slow_share: "What share of messages wait more than a day for a reply?",
+  lost_share: "Out of 10 of those people, how many go to someone else? (as a %)",
+  online_preference: "Out of 10 customers, how many would rather book online? (as a %)",
+  give_up_share: "Out of 10 of them, how many give up when they have to call? (as a %)",
+  monthly_customers: "About how many past customers could you remind each month?",
+  repeat_lift: "What share of them might come back if reminded? (as a %)",
+  hours_per_week: "About how many hours a week does this take you?",
+  automatable_share: "What share of that time could a tool save? (as a %)",
+  hourly_value: "What is an hour of your time worth?",
+  people_affected: "About how many people a week might see the wrong details?",
+};
+
+/** Order of the terms in each model's equation (derived values replace what they're derived from). */
+const TERMS: Record<string, string[]> = {
+  missed_inquiries: ["missed_per_week", "conversion_rate", "average_job_value"],
+  slow_responses: ["weekly_inquiries", "slow_share", "lost_share", "average_job_value"],
+  no_online_booking: ["weekly_inquiries", "online_preference", "give_up_share", "average_job_value"],
+  follow_up: ["monthly_customers", "repeat_lift", "average_job_value"],
+  wrong_info: ["people_affected", "lost_share", "average_job_value"],
+  time_cost_quotes: ["hours_per_week", "automatable_share", "hourly_value"],
+  time_cost_scheduling: ["hours_per_week", "automatable_share", "hourly_value"],
+  time_cost_admin: ["hours_per_week", "automatable_share", "hourly_value"],
+};
+const MONTHLY_MODELS = new Set(["follow_up"]);
 
 export type ImpactOverrides = Record<string, number>;
 
@@ -238,6 +312,7 @@ export function calculateImpact(modelId: string, industry: IndustryInfo, overrid
     inputs.push({
       key: spec.key,
       label: spec.label,
+      short: SHORT_LABEL[spec.key],
       value,
       unit: spec.unit,
       source: own !== undefined ? "owner" : "default",
@@ -255,6 +330,7 @@ export function calculateImpact(modelId: string, industry: IndustryInfo, overrid
     inputs.push({
       key: d.key,
       label: d.label,
+      short: SHORT_LABEL[d.key],
       value: Math.round(expected[d.key] * 10) / 10,
       unit: d.unit,
       source: own !== undefined ? "owner" : "derived",
@@ -278,6 +354,24 @@ export function calculateImpact(modelId: string, industry: IndustryInfo, overrid
       assumptions: [...model.assumptions, ...(ownerInputShare < 1 ? ["Inputs marked “starting assumption” are placeholders, not data about your business."] : [])],
       formula: model.formula,
       calculation: model.calculation(expected, result),
+      terms: [
+        ...(TERMS[model.id] ?? []).map((key) => {
+          const input = inputs.find((i) => i.key === key)!;
+          return {
+            key,
+            short: SHORT_LABEL[key] ?? input.label,
+            value: input.value,
+            unit: input.unit,
+            source: input.source,
+            question: QUESTION[key] ?? input.label,
+            min: input.min,
+            max: input.max,
+          };
+        }),
+        ...(MONTHLY_MODELS.has(model.id)
+          ? []
+          : [{ key: "weeks", short: "weeks / month", value: WEEKS_PER_MONTH, unit: "constant" as const, source: "constant" as const, question: null, min: WEEKS_PER_MONTH, max: WEEKS_PER_MONTH }]),
+      ],
       monthly: { expected: result, low: round(model.compute(low)), high: round(model.compute(high)) },
       confidence: confidenceFor(ownerInputShare),
       ownerInputShare: Math.round(ownerInputShare * 100) / 100,

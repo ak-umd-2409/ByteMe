@@ -13,8 +13,10 @@ import type { ProfileCorrections } from "../business/profile.ts";
 import type { BusinessMatch, IndustryKey, OnboardingProfile, PlaceDetails, ReviewAnalysis, WebsiteAnalysis } from "../business/types.ts";
 import type { RecommendationInputResult } from "../problems/toRecommendation.ts";
 import type { DiscoveryResult, ImpactEstimate, ProblemKey } from "../problems/types.ts";
+import type { PaybackResult } from "../problems/payback.ts";
+import type { RulesReport } from "../rules/maryland.ts";
 
-export type { OnboardingAnalysis, OnboardingProfile, DiscoveryResult, ImpactEstimate, ProblemKey, RecommendationInputResult };
+export type { OnboardingAnalysis, OnboardingProfile, DiscoveryResult, ImpactEstimate, ProblemKey, RecommendationInputResult, RulesReport, PaybackResult };
 export type ProblemCard = DiscoveryResult["problems"][number];
 
 export interface ApiErrorBody {
@@ -77,12 +79,18 @@ export const api = {
       profile: OnboardingProfile;
       reviews: ReviewAnalysis;
       website: WebsiteAnalysis | null;
+      listings?: OnboardingAnalysis["listings"] | null;
       assumptions?: Partial<Record<ProblemKey, Record<string, number>>>;
       includeHypotheses?: ProblemKey[];
       polish?: boolean;
     },
     signal?: AbortSignal,
-  ) => call<{ discovery: DiscoveryResult; recommendationInput: RecommendationInputResult }>("/api/problems/discover", { json: request }, signal),
+  ) => call<{ discovery: DiscoveryResult; recommendationInput: RecommendationInputResult; rules: RulesReport }>("/api/problems/discover", { json: request }, signal),
+
+  payback: (
+    request: { industry: IndustryKey; items: { problemKey: ProblemKey; monthlyCost: number }[]; assumptions?: Partial<Record<ProblemKey, Record<string, number>>> },
+    signal?: AbortSignal,
+  ) => call<{ results: PaybackResult[]; note: string }>("/api/problems/payback", { json: request }, signal),
 
   impact: (request: { problemKey: ProblemKey; industry: IndustryKey; overrides?: Record<string, number> }, signal?: AbortSignal) =>
     call<{ problemKey: ProblemKey; impact: ImpactEstimate }>("/api/problems/impact", { json: request }, signal),

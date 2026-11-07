@@ -1,5 +1,7 @@
+import type { ListingsCheck } from "../business/listings.ts";
+import { displayFor, overviewFor } from "./present.ts";
 import { industryInfo, type IndustryInfo } from "../business/industry.ts";
-import type { Goal, OnboardingProfile, ReviewAnalysis, WebsiteAnalysis } from "../business/types.ts";
+import type { Goal, OnboardingProfile, ReviewAnalysis, ReviewThemeKey, WebsiteAnalysis } from "../business/types.ts";
 import { llmJson, type LlmProvider } from "../llm/client.ts";
 import { v } from "../shared/validate.ts";
 import { PROBLEMS } from "./catalog.ts";
@@ -27,6 +29,7 @@ export interface DiscoverInput {
   profile: OnboardingProfile;
   reviews: ReviewAnalysis;
   website: WebsiteAnalysis | null;
+  listings?: ListingsCheck | null;
   /** Owner adjustments per problem key, e.g. { missed_inquiries: { missed_per_week: 8 } }. */
   assumptions?: Partial<Record<ProblemKey, ImpactOverrides>>;
 }
@@ -36,17 +39,21 @@ const FAMILY: Record<EvidenceSource, string> = {
   google_review: "reviews",
   pasted_review: "reviews",
   sample_review: "reviews",
+  public_review: "reviews",
+  listing: "listings",
   website: "website",
   google_profile: "google_profile",
-  tech_stack: "owner",
+  tech_stack: "tools",
   owner_reported: "owner",
   industry_pattern: "pattern",
 };
 const SOURCE_WORDS: Record<string, [string, string]> = {
   reviews: ["customer review", "customer reviews"],
   website: ["website finding", "website findings"],
+  listings: ["listing comparison", "listing comparisons"],
   google_profile: ["Google listing detail", "Google listing details"],
   owner: ["thing you told us", "things you told us"],
+  tools: ["gap in your tools", "gaps in your tools"],
   pattern: ["industry pattern", "industry patterns"],
 };
 
@@ -60,7 +67,9 @@ export function statusFor(signals: Signal[]): ProblemStatus {
   if (verified.length === 0) return "hypothesis";
   const families = new Set(verified.map((s) => FAMILY[s.source]));
   const reviewMentions = verified.filter((s) => FAMILY[s.source] === "reviews").length;
-  if ((verified.length >= 2 && families.size >= 2) || reviewMentions >= 3) return "confirmed";
+  // Each listing comparison already sets independent public sources against each other.
+  const listingChecks = verified.filter((s) => FAMILY[s.source] === "listings").length;
+  if ((verified.length >= 2 && families.size >= 2) || reviewMentions >= 3 || listingChecks >= 2) return "confirmed";
   return "likely";
 }
 
@@ -111,6 +120,31 @@ export function rankScore(
   return { score: round2(evidence + confidence + impact + relevance), breakdown, explanation };
 }
 
+/** Praise that argues against a problem. Only themes that directly contradict it. */
+const COUNTER_THEMES: Partial<Record<ProblemKey, ReviewThemeKey[]>> = {
+  missed_inquiries: ["praise_responsive"],
+  slow_responses: ["praise_responsive"],
+};
+
+function counterEvidenceFor(key: ProblemKey, reviews: ReviewAnalysis): ProblemCard["counterEvidence"] {
+  const themes = (COUNTER_THEMES[key] ?? []).map((k) => reviews.praise.find((t) => t.key === k)).filter((t) => t !== undefined);
+  const theme = themes.sort((a, b) => b.mentions - a.mentions)[0];
+  if (!theme || theme.mentions === 0) return null;
+  const examples = [...theme.evidence]
+    .sort((a, b) => Number(Boolean(b.quote)) - Number(Boolean(a.quote)))
+    .slice(0, 3)
+    .map((e) => ({
+      text: e.quote || e.summary || "",
+      isQuote: Boolean(e.quote),
+      attribution: [e.author, e.platform, e.relativeTime].filter(Boolean).join(" · ") || null,
+      url: e.url ?? null,
+    }))
+    .filter((e) => e.text);
+  const n = `${theme.mentions} review${theme.mentions === 1 ? "" : "s"}`;
+  const label = theme.key === "praise_responsive" ? `${n} say you respond quickly` : `${n} praise: ${theme.label.toLowerCase()}`;
+  return { label, mentions: theme.mentions, examples };
+}
+
 /** Evidence-backed problems first; within that group, score decides. */
 const TIER: Record<ProblemStatus, number> = { confirmed: 0, likely: 0, hypothesis: 1 };
 
@@ -156,14 +190,21 @@ export function discoverProblems(input: DiscoverInput, now = new Date()): Discov
       rank: { position: 0, score: 0, breakdown: { evidence: 0, confidence: 0, impact: 0, relevance: 0 }, explanation: [] },
       needsOwnerConfirmation: status === "hypothesis",
       explanationSource: "template",
+      counterEvidence: counterEvidenceFor(key, input.reviews),
+      display: undefined as unknown as ProblemCard["display"],
     };
+    card.display = displayFor(card);
     const rank = rankScore(card, industry, goals);
     card.rank = { position: 0, ...rank };
     cards.push(card);
   }
 
   // Hypotheses always rank after anything with direct evidence.
-  cards.sort((a, b) => TIER[a.status] - TIER[b.status] || b.rank.score - a.rank.score || a.key.localeCompare(b.key));
+  // Among hypotheses, ones that customers' own reviews argue against go last.
+  const contradicted = (c: ProblemCard) => (c.status === "hypothesis" && (c.counterEvidence?.mentions ?? 0) >= 2 ? 1 : 0);
+  cards.sort(
+    (a, b) => TIER[a.status] - TIER[b.status] || contradicted(a) - contradicted(b) || b.rank.score - a.rank.score || a.key.localeCompare(b.key),
+  );
   cards.forEach((card, index) => (card.rank.position = index + 1));
 
   const evidenced = cards.filter((c) => c.status !== "hypothesis");
@@ -186,7 +227,7 @@ export function discoverProblems(input: DiscoverInput, now = new Date()): Discov
   if (forTotals.length < evidenced.length)
     limitations.push("Some problems overlap (they affect the same customers), so the totals count only the top problem for each kind of fix.");
 
-  return {
+  const result = {
     businessName: name,
     generatedAt: now.toISOString(),
     problems: cards,
@@ -198,9 +239,10 @@ export function discoverProblems(input: DiscoverInput, now = new Date()): Discov
       estimatedMonthlyTimeValue: { expected: sum("time_cost", "expected"), low: sum("time_cost", "low"), high: sum("time_cost", "high") },
     },
     disclaimer:
-      "Money figures are estimated opportunities calculated from the inputs shown, not proven lost revenue. Problems marked “hypothesis” have no direct evidence yet.",
+      "Money figures are estimated opportunities calculated from the inputs shown, not proven lost revenue. Problems marked “Not confirmed” have no direct evidence yet and are not included in totals.",
     limitations,
   };
+  return { ...result, overview: overviewFor(result, input.reviews) };
 }
 
 // ---------- Optional LLM wording ----------

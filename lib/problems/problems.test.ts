@@ -138,6 +138,15 @@ describe("problem discovery", () => {
     assert.equal(statusFor([signal({ id: "1" }), signal({ id: "2", source: "website" })]), "confirmed");
   });
 
+  it("a missing tool alone never turns a problem into 'likely'", async () => {
+    const analysis = await mikes();
+    const profile = applyCorrections(analysis.profile, { currentTools: ["QuickBooks"] }, { now: NOW });
+    const result = discover({ ...analysis, profile });
+    const scheduling = result.problems.find((p) => p.key === "scheduling_inefficiency")!;
+    assert.equal(scheduling.status, "hypothesis");
+    for (const e of result.problems.flatMap((p) => p.evidence).filter((e) => e.source === "tech_stack")) assert.equal(e.verified, false);
+  });
+
   it("uses owner-supplied assumptions in the estimate", async () => {
     const result = discover(await mikes(), { missed_inquiries: { missed_per_week: 8, conversion_rate: 0.25, average_job_value: 300 } });
     const card = result.problems.find((p) => p.key === "missed_inquiries")!;

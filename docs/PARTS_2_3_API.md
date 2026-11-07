@@ -388,3 +388,39 @@ lib/api/         schemas (request validation), handlers (framework-free), next (
 app/api/         thin Next.js routes
 data/mock/onboarding.ts   fictional businesses + websites for mock mode
 ```
+
+## Real businesses, listings and UI-ready fields (v2)
+
+**Real public snapshots** (`data/real/`, `lib/business/snapshot.ts`). With no Google key, search returns two real Maryland HVAC businesses captured from public pages on 2026-11-07: Dave's Cooling & Heating (Frederick) and Frederick Heating & Air Conditioning (Jefferson). Every fact has a source URL and capture method (`page_fetch` or `search_index`). Reviews keep a link, the reviewer's first name and last initial, at most one short exact excerpt per source page, and otherwise a summary that is always labelled as one. Nothing is invented: no complaints were found for Frederick Heating, so none appear. Responses carry `mode.places: "public_snapshot"` and `analysis.snapshot = { capturedAt, note, sources[], about[] }`. Show the sources.
+
+**Listings check** (`analysis.listings`, `lib/business/listings.ts`). This compares the business across its website and directories: hours, address, phone, duplicate listings, rating gaps, and yes/no **service claims** (emergency service, senior discount, free estimates). It is deterministic, and every issue names the listings that disagree. A listing that says nothing is never counted as disagreeing. Pass it back to `discover` as `listings`. Mismatches become `inconsistent_business_info` evidence with links to each listing.
+
+**New fields on each problem card**
+- `display`: `headline`, `whyItMatters` (one line), `nextStep` (one line), `effort` (`free` or `tool` plus a label), and `evidenceStrength` (level 1–3, a label, and counts by source). For listing problems, `whyItMatters` and `nextStep` are built from the mismatches actually found (for example, "Show the same services on every listing, then merge duplicate listings").
+- `counterEvidence`: reviews that argue *against* the problem (for example, "6 reviews say you respond quickly" next to "calls go unanswered"), with up to 3 linked examples. Unconfirmed problems that customers contradict rank last.
+- `impact.terms`: the estimate as ordered equation terms, each with `short`, `value`, `unit`, `source` (`owner`/`default`/`derived`/`constant`), a plain-language `question` to ask the owner, and `min`/`max`. Editing a term = sending it as an override to `/api/problems/impact`.
+
+**`discovery.overview`**: `headline` ("We found 1 free fix and 1 problem a tool could help with"), counts (`quickWins`, `needTool`, `toCheck`), `topProblemKey`, and `strengths` (most-praised review themes with counts).
+
+The Part 4 contract is unchanged. Both real businesses produce a valid `/api/recommend` request (`lib/business/realSnapshots.test.ts`).
+
+## Spec checklist status (Parts 2 & 3)
+
+| # | Feature | Where |
+| --- | --- | --- |
+| 2.1 | Business lookup | `/api/business/search`, `/api/business/details` (Google Places, or real public snapshots with no key) |
+| 2.2 | Review scan | `analysis.reviews` |
+| 2.3 | Paste more reviews | `analyze` → `pastedReviews`; "Paste more reviews" on the home page |
+| 2.4 | Website scan | `analysis.website` |
+| 2.5 | Tools you use | `analysis.technology` (pre-checks the home page tool toggles) |
+| 2.6 | Policy scan | `website.policies.{privacy,refund,terms}.facts`: each fact quotes the exact sentence (`lib/business/policies.ts`) |
+| 2.7 | Data sensitivity | `profile.dataSensitivity` (level + reasons) |
+| 2.8 | Rules that apply to you | `analysis.rules`, updated in `discover.rules` (`lib/rules/maryland.ts`, rules as data with sources, checked 2026-11-07, not legal advice) |
+| 2.9 | Location context | `analysis.location`: county, rural (Maryland's 18 rural counties), Maryland SBDC region and contact |
+| 2.10 | Languages nearby | `analysis.location.languages` (Census QuickFacts; Frederick County loaded, other counties say "not available yet") |
+| 2.11 | Internet check | `analysis.location.internet` (county broadband share from Census; favors phone-friendly tools in rural or low-broadband areas) |
+| — | Questions we still ask | `confirm` with `owner` corrections: team size, goals, deal-breakers, "what eats your week", 35,000+ customers |
+| 3.1–3.2 | Evidence cards, ranked | `discover.discovery.problems` |
+| 3.3 | Pays for itself in X days | `POST /api/problems/payback` `{ industry, items: [{ problemKey, monthlyCost }], assumptions? }` → `results[]` with `days`, `label`, `math` |
+| 3.4 | Problems you didn't know about | Listings check (hours, address, phone, services, duplicates) |
+| 3.5 | Add a problem | "Anything else?" → `confirm` with `owner.reportedProblems` (recorded as owner-reported, never as found evidence) |

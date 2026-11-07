@@ -65,7 +65,7 @@ export const analyzeBody = v.object({
 
 // ---------- Round-tripped payloads ----------
 
-const FACT_SOURCES = ["google_places", "mock_places", "website", "tech_signature", "review_analysis", "owner", "default", "derived"] as const;
+const FACT_SOURCES = ["google_places", "mock_places", "public_listings", "website", "tech_signature", "review_analysis", "owner", "default", "derived"] as const;
 const CONFIDENCE = ["high", "medium", "low"] as const;
 
 function factOf<T>(value: Schema<T>) {
@@ -103,7 +103,7 @@ const detectedTech = v.object(
     name: v.string({ max: 80 }),
     category: v.string({ max: 40 }),
     evidence: v.array(
-      v.object({ url: v.string({ max: 500 }), matched: v.string({ max: 200 }), kind: v.oneOf(["script", "link", "html", "header", "places"] as const) }, { allowUnknown: true }),
+      v.object({ url: v.string({ max: 500 }), matched: v.string({ max: 200 }), kind: v.oneOf(["script", "link", "html", "header", "places", "listing"] as const) }, { allowUnknown: true }),
       { max: 5 },
     ),
     confidence: v.oneOf(["verified"] as const),
@@ -159,9 +159,12 @@ export const profileSchema = v.object(
     dataSensitivity: v.object({ level: v.oneOf(["low", "medium", "high"] as const), reasons: v.array(v.string({ max: 200 }), { max: 10 }) }, { allowUnknown: true }),
     sources: v.object(
       {
-        places: v.oneOf(["google_places", "mock", "none"] as const),
+        places: v.oneOf(["google_places", "mock", "public_snapshot", "none"] as const),
         website: v.oneOf(["scanned", "unreachable", "blocked", "none"] as const),
-        reviews: v.object({ google: v.number({ min: 0 }), owner_pasted: v.number({ min: 0 }), mock: v.number({ min: 0 }) }, { allowUnknown: true }),
+        reviews: v.object(
+          { google: v.number({ min: 0 }), owner_pasted: v.number({ min: 0 }), mock: v.number({ min: 0 }), public_listing: v.optional(v.number({ min: 0 })) },
+          { allowUnknown: true },
+        ),
       },
       { allowUnknown: true },
     ),
@@ -174,8 +177,12 @@ export const profileSchema = v.object(
 const themeEvidence = v.object(
   {
     reviewId: v.string({ max: 300 }),
-    quote: shortText,
-    source: v.oneOf(["google", "owner_pasted", "mock"] as const),
+    quote: v.nullable(shortText),
+    summary: v.optional(v.nullable(shortText)),
+    url: v.optional(v.nullable(v.string({ max: 500 }))),
+    platform: v.optional(v.nullable(v.string({ max: 80 }))),
+    relativeTime: v.optional(v.nullable(v.string({ max: 40 }))),
+    source: v.oneOf(["google", "owner_pasted", "mock", "public_listing"] as const),
     rating: v.nullable(v.number({ min: 0, max: 5 })),
     author: v.nullable(v.string({ max: 120 })),
   },
@@ -188,7 +195,7 @@ const theme = v.object(
     polarity: v.oneOf(["complaint", "praise"] as const),
     mentions: v.number({ min: 0, max: 1_000 }),
     evidence: v.array(themeEvidence, { max: 10 }),
-    detectedBy: v.array(v.oneOf(["rules", "llm"] as const), { max: 2 }),
+    detectedBy: v.array(v.oneOf(["rules", "llm", "extracted"] as const), { max: 3 }),
   },
   { allowUnknown: true },
 );
@@ -197,7 +204,12 @@ export const reviewAnalysisSchema = v.object(
   {
     reviewCount: v.number({ min: 0, max: 10_000 }),
     averageRating: v.nullable(v.number({ min: 0, max: 5 })),
-    bySource: v.object({ google: v.number({ min: 0 }), owner_pasted: v.number({ min: 0 }), mock: v.number({ min: 0 }) }, { allowUnknown: true }),
+    bySource: v.object(
+      { google: v.number({ min: 0 }), owner_pasted: v.number({ min: 0 }), mock: v.number({ min: 0 }), public_listing: v.optional(v.number({ min: 0 })) },
+      { allowUnknown: true },
+    ),
+    platforms: v.optional(v.array(v.object({ name: v.string({ max: 80 }), count: v.number({ min: 0 }) }), { max: 20 })),
+    newestReview: v.optional(v.nullable(v.string({ max: 40 }))),
     complaints: v.array(theme, { max: 20 }),
     praise: v.array(theme, { max: 20 }),
     method: v.oneOf(["rules", "rules+llm"] as const),
@@ -207,8 +219,15 @@ export const reviewAnalysisSchema = v.object(
 );
 
 const webEvidence = v.object({ url: v.string({ max: 500 }), snippet: v.string({ max: 300, trim: false }) }, { allowUnknown: true });
-const finding = <T>(value: Schema<T>) => v.object({ value, evidence: webEvidence, method: v.oneOf(["pattern", "html", "llm"] as const) }, { allowUnknown: true });
+const finding = <T>(value: Schema<T>) => v.object({ value, evidence: webEvidence, method: v.oneOf(["pattern", "html", "llm", "search_index", "page_fetch"] as const) }, { allowUnknown: true });
 const present = v.object({ present: v.boolean(), url: v.nullable(v.string({ max: 500 })) }, { allowUnknown: true });
+const policyStatus = v.object({
+  present: v.boolean(),
+  url: v.nullable(v.string({ max: 2048 })),
+  facts: v.optional(
+    v.array(v.object({ key: v.string({ max: 40 }), label: v.string({ max: 200 }), snippet: v.string({ max: 300 }), url: v.string({ max: 2048 }) }), { max: 20 }),
+  ),
+});
 
 export const websiteAnalysisSchema = v.object(
   {
@@ -238,7 +257,7 @@ export const websiteAnalysisSchema = v.object(
     booking: v.object({ onlineBooking: v.boolean(), evidence: v.nullable(webEvidence), provider: v.nullable(v.string({ max: 80 })) }, { allowUnknown: true }),
     contactForm: v.object({ present: v.boolean(), evidence: v.nullable(webEvidence) }, { allowUnknown: true }),
     faq: v.object({ present: v.boolean(), url: v.nullable(v.string({ max: 500 })), questions: v.array(v.string({ max: 200 }), { max: 20 }) }, { allowUnknown: true }),
-    policies: v.object({ privacy: present, refund: present, terms: present }, { allowUnknown: true }),
+    policies: v.object({ privacy: policyStatus, refund: policyStatus, terms: policyStatus }, { allowUnknown: true }),
     phoneOnlyCallsToAction: v.array(finding(v.string({ max: 120 })), { max: 10 }),
     afterHoursMessages: v.array(finding(v.string({ max: 120 })), { max: 10 }),
     method: v.oneOf(["rules", "rules+llm"] as const),
@@ -272,13 +291,65 @@ export const confirmBody = v.object({
   confirm: v.optional(v.boolean()),
 });
 
+const listingRecord = v.object({
+  id: v.string({ max: 40 }),
+  directory: v.oneOf(["google", "website", "bbb", "yelp", "birdeye", "yahoo", "facebook", "linkedin", "angi", "other"] as const),
+  label: v.string({ max: 60 }),
+  url: v.nullable(v.string({ max: 500 })),
+  capturedAt: v.string({ max: 40 }),
+  capturedVia: v.oneOf(["places_api", "page_fetch", "search_index", "website_scan", "sample"] as const),
+  name: v.nullable(v.string({ max: 120 })),
+  address: v.nullable(v.string({ max: 200 })),
+  phone: v.nullable(v.string({ max: 30 })),
+  hours: v.nullable(v.array(v.string({ max: 160 }), { max: 14 })),
+  rating: v.nullable(v.number({ min: 0, max: 5 })),
+  reviewCount: v.nullable(v.number({ min: 0, max: 1_000_000 })),
+  services: v.optional(
+    v.object({
+      emergency_service: v.optional(v.nullable(v.boolean())),
+      senior_discount: v.optional(v.nullable(v.boolean())),
+      free_estimates: v.optional(v.nullable(v.boolean())),
+    }),
+  ),
+});
+const listingValue = v.object({ display: v.string({ max: 200 }), listingIds: v.array(v.string({ max: 40 }), { max: 20 }) });
+export const listingsSchema = v.object({
+  listings: v.array(listingRecord, { max: 20 }),
+  fields: v.array(
+    v.object({
+      field: v.oneOf(["hours", "address", "phone"] as const),
+      status: v.oneOf(["match", "differs", "single", "missing"] as const),
+      values: v.array(listingValue, { max: 20 }),
+    }),
+    { max: 3 },
+  ),
+  issues: v.array(
+    v.object({
+      kind: v.oneOf(["hours", "address", "phone", "duplicate", "rating_gap", "services"] as const),
+      severity: v.oneOf(["high", "medium", "low"] as const),
+      headline: v.string({ max: 120 }),
+      detail: v.string({ max: 600 }),
+      listingIds: v.array(v.string({ max: 40 }), { max: 20 }),
+    }),
+    { max: 20 },
+  ),
+  consistentCount: v.number({ min: 0, max: 20 }),
+});
+
 export const discoverBody = v.object({
   profile: profileSchema,
   reviews: reviewAnalysisSchema,
   website: v.nullable(websiteAnalysisSchema),
+  listings: v.optional(v.nullable(listingsSchema)),
   assumptions: v.optional(v.record(overrides, { keys: PROBLEM_KEYS })),
   includeHypotheses: v.optional(v.array(v.oneOf(PROBLEM_KEYS), { max: PROBLEM_KEYS.length })),
   polish: v.optional(v.boolean()),
+});
+
+export const paybackBody = v.object({
+  industry: v.oneOf(INDUSTRY_KEYS),
+  items: v.array(v.object({ problemKey: v.oneOf(PROBLEM_KEYS), monthlyCost: v.number({ min: 0, max: 100_000 }) }), { min: 1, max: 30 }),
+  assumptions: v.optional(v.record(v.record(v.number({ min: 0, max: 1_000_000 }), { maxKeys: 20 }), { maxKeys: 20, keys: PROBLEM_KEYS })),
 });
 
 export const impactBody = v.object({

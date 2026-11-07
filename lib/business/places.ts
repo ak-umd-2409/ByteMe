@@ -1,3 +1,5 @@
+import { PUBLIC_SNAPSHOTS } from "../../data/real/index.ts";
+import { chainProviders, snapshotPlacesProvider } from "./snapshot.ts";
 import { mockPlaces } from "../../data/mock/onboarding.ts";
 import { cached, hashKey, sharedCache, type Cache } from "../shared/cache.ts";
 import { loadConfig, type AppConfig } from "../shared/config.ts";
@@ -15,7 +17,7 @@ import type { BusinessMatch, PlaceDetails, PostalAddress, SourceReview } from ".
  * be stored long-term, so we only keep them in a short-lived memory cache.
  */
 export interface PlacesProvider {
-  readonly kind: "google_places" | "mock";
+  readonly kind: "google_places" | "mock" | "public_snapshot";
   search(query: string, near?: string): Promise<BusinessMatch[]>;
   details(placeId: string): Promise<PlaceDetails | null>;
 }
@@ -231,6 +233,12 @@ export const mockPlacesProvider: PlacesProvider = {
   },
 };
 
+/**
+ * With a Google key: live Google Places. Without one: real public snapshots (data/real), plus the
+ * fictional sample businesses only when DEMO_SAMPLE_BUSINESSES=1.
+ */
 export function getPlacesProvider(config: AppConfig = loadConfig()): PlacesProvider {
-  return config.googlePlacesApiKey ? createGooglePlacesProvider(config.googlePlacesApiKey) : mockPlacesProvider;
+  if (config.googlePlacesApiKey) return createGooglePlacesProvider(config.googlePlacesApiKey);
+  const real = snapshotPlacesProvider(PUBLIC_SNAPSHOTS);
+  return config.sampleBusinesses ? chainProviders("public_snapshot", [real, mockPlacesProvider]) : real;
 }

@@ -19,6 +19,8 @@ export interface AppConfig {
   /** Max website pages fetched per analysis. */
   websiteMaxPages: number;
   userAgent: string;
+  /** Also offer the fictional sample businesses in search (DEMO_SAMPLE_BUSINESSES=1). */
+  sampleBusinesses: boolean;
 }
 
 type Env = Record<string, string | undefined>;
@@ -43,6 +45,7 @@ export function loadConfig(env: Env = process.env): AppConfig {
     llmMaxCallsPerHour: intOr(env.LLM_MAX_CALLS_PER_HOUR, 200, 0, 10_000),
     httpTimeoutMs: intOr(env.HTTP_TIMEOUT_MS, 8_000, 1_000, 30_000),
     websiteMaxPages: intOr(env.WEBSITE_MAX_PAGES, 6, 1, 15),
+    sampleBusinesses: env.DEMO_SAMPLE_BUSINESSES === "1" || env.DEMO_SAMPLE_BUSINESSES === "true",
     userAgent:
       clean(env.SCANNER_USER_AGENT) ??
       "MainStreetAI-Scanner/0.1 (+University of Maryland AI for Small Business prototype)",
