@@ -121,6 +121,14 @@ describe("askAi", () => {
     assert.deepEqual(ai.policyAddress, { answer: "100 Main Street, College Park, MD 20740", quote: line, pageUrl: "https://goodtool.example/privacy" });
   });
 
+  it("keeps the other answers when the AI gives one as a bare word with no quote", async () => {
+    const { provider } = llm(ABOUT_ANSWER, { ...PRIVACY_ANSWER, trainsOnYourData: "no" });
+    const ai = await run(pages(), provider);
+    assert.equal(ai.ran.privacy, true);
+    assert.equal(ai.trainsOnYourData, "unknown");
+    assert.notEqual(ai.canDeleteData, "unknown");
+  });
+
   it("rejects an answer outside the allowed values", async () => {
     const { provider } = llm(ABOUT_ANSWER, { ...PRIVACY_ANSWER, canDeleteData: { answer: "maybe", quote: PRIVACY_ANSWER.canDeleteData.quote } });
     assert.equal((await run(pages(), provider)).canDeleteData, "unknown");

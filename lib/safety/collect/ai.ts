@@ -5,7 +5,7 @@
  */
 import { isVerbatim } from "../../business/reviews.ts";
 import { getLlmProvider, llmJson } from "../../llm/client.ts";
-import { v } from "../../shared/validate.ts";
+import { v, type Schema } from "../../shared/validate.ts";
 import { SAFETY_CONFIG } from "../config.ts";
 import { isFetched, type AiAnswer, type CollectDeps, type FetchedPageFact, type PageFact, type PageKind, type SafetyFacts } from "../types.ts";
 
@@ -17,7 +17,9 @@ const ALLOWED: Partial<Record<keyof Ai, string[]>> = {
   canDeleteData: ["yes", "no"],
 };
 
-const answerSchema = v.optional(v.nullable(v.object({ answer: v.nullable(v.string({ max: 300 })), quote: v.nullable(v.string({ max: 1000 })) }, { allowUnknown: true })));
+// Each field is checked one by one in verify(), so one oddly shaped answer
+// (a bare "no", a null) never throws away the others.
+const answerSchema = v.unknown();
 const aboutSchema = v.object({ companyName: answerSchema, address: answerSchema, leaderName: answerSchema }, { allowUnknown: true });
 const privacySchema = v.object(
   {
@@ -88,13 +90,15 @@ function trainingQuoteOk(answer: string, quote: string): boolean {
 }
 
 /** Keep an answer only if its quote is on one of the source pages. */
-type RawAnswer = { answer: string | null; quote: string | null } | null | undefined;
+type RawAnswer = unknown;
 
 function verify(key: keyof Ai, raw: RawAnswer, sources: FetchedPageFact[]): AiAnswer<string> {
-  // Models sometimes write { answer: null, quote: null } for "the page doesn't say".
-  if (!raw || raw.answer === null || raw.quote === null) return "unknown";
-  const answer = raw.answer.trim();
-  const quote = raw.quote;
+  // Only { answer: text, quote: text } counts. Models sometimes write null,
+  // { answer: null, quote: null } or a bare word: all mean "couldn't tell".
+  if (typeof raw !== "object" || raw === null) return "unknown";
+  const { answer: rawAnswer, quote } = raw as Record<string, unknown>;
+  if (typeof rawAnswer !== "string" || typeof quote !== "string" || rawAnswer.length > 300 || quote.length > 1000) return "unknown";
+  const answer = rawAnswer.trim();
   if (!answer) return "unknown";
   const allowed = ALLOWED[key];
   const normalized = allowed ? answer.toLowerCase() : answer;
@@ -115,7 +119,7 @@ async function ask<K extends readonly (keyof Ai)[]>(
   sources: FetchedPageFact[],
   maxChars: number,
   keys: K,
-  schema: typeof aboutSchema | typeof privacySchema,
+  schema: Schema<object>,
   deps: CollectDeps,
 ): Promise<Partial<Ai> | null> {
   const user = sources.map((p) => `PAGE ${p.finalUrl}\n"""\n${p.text.slice(0, maxChars)}\n"""`).join("\n\n");
