@@ -1,0 +1,100 @@
+import assert from "node:assert/strict";
+import { describe, it } from "node:test";
+import { SAFETY_CHECK_NAMES } from "../catalog/types.ts";
+import { factsFixture, type DeepPartial } from "./fixtures.ts";
+import { judge } from "./judge.ts";
+import type { SafetyFacts } from "./types.ts";
+
+const LOOKALIKE: DeepPartial<SafetyFacts> = { input: { url: "https://squarre-voice.example/" }, domain: { name: "squarre-voice.example" } };
+
+describe("judge", () => {
+  it("marks a good tool ready with no flags or warnings", () => {
+    const report = judge(factsFixture());
+    assert.equal(report.verdict, "ready");
+    assert.deepEqual(report.redFlags, []);
+    assert.deepEqual(report.warnings, []);
+    assert.equal(report.ranAt, "2026-11-07");
+    for (const name of SAFETY_CHECK_NAMES) assert.equal(report.checks[name].result, "pass", name);
+  });
+
+  it("notes when the Google unsafe-site check was not run", () => {
+    assert.match(judge(factsFixture()).checks.redFlags.reason, /Google unsafe-site check was not run/);
+  });
+
+  it("blocks a lookalike even when every other check passes", () => {
+    const report = judge(factsFixture(LOOKALIKE));
+    assert.equal(report.verdict, "blocked");
+    assert.equal(report.checks.redFlags.result, "fail");
+    assert.match(report.checks.redFlags.reason, /imitate Square/);
+  });
+
+  it("blocked wins over held", () => {
+    const report = judge(factsFixture({ ...LOOKALIKE, ai: { leaderName: "unknown" } }));
+    assert.equal(report.verdict, "blocked");
+  });
+
+  const coreCases: [string, DeepPartial<SafetyFacts>][] = [
+    ["whoIsBehind", { ai: { leaderName: "unknown" } }],
+    ["privacyPolicy", { pages: { privacy: { error: "timeout" } } }],
+    ["dataUse", { ai: { trainsOnYourData: { answer: "yes" } } }],
+    ["securityBasics", { https: false }],
+    ["redFlags", { safeBrowsing: "listed" }],
+  ];
+  for (const [name, override] of coreCases)
+    it(`a non-pass ${name} alone is not ready`, () => {
+      const report = judge(factsFixture(override));
+      assert.notEqual(report.checks[name as keyof typeof report.checks].result, "pass");
+      assert.equal(report.verdict, name === "redFlags" ? "blocked" : "held");
+    });
+
+  const warningCases: [string, DeepPartial<SafetyFacts>][] = [
+    ["domainAge", { domain: { registeredAt: "2026-06-01" } }],
+    ["dataLocation", { ai: { whereStored: "unknown" } }],
+    ["pricingClarity", { pages: { pricing: null } }],
+  ];
+  for (const [name, override] of warningCases)
+    it(`a non-pass ${name} alone stays ready with one warning`, () => {
+      const report = judge(factsFixture(override));
+      assert.equal(report.verdict, "ready");
+      assert.equal(report.warnings.length, 1);
+      assert.equal(report.warnings[0], report.checks[name as keyof typeof report.checks].reason);
+    });
+
+  it("warns a sensitive tool with no certification but keeps it ready", () => {
+    const report = judge(factsFixture({ input: { handlesSensitiveData: true }, ai: { securityCertification: "unknown" } }));
+    assert.equal(report.verdict, "ready");
+    assert.ok(report.warnings.some((w) => w.includes("no security certification")));
+  });
+
+  it("is deterministic", () => {
+    assert.deepEqual(judge(factsFixture({ ai: { whereStored: "unknown" } })), judge(factsFixture({ ai: { whereStored: "unknown" } })));
+  });
+});
+
+describe("judge scenarios", () => {
+  it("scam lookalike", () => {
+    assert.equal(judge(factsFixture({ ...LOOKALIKE, pages: { about: null, contact: null } })).verdict, "blocked");
+  });
+  it("new site with download", () => {
+    const report = judge(factsFixture({ domain: { registeredAt: "2026-10-01" }, downloadPrompt: true }));
+    assert.equal(report.verdict, "blocked");
+    assert.deepEqual(report.redFlags, ["Website is under 6 months old and asks you to download software."]);
+  });
+  it("vague privacy wording", () => {
+    const report = judge(factsFixture({ riskySentences: ["We may use your data to improve our models."] }));
+    assert.equal(report.checks.dataUse.result, "unknown");
+    assert.equal(report.verdict, "held");
+  });
+  it("AI quote not on page", () => {
+    // The collector turns an unverifiable quote into "unknown".
+    assert.equal(judge(factsFixture({ ai: { canDeleteData: "unknown" } })).verdict, "held");
+  });
+  it("http only", () => {
+    assert.equal(judge(factsFixture({ https: false })).verdict, "held");
+  });
+  it("missing privacy page", () => {
+    const report = judge(factsFixture({ pages: { privacy: null } }));
+    assert.equal(report.verdict, "blocked");
+    assert.deepEqual(report.redFlags, ["No privacy policy found."]);
+  });
+});
