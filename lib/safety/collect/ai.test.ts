@@ -79,6 +79,56 @@ describe("askAi", () => {
     assert.equal((await run(p, provider)).whereStored, "unknown");
   });
 
+  const withPolicy = (extra: string) => {
+    const p = pages();
+    const privacy = p.privacy as FetchedPageFact;
+    p.privacy = { ...privacy, text: `${privacy.text} ${extra}` };
+    return p;
+  };
+  it("accepts 'names removed' only when the quote says so", async () => {
+    const good = "We only use de-identified call data to improve our AI.";
+    const bad = "We use call data to improve our AI.";
+    const p = withPolicy(`${good} ${bad}`);
+    const ok = llm(ABOUT_ANSWER, { ...PRIVACY_ANSWER, trainsOnYourData: { answer: "anonymized", quote: good } });
+    assert.equal((await run(p, ok.provider)).trainsOnYourData !== "unknown", true);
+    const no = llm(ABOUT_ANSWER, { ...PRIVACY_ANSWER, trainsOnYourData: { answer: "anonymized", quote: bad } });
+    assert.equal((await run(p, no.provider)).trainsOnYourData, "unknown");
+  });
+  it("accepts 'you can switch it off' only when the quote says how", async () => {
+    const good = "You can opt out of model training in your settings.";
+    const bad = "We use call data to improve our AI.";
+    const p = withPolicy(`${good} ${bad}`);
+    const ok = llm(ABOUT_ANSWER, { ...PRIVACY_ANSWER, trainsOnYourData: { answer: "opt-out", quote: good } });
+    assert.notEqual((await run(p, ok.provider)).trainsOnYourData, "unknown");
+    const no = llm(ABOUT_ANSWER, { ...PRIVACY_ANSWER, trainsOnYourData: { answer: "opt-out", quote: bad } });
+    assert.equal((await run(p, no.provider)).trainsOnYourData, "unknown");
+  });
+  it("doesn't count opting out of something other than training", async () => {
+    const line = "You may opt out of manual review at any time by contacting support.";
+    const { provider } = llm(ABOUT_ANSWER, { ...PRIVACY_ANSWER, trainsOnYourData: { answer: "opt-out", quote: line } });
+    assert.equal((await run(withPolicy(line), provider)).trainsOnYourData, "unknown");
+  });
+  it("accepts 'names removed' written as 'de identified'", async () => {
+    const line = "We may use data in aggregated or de identified form to train internal systems.";
+    const { provider } = llm(ABOUT_ANSWER, { ...PRIVACY_ANSWER, trainsOnYourData: { answer: "anonymized", quote: line } });
+    assert.notEqual((await run(withPolicy(line), provider)).trainsOnYourData, "unknown");
+  });
+  it("reads the company's address from the privacy page", async () => {
+    const line = "Our mailing address is 100 Main Street, College Park, MD 20740.";
+    const p = withPolicy(line);
+    const { provider } = llm(ABOUT_ANSWER, { ...PRIVACY_ANSWER, policyAddress: { answer: "100 Main Street, College Park, MD 20740", quote: line } });
+    const ai = await run(p, provider);
+    assert.deepEqual(ai.policyAddress, { answer: "100 Main Street, College Park, MD 20740", quote: line, pageUrl: "https://goodtool.example/privacy" });
+  });
+
+  it("keeps the other answers when the AI gives one as a bare word with no quote", async () => {
+    const { provider } = llm(ABOUT_ANSWER, { ...PRIVACY_ANSWER, trainsOnYourData: "no" });
+    const ai = await run(pages(), provider);
+    assert.equal(ai.ran.privacy, true);
+    assert.equal(ai.trainsOnYourData, "unknown");
+    assert.notEqual(ai.canDeleteData, "unknown");
+  });
+
   it("rejects an answer outside the allowed values", async () => {
     const { provider } = llm(ABOUT_ANSWER, { ...PRIVACY_ANSWER, canDeleteData: { answer: "maybe", quote: PRIVACY_ANSWER.canDeleteData.quote } });
     assert.equal((await run(pages(), provider)).canDeleteData, "unknown");

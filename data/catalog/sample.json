@@ -104,7 +104,7 @@
       "checks": {
         "whoIsBehind": {
           "result": "pass",
-          "reason": "Run by Ringwise Labs, led by Dana Okafor, at 12 Harbor Street, Baltimore, MD 21202.",
+          "reason": "Run by Ringwise Labs, a company at 12 Harbor Street, Baltimore, MD 21202.",
           "evidence": [
             {
               "quote": "Ringwise Labs builds AI receptionist software for small businesses.",
@@ -125,7 +125,7 @@
         },
         "domainAge": {
           "result": "pass",
-          "reason": "The website has been around since 2022-04-12.",
+          "reason": "The website has been around since April 2022.",
           "evidence": [
             {
               "url": "https://rdap.org/domain/ringwise.example",
@@ -135,7 +135,7 @@
         },
         "privacyPolicy": {
           "result": "pass",
-          "reason": "Has a full privacy policy.",
+          "reason": "Has a full privacy policy that says what they do with your information.",
           "evidence": [
             {
               "url": "https://ringwise.example/privacy",
@@ -145,7 +145,7 @@
         },
         "dataUse": {
           "result": "pass",
-          "reason": "Doesn't train on your data, and you can delete your data.",
+          "reason": "Doesn't use your information to make its AI better. You can delete your information.",
           "evidence": [
             {
               "quote": "We do not use customer content to train AI models.",
@@ -161,7 +161,7 @@
         },
         "dataLocation": {
           "result": "pass",
-          "reason": "Your data is stored in United States.",
+          "reason": "Your information is kept in United States.",
           "evidence": [
             {
               "quote": "All customer data is stored in data centers in the United States.",
@@ -172,7 +172,7 @@
         },
         "pricingClarity": {
           "result": "pass",
-          "reason": "Shows a monthly price in dollars.",
+          "reason": "Shows a clear monthly price.",
           "evidence": [
             {
               "url": "https://ringwise.example/pricing",
@@ -182,7 +182,7 @@
         },
         "securityBasics": {
           "result": "pass",
-          "reason": "Uses a secure (https) connection.",
+          "reason": "Your connection to this website is private (https).",
           "evidence": [
             {
               "url": "https://ringwise.example/",
@@ -192,7 +192,7 @@
         },
         "redFlags": {
           "result": "pass",
-          "reason": "No red flags found. Google unsafe-site check was not run.",
+          "reason": "No warning signs found. (We didn't check Google's list of unsafe websites.)",
           "evidence": [
             {
               "url": "https://ringwise.example/",
@@ -316,7 +316,7 @@
       "checks": {
         "whoIsBehind": {
           "result": "pass",
-          "reason": "Run by QuoteQuick Inc., led by Luis Ortega, at 400 Commerce Drive, Richmond, VA 23219.",
+          "reason": "Run by QuoteQuick Inc., a company at 400 Commerce Drive, Richmond, VA 23219.",
           "evidence": [
             {
               "quote": "QuoteQuick Inc. builds Quotes and estimates software for small businesses.",
@@ -337,7 +337,7 @@
         },
         "domainAge": {
           "result": "pass",
-          "reason": "The website has been around since 2021-09-30.",
+          "reason": "The website has been around since September 2021.",
           "evidence": [
             {
               "url": "https://rdap.org/domain/quotequick.example",
@@ -347,7 +347,7 @@
         },
         "privacyPolicy": {
           "result": "pass",
-          "reason": "Has a full privacy policy.",
+          "reason": "Has a full privacy policy that says what they do with your information.",
           "evidence": [
             {
               "url": "https://quotequick.example/privacy",
@@ -357,7 +357,7 @@
         },
         "dataUse": {
           "result": "pass",
-          "reason": "Doesn't train on your data, and you can delete your data.",
+          "reason": "Doesn't use your information to make its AI better. You can delete your information.",
           "evidence": [
             {
               "quote": "We do not use customer content to train AI models.",
@@ -373,7 +373,7 @@
         },
         "dataLocation": {
           "result": "pass",
-          "reason": "Your data is stored in United States.",
+          "reason": "Your information is kept in United States.",
           "evidence": [
             {
               "quote": "All customer data is stored in data centers in the United States.",
@@ -384,7 +384,7 @@
         },
         "pricingClarity": {
           "result": "pass",
-          "reason": "Shows a monthly price in dollars.",
+          "reason": "Shows a clear monthly price.",
           "evidence": [
             {
               "url": "https://quotequick.example/pricing",
@@ -394,7 +394,7 @@
         },
         "securityBasics": {
           "result": "pass",
-          "reason": "Uses a secure (https) connection.",
+          "reason": "Your connection to this website is private (https).",
           "evidence": [
             {
               "url": "https://quotequick.example/",
@@ -404,7 +404,7 @@
         },
         "redFlags": {
           "result": "pass",
-          "reason": "No red flags found. Google unsafe-site check was not run.",
+          "reason": "No warning signs found. (We didn't check Google's list of unsafe websites.)",
           "evidence": [
             {
               "url": "https://quotequick.example/",
@@ -519,7 +519,7 @@
       "checks": {
         "whoIsBehind": {
           "result": "pass",
-          "reason": "Run by ReplyKind LLC, led by Priya Natarajan, at 88 Market Street, Philadelphia, PA 19107.",
+          "reason": "Run by ReplyKind LLC, a company at 88 Market Street, Philadelphia, PA 19107.",
           "evidence": [
             {
               "quote": "ReplyKind LLC builds Review replies software for small businesses.",
@@ -540,7 +540,7 @@
         },
         "domainAge": {
           "result": "pass",
-          "reason": "The website has been around since 2023-02-14.",
+          "reason": "The website has been around since February 2023.",
           "evidence": [
             {
               "url": "https://rdap.org/domain/replykind.example",
@@ -550,7 +550,7 @@
         },
         "privacyPolicy": {
           "result": "pass",
-          "reason": "Has a full privacy policy.",
+          "reason": "Has a full privacy policy that says what they do with your information.",
           "evidence": [
             {
               "url": "https://replykind.example/privacy",
@@ -560,7 +560,7 @@
         },
         "dataUse": {
           "result": "pass",
-          "reason": "Doesn't train on your data, and you can delete your data.",
+          "reason": "Doesn't use your information to make its AI better. You can delete your information.",
           "evidence": [
             {
               "quote": "We do not use customer content to train AI models.",
@@ -576,7 +576,7 @@
         },
         "dataLocation": {
           "result": "pass",
-          "reason": "Your data is stored in United States.",
+          "reason": "Your information is kept in United States.",
           "evidence": [
             {
               "quote": "All customer data is stored in data centers in the United States.",
@@ -587,7 +587,7 @@
         },
         "pricingClarity": {
           "result": "pass",
-          "reason": "Shows a monthly price in dollars.",
+          "reason": "Shows a clear monthly price.",
           "evidence": [
             {
               "url": "https://replykind.example/pricing",
@@ -597,7 +597,7 @@
         },
         "securityBasics": {
           "result": "pass",
-          "reason": "Uses a secure (https) connection.",
+          "reason": "Your connection to this website is private (https).",
           "evidence": [
             {
               "url": "https://replykind.example/",
@@ -607,7 +607,7 @@
         },
         "redFlags": {
           "result": "pass",
-          "reason": "No red flags found. Google unsafe-site check was not run.",
+          "reason": "No warning signs found. (We didn't check Google's list of unsafe websites.)",
           "evidence": [
             {
               "url": "https://replykind.example/",
@@ -728,7 +728,7 @@
       "checks": {
         "whoIsBehind": {
           "result": "pass",
-          "reason": "Run by BookNest Co., led by Sam Whitfield, at 15 Oak Avenue, Columbus, OH 43215.",
+          "reason": "Run by BookNest Co., a company at 15 Oak Avenue, Columbus, OH 43215.",
           "evidence": [
             {
               "quote": "BookNest Co. builds Online booking software for small businesses.",
@@ -749,7 +749,7 @@
         },
         "domainAge": {
           "result": "fail",
-          "reason": "The website is only a year old or less (registered 2026-02-03).",
+          "reason": "The website is less than a year old (started February 2026). New websites are riskier.",
           "evidence": [
             {
               "url": "https://rdap.org/domain/booknest.example",
@@ -759,7 +759,7 @@
         },
         "privacyPolicy": {
           "result": "pass",
-          "reason": "Has a full privacy policy.",
+          "reason": "Has a full privacy policy that says what they do with your information.",
           "evidence": [
             {
               "url": "https://booknest.example/privacy",
@@ -769,7 +769,7 @@
         },
         "dataUse": {
           "result": "pass",
-          "reason": "Doesn't train on your data, and you can delete your data.",
+          "reason": "Doesn't use your information to make its AI better. You can delete your information.",
           "evidence": [
             {
               "quote": "We do not use customer content to train AI models.",
@@ -785,7 +785,7 @@
         },
         "dataLocation": {
           "result": "pass",
-          "reason": "Your data is stored in United States.",
+          "reason": "Your information is kept in United States.",
           "evidence": [
             {
               "quote": "All customer data is stored in data centers in the United States.",
@@ -796,7 +796,7 @@
         },
         "pricingClarity": {
           "result": "pass",
-          "reason": "Shows a monthly price in dollars.",
+          "reason": "Shows a clear monthly price.",
           "evidence": [
             {
               "url": "https://booknest.example/pricing",
@@ -806,7 +806,7 @@
         },
         "securityBasics": {
           "result": "pass",
-          "reason": "Uses a secure (https) connection.",
+          "reason": "Your connection to this website is private (https).",
           "evidence": [
             {
               "url": "https://booknest.example/",
@@ -816,7 +816,7 @@
         },
         "redFlags": {
           "result": "pass",
-          "reason": "No red flags found. Google unsafe-site check was not run.",
+          "reason": "No warning signs found. (We didn't check Google's list of unsafe websites.)",
           "evidence": [
             {
               "url": "https://booknest.example/",
@@ -828,7 +828,7 @@
       "redFlags": [],
       "verdict": "ready",
       "warnings": [
-        "The website is only a year old or less (registered 2026-02-03)."
+        "The website is less than a year old (started February 2026). New websites are riskier."
       ]
     },
     "lastChecked": "2026-11-07",
@@ -932,7 +932,7 @@
       "checks": {
         "whoIsBehind": {
           "result": "pass",
-          "reason": "Run by TextTide Inc., led by Grace Kim, at 230 Bay Road, Norfolk, VA 23510.",
+          "reason": "Run by TextTide Inc., a company at 230 Bay Road, Norfolk, VA 23510.",
           "evidence": [
             {
               "quote": "TextTide Inc. builds Customer messaging software for small businesses.",
@@ -953,7 +953,7 @@
         },
         "domainAge": {
           "result": "fail",
-          "reason": "The website is only a year old or less (registered 2025-12-20).",
+          "reason": "The website is less than a year old (started December 2025). New websites are riskier.",
           "evidence": [
             {
               "url": "https://rdap.org/domain/texttide.example",
@@ -963,7 +963,7 @@
         },
         "privacyPolicy": {
           "result": "pass",
-          "reason": "Has a full privacy policy.",
+          "reason": "Has a full privacy policy that says what they do with your information.",
           "evidence": [
             {
               "url": "https://texttide.example/privacy",
@@ -973,7 +973,7 @@
         },
         "dataUse": {
           "result": "pass",
-          "reason": "Doesn't train on your data, and you can delete your data.",
+          "reason": "Doesn't use your information to make its AI better. You can delete your information.",
           "evidence": [
             {
               "quote": "We do not use customer content to train AI models.",
@@ -989,7 +989,7 @@
         },
         "dataLocation": {
           "result": "pass",
-          "reason": "Your data is stored in United States.",
+          "reason": "Your information is kept in United States.",
           "evidence": [
             {
               "quote": "All customer data is stored in data centers in the United States.",
@@ -1000,7 +1000,7 @@
         },
         "pricingClarity": {
           "result": "pass",
-          "reason": "Shows a monthly price in dollars.",
+          "reason": "Shows a clear monthly price.",
           "evidence": [
             {
               "url": "https://texttide.example/pricing",
@@ -1010,7 +1010,7 @@
         },
         "securityBasics": {
           "result": "pass",
-          "reason": "Uses a secure (https) connection.",
+          "reason": "Your connection to this website is private (https).",
           "evidence": [
             {
               "url": "https://texttide.example/",
@@ -1020,7 +1020,7 @@
         },
         "redFlags": {
           "result": "pass",
-          "reason": "No red flags found. Google unsafe-site check was not run.",
+          "reason": "No warning signs found. (We didn't check Google's list of unsafe websites.)",
           "evidence": [
             {
               "url": "https://texttide.example/",
@@ -1032,7 +1032,7 @@
       "redFlags": [],
       "verdict": "ready",
       "warnings": [
-        "The website is only a year old or less (registered 2025-12-20)."
+        "The website is less than a year old (started December 2025). New websites are riskier."
       ]
     },
     "lastChecked": "2026-11-07",
@@ -1130,12 +1130,12 @@
       "checks": {
         "whoIsBehind": {
           "result": "unknown",
-          "reason": "We couldn't read an About or Contact page.",
+          "reason": "We couldn't find an About or Contact page that says who is behind this tool.",
           "evidence": []
         },
         "domainAge": {
           "result": "fail",
-          "reason": "The website is only a year old or less (registered 2026-09-01).",
+          "reason": "The website is less than a year old (started September 2026). New websites are riskier.",
           "evidence": [
             {
               "url": "https://rdap.org/domain/squarre-voice.example",
@@ -1145,7 +1145,7 @@
         },
         "privacyPolicy": {
           "result": "pass",
-          "reason": "Has a full privacy policy.",
+          "reason": "Has a full privacy policy that says what they do with your information.",
           "evidence": [
             {
               "url": "https://squarre-voice.example/privacy",
@@ -1155,7 +1155,7 @@
         },
         "dataUse": {
           "result": "unknown",
-          "reason": "We couldn't find whether it trains AI on your data or whether you can delete your data.",
+          "reason": "We couldn't find whether it uses your information to make its AI better or whether you can delete your information.",
           "evidence": [
             {
               "url": "https://squarre-voice.example/privacy",
@@ -1165,7 +1165,7 @@
         },
         "dataLocation": {
           "result": "unknown",
-          "reason": "We couldn't find where your data is stored.",
+          "reason": "We couldn't find which country your information is kept in.",
           "evidence": [
             {
               "url": "https://squarre-voice.example/privacy",
@@ -1175,12 +1175,12 @@
         },
         "pricingClarity": {
           "result": "fail",
-          "reason": "We found no public pricing page.",
+          "reason": "We couldn't find a pricing page.",
           "evidence": []
         },
         "securityBasics": {
           "result": "pass",
-          "reason": "Uses a secure (https) connection.",
+          "reason": "Your connection to this website is private (https).",
           "evidence": [
             {
               "url": "https://squarre-voice.example/",
@@ -1204,9 +1204,10 @@
       ],
       "verdict": "blocked",
       "warnings": [
-        "The website is only a year old or less (registered 2026-09-01).",
-        "We couldn't find where your data is stored.",
-        "We found no public pricing page."
+        "The website is less than a year old (started September 2026). New websites are riskier.",
+        "We couldn't find which country your information is kept in.",
+        "We couldn't find a pricing page.",
+        "We couldn't find the name of the person who runs this company."
       ]
     },
     "lastChecked": "2026-11-07",
@@ -1315,12 +1316,12 @@
       "checks": {
         "whoIsBehind": {
           "result": "unknown",
-          "reason": "We couldn't read an About or Contact page.",
+          "reason": "We couldn't find an About or Contact page that says who is behind this tool.",
           "evidence": []
         },
         "domainAge": {
           "result": "fail",
-          "reason": "The website is only a year old or less (registered 2026-10-01).",
+          "reason": "The website is less than a year old (started October 2026). New websites are riskier.",
           "evidence": [
             {
               "url": "https://rdap.org/domain/fastbooks-ai-download.example",
@@ -1330,7 +1331,7 @@
         },
         "privacyPolicy": {
           "result": "pass",
-          "reason": "Has a full privacy policy.",
+          "reason": "Has a full privacy policy that says what they do with your information.",
           "evidence": [
             {
               "url": "https://fastbooks-ai-download.example/privacy",
@@ -1340,7 +1341,7 @@
         },
         "dataUse": {
           "result": "unknown",
-          "reason": "We couldn't find whether it trains AI on your data or whether you can delete your data.",
+          "reason": "We couldn't find whether it uses your information to make its AI better or whether you can delete your information.",
           "evidence": [
             {
               "url": "https://fastbooks-ai-download.example/privacy",
@@ -1350,7 +1351,7 @@
         },
         "dataLocation": {
           "result": "unknown",
-          "reason": "We couldn't find where your data is stored.",
+          "reason": "We couldn't find which country your information is kept in.",
           "evidence": [
             {
               "url": "https://fastbooks-ai-download.example/privacy",
@@ -1360,12 +1361,12 @@
         },
         "pricingClarity": {
           "result": "fail",
-          "reason": "We found no public pricing page.",
+          "reason": "We couldn't find a pricing page.",
           "evidence": []
         },
         "securityBasics": {
           "result": "pass",
-          "reason": "Uses a secure (https) connection.",
+          "reason": "Your connection to this website is private (https).",
           "evidence": [
             {
               "url": "https://fastbooks-ai-download.example/",
@@ -1389,9 +1390,10 @@
       ],
       "verdict": "blocked",
       "warnings": [
-        "The website is only a year old or less (registered 2026-10-01).",
-        "We couldn't find where your data is stored.",
-        "We found no public pricing page."
+        "The website is less than a year old (started October 2026). New websites are riskier.",
+        "We couldn't find which country your information is kept in.",
+        "We couldn't find a pricing page.",
+        "We couldn't find the name of the person who runs this company."
       ]
     },
     "lastChecked": "2026-11-07",
@@ -1500,12 +1502,12 @@
       "checks": {
         "whoIsBehind": {
           "result": "unknown",
-          "reason": "We couldn't read an About or Contact page.",
+          "reason": "We couldn't find an About or Contact page that says who is behind this tool.",
           "evidence": []
         },
         "domainAge": {
           "result": "pass",
-          "reason": "The website has been around since 2022-06-18.",
+          "reason": "The website has been around since June 2022.",
           "evidence": [
             {
               "url": "https://rdap.org/domain/replybot-pro.example",
@@ -1515,27 +1517,27 @@
         },
         "privacyPolicy": {
           "result": "fail",
-          "reason": "We found no privacy policy anywhere on the website.",
+          "reason": "There's no privacy policy on the website.",
           "evidence": []
         },
         "dataUse": {
           "result": "unknown",
-          "reason": "We couldn't find whether it trains AI on your data or whether you can delete your data.",
+          "reason": "We couldn't find whether it uses your information to make its AI better or whether you can delete your information.",
           "evidence": []
         },
         "dataLocation": {
           "result": "unknown",
-          "reason": "We couldn't find where your data is stored.",
+          "reason": "We couldn't find which country your information is kept in.",
           "evidence": []
         },
         "pricingClarity": {
           "result": "fail",
-          "reason": "We found no public pricing page.",
+          "reason": "We couldn't find a pricing page.",
           "evidence": []
         },
         "securityBasics": {
           "result": "pass",
-          "reason": "Uses a secure (https) connection.",
+          "reason": "Your connection to this website is private (https).",
           "evidence": [
             {
               "url": "https://replybot-pro.example/",
@@ -1559,8 +1561,9 @@
       ],
       "verdict": "blocked",
       "warnings": [
-        "We couldn't find where your data is stored.",
-        "We found no public pricing page."
+        "We couldn't find which country your information is kept in.",
+        "We couldn't find a pricing page.",
+        "We couldn't find the name of the person who runs this company."
       ]
     },
     "lastChecked": "2026-11-07",

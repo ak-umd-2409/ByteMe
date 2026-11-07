@@ -22,7 +22,7 @@ export function loadFacts(toolId: string): SafetyFacts | null {
 type Obj = Record<string, any>;
 const isObj = (v: unknown): v is Obj => typeof v === "object" && v !== null && !Array.isArray(v);
 const isDate = (v: unknown) => typeof v === "string" && /^\d{4}-\d{2}-\d{2}$/.test(v);
-const AI_KEYS = ["companyName", "address", "leaderName", "trainsOnYourData", "canDeleteData", "whereStored", "securityCertification"];
+const AI_KEYS = ["companyName", "address", "leaderName", "trainsOnYourData", "canDeleteData", "whereStored", "securityCertification", "policyAddress"];
 
 /** Shape check of a fact sheet. Empty list = valid. */
 export function validateFacts(x: unknown): string[] {

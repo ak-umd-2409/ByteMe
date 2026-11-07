@@ -38,7 +38,8 @@
     "trainsOnYourData": "unknown",
     "canDeleteData": "unknown",
     "whereStored": "unknown",
-    "securityCertification": "unknown"
+    "securityCertification": "unknown",
+    "policyAddress": "unknown"
   },
   "riskySentences": [],
   "safeBrowsing": "not_run"
