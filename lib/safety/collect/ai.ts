@@ -16,7 +16,7 @@ const ALLOWED: Partial<Record<keyof Ai, string[]>> = {
   canDeleteData: ["yes", "no"],
 };
 
-const answerSchema = v.optional(v.nullable(v.object({ answer: v.string({ max: 300 }), quote: v.string({ max: 1000 }) }, { allowUnknown: true })));
+const answerSchema = v.optional(v.nullable(v.object({ answer: v.nullable(v.string({ max: 300 })), quote: v.nullable(v.string({ max: 1000 })) }, { allowUnknown: true })));
 const aboutSchema = v.object({ companyName: answerSchema, address: answerSchema, leaderName: answerSchema }, { allowUnknown: true });
 const privacySchema = v.object(
   { trainsOnYourData: answerSchema, canDeleteData: answerSchema, whereStored: answerSchema, securityCertification: answerSchema },
@@ -39,7 +39,7 @@ const PRIVACY_SYSTEM = `${RULES}
 Fields, each {"answer": string, "quote": string} or null:
 - trainsOnYourData: "yes", "no" or "opt-in". Does the company use customer data to train or improve AI or machine-learning models? Wording like "we may use your data to improve our services or models" means "yes". "opt-in" only if it happens only when the customer agrees first.
 - canDeleteData: "yes" or "no". Can customers delete their data or have it deleted?
-- whereStored: the country or region where data is stored.
+- whereStored: the country or region where customer data is stored or processed. Only from a sentence about data storage or processing, never from the company's mailing address.
 - securityCertification: any security certification named (for example SOC 2, ISO 27001, PCI DSS, HIPAA).`;
 
 const fetched = (page: PageFact): FetchedPageFact | null => (isFetched(page) ? page : null);
@@ -62,17 +62,21 @@ function emptyAi(): Ai {
 const squash = (text: string) => text.toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
 
 /** Keep an answer only if its quote is on one of the source pages. */
-function verify(key: keyof Ai, raw: { answer: string; quote: string } | null | undefined, sources: FetchedPageFact[]): AiAnswer<string> {
-  if (!raw) return "unknown";
+type RawAnswer = { answer: string | null; quote: string | null } | null | undefined;
+
+function verify(key: keyof Ai, raw: RawAnswer, sources: FetchedPageFact[]): AiAnswer<string> {
+  // Models sometimes write { answer: null, quote: null } for "the page doesn't say".
+  if (!raw || raw.answer === null || raw.quote === null) return "unknown";
   const answer = raw.answer.trim();
+  const quote = raw.quote;
   if (!answer) return "unknown";
   const allowed = ALLOWED[key];
   const normalized = allowed ? answer.toLowerCase() : answer;
   if (allowed && !allowed.includes(normalized)) return "unknown";
   // A free-text answer must be backed by its own quote ("Intuit Inc." needs a quote that names Intuit).
-  if (!allowed && !squash(raw.quote).includes(squash(answer))) return "unknown";
-  const page = sources.find((p) => isVerbatim(raw.quote, p.text));
-  return page ? { answer: normalized, quote: raw.quote.trim(), pageUrl: page.finalUrl } : "unknown";
+  if (!allowed && !squash(quote).includes(squash(answer))) return "unknown";
+  const page = sources.find((p) => isVerbatim(quote, p.text));
+  return page ? { answer: normalized, quote: quote.trim(), pageUrl: page.finalUrl } : "unknown";
 }
 
 async function ask<K extends readonly (keyof Ai)[]>(
@@ -87,7 +91,7 @@ async function ask<K extends readonly (keyof Ai)[]>(
   const user = sources.map((p) => `PAGE ${p.finalUrl}\n"""\n${p.text.slice(0, maxChars)}\n"""`).join("\n\n");
   const result = await llmJson(deps.llm ?? getLlmProvider(), schema, { task, system, user, maxTokens: 700 }, { cache: deps.cache });
   if (!result.ok) return null;
-  const value = result.value as Record<string, { answer: string; quote: string } | null | undefined>;
+  const value = result.value as Record<string, RawAnswer>;
   const out: Record<string, AiAnswer<string>> = {};
   for (const key of keys) out[key] = verify(key, value[key], sources);
   return out as Partial<Ai>;

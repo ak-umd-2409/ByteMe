@@ -30,6 +30,14 @@ const emptyPages = (value: PageFact): Record<PageKind, PageFact> => ({
   terms: value,
 });
 
+/** classifyPage, but "contactless" (a payments word) is not a Contact page. */
+function kindOf(href: string, text: string) {
+  const kind = classifyPage(href, text);
+  if (kind !== "contact") return kind;
+  const haystack = `${new URL(href).pathname.replace(/[-_/]+/g, " ")} ${text}`;
+  return /\bcontact\b|get in touch|reach us/i.test(haystack) ? kind : "other";
+}
+
 const errorCode = (error: unknown) => (error instanceof SafeFetchError ? error.code : "network");
 
 export async function findPages(url: string, deps: CollectDeps): Promise<FoundPages> {
@@ -75,7 +83,7 @@ export async function findPages(url: string, deps: CollectDeps): Promise<FoundPa
   const sameSite = (href: string) => registrableDomain(new URL(href).hostname) === site;
   const links = allLinks.filter((link) => sameSite(link.href));
   // A policy hosted elsewhere (Termly, a parent company) needs a person to look: held, never "missing".
-  const offSitePrivacy = allLinks.some((link) => !sameSite(link.href) && classifyPage(link.href, link.text) === "privacy");
+  const offSitePrivacy = allLinks.some((link) => !sameSite(link.href) && kindOf(link.href, link.text) === "privacy");
 
   const pages = emptyPages(null);
   pages.home = toFact(home);
@@ -84,7 +92,7 @@ export async function findPages(url: string, deps: CollectDeps): Promise<FoundPa
   // Pass 1: pages the home page links to. These are certain, so they come first.
   const unresolved: OtherKind[] = [];
   for (const kind of SEARCH_ORDER) {
-    const linked = links.find((link) => !used.has(link.href) && classifyPage(link.href, link.text) === kind);
+    const linked = links.find((link) => !used.has(link.href) && kindOf(link.href, link.text) === kind);
     if (!linked) {
       unresolved.push(kind);
       continue;

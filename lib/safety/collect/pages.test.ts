@@ -30,6 +30,15 @@ describe("findPages", () => {
     assert.ok(isFetched(pages.home) && pages.home.fetchedAt === "2026-11-07");
   });
 
+  it("doesn't mistake a 'contactless' product page for the Contact page", async () => {
+    const { deps: d } = deps({
+      [`${SITE}/`]: html('<a href="/hardware/contactless-chip-reader">Contactless reader</a><a href="/contact-us">Contact us</a>'),
+      [`${SITE}/hardware/contactless-chip-reader`]: html("<p>Reader</p>"),
+      [`${SITE}/contact-us`]: html("<p>Contact</p>"),
+    });
+    assert.equal(urlOf((await findPages(`${SITE}/`, d)).pages.contact), `${SITE}/contact-us`);
+  });
+
   it("tries the usual paths when the home page has no links", async () => {
     const { deps: d } = deps({ [`${SITE}/`]: html("<p>Hi</p>"), [`${SITE}/privacy`]: html("<p>Policy</p>") });
     const { pages } = await findPages(`${SITE}/`, d);

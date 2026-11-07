@@ -62,6 +62,14 @@ describe("askAi", () => {
     assert.equal((await run(pages(), provider)).companyName, "unknown");
   });
 
+  it("keeps the other answers when the AI writes { answer: null, quote: null } for one", async () => {
+    const { provider } = llm(ABOUT_ANSWER, { ...PRIVACY_ANSWER, securityCertification: { answer: null, quote: null } });
+    const ai = await run(pages(), provider);
+    assert.equal(ai.ran.privacy, true);
+    assert.equal(ai.securityCertification, "unknown");
+    assert.notEqual(ai.canDeleteData, "unknown");
+  });
+
   it("rejects an answer outside the allowed values", async () => {
     const { provider } = llm(ABOUT_ANSWER, { ...PRIVACY_ANSWER, canDeleteData: { answer: "maybe", quote: PRIVACY_ANSWER.canDeleteData.quote } });
     assert.equal((await run(pages(), provider)).canDeleteData, "unknown");

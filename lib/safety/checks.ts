@@ -67,7 +67,7 @@ export function checkDataUse(facts: SafetyFacts): SafetyCheckItem {
   const evidence = answerEvidence(facts, trains, del);
   const fallback = evidence.length ? evidence : pageEvidence(facts.pages.privacy);
   if (trains !== "unknown" && trains.answer === "yes")
-    return item("fail", "Uses your data to train its AI.", evidence);
+    return item("fail", "The privacy policy says it may use your data for its AI.", evidence);
   if (del !== "unknown" && del.answer === "no") return item("fail", "You can't delete your data.", evidence);
   // The "no training" sentence itself often says "train". It is set aside only when it
   // reads as a plain no (a negation and no exceptions); every other risky sentence counts.
