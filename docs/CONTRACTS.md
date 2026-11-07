@@ -46,14 +46,48 @@ When a rules flag is unknown, the translator assumes the answer that protects th
 
 In `app/api/recommend/route.ts`, replace `demoCatalog` with `getVerifiedTools()`. That's the only change. We'll do it together at the "plug everything together" step.
 
+## Safety Check (`lib/safety`)
+
+Design: [docs/specs/b-safety-check.md](specs/b-safety-check.md). Decides whether a tool may ever be shown to an owner, and shows the proof.
+
+### `checkTool(input, deps?) → Promise<{ facts, report }>`
+
+```ts
+import { checkTool, judge, approveTool } from "@/lib/safety/index.ts";
+
+const { facts, report } = await checkTool({ url: "https://tool.com", name: "Tool", handlesSensitiveData: false });
+report.verdict;   // "blocked" | "held" | "ready"
+report.redFlags;  // why it was blocked (plain English)
+report.warnings;  // things to know that don't block it
+report.checks;    // 8 checks, each pass / fail / unknown + reason + evidence (link, date, quote)
+```
+
+- Two layers: `collectFacts()` reads the website (and asks the AI fixed questions); `judge(facts)` decides with plain code, no internet, no AI. Server-side only.
+- Never throws. A page it couldn't read becomes "couldn't tell", never a guess.
+- **AI answers need a verbatim quote.** Every AI answer must come with a sentence the code finds word for word on the vendor's page, or it becomes `"unknown"`. With no OpenRouter key, those answers are `"unknown"`, so the tool is `held`.
+
+| Verdict | When | What happens |
+| --- | --- | --- |
+| `blocked` | Any red flag: lookalike of a known brand, no privacy policy, site under 6 months old asking for a download, on Google's unsafe list | Badge `blocked`. Never shown. |
+| `held` | No red flag, but a must-pass check (`whoIsBehind`, `privacyPolicy`, `dataUse`, `securityBasics`, `redFlags`) isn't `pass` | Stays in review. **Can't be approved.** |
+| `ready` | All must-pass checks pass | Badge `listed`. Warnings (`domainAge`, `dataLocation`, `pricingClarity`) are shown. |
+
+### `approveTool(record, reviewer, date)`
+
+The only way to make a tool `verified`. Returns `{ ok: false, reason }` unless `record.safetyCheck.verdict === "ready"`. The catalog checker also rejects any `verified`/`listed` tool whose verdict isn't `ready`.
+
+### Saved results and the script
+
+- `data/safety/<toolId>.json`: the saved fact sheet for each catalog tool, so the demo never needs the internet or the AI. `loadFacts(id)` in `lib/safety/saved.ts` reads one.
+- `npm run safety:check -- <url> [--id <toolId>] [--name "<name>"] [--sensitive]` runs the check and prints it in plain English. `--id` saves the fact sheet (and reuses earlier AI answers for pages that haven't changed). `--sensitive` = takes payments or health info. Keys come from `.env.local`.
+
 ## Coming next (signatures fixed, not built yet)
 
 ```ts
 applyRules(profile: BusinessProfile, tools: CatalogTool[])
   → { allowed: CatalogTool[]; excluded: { tool: CatalogTool; rule: string; reason: string }[] }
 
-checkTool(url: string)
-  → Promise<{ known: boolean; badge: Badge; record: CatalogRecord }>   // unknown URLs join the review queue
+// checkTool is built: see "Safety Check" above. The review queue for unknown URLs comes with discovery (problem 8).
 
 getHelpForCounty(county: string)
   → { sbdc: { name: string; url: string }; score: { name: string; url: string } } | null

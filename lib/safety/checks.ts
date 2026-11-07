@@ -56,7 +56,7 @@ export function checkWhoIsBehind(facts: SafetyFacts): SafetyCheckItem {
 export function checkPrivacyPolicy(facts: SafetyFacts): SafetyCheckItem {
   const privacy = facts.pages.privacy;
   if (privacy === null) return item("fail", "We found no privacy policy anywhere on the website.", []);
-  if (!isFetched(privacy)) return item("unknown", "We found a privacy policy link but couldn't open it.", []);
+  if (!isFetched(privacy)) return item("unknown", "We couldn't read the privacy policy page (the website blocked us or didn't answer).", []);
   if (wordCount(privacy.text) < SAFETY_CONFIG.minPrivacyWords)
     return item("unknown", "The privacy policy is too short to tell what happens to your data.", pageEvidence(privacy));
   return item("pass", "Has a full privacy policy.", pageEvidence(privacy));
@@ -129,7 +129,7 @@ export function checkPricingClarity(facts: SafetyFacts): SafetyCheckItem {
   const pricing = facts.pages.pricing;
   const { pricePattern, monthlyPattern } = SAFETY_CONFIG;
   if (pricing === null) return item("fail", "We found no public pricing page.", []);
-  if (!isFetched(pricing)) return item("unknown", "We found a pricing page but couldn't open it.", []);
+  if (!isFetched(pricing)) return item("unknown", "We couldn't check the pricing page.", []);
   if (pricePattern.test(pricing.text) && monthlyPattern.test(pricing.text))
     return item("pass", "Shows a monthly price in dollars.", pageEvidence(pricing));
   return item(
