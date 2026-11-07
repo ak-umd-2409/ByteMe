@@ -1,10 +1,19 @@
-export type UseCase =
-  | "missed-calls"
-  | "quotes"
-  | "reviews"
-  | "booking"
-  | "marketing"
-  | "bookkeeping";
+/** The 12 problem types from FEATURE_SPEC. Tools and problems both use these. */
+export const USE_CASES = [
+  "missed-calls",
+  "booking",
+  "reviews",
+  "marketing",
+  "customer-messaging",
+  "quotes",
+  "bookkeeping",
+  "inventory",
+  "staff-scheduling",
+  "website-seo",
+  "email-marketing",
+  "admin-paperwork",
+] as const;
+export type UseCase = (typeof USE_CASES)[number];
 export type ToolStatus = "verified" | "listed" | "blocked";
 export type IntegrationKind = "native" | "via-zapier";
 export type RecommendationKind =
