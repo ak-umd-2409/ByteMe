@@ -38,7 +38,7 @@ const FAMILY: Record<EvidenceSource, string> = {
   sample_review: "reviews",
   website: "website",
   google_profile: "google_profile",
-  tech_stack: "owner",
+  tech_stack: "tools",
   owner_reported: "owner",
   industry_pattern: "pattern",
 };
@@ -47,6 +47,7 @@ const SOURCE_WORDS: Record<string, [string, string]> = {
   website: ["website finding", "website findings"],
   google_profile: ["Google listing detail", "Google listing details"],
   owner: ["thing you told us", "things you told us"],
+  tools: ["gap in your tools", "gaps in your tools"],
   pattern: ["industry pattern", "industry patterns"],
 };
 
@@ -198,7 +199,7 @@ export function discoverProblems(input: DiscoverInput, now = new Date()): Discov
       estimatedMonthlyTimeValue: { expected: sum("time_cost", "expected"), low: sum("time_cost", "low"), high: sum("time_cost", "high") },
     },
     disclaimer:
-      "Money figures are estimated opportunities calculated from the inputs shown, not proven lost revenue. Problems marked “hypothesis” have no direct evidence yet.",
+      "Money figures are estimated opportunities calculated from the inputs shown, not proven lost revenue. Problems marked “Not confirmed” have no direct evidence yet and are not included in totals.",
     limitations,
   };
 }

@@ -14,18 +14,26 @@ export function ImpactCalculator({
   industry,
   initial,
   onChange,
+  onEstimate,
 }: {
   problemKey: ProblemKey;
   industry: IndustryKey;
   initial: ImpactEstimate;
   /** Called with the owner's overrides so the page can send them to /api/problems/discover later. */
   onChange?: (overrides: Record<string, number>) => void;
+  /** Called with each new server-calculated estimate (e.g. to update a summary line). */
+  onEstimate?: (estimate: ImpactEstimate) => void;
 }) {
   const [estimate, setEstimate] = useState(initial);
   const [overrides, setOverrides] = useState<Record<string, number>>({});
   const [errors, setErrors] = useState<string[]>([]);
   const [pending, setPending] = useState(false);
   const controller = useRef<AbortController | null>(null);
+  // Keep callbacks in refs so inline arrow props don't re-trigger the request effect (which would loop).
+  const callbacks = useRef({ onChange, onEstimate });
+  useEffect(() => {
+    callbacks.current = { onChange, onEstimate };
+  });
 
   useEffect(() => {
     if (Object.keys(overrides).length === 0) return;
@@ -36,8 +44,9 @@ export function ImpactCalculator({
       try {
         const result = await api.impact({ problemKey, industry, overrides }, controller.current.signal);
         setEstimate(result.impact);
+        callbacks.current.onEstimate?.(result.impact);
         setErrors([]);
-        onChange?.(overrides);
+        callbacks.current.onChange?.(overrides);
       } catch (error) {
         if (error instanceof ApiError) setErrors(error.details.length ? error.details : [error.message]);
       } finally {
@@ -45,7 +54,7 @@ export function ImpactCalculator({
       }
     }, 350);
     return () => clearTimeout(timer);
-  }, [overrides, problemKey, industry, onChange]);
+  }, [overrides, problemKey, industry]);
 
   const editable = estimate.inputs.filter((i) => i.source !== "derived");
   const derived = estimate.inputs.filter((i) => i.source === "derived");

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import type { IndustryKey } from "@/lib/business/types.ts";
-import { fmt, type ProblemCard } from "@/lib/client/parts23.ts";
+import { fmt, type ImpactEstimate, type ProblemCard } from "@/lib/client/parts23.ts";
 import { ImpactCalculator } from "./ImpactCalculator.tsx";
 import { EvidenceList, StatusBadge } from "./primitives.tsx";
 import s from "./parts23.module.css";
@@ -24,11 +24,12 @@ export function ProblemCardView({
   onAssumptions?: (key: ProblemCard["key"], overrides: Record<string, number>) => void;
 }) {
   const [open, setOpen] = useState(problem.rank.position === 1);
+  const [impact, setImpact] = useState<ImpactEstimate | null>(problem.impact);
   const panelId = `${problem.id}-panel`;
   return (
     <article className={`${s.root} ${s.card}`} aria-labelledby={`${problem.id}-title`}>
       <header className={s.row} style={{ justifyContent: "space-between", alignItems: "flex-start" }}>
-        <div className={s.stack} style={{ gap: 4 }}>
+        <div className={s.stack} style={{ gap: 4, flex: "1 1 340px" }}>
           <div className={s.row}>
             <span className={`${s.meta} ${s.num}`}>#{problem.rank.position}</span>
             <StatusBadge status={problem.status} />
@@ -42,12 +43,12 @@ export function ProblemCardView({
             {problem.confidence.reason}
           </p>
         </div>
-        {problem.impact && (
-          <div style={{ textAlign: "right", minWidth: 120 }}>
+        {impact && (
+          <div style={{ minWidth: 120 }}>
             <div className={s.amount} style={{ fontSize: 22 }}>
-              {fmt.usd(problem.impact.monthly.expected)}
+              {fmt.usd(impact.monthly.expected)}
             </div>
-            <div className={s.meta}>{problem.impact.kind === "time_cost" ? "time / month" : "opportunity / month"}</div>
+            <div className={s.meta}>{impact.kind === "time_cost" ? "time / month" : "opportunity / month"}</div>
           </div>
         )}
       </header>
@@ -83,6 +84,7 @@ export function ProblemCardView({
               industry={industry}
               initial={problem.impact}
               onChange={(o) => onAssumptions?.(problem.key, o)}
+              onEstimate={setImpact}
             />
           ) : (
             problem.impactNote && <p className={s.meta}>{problem.impactNote}</p>

@@ -229,7 +229,8 @@ export function collectSignals({ profile, reviews, website }: SignalInput): Sign
     });
   }
 
-  // 4) Tools the owner confirmed (absence only counts when the owner confirmed the list).
+  // 4) Tools the owner confirmed. A missing tool is only an inference, so these never count as verified
+  //    evidence on their own: they can support a problem, not create one.
   const tools = profile.technology.currentTools;
   if (tools.source === "owner") {
     const names = (tools.value ?? []).map((t) => t.toLowerCase());
@@ -242,7 +243,7 @@ export function collectSignals({ profile, reviews, website }: SignalInput): Sign
         quote: null,
         reference: { field: "technology.currentTools" },
         weight: 0.3,
-        verified: true,
+        verified: false, // inferred from a missing tool, not something we observed
       });
     }
     if (industry.appointmentBased && !hasFieldService && !names.some((t) => /calendly|acuity|square appointments|booksy|vagaro|mindbody/.test(t))) {
@@ -253,7 +254,7 @@ export function collectSignals({ profile, reviews, website }: SignalInput): Sign
         quote: null,
         reference: { field: "technology.currentTools" },
         weight: 0.3,
-        verified: true,
+        verified: false, // inferred from a missing tool, not something we observed
       });
     }
   }

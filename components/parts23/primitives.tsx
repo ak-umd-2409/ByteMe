@@ -121,7 +121,7 @@ export function EvidenceList({ evidence, limit = 3 }: { evidence: ProblemCard["e
           <li key={e.id}>
             <blockquote className={`${s.quote} ${e.verified ? "" : s.unverified}`}>
               {e.quote ? <p style={{ margin: 0 }}>“{e.quote}”</p> : <p style={{ margin: 0 }}>{e.observation}</p>}
-              <footer className={s.meta}>
+              <div className={s.meta}>
                 {EVIDENCE_SOURCE[e.source]}
                 {!e.verified && " · not directly observed"}
                 {e.reference?.url && (
@@ -132,7 +132,7 @@ export function EvidenceList({ evidence, limit = 3 }: { evidence: ProblemCard["e
                     </a>
                   </>
                 )}
-              </footer>
+              </div>
             </blockquote>
           </li>
         ))}
