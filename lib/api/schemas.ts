@@ -221,6 +221,13 @@ export const reviewAnalysisSchema = v.object(
 const webEvidence = v.object({ url: v.string({ max: 500 }), snippet: v.string({ max: 300, trim: false }) }, { allowUnknown: true });
 const finding = <T>(value: Schema<T>) => v.object({ value, evidence: webEvidence, method: v.oneOf(["pattern", "html", "llm", "search_index", "page_fetch"] as const) }, { allowUnknown: true });
 const present = v.object({ present: v.boolean(), url: v.nullable(v.string({ max: 500 })) }, { allowUnknown: true });
+const policyStatus = v.object({
+  present: v.boolean(),
+  url: v.nullable(v.string({ max: 2048 })),
+  facts: v.optional(
+    v.array(v.object({ key: v.string({ max: 40 }), label: v.string({ max: 200 }), snippet: v.string({ max: 300 }), url: v.string({ max: 2048 }) }), { max: 20 }),
+  ),
+});
 
 export const websiteAnalysisSchema = v.object(
   {
@@ -250,7 +257,7 @@ export const websiteAnalysisSchema = v.object(
     booking: v.object({ onlineBooking: v.boolean(), evidence: v.nullable(webEvidence), provider: v.nullable(v.string({ max: 80 })) }, { allowUnknown: true }),
     contactForm: v.object({ present: v.boolean(), evidence: v.nullable(webEvidence) }, { allowUnknown: true }),
     faq: v.object({ present: v.boolean(), url: v.nullable(v.string({ max: 500 })), questions: v.array(v.string({ max: 200 }), { max: 20 }) }, { allowUnknown: true }),
-    policies: v.object({ privacy: present, refund: present, terms: present }, { allowUnknown: true }),
+    policies: v.object({ privacy: policyStatus, refund: policyStatus, terms: policyStatus }, { allowUnknown: true }),
     phoneOnlyCallsToAction: v.array(finding(v.string({ max: 120 })), { max: 10 }),
     afterHoursMessages: v.array(finding(v.string({ max: 120 })), { max: 10 }),
     method: v.oneOf(["rules", "rules+llm"] as const),
@@ -337,6 +344,12 @@ export const discoverBody = v.object({
   assumptions: v.optional(v.record(overrides, { keys: PROBLEM_KEYS })),
   includeHypotheses: v.optional(v.array(v.oneOf(PROBLEM_KEYS), { max: PROBLEM_KEYS.length })),
   polish: v.optional(v.boolean()),
+});
+
+export const paybackBody = v.object({
+  industry: v.oneOf(INDUSTRY_KEYS),
+  items: v.array(v.object({ problemKey: v.oneOf(PROBLEM_KEYS), monthlyCost: v.number({ min: 0, max: 100_000 }) }), { min: 1, max: 30 }),
+  assumptions: v.optional(v.record(v.record(v.number({ min: 0, max: 1_000_000 }), { maxKeys: 20 }), { maxKeys: 20, keys: PROBLEM_KEYS })),
 });
 
 export const impactBody = v.object({

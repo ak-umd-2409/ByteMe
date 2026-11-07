@@ -159,6 +159,13 @@ export interface ReviewAnalysis {
 
 // ---------- Website ----------
 
+export interface PolicyStatus {
+  present: boolean;
+  url: string | null;
+  /** Facts read from the page; absent if the page wasn't read (only linked). */
+  facts?: { key: string; label: string; snippet: string; url: string }[];
+}
+
 export type PageKind =
   | "home"
   | "contact"
@@ -210,10 +217,11 @@ export interface WebsiteAnalysis {
   booking: { onlineBooking: boolean; evidence: WebEvidence | null; provider: string | null };
   contactForm: { present: boolean; evidence: WebEvidence | null };
   faq: { present: boolean; url: string | null; questions: string[] };
+  /** Spec 2.6. `facts` are read from the policy page itself, each with the exact sentence. */
   policies: {
-    privacy: { present: boolean; url: string | null };
-    refund: { present: boolean; url: string | null };
-    terms: { present: boolean; url: string | null };
+    privacy: PolicyStatus;
+    refund: PolicyStatus;
+    terms: PolicyStatus;
   };
   /** Mentions like "call to book" or "call for a quote". */
   phoneOnlyCallsToAction: Finding<string>[];

@@ -13,7 +13,9 @@ import type { ProblemKey } from "../problems/types.ts";
 import { loadConfig, type AppConfig } from "../shared/config.ts";
 import { log } from "../shared/logger.ts";
 import type { Result } from "../shared/validate.ts";
-import { analyzeBody, confirmBody, detailsQuery, discoverBody, impactBody, searchQuery } from "./schemas.ts";
+import { paybackFor } from "../problems/payback.ts";
+import { rulesForProfile } from "../rules/forProfile.ts";
+import { paybackBody, analyzeBody, confirmBody, detailsQuery, discoverBody, impactBody, searchQuery } from "./schemas.ts";
 
 /**
  * Framework-free API handlers for Parts 2 and 3. Each returns `{ status, body }`
@@ -133,7 +135,18 @@ export async function handleDiscover(body: unknown, deps: ApiDeps): Promise<ApiR
   if (input.polish !== false && deps.llm !== disabledProvider) discovery = await polishExplanations(discovery, deps.llm);
   const recommendationInput = toRecommendationInput(profile, discovery, { includeHypotheses: input.includeHypotheses });
   log.info("problems.discovered", { problems: discovery.problems.length, readyForPart4: recommendationInput.ok });
-  return { status: 200, body: { discovery, recommendationInput } };
+  return { status: 200, body: { discovery, recommendationInput, rules: rulesForProfile(profile, discovery) } };
+}
+
+/** POST /api/problems/payback — "pays for itself in X days" for a list of tool prices. */
+export async function handlePayback(body: unknown): Promise<ApiResponse> {
+  const parsed = paybackBody.parse(body);
+  if (!parsed.ok) return invalid(parsed)!;
+  const { industry, items, assumptions } = parsed.value;
+  const results = items.map((item) =>
+    paybackFor(item as { problemKey: ProblemKey; monthlyCost: number }, industry, (assumptions as Partial<Record<ProblemKey, Record<string, number>>> | undefined)?.[item.problemKey as ProblemKey] ?? {}),
+  );
+  return { status: 200, body: { results, note: "Estimates only. Based on the same numbers as the problem's estimate; not a promise of results." } };
 }
 
 /** POST /api/problems/impact — recalculate one estimate when the owner edits an input. */

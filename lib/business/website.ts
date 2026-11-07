@@ -1,3 +1,4 @@
+import { extractPolicyFacts } from "./policies.ts";
 import { mockWebsites } from "../../data/mock/onboarding.ts";
 import { llmJson, type LlmProvider } from "../llm/client.ts";
 import { cached, hashKey, sharedCache, type Cache } from "../shared/cache.ts";
@@ -218,8 +219,9 @@ export function extractFromPages(requestedUrl: string, pages: ScannedPage[], raw
       if (/(refund|return|cancellation)/i.test(label) && !analysis.policies.refund.present) analysis.policies.refund = { present: true, url: link.href };
       if (/terms/i.test(label) && !analysis.policies.terms.present) analysis.policies.terms = { present: true, url: link.href };
     }
-    if (page.kind === "privacy") analysis.policies.privacy = { present: true, url };
-    if (page.kind === "refund") analysis.policies.refund = { present: true, url };
+    if (page.kind === "privacy" || page.kind === "refund" || page.kind === "terms") {
+      analysis.policies[page.kind] = { present: true, url, facts: extractPolicyFacts(page.kind, text, url) };
+    }
 
     if (page.kind === "services" || page.kind === "pricing") {
       for (const item of listItems(html)) {

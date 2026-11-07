@@ -7,6 +7,9 @@ import { baseListings, checkListings, describeHours, parseHours, type ListingsCh
 import type { PublicSnapshot } from "./snapshot.ts";
 import type { PlacesProvider } from "./places.ts";
 import { buildProfile, type ManualBusiness } from "./profile.ts";
+import { rulesForProfile } from "../rules/forProfile.ts";
+import type { RulesReport } from "../rules/maryland.ts";
+import { locationContext, type LocationContext } from "./location.ts";
 import { analyzeReviews, splitPastedReviews } from "./reviews.ts";
 import { detectTechnology } from "./techDetect.ts";
 import type {
@@ -44,6 +47,10 @@ export interface OnboardingAnalysis {
   /** Plain-English notes about anything we couldn't do. */
   warnings: string[];
   mode: { places: "google_places" | "mock" | "public_snapshot" | "none"; llm: "on" | "off" };
+  /** Spec 2.9–2.11: county, rural, nearest SBDC office, languages nearby, internet. */
+  location: LocationContext;
+  /** Spec 2.8: rules that affect which AI tools fit. /api/problems/discover returns an updated copy. */
+  rules: RulesReport;
 }
 
 export interface OnboardingDeps {
@@ -137,6 +144,8 @@ export async function analyzeBusiness(request: AnalyzeRequest, deps: OnboardingD
     snapshot: snapshot ? { capturedAt: snapshot.capturedAt, note: snapshot.captureNote, sources: snapshot.sources, about: snapshot.about } : null,
     warnings,
     mode: { places: details ? details.provider : "none", llm: llmOn ? "on" : "off" },
+    location: locationContext(profile.business.address.value),
+    rules: rulesForProfile(profile),
   };
 }
 
