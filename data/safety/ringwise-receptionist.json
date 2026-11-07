@@ -1,0 +1,106 @@
+{
+  "input": {
+    "url": "https://ringwise.example/",
+    "name": "Ringwise Receptionist",
+    "handlesSensitiveData": false
+  },
+  "collectedAt": "2026-11-07",
+  "pages": {
+    "home": {
+      "url": "https://ringwise.example/",
+      "finalUrl": "https://ringwise.example/",
+      "status": 200,
+      "fetchedAt": "2026-11-07",
+      "contentHash": "f8ccdb4f2aaa5bfddc1a4adce79215a0",
+      "text": "Ringwise Receptionist: Sample tool (fictional). Answers calls you miss while you're on a job, takes the customer's details and texts them to you."
+    },
+    "about": {
+      "url": "https://ringwise.example/about",
+      "finalUrl": "https://ringwise.example/about",
+      "status": 200,
+      "fetchedAt": "2026-11-07",
+      "contentHash": "fd7859cf0184e6534f918497d34ebd25",
+      "text": "Ringwise Labs builds AI receptionist software for small businesses. Our office is at 12 Harbor Street, Baltimore, MD 21202. Dana Okafor is our founder and CEO."
+    },
+    "contact": {
+      "url": "https://ringwise.example/contact",
+      "finalUrl": "https://ringwise.example/contact",
+      "status": 200,
+      "fetchedAt": "2026-11-07",
+      "contentHash": "e8d0d3cc525090fd9873771a34f05da6",
+      "text": "Email hello@ringwise.example or write to Ringwise Labs, 12 Harbor Street, Baltimore, MD 21202."
+    },
+    "privacy": {
+      "url": "https://ringwise.example/privacy",
+      "finalUrl": "https://ringwise.example/privacy",
+      "status": 200,
+      "fetchedAt": "2026-11-07",
+      "contentHash": "6394babaaeac63c576e5f717c6544bb4",
+      "text": "Ringwise Labs Privacy Policy. We do not use customer content to train AI models. You can delete your account and all associated data at any time. All customer data is stored in data centers in the United States. We never sell your personal information. Section 1. We collect only what we need to run the service, we protect it with encryption, and we share it only with vendors who help us run the service for you. Section 2. We collect only what we need to run the service, we protect it with encryption, and we share it only with vendors who help us run the service for you. Section 3. We collect only what we need to run the service, we protect it with encryption, and we share it only with vendors who help us run the service for you. Section 4. We collect only what we need to run the service, we protect it with encryption, and we share it only with vendors who help us run the service for you. Section 5. We collect only what we need to run the service, we protect it with encryption, and we share it only with vendors who help us run the service for you. Section 6. We collect only what we need to run the service, we protect it with encryption, and we share it only with vendors who help us run the service for you. Section 7. We collect only what we need to run the service, we protect it with encryption, and we share it only with vendors who help us run the service for you. Section 8. We collect only what we need to run the service, we protect it with encryption, and we share it only with vendors who help us run the service for you. Section 9. We collect only what we need to run the service, we protect it with encryption, and we share it only with vendors who help us run the service for you. Section 10. We collect only what we need to run the service, we protect it with encryption, and we share it only with vendors who help us run the service for you. Section 11. We collect only what we need to run the service, we protect it with encryption, and we share it only with vendors who help us run the service for you. Section 12. We collect only what we need to run the service, we protect it with encryption, and we share it only with vendors who help us run the service for you."
+    },
+    "pricing": {
+      "url": "https://ringwise.example/pricing",
+      "finalUrl": "https://ringwise.example/pricing",
+      "status": 200,
+      "fetchedAt": "2026-11-07",
+      "contentHash": "8768adfe47d417c2e6f00a3b217f2374",
+      "text": "Starter plan $59 per month. Cancel any time from your account."
+    },
+    "terms": {
+      "url": "https://ringwise.example/terms",
+      "finalUrl": "https://ringwise.example/terms",
+      "status": 200,
+      "fetchedAt": "2026-11-07",
+      "contentHash": "7921e3b8c9bd4c774784fc808ad1a34b",
+      "text": "These terms explain how you may use Ringwise Receptionist."
+    }
+  },
+  "domain": {
+    "name": "ringwise.example",
+    "registeredAt": "2022-04-12",
+    "source": "rdap"
+  },
+  "https": true,
+  "downloadPrompt": false,
+  "ai": {
+    "ran": {
+      "about": true,
+      "privacy": true
+    },
+    "companyName": {
+      "answer": "Ringwise Labs",
+      "quote": "Ringwise Labs builds AI receptionist software for small businesses.",
+      "pageUrl": "https://ringwise.example/about"
+    },
+    "address": {
+      "answer": "12 Harbor Street, Baltimore, MD 21202",
+      "quote": "Our office is at 12 Harbor Street, Baltimore, MD 21202.",
+      "pageUrl": "https://ringwise.example/about"
+    },
+    "leaderName": {
+      "answer": "Dana Okafor",
+      "quote": "Dana Okafor is our founder and CEO.",
+      "pageUrl": "https://ringwise.example/about"
+    },
+    "trainsOnYourData": {
+      "answer": "no",
+      "quote": "We do not use customer content to train AI models.",
+      "pageUrl": "https://ringwise.example/privacy"
+    },
+    "canDeleteData": {
+      "answer": "yes",
+      "quote": "You can delete your account and all associated data at any time.",
+      "pageUrl": "https://ringwise.example/privacy"
+    },
+    "whereStored": {
+      "answer": "United States",
+      "quote": "All customer data is stored in data centers in the United States.",
+      "pageUrl": "https://ringwise.example/privacy"
+    },
+    "securityCertification": "unknown"
+  },
+  "riskySentences": [
+    "We do not use customer content to train AI models."
+  ],
+  "safeBrowsing": "not_run"
+}

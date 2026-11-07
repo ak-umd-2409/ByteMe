@@ -11,6 +11,8 @@ import type { UseCase } from "../recommend/types.ts";
 export type Unknown = "unknown";
 export type Badge = "verified" | "listed" | "blocked";
 export type CheckResult = "pass" | "fail" | "unknown";
+/** Safety Check outcome. Only "ready" tools can be approved to verified. */
+export type Verdict = "blocked" | "held" | "ready";
 
 export interface Evidence {
   quote?: string;
@@ -50,6 +52,10 @@ export interface SafetyReport {
   checks: Record<SafetyCheckName, SafetyCheckItem>;
   /** Plain-English reasons a tool was auto-blocked. Empty when none. */
   redFlags: string[];
+  /** blocked = any red flag; held = a core check isn't pass; ready = all core checks pass. */
+  verdict: Verdict;
+  /** Plain-English notes for warning checks that didn't pass. Never block a tool. */
+  warnings: string[];
 }
 
 export interface PriceTier {

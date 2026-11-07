@@ -1,0 +1,52 @@
+{
+  "input": {
+    "url": "https://fastbooks-ai-download.example/",
+    "name": "FastBooks AI",
+    "handlesSensitiveData": false
+  },
+  "collectedAt": "2026-11-07",
+  "pages": {
+    "home": {
+      "url": "https://fastbooks-ai-download.example/",
+      "finalUrl": "https://fastbooks-ai-download.example/",
+      "status": 200,
+      "fetchedAt": "2026-11-07",
+      "contentHash": "ddb18548e99686c1ef4bb87d15dfa817",
+      "text": "FastBooks AI. Download the desktop app now and start in 60 seconds."
+    },
+    "about": null,
+    "contact": null,
+    "privacy": {
+      "url": "https://fastbooks-ai-download.example/privacy",
+      "finalUrl": "https://fastbooks-ai-download.example/privacy",
+      "status": 200,
+      "fetchedAt": "2026-11-07",
+      "contentHash": "893d959f7d50a704bc908e9f1fc9f37f",
+      "text": "Privacy. We may share your information with partners. Section 1. We collect only what we need to run the service, we protect it with encryption, and we share it only with vendors who help us run the service for you. Section 2. We collect only what we need to run the service, we protect it with encryption, and we share it only with vendors who help us run the service for you. Section 3. We collect only what we need to run the service, we protect it with encryption, and we share it only with vendors who help us run the service for you. Section 4. We collect only what we need to run the service, we protect it with encryption, and we share it only with vendors who help us run the service for you. Section 5. We collect only what we need to run the service, we protect it with encryption, and we share it only with vendors who help us run the service for you. Section 6. We collect only what we need to run the service, we protect it with encryption, and we share it only with vendors who help us run the service for you. Section 7. We collect only what we need to run the service, we protect it with encryption, and we share it only with vendors who help us run the service for you. Section 8. We collect only what we need to run the service, we protect it with encryption, and we share it only with vendors who help us run the service for you. Section 9. We collect only what we need to run the service, we protect it with encryption, and we share it only with vendors who help us run the service for you. Section 10. We collect only what we need to run the service, we protect it with encryption, and we share it only with vendors who help us run the service for you."
+    },
+    "pricing": null,
+    "terms": null
+  },
+  "domain": {
+    "name": "fastbooks-ai-download.example",
+    "registeredAt": "2026-10-01",
+    "source": "rdap"
+  },
+  "https": true,
+  "downloadPrompt": true,
+  "ai": {
+    "ran": {
+      "about": false,
+      "privacy": false
+    },
+    "companyName": "unknown",
+    "address": "unknown",
+    "leaderName": "unknown",
+    "trainsOnYourData": "unknown",
+    "canDeleteData": "unknown",
+    "whereStored": "unknown",
+    "securityCertification": "unknown"
+  },
+  "riskySentences": [],
+  "safeBrowsing": "not_run"
+}

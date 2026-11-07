@@ -48,6 +48,33 @@ describe("validateRecord", () => {
     r.pricing.asOf = "Oct 2026";
     assert.ok(mentions(validateRecord(r), "pricing.asOf"));
   });
+
+  it("rejects a verified record whose verdict is held", () => {
+    const r = validRecord() as any;
+    r.safetyCheck.verdict = "held";
+    assert.ok(mentions(validateRecord(r), "safetyCheck.verdict"));
+  });
+
+  it("rejects a listed record whose verdict is blocked", () => {
+    const r = validRecord() as any;
+    r.badge = "listed";
+    r.safetyCheck.verdict = "blocked";
+    assert.ok(mentions(validateRecord(r), "safetyCheck.verdict"));
+  });
+
+  it("rejects a blocked record whose verdict is ready", () => {
+    const r = validRecord() as any;
+    r.badge = "blocked";
+    r.safetyCheck.redFlags = ["No privacy policy found."];
+    r.safetyCheck.verdict = "ready";
+    assert.ok(mentions(validateRecord(r), "safetyCheck.verdict"));
+  });
+
+  it("rejects a report without warnings array", () => {
+    const r = validRecord() as any;
+    delete r.safetyCheck.warnings;
+    assert.ok(mentions(validateRecord(r), "safetyCheck.warnings"));
+  });
 });
 
 describe("validateCatalog", () => {

@@ -64,6 +64,8 @@ export function validRecord(): CatalogRecord {
         redFlags: passed("No red flags."),
       },
       redFlags: [],
+      verdict: "ready",
+      warnings: [],
     },
     lastChecked: "2026-11-07",
     sources: ["https://example.com/pricing", "https://example.com/privacy"],

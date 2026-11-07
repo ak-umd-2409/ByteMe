@@ -1,0 +1,52 @@
+{
+  "input": {
+    "url": "https://squarre-voice.example/",
+    "name": "Squarre Voice AI",
+    "handlesSensitiveData": false
+  },
+  "collectedAt": "2026-11-07",
+  "pages": {
+    "home": {
+      "url": "https://squarre-voice.example/",
+      "finalUrl": "https://squarre-voice.example/",
+      "status": 200,
+      "fetchedAt": "2026-11-07",
+      "contentHash": "f5d07edd3501656366bc89d2fd1c5640",
+      "text": "Squarre Voice AI. Sample scam-style tool (fictional), used to show the Safety Check. Claims to be an official Square phone assistant."
+    },
+    "about": null,
+    "contact": null,
+    "privacy": {
+      "url": "https://squarre-voice.example/privacy",
+      "finalUrl": "https://squarre-voice.example/privacy",
+      "status": 200,
+      "fetchedAt": "2026-11-07",
+      "contentHash": "893d959f7d50a704bc908e9f1fc9f37f",
+      "text": "Privacy. We may share your information with partners. Section 1. We collect only what we need to run the service, we protect it with encryption, and we share it only with vendors who help us run the service for you. Section 2. We collect only what we need to run the service, we protect it with encryption, and we share it only with vendors who help us run the service for you. Section 3. We collect only what we need to run the service, we protect it with encryption, and we share it only with vendors who help us run the service for you. Section 4. We collect only what we need to run the service, we protect it with encryption, and we share it only with vendors who help us run the service for you. Section 5. We collect only what we need to run the service, we protect it with encryption, and we share it only with vendors who help us run the service for you. Section 6. We collect only what we need to run the service, we protect it with encryption, and we share it only with vendors who help us run the service for you. Section 7. We collect only what we need to run the service, we protect it with encryption, and we share it only with vendors who help us run the service for you. Section 8. We collect only what we need to run the service, we protect it with encryption, and we share it only with vendors who help us run the service for you. Section 9. We collect only what we need to run the service, we protect it with encryption, and we share it only with vendors who help us run the service for you. Section 10. We collect only what we need to run the service, we protect it with encryption, and we share it only with vendors who help us run the service for you."
+    },
+    "pricing": null,
+    "terms": null
+  },
+  "domain": {
+    "name": "squarre-voice.example",
+    "registeredAt": "2026-09-01",
+    "source": "rdap"
+  },
+  "https": true,
+  "downloadPrompt": false,
+  "ai": {
+    "ran": {
+      "about": false,
+      "privacy": false
+    },
+    "companyName": "unknown",
+    "address": "unknown",
+    "leaderName": "unknown",
+    "trainsOnYourData": "unknown",
+    "canDeleteData": "unknown",
+    "whereStored": "unknown",
+    "securityCertification": "unknown"
+  },
+  "riskySentences": [],
+  "safeBrowsing": "not_run"
+}
