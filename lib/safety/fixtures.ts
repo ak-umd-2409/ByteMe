@@ -13,9 +13,9 @@ export type DeepPartial<T> = T extends readonly unknown[]
 const isPlain = (v: unknown): v is Record<string, unknown> =>
   typeof v === "object" && v !== null && !Array.isArray(v);
 
-/** Deep-merge plain objects; arrays, strings and null replace. */
+/** Deep-merge plain objects; arrays, strings, null and `{ error }` pages replace. */
 function merge<T>(base: T, over: unknown): T {
-  if (!isPlain(base) || !isPlain(over)) return (over === undefined ? base : over) as T;
+  if (!isPlain(base) || !isPlain(over) || "error" in over) return (over === undefined ? base : over) as T;
   const out: Record<string, unknown> = { ...base };
   for (const [k, v] of Object.entries(over)) out[k] = v === undefined ? out[k] : merge(out[k], v);
   return out as T;
