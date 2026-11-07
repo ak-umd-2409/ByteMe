@@ -65,7 +65,7 @@ All numbers and word lists live in `config.ts`.
 
 | Check | Core? | pass | fail | unknown |
 | --- | --- | --- | --- | --- |
-| `whoIsBehind` | core | company name, address and leader all quoted | About and Contact read, AI ran, and no company name was found | pages missing or AI didn't run |
+| `whoIsBehind` | core | company name, address and leader all quoted | About and Contact read, AI ran, and no company name was found | anything else (pages missing, AI didn't run, or only some of the three found) |
 | `privacyPolicy` | core | Privacy page found with at least 150 words | no Privacy page anywhere (also a red flag) | fetch error |
 | `dataUse` | core | trains = `no` or `opt-in` **and** delete = `yes` | trains = `yes`, or delete = `no` | anything else, **or** AI said trains = `no` while `riskySentences` is not empty (a person must read it) |
 | `securityBasics` | core | https | http only | home page not reached |
