@@ -28,6 +28,7 @@ function answerEvidence(facts: SafetyFacts, ...answers: AiAnswer<string>[]): Evi
     }));
 }
 
+const norm = (text: string) => text.replace(/\s+/g, " ").trim().toLowerCase();
 const wordCount = (text: string) => text.split(/\s+/).filter(Boolean).length;
 
 export function checkWhoIsBehind(facts: SafetyFacts): SafetyCheckItem {
@@ -68,9 +69,11 @@ export function checkDataUse(facts: SafetyFacts): SafetyCheckItem {
   if (trains !== "unknown" && trains.answer === "yes")
     return item("fail", "Uses your data to train its AI.", evidence);
   if (del !== "unknown" && del.answer === "no") return item("fail", "You can't delete your data.", evidence);
-  if (trains !== "unknown" && trains.answer === "no" && facts.riskySentences.length > 0) {
+  // The "no training" sentence itself often says "train"; only *other* risky sentences count.
+  const others = trains === "unknown" ? [] : facts.riskySentences.filter((s) => norm(s) !== norm(trains.quote));
+  if (trains !== "unknown" && trains.answer === "no" && others.length > 0) {
     const privacy = pageEvidence(facts.pages.privacy);
-    const risky = privacy.length ? facts.riskySentences.map((quote) => ({ ...privacy[0], quote })) : [];
+    const risky = privacy.length ? others.map((quote) => ({ ...privacy[0], quote })) : [];
     return item(
       "unknown",
       "The policy says it doesn't train on your data, but other sentences mention training or improving models. A person must read it.",

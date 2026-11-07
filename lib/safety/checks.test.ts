@@ -83,6 +83,10 @@ describe("checkDataUse", () => {
   it("is unknown when training wasn't found", () => {
     assert.equal(checkDataUse(factsFixture({ ai: { trainsOnYourData: "unknown" } })).result, "unknown");
   });
+  it("passes when the only risky sentence is the no-training quote itself", () => {
+    const f = factsFixture({ riskySentences: ["We do not use your data to build or tune any models."] });
+    assert.equal(checkDataUse(f).result, "pass");
+  });
   it("is unknown when the AI says no training but a risky sentence exists", () => {
     const item = checkDataUse(factsFixture({ riskySentences: ["We may use your content to improve our models."] }));
     assert.equal(item.result, "unknown");

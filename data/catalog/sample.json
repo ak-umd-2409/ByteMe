@@ -104,9 +104,20 @@
       "checks": {
         "whoIsBehind": {
           "result": "pass",
-          "reason": "Company name, street address and named founders found on the About page.",
+          "reason": "Run by Ringwise Labs, led by Dana Okafor, at 12 Harbor Street, Baltimore, MD 21202.",
           "evidence": [
             {
+              "quote": "Ringwise Labs builds AI receptionist software for small businesses.",
+              "url": "https://ringwise.example/about",
+              "checkedAt": "2026-11-07"
+            },
+            {
+              "quote": "Our office is at 12 Harbor Street, Baltimore, MD 21202.",
+              "url": "https://ringwise.example/about",
+              "checkedAt": "2026-11-07"
+            },
+            {
+              "quote": "Dana Okafor is our founder and CEO.",
               "url": "https://ringwise.example/about",
               "checkedAt": "2026-11-07"
             }
@@ -114,17 +125,17 @@
         },
         "domainAge": {
           "result": "pass",
-          "reason": "Website domain is over 3 years old.",
+          "reason": "The website has been around since 2022-04-12.",
           "evidence": [
             {
-              "url": "https://ringwise.example",
+              "url": "https://rdap.org/domain/ringwise.example",
               "checkedAt": "2026-11-07"
             }
           ]
         },
         "privacyPolicy": {
           "result": "pass",
-          "reason": "Privacy policy found and readable.",
+          "reason": "Has a full privacy policy.",
           "evidence": [
             {
               "url": "https://ringwise.example/privacy",
@@ -134,9 +145,15 @@
         },
         "dataUse": {
           "result": "pass",
-          "reason": "Does not train AI on your data by default; you can delete your data.",
+          "reason": "Doesn't train on your data, and you can delete your data.",
           "evidence": [
             {
+              "quote": "We do not use customer content to train AI models.",
+              "url": "https://ringwise.example/privacy",
+              "checkedAt": "2026-11-07"
+            },
+            {
+              "quote": "You can delete your account and all associated data at any time.",
               "url": "https://ringwise.example/privacy",
               "checkedAt": "2026-11-07"
             }
@@ -144,9 +161,10 @@
         },
         "dataLocation": {
           "result": "pass",
-          "reason": "Data is stored in the United States.",
+          "reason": "Your data is stored in United States.",
           "evidence": [
             {
+              "quote": "All customer data is stored in data centers in the United States.",
               "url": "https://ringwise.example/privacy",
               "checkedAt": "2026-11-07"
             }
@@ -154,7 +172,7 @@
         },
         "pricingClarity": {
           "result": "pass",
-          "reason": "Public pricing page with a monthly plan you can cancel.",
+          "reason": "Shows a monthly price in dollars.",
           "evidence": [
             {
               "url": "https://ringwise.example/pricing",
@@ -164,20 +182,20 @@
         },
         "securityBasics": {
           "result": "pass",
-          "reason": "Website uses HTTPS.",
+          "reason": "Uses a secure (https) connection.",
           "evidence": [
             {
-              "url": "https://ringwise.example",
+              "url": "https://ringwise.example/",
               "checkedAt": "2026-11-07"
             }
           ]
         },
         "redFlags": {
           "result": "pass",
-          "reason": "No red flags found.",
+          "reason": "No red flags found. Google unsafe-site check was not run.",
           "evidence": [
             {
-              "url": "https://ringwise.example",
+              "url": "https://ringwise.example/",
               "checkedAt": "2026-11-07"
             }
           ]
@@ -298,9 +316,20 @@
       "checks": {
         "whoIsBehind": {
           "result": "pass",
-          "reason": "Company name, street address and named founders found on the About page.",
+          "reason": "Run by QuoteQuick Inc., led by Luis Ortega, at 400 Commerce Drive, Richmond, VA 23219.",
           "evidence": [
             {
+              "quote": "QuoteQuick Inc. builds Quotes and estimates software for small businesses.",
+              "url": "https://quotequick.example/about",
+              "checkedAt": "2026-11-07"
+            },
+            {
+              "quote": "Our office is at 400 Commerce Drive, Richmond, VA 23219.",
+              "url": "https://quotequick.example/about",
+              "checkedAt": "2026-11-07"
+            },
+            {
+              "quote": "Luis Ortega is our founder and CEO.",
               "url": "https://quotequick.example/about",
               "checkedAt": "2026-11-07"
             }
@@ -308,17 +337,17 @@
         },
         "domainAge": {
           "result": "pass",
-          "reason": "Website domain is over 3 years old.",
+          "reason": "The website has been around since 2021-09-30.",
           "evidence": [
             {
-              "url": "https://quotequick.example",
+              "url": "https://rdap.org/domain/quotequick.example",
               "checkedAt": "2026-11-07"
             }
           ]
         },
         "privacyPolicy": {
           "result": "pass",
-          "reason": "Privacy policy found and readable.",
+          "reason": "Has a full privacy policy.",
           "evidence": [
             {
               "url": "https://quotequick.example/privacy",
@@ -328,9 +357,15 @@
         },
         "dataUse": {
           "result": "pass",
-          "reason": "Does not train AI on your data by default; you can delete your data.",
+          "reason": "Doesn't train on your data, and you can delete your data.",
           "evidence": [
             {
+              "quote": "We do not use customer content to train AI models.",
+              "url": "https://quotequick.example/privacy",
+              "checkedAt": "2026-11-07"
+            },
+            {
+              "quote": "You can delete your account and all associated data at any time.",
               "url": "https://quotequick.example/privacy",
               "checkedAt": "2026-11-07"
             }
@@ -338,9 +373,10 @@
         },
         "dataLocation": {
           "result": "pass",
-          "reason": "Data is stored in the United States.",
+          "reason": "Your data is stored in United States.",
           "evidence": [
             {
+              "quote": "All customer data is stored in data centers in the United States.",
               "url": "https://quotequick.example/privacy",
               "checkedAt": "2026-11-07"
             }
@@ -348,7 +384,7 @@
         },
         "pricingClarity": {
           "result": "pass",
-          "reason": "Public pricing page with a monthly plan you can cancel.",
+          "reason": "Shows a monthly price in dollars.",
           "evidence": [
             {
               "url": "https://quotequick.example/pricing",
@@ -358,20 +394,20 @@
         },
         "securityBasics": {
           "result": "pass",
-          "reason": "Website uses HTTPS.",
+          "reason": "Uses a secure (https) connection.",
           "evidence": [
             {
-              "url": "https://quotequick.example",
+              "url": "https://quotequick.example/",
               "checkedAt": "2026-11-07"
             }
           ]
         },
         "redFlags": {
           "result": "pass",
-          "reason": "No red flags found.",
+          "reason": "No red flags found. Google unsafe-site check was not run.",
           "evidence": [
             {
-              "url": "https://quotequick.example",
+              "url": "https://quotequick.example/",
               "checkedAt": "2026-11-07"
             }
           ]
@@ -483,9 +519,20 @@
       "checks": {
         "whoIsBehind": {
           "result": "pass",
-          "reason": "Company name, street address and named founders found on the About page.",
+          "reason": "Run by ReplyKind LLC, led by Priya Natarajan, at 88 Market Street, Philadelphia, PA 19107.",
           "evidence": [
             {
+              "quote": "ReplyKind LLC builds Review replies software for small businesses.",
+              "url": "https://replykind.example/about",
+              "checkedAt": "2026-11-07"
+            },
+            {
+              "quote": "Our office is at 88 Market Street, Philadelphia, PA 19107.",
+              "url": "https://replykind.example/about",
+              "checkedAt": "2026-11-07"
+            },
+            {
+              "quote": "Priya Natarajan is our founder and CEO.",
               "url": "https://replykind.example/about",
               "checkedAt": "2026-11-07"
             }
@@ -493,17 +540,17 @@
         },
         "domainAge": {
           "result": "pass",
-          "reason": "Website domain is over 3 years old.",
+          "reason": "The website has been around since 2023-02-14.",
           "evidence": [
             {
-              "url": "https://replykind.example",
+              "url": "https://rdap.org/domain/replykind.example",
               "checkedAt": "2026-11-07"
             }
           ]
         },
         "privacyPolicy": {
           "result": "pass",
-          "reason": "Privacy policy found and readable.",
+          "reason": "Has a full privacy policy.",
           "evidence": [
             {
               "url": "https://replykind.example/privacy",
@@ -513,9 +560,15 @@
         },
         "dataUse": {
           "result": "pass",
-          "reason": "Does not train AI on your data by default; you can delete your data.",
+          "reason": "Doesn't train on your data, and you can delete your data.",
           "evidence": [
             {
+              "quote": "We do not use customer content to train AI models.",
+              "url": "https://replykind.example/privacy",
+              "checkedAt": "2026-11-07"
+            },
+            {
+              "quote": "You can delete your account and all associated data at any time.",
               "url": "https://replykind.example/privacy",
               "checkedAt": "2026-11-07"
             }
@@ -523,9 +576,10 @@
         },
         "dataLocation": {
           "result": "pass",
-          "reason": "Data is stored in the United States.",
+          "reason": "Your data is stored in United States.",
           "evidence": [
             {
+              "quote": "All customer data is stored in data centers in the United States.",
               "url": "https://replykind.example/privacy",
               "checkedAt": "2026-11-07"
             }
@@ -533,7 +587,7 @@
         },
         "pricingClarity": {
           "result": "pass",
-          "reason": "Public pricing page with a monthly plan you can cancel.",
+          "reason": "Shows a monthly price in dollars.",
           "evidence": [
             {
               "url": "https://replykind.example/pricing",
@@ -543,20 +597,20 @@
         },
         "securityBasics": {
           "result": "pass",
-          "reason": "Website uses HTTPS.",
+          "reason": "Uses a secure (https) connection.",
           "evidence": [
             {
-              "url": "https://replykind.example",
+              "url": "https://replykind.example/",
               "checkedAt": "2026-11-07"
             }
           ]
         },
         "redFlags": {
           "result": "pass",
-          "reason": "No red flags found.",
+          "reason": "No red flags found. Google unsafe-site check was not run.",
           "evidence": [
             {
-              "url": "https://replykind.example",
+              "url": "https://replykind.example/",
               "checkedAt": "2026-11-07"
             }
           ]
@@ -674,27 +728,38 @@
       "checks": {
         "whoIsBehind": {
           "result": "pass",
-          "reason": "Company name, street address and named founders found on the About page.",
+          "reason": "Run by BookNest Co., led by Sam Whitfield, at 15 Oak Avenue, Columbus, OH 43215.",
           "evidence": [
             {
+              "quote": "BookNest Co. builds Online booking software for small businesses.",
+              "url": "https://booknest.example/about",
+              "checkedAt": "2026-11-07"
+            },
+            {
+              "quote": "Our office is at 15 Oak Avenue, Columbus, OH 43215.",
+              "url": "https://booknest.example/about",
+              "checkedAt": "2026-11-07"
+            },
+            {
+              "quote": "Sam Whitfield is our founder and CEO.",
               "url": "https://booknest.example/about",
               "checkedAt": "2026-11-07"
             }
           ]
         },
         "domainAge": {
-          "result": "pass",
-          "reason": "Website domain is over 3 years old.",
+          "result": "fail",
+          "reason": "The website is only a year old or less (registered 2026-02-03).",
           "evidence": [
             {
-              "url": "https://booknest.example",
+              "url": "https://rdap.org/domain/booknest.example",
               "checkedAt": "2026-11-07"
             }
           ]
         },
         "privacyPolicy": {
           "result": "pass",
-          "reason": "Privacy policy found and readable.",
+          "reason": "Has a full privacy policy.",
           "evidence": [
             {
               "url": "https://booknest.example/privacy",
@@ -704,9 +769,15 @@
         },
         "dataUse": {
           "result": "pass",
-          "reason": "Does not train AI on your data by default; you can delete your data.",
+          "reason": "Doesn't train on your data, and you can delete your data.",
           "evidence": [
             {
+              "quote": "We do not use customer content to train AI models.",
+              "url": "https://booknest.example/privacy",
+              "checkedAt": "2026-11-07"
+            },
+            {
+              "quote": "You can delete your account and all associated data at any time.",
               "url": "https://booknest.example/privacy",
               "checkedAt": "2026-11-07"
             }
@@ -714,9 +785,10 @@
         },
         "dataLocation": {
           "result": "pass",
-          "reason": "Data is stored in the United States.",
+          "reason": "Your data is stored in United States.",
           "evidence": [
             {
+              "quote": "All customer data is stored in data centers in the United States.",
               "url": "https://booknest.example/privacy",
               "checkedAt": "2026-11-07"
             }
@@ -724,7 +796,7 @@
         },
         "pricingClarity": {
           "result": "pass",
-          "reason": "Public pricing page with a monthly plan you can cancel.",
+          "reason": "Shows a monthly price in dollars.",
           "evidence": [
             {
               "url": "https://booknest.example/pricing",
@@ -734,20 +806,20 @@
         },
         "securityBasics": {
           "result": "pass",
-          "reason": "Website uses HTTPS.",
+          "reason": "Uses a secure (https) connection.",
           "evidence": [
             {
-              "url": "https://booknest.example",
+              "url": "https://booknest.example/",
               "checkedAt": "2026-11-07"
             }
           ]
         },
         "redFlags": {
           "result": "pass",
-          "reason": "No red flags found.",
+          "reason": "No red flags found. Google unsafe-site check was not run.",
           "evidence": [
             {
-              "url": "https://booknest.example",
+              "url": "https://booknest.example/",
               "checkedAt": "2026-11-07"
             }
           ]
@@ -755,7 +827,9 @@
       },
       "redFlags": [],
       "verdict": "ready",
-      "warnings": []
+      "warnings": [
+        "The website is only a year old or less (registered 2026-02-03)."
+      ]
     },
     "lastChecked": "2026-11-07",
     "sources": [
@@ -858,27 +932,38 @@
       "checks": {
         "whoIsBehind": {
           "result": "pass",
-          "reason": "Company name, street address and named founders found on the About page.",
+          "reason": "Run by TextTide Inc., led by Grace Kim, at 230 Bay Road, Norfolk, VA 23510.",
           "evidence": [
             {
+              "quote": "TextTide Inc. builds Customer messaging software for small businesses.",
+              "url": "https://texttide.example/about",
+              "checkedAt": "2026-11-07"
+            },
+            {
+              "quote": "Our office is at 230 Bay Road, Norfolk, VA 23510.",
+              "url": "https://texttide.example/about",
+              "checkedAt": "2026-11-07"
+            },
+            {
+              "quote": "Grace Kim is our founder and CEO.",
               "url": "https://texttide.example/about",
               "checkedAt": "2026-11-07"
             }
           ]
         },
         "domainAge": {
-          "result": "pass",
-          "reason": "Website domain is over 3 years old.",
+          "result": "fail",
+          "reason": "The website is only a year old or less (registered 2025-12-20).",
           "evidence": [
             {
-              "url": "https://texttide.example",
+              "url": "https://rdap.org/domain/texttide.example",
               "checkedAt": "2026-11-07"
             }
           ]
         },
         "privacyPolicy": {
           "result": "pass",
-          "reason": "Privacy policy found and readable.",
+          "reason": "Has a full privacy policy.",
           "evidence": [
             {
               "url": "https://texttide.example/privacy",
@@ -888,9 +973,15 @@
         },
         "dataUse": {
           "result": "pass",
-          "reason": "Does not train AI on your data by default; you can delete your data.",
+          "reason": "Doesn't train on your data, and you can delete your data.",
           "evidence": [
             {
+              "quote": "We do not use customer content to train AI models.",
+              "url": "https://texttide.example/privacy",
+              "checkedAt": "2026-11-07"
+            },
+            {
+              "quote": "You can delete your account and all associated data at any time.",
               "url": "https://texttide.example/privacy",
               "checkedAt": "2026-11-07"
             }
@@ -898,9 +989,10 @@
         },
         "dataLocation": {
           "result": "pass",
-          "reason": "Data is stored in the United States.",
+          "reason": "Your data is stored in United States.",
           "evidence": [
             {
+              "quote": "All customer data is stored in data centers in the United States.",
               "url": "https://texttide.example/privacy",
               "checkedAt": "2026-11-07"
             }
@@ -908,7 +1000,7 @@
         },
         "pricingClarity": {
           "result": "pass",
-          "reason": "Public pricing page with a monthly plan you can cancel.",
+          "reason": "Shows a monthly price in dollars.",
           "evidence": [
             {
               "url": "https://texttide.example/pricing",
@@ -918,20 +1010,20 @@
         },
         "securityBasics": {
           "result": "pass",
-          "reason": "Website uses HTTPS.",
+          "reason": "Uses a secure (https) connection.",
           "evidence": [
             {
-              "url": "https://texttide.example",
+              "url": "https://texttide.example/",
               "checkedAt": "2026-11-07"
             }
           ]
         },
         "redFlags": {
           "result": "pass",
-          "reason": "No red flags found.",
+          "reason": "No red flags found. Google unsafe-site check was not run.",
           "evidence": [
             {
-              "url": "https://texttide.example",
+              "url": "https://texttide.example/",
               "checkedAt": "2026-11-07"
             }
           ]
@@ -939,7 +1031,9 @@
       },
       "redFlags": [],
       "verdict": "ready",
-      "warnings": []
+      "warnings": [
+        "The website is only a year old or less (registered 2025-12-20)."
+      ]
     },
     "lastChecked": "2026-11-07",
     "sources": [
@@ -1035,28 +1129,23 @@
       "ranAt": "2026-11-07",
       "checks": {
         "whoIsBehind": {
-          "result": "fail",
-          "reason": "No company name, address or leadership found.",
-          "evidence": [
-            {
-              "url": "https://squarre-voice.example",
-              "checkedAt": "2026-11-07"
-            }
-          ]
+          "result": "unknown",
+          "reason": "We couldn't read an About or Contact page.",
+          "evidence": []
         },
         "domainAge": {
           "result": "fail",
-          "reason": "Website domain is 2 months old.",
+          "reason": "The website is only a year old or less (registered 2026-09-01).",
           "evidence": [
             {
-              "url": "https://squarre-voice.example",
+              "url": "https://rdap.org/domain/squarre-voice.example",
               "checkedAt": "2026-11-07"
             }
           ]
         },
         "privacyPolicy": {
           "result": "pass",
-          "reason": "Privacy policy found and readable.",
+          "reason": "Has a full privacy policy.",
           "evidence": [
             {
               "url": "https://squarre-voice.example/privacy",
@@ -1066,60 +1155,59 @@
         },
         "dataUse": {
           "result": "unknown",
-          "reason": "No policy text to read.",
+          "reason": "We couldn't find whether it trains AI on your data or whether you can delete your data.",
           "evidence": [
             {
-              "url": "https://squarre-voice.example",
+              "url": "https://squarre-voice.example/privacy",
               "checkedAt": "2026-11-07"
             }
           ]
         },
         "dataLocation": {
           "result": "unknown",
-          "reason": "No policy text to read.",
+          "reason": "We couldn't find where your data is stored.",
           "evidence": [
             {
-              "url": "https://squarre-voice.example",
+              "url": "https://squarre-voice.example/privacy",
               "checkedAt": "2026-11-07"
             }
           ]
         },
         "pricingClarity": {
           "result": "fail",
-          "reason": "No public pricing page.",
-          "evidence": [
-            {
-              "url": "https://squarre-voice.example",
-              "checkedAt": "2026-11-07"
-            }
-          ]
+          "reason": "We found no public pricing page.",
+          "evidence": []
         },
         "securityBasics": {
           "result": "pass",
-          "reason": "Website uses HTTPS.",
+          "reason": "Uses a secure (https) connection.",
           "evidence": [
             {
-              "url": "https://squarre-voice.example",
+              "url": "https://squarre-voice.example/",
               "checkedAt": "2026-11-07"
             }
           ]
         },
         "redFlags": {
           "result": "fail",
-          "reason": "Name and website imitate Square (squarre-voice vs. Square).",
+          "reason": "Name and website imitate Square (squarre vs. Square).",
           "evidence": [
             {
-              "url": "https://squarre-voice.example",
+              "url": "https://squarre-voice.example/",
               "checkedAt": "2026-11-07"
             }
           ]
         }
       },
       "redFlags": [
-        "Name and website imitate Square (squarre-voice vs. Square)."
+        "Name and website imitate Square (squarre vs. Square)."
       ],
       "verdict": "blocked",
-      "warnings": []
+      "warnings": [
+        "The website is only a year old or less (registered 2026-09-01).",
+        "We couldn't find where your data is stored.",
+        "We found no public pricing page."
+      ]
     },
     "lastChecked": "2026-11-07",
     "sources": [
@@ -1226,28 +1314,23 @@
       "ranAt": "2026-11-07",
       "checks": {
         "whoIsBehind": {
-          "result": "fail",
-          "reason": "No company name, address or leadership found.",
-          "evidence": [
-            {
-              "url": "https://fastbooks-ai-download.example",
-              "checkedAt": "2026-11-07"
-            }
-          ]
+          "result": "unknown",
+          "reason": "We couldn't read an About or Contact page.",
+          "evidence": []
         },
         "domainAge": {
           "result": "fail",
-          "reason": "Website domain is 5 weeks old.",
+          "reason": "The website is only a year old or less (registered 2026-10-01).",
           "evidence": [
             {
-              "url": "https://fastbooks-ai-download.example",
+              "url": "https://rdap.org/domain/fastbooks-ai-download.example",
               "checkedAt": "2026-11-07"
             }
           ]
         },
         "privacyPolicy": {
           "result": "pass",
-          "reason": "Privacy policy found and readable.",
+          "reason": "Has a full privacy policy.",
           "evidence": [
             {
               "url": "https://fastbooks-ai-download.example/privacy",
@@ -1257,40 +1340,35 @@
         },
         "dataUse": {
           "result": "unknown",
-          "reason": "No policy text to read.",
+          "reason": "We couldn't find whether it trains AI on your data or whether you can delete your data.",
           "evidence": [
             {
-              "url": "https://fastbooks-ai-download.example",
+              "url": "https://fastbooks-ai-download.example/privacy",
               "checkedAt": "2026-11-07"
             }
           ]
         },
         "dataLocation": {
           "result": "unknown",
-          "reason": "No policy text to read.",
+          "reason": "We couldn't find where your data is stored.",
           "evidence": [
             {
-              "url": "https://fastbooks-ai-download.example",
+              "url": "https://fastbooks-ai-download.example/privacy",
               "checkedAt": "2026-11-07"
             }
           ]
         },
         "pricingClarity": {
           "result": "fail",
-          "reason": "No public pricing page.",
-          "evidence": [
-            {
-              "url": "https://fastbooks-ai-download.example",
-              "checkedAt": "2026-11-07"
-            }
-          ]
+          "reason": "We found no public pricing page.",
+          "evidence": []
         },
         "securityBasics": {
           "result": "pass",
-          "reason": "Website uses HTTPS.",
+          "reason": "Uses a secure (https) connection.",
           "evidence": [
             {
-              "url": "https://fastbooks-ai-download.example",
+              "url": "https://fastbooks-ai-download.example/",
               "checkedAt": "2026-11-07"
             }
           ]
@@ -1300,7 +1378,7 @@
           "reason": "Website is under 6 months old and asks you to download software.",
           "evidence": [
             {
-              "url": "https://fastbooks-ai-download.example",
+              "url": "https://fastbooks-ai-download.example/",
               "checkedAt": "2026-11-07"
             }
           ]
@@ -1310,7 +1388,11 @@
         "Website is under 6 months old and asks you to download software."
       ],
       "verdict": "blocked",
-      "warnings": []
+      "warnings": [
+        "The website is only a year old or less (registered 2026-10-01).",
+        "We couldn't find where your data is stored.",
+        "We found no public pricing page."
+      ]
     },
     "lastChecked": "2026-11-07",
     "sources": [
@@ -1417,71 +1499,46 @@
       "ranAt": "2026-11-07",
       "checks": {
         "whoIsBehind": {
-          "result": "fail",
-          "reason": "No company name, address or leadership found.",
-          "evidence": [
-            {
-              "url": "https://replybot-pro.example",
-              "checkedAt": "2026-11-07"
-            }
-          ]
+          "result": "unknown",
+          "reason": "We couldn't read an About or Contact page.",
+          "evidence": []
         },
         "domainAge": {
           "result": "pass",
-          "reason": "Website domain is over 3 years old.",
+          "reason": "The website has been around since 2022-06-18.",
           "evidence": [
             {
-              "url": "https://replybot-pro.example",
+              "url": "https://rdap.org/domain/replybot-pro.example",
               "checkedAt": "2026-11-07"
             }
           ]
         },
         "privacyPolicy": {
           "result": "fail",
-          "reason": "No privacy policy link found on the website.",
-          "evidence": [
-            {
-              "url": "https://replybot-pro.example",
-              "checkedAt": "2026-11-07"
-            }
-          ]
+          "reason": "We found no privacy policy anywhere on the website.",
+          "evidence": []
         },
         "dataUse": {
           "result": "unknown",
-          "reason": "No policy text to read.",
-          "evidence": [
-            {
-              "url": "https://replybot-pro.example",
-              "checkedAt": "2026-11-07"
-            }
-          ]
+          "reason": "We couldn't find whether it trains AI on your data or whether you can delete your data.",
+          "evidence": []
         },
         "dataLocation": {
           "result": "unknown",
-          "reason": "No policy text to read.",
-          "evidence": [
-            {
-              "url": "https://replybot-pro.example",
-              "checkedAt": "2026-11-07"
-            }
-          ]
+          "reason": "We couldn't find where your data is stored.",
+          "evidence": []
         },
         "pricingClarity": {
           "result": "fail",
-          "reason": "No public pricing page.",
-          "evidence": [
-            {
-              "url": "https://replybot-pro.example",
-              "checkedAt": "2026-11-07"
-            }
-          ]
+          "reason": "We found no public pricing page.",
+          "evidence": []
         },
         "securityBasics": {
           "result": "pass",
-          "reason": "Website uses HTTPS.",
+          "reason": "Uses a secure (https) connection.",
           "evidence": [
             {
-              "url": "https://replybot-pro.example",
+              "url": "https://replybot-pro.example/",
               "checkedAt": "2026-11-07"
             }
           ]
@@ -1491,7 +1548,7 @@
           "reason": "No privacy policy found.",
           "evidence": [
             {
-              "url": "https://replybot-pro.example",
+              "url": "https://replybot-pro.example/",
               "checkedAt": "2026-11-07"
             }
           ]
@@ -1501,7 +1558,10 @@
         "No privacy policy found."
       ],
       "verdict": "blocked",
-      "warnings": []
+      "warnings": [
+        "We couldn't find where your data is stored.",
+        "We found no public pricing page."
+      ]
     },
     "lastChecked": "2026-11-07",
     "sources": [

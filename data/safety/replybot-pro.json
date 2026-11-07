@@ -1,0 +1,45 @@
+{
+  "input": {
+    "url": "https://replybot-pro.example/",
+    "name": "ReplyBot Pro",
+    "handlesSensitiveData": false
+  },
+  "collectedAt": "2026-11-07",
+  "pages": {
+    "home": {
+      "url": "https://replybot-pro.example/",
+      "finalUrl": "https://replybot-pro.example/",
+      "status": 200,
+      "fetchedAt": "2026-11-07",
+      "contentHash": "bfc4b1ef6995503bf0913a32303b0afc",
+      "text": "ReplyBot Pro. Sample scam-style tool (fictional), used to show the Safety Check. Offers to reply to all your reviews automatically."
+    },
+    "about": null,
+    "contact": null,
+    "privacy": null,
+    "pricing": null,
+    "terms": null
+  },
+  "domain": {
+    "name": "replybot-pro.example",
+    "registeredAt": "2022-06-18",
+    "source": "rdap"
+  },
+  "https": true,
+  "downloadPrompt": false,
+  "ai": {
+    "ran": {
+      "about": false,
+      "privacy": false
+    },
+    "companyName": "unknown",
+    "address": "unknown",
+    "leaderName": "unknown",
+    "trainsOnYourData": "unknown",
+    "canDeleteData": "unknown",
+    "whereStored": "unknown",
+    "securityCertification": "unknown"
+  },
+  "riskySentences": [],
+  "safeBrowsing": "not_run"
+}

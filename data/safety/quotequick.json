@@ -1,0 +1,106 @@
+{
+  "input": {
+    "url": "https://quotequick.example/",
+    "name": "QuoteQuick",
+    "handlesSensitiveData": false
+  },
+  "collectedAt": "2026-11-07",
+  "pages": {
+    "home": {
+      "url": "https://quotequick.example/",
+      "finalUrl": "https://quotequick.example/",
+      "status": 200,
+      "fetchedAt": "2026-11-07",
+      "contentHash": "1136e9129ef51f76ab7430b6aec4fac4",
+      "text": "QuoteQuick: Sample tool (fictional). Turns your notes from a site visit into a clean, itemized quote you can send in minutes."
+    },
+    "about": {
+      "url": "https://quotequick.example/about",
+      "finalUrl": "https://quotequick.example/about",
+      "status": 200,
+      "fetchedAt": "2026-11-07",
+      "contentHash": "b7317d80c0a51375ba6f2bf94a43e336",
+      "text": "QuoteQuick Inc. builds Quotes and estimates software for small businesses. Our office is at 400 Commerce Drive, Richmond, VA 23219. Luis Ortega is our founder and CEO."
+    },
+    "contact": {
+      "url": "https://quotequick.example/contact",
+      "finalUrl": "https://quotequick.example/contact",
+      "status": 200,
+      "fetchedAt": "2026-11-07",
+      "contentHash": "6f9f0bf18efd1fcc829356ab8b81c4e3",
+      "text": "Email hello@quotequick.example or write to QuoteQuick Inc., 400 Commerce Drive, Richmond, VA 23219."
+    },
+    "privacy": {
+      "url": "https://quotequick.example/privacy",
+      "finalUrl": "https://quotequick.example/privacy",
+      "status": 200,
+      "fetchedAt": "2026-11-07",
+      "contentHash": "cef205a476b1ec187d3c77707a58ee5a",
+      "text": "QuoteQuick Inc. Privacy Policy. We do not use customer content to train AI models. You can delete your account and all associated data at any time. All customer data is stored in data centers in the United States. We never sell your personal information. Section 1. We collect only what we need to run the service, we protect it with encryption, and we share it only with vendors who help us run the service for you. Section 2. We collect only what we need to run the service, we protect it with encryption, and we share it only with vendors who help us run the service for you. Section 3. We collect only what we need to run the service, we protect it with encryption, and we share it only with vendors who help us run the service for you. Section 4. We collect only what we need to run the service, we protect it with encryption, and we share it only with vendors who help us run the service for you. Section 5. We collect only what we need to run the service, we protect it with encryption, and we share it only with vendors who help us run the service for you. Section 6. We collect only what we need to run the service, we protect it with encryption, and we share it only with vendors who help us run the service for you. Section 7. We collect only what we need to run the service, we protect it with encryption, and we share it only with vendors who help us run the service for you. Section 8. We collect only what we need to run the service, we protect it with encryption, and we share it only with vendors who help us run the service for you. Section 9. We collect only what we need to run the service, we protect it with encryption, and we share it only with vendors who help us run the service for you. Section 10. We collect only what we need to run the service, we protect it with encryption, and we share it only with vendors who help us run the service for you. Section 11. We collect only what we need to run the service, we protect it with encryption, and we share it only with vendors who help us run the service for you. Section 12. We collect only what we need to run the service, we protect it with encryption, and we share it only with vendors who help us run the service for you."
+    },
+    "pricing": {
+      "url": "https://quotequick.example/pricing",
+      "finalUrl": "https://quotequick.example/pricing",
+      "status": 200,
+      "fetchedAt": "2026-11-07",
+      "contentHash": "7d46674b47055b2a2102e19b879ad353",
+      "text": "Starter plan $39 per month. Cancel any time from your account."
+    },
+    "terms": {
+      "url": "https://quotequick.example/terms",
+      "finalUrl": "https://quotequick.example/terms",
+      "status": 200,
+      "fetchedAt": "2026-11-07",
+      "contentHash": "f17d9f05ad51ec8251443ce0e9595941",
+      "text": "These terms explain how you may use QuoteQuick."
+    }
+  },
+  "domain": {
+    "name": "quotequick.example",
+    "registeredAt": "2021-09-30",
+    "source": "rdap"
+  },
+  "https": true,
+  "downloadPrompt": false,
+  "ai": {
+    "ran": {
+      "about": true,
+      "privacy": true
+    },
+    "companyName": {
+      "answer": "QuoteQuick Inc.",
+      "quote": "QuoteQuick Inc. builds Quotes and estimates software for small businesses.",
+      "pageUrl": "https://quotequick.example/about"
+    },
+    "address": {
+      "answer": "400 Commerce Drive, Richmond, VA 23219",
+      "quote": "Our office is at 400 Commerce Drive, Richmond, VA 23219.",
+      "pageUrl": "https://quotequick.example/about"
+    },
+    "leaderName": {
+      "answer": "Luis Ortega",
+      "quote": "Luis Ortega is our founder and CEO.",
+      "pageUrl": "https://quotequick.example/about"
+    },
+    "trainsOnYourData": {
+      "answer": "no",
+      "quote": "We do not use customer content to train AI models.",
+      "pageUrl": "https://quotequick.example/privacy"
+    },
+    "canDeleteData": {
+      "answer": "yes",
+      "quote": "You can delete your account and all associated data at any time.",
+      "pageUrl": "https://quotequick.example/privacy"
+    },
+    "whereStored": {
+      "answer": "United States",
+      "quote": "All customer data is stored in data centers in the United States.",
+      "pageUrl": "https://quotequick.example/privacy"
+    },
+    "securityCertification": "unknown"
+  },
+  "riskySentences": [
+    "We do not use customer content to train AI models."
+  ],
+  "safeBrowsing": "not_run"
+}

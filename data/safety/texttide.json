@@ -1,0 +1,106 @@
+{
+  "input": {
+    "url": "https://texttide.example/",
+    "name": "TextTide",
+    "handlesSensitiveData": false
+  },
+  "collectedAt": "2026-11-07",
+  "pages": {
+    "home": {
+      "url": "https://texttide.example/",
+      "finalUrl": "https://texttide.example/",
+      "status": 200,
+      "fetchedAt": "2026-11-07",
+      "contentHash": "a32e40bfe2f6085abacac5805da4cda9",
+      "text": "TextTide: Sample tool (fictional). Answers common customer texts and website chats for you, day or night."
+    },
+    "about": {
+      "url": "https://texttide.example/about",
+      "finalUrl": "https://texttide.example/about",
+      "status": 200,
+      "fetchedAt": "2026-11-07",
+      "contentHash": "9b05d6f10aabd1dfa2e6df6a3e76c4ad",
+      "text": "TextTide Inc. builds Customer messaging software for small businesses. Our office is at 230 Bay Road, Norfolk, VA 23510. Grace Kim is our founder and CEO."
+    },
+    "contact": {
+      "url": "https://texttide.example/contact",
+      "finalUrl": "https://texttide.example/contact",
+      "status": 200,
+      "fetchedAt": "2026-11-07",
+      "contentHash": "e7d1d9b6ef2f084e7630af770fe70783",
+      "text": "Email hello@texttide.example or write to TextTide Inc., 230 Bay Road, Norfolk, VA 23510."
+    },
+    "privacy": {
+      "url": "https://texttide.example/privacy",
+      "finalUrl": "https://texttide.example/privacy",
+      "status": 200,
+      "fetchedAt": "2026-11-07",
+      "contentHash": "8ce883015eb891fffca7ac0550ff5bf3",
+      "text": "TextTide Inc. Privacy Policy. We do not use customer content to train AI models. You can delete your account and all associated data at any time. All customer data is stored in data centers in the United States. We never sell your personal information. Section 1. We collect only what we need to run the service, we protect it with encryption, and we share it only with vendors who help us run the service for you. Section 2. We collect only what we need to run the service, we protect it with encryption, and we share it only with vendors who help us run the service for you. Section 3. We collect only what we need to run the service, we protect it with encryption, and we share it only with vendors who help us run the service for you. Section 4. We collect only what we need to run the service, we protect it with encryption, and we share it only with vendors who help us run the service for you. Section 5. We collect only what we need to run the service, we protect it with encryption, and we share it only with vendors who help us run the service for you. Section 6. We collect only what we need to run the service, we protect it with encryption, and we share it only with vendors who help us run the service for you. Section 7. We collect only what we need to run the service, we protect it with encryption, and we share it only with vendors who help us run the service for you. Section 8. We collect only what we need to run the service, we protect it with encryption, and we share it only with vendors who help us run the service for you. Section 9. We collect only what we need to run the service, we protect it with encryption, and we share it only with vendors who help us run the service for you. Section 10. We collect only what we need to run the service, we protect it with encryption, and we share it only with vendors who help us run the service for you. Section 11. We collect only what we need to run the service, we protect it with encryption, and we share it only with vendors who help us run the service for you. Section 12. We collect only what we need to run the service, we protect it with encryption, and we share it only with vendors who help us run the service for you."
+    },
+    "pricing": {
+      "url": "https://texttide.example/pricing",
+      "finalUrl": "https://texttide.example/pricing",
+      "status": 200,
+      "fetchedAt": "2026-11-07",
+      "contentHash": "3a073ab6d96dfc5b2373734e0a14c439",
+      "text": "Starter plan $45 per month. Cancel any time from your account."
+    },
+    "terms": {
+      "url": "https://texttide.example/terms",
+      "finalUrl": "https://texttide.example/terms",
+      "status": 200,
+      "fetchedAt": "2026-11-07",
+      "contentHash": "a2759858850b1c643c5a691813bf42d2",
+      "text": "These terms explain how you may use TextTide."
+    }
+  },
+  "domain": {
+    "name": "texttide.example",
+    "registeredAt": "2025-12-20",
+    "source": "rdap"
+  },
+  "https": true,
+  "downloadPrompt": false,
+  "ai": {
+    "ran": {
+      "about": true,
+      "privacy": true
+    },
+    "companyName": {
+      "answer": "TextTide Inc.",
+      "quote": "TextTide Inc. builds Customer messaging software for small businesses.",
+      "pageUrl": "https://texttide.example/about"
+    },
+    "address": {
+      "answer": "230 Bay Road, Norfolk, VA 23510",
+      "quote": "Our office is at 230 Bay Road, Norfolk, VA 23510.",
+      "pageUrl": "https://texttide.example/about"
+    },
+    "leaderName": {
+      "answer": "Grace Kim",
+      "quote": "Grace Kim is our founder and CEO.",
+      "pageUrl": "https://texttide.example/about"
+    },
+    "trainsOnYourData": {
+      "answer": "no",
+      "quote": "We do not use customer content to train AI models.",
+      "pageUrl": "https://texttide.example/privacy"
+    },
+    "canDeleteData": {
+      "answer": "yes",
+      "quote": "You can delete your account and all associated data at any time.",
+      "pageUrl": "https://texttide.example/privacy"
+    },
+    "whereStored": {
+      "answer": "United States",
+      "quote": "All customer data is stored in data centers in the United States.",
+      "pageUrl": "https://texttide.example/privacy"
+    },
+    "securityCertification": "unknown"
+  },
+  "riskySentences": [
+    "We do not use customer content to train AI models."
+  ],
+  "safeBrowsing": "not_run"
+}
