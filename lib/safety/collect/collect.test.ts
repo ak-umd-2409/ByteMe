@@ -18,6 +18,11 @@ describe("lookupDomain", () => {
     assert.deepEqual(domain, { name: "tool.co.uk", registeredAt: "2021-03-04", source: "rdap" });
     assert.equal(fake.calls[0].url, "https://rdap.org/domain/tool.co.uk");
   });
+  it("identifies itself (rdap.org refuses requests with no user agent)", async () => {
+    const fake = fakeFetch({ "https://rdap.org/domain/tool.example": rdap("2021-03-04T10:00:00Z") });
+    await lookupDomain("tool.example", { fetchImpl: fake.impl, userAgent: "MainStreetAI-Scanner/0.1" });
+    assert.equal(new Headers(fake.calls[0].init?.headers).get("user-agent"), "MainStreetAI-Scanner/0.1");
+  });
   it("gives null on a 404", async () => {
     const fake = fakeFetch({});
     assert.equal((await lookupDomain("tool.example", { fetchImpl: fake.impl })).registeredAt, null);

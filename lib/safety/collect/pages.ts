@@ -41,6 +41,7 @@ export async function findPages(url: string, deps: CollectDeps): Promise<FoundPa
       resolveHost: deps.resolveHost,
       timeoutMs: deps.timeoutMs,
       userAgent: deps.userAgent,
+      maxBytes: SAFETY_CONFIG.maxPageBytes,
     });
   };
   const toFact = (page: FetchedPage): FetchedPageFact => {

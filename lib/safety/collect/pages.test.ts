@@ -84,6 +84,11 @@ describe("findPages", () => {
     assert.equal((await findPages(`${SITE}/`, d)).downloadPrompt, true);
   });
 
+  it("reads big home pages (2 MB, like squareup.com)", async () => {
+    const { deps: d } = deps({ [`${SITE}/`]: html(`<p>Big site.</p><!--${"x".repeat(2_000_000)}-->`) });
+    assert.ok(isFetched((await findPages(`${SITE}/`, d)).pages.home));
+  });
+
   it("makes at most 6 requests", async () => {
     const { fake, deps: d } = deps({ [`${SITE}/`]: html("<p>Hi</p>") });
     await findPages(`${SITE}/`, d);

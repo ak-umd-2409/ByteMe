@@ -18,7 +18,10 @@ async function fetchWithTimeout(url: string, init: RequestInit, deps: CollectDep
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), deps.timeoutMs ?? 8_000);
   try {
-    return await (deps.fetchImpl ?? fetch)(url, { ...init, signal: controller.signal });
+    const headers = new Headers(init.headers);
+    // rdap.org answers 403 to requests that don't say who they are.
+    headers.set("user-agent", deps.userAgent ?? "MainStreetAI-Scanner/0.1");
+    return await (deps.fetchImpl ?? fetch)(url, { ...init, headers, signal: controller.signal });
   } finally {
     clearTimeout(timer);
   }

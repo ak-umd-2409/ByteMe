@@ -14,6 +14,8 @@ export const SAFETY_CONFIG = {
   /** Brand words shorter than this only match exactly. */
   lookalikeMinLength: 5,
   maxPages: 6,
+  /** Big vendor home pages are often 1.5–3 MB of HTML. */
+  maxPageBytes: 5_000_000,
   downloadExtensions: [".exe", ".dmg", ".msi", ".apk", ".pkg"],
   fallbackPaths: {
     about: ["/about", "/about-us", "/company"],
