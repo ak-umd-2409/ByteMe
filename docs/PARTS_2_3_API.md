@@ -388,3 +388,18 @@ lib/api/         schemas (request validation), handlers (framework-free), next (
 app/api/         thin Next.js routes
 data/mock/onboarding.ts   fictional businesses + websites for mock mode
 ```
+
+## Real businesses, listings and UI-ready fields (v2)
+
+**Real public snapshots** (`data/real/`, `lib/business/snapshot.ts`). With no Google key, search returns two real Maryland HVAC businesses captured from public pages on 2026-11-07: Dave's Cooling & Heating (Frederick) and Frederick Heating & Air Conditioning (Jefferson). Every fact has a source URL and capture method (`page_fetch` or `search_index`). Reviews keep a link, the reviewer's first name and last initial, at most one short exact excerpt per source page, and otherwise a summary that is always labelled as one. Nothing is invented: no complaints were found for Frederick Heating, so none appear. Responses carry `mode.places: "public_snapshot"` and `analysis.snapshot = { capturedAt, note, sources[], about[] }`. Show the sources.
+
+**Listings check** (`analysis.listings`, `lib/business/listings.ts`). This compares the business across its website and directories: hours, address, phone, duplicate listings, rating gaps, and yes/no **service claims** (emergency service, senior discount, free estimates). It is deterministic, and every issue names the listings that disagree. A listing that says nothing is never counted as disagreeing. Pass it back to `discover` as `listings`. Mismatches become `inconsistent_business_info` evidence with links to each listing.
+
+**New fields on each problem card**
+- `display`: `headline`, `whyItMatters` (one line), `nextStep` (one line), `effort` (`free` or `tool` plus a label), and `evidenceStrength` (level 1–3, a label, and counts by source). For listing problems, `whyItMatters` and `nextStep` are built from the mismatches actually found (for example, "Show the same services on every listing, then merge duplicate listings").
+- `counterEvidence`: reviews that argue *against* the problem (for example, "6 reviews say you respond quickly" next to "calls go unanswered"), with up to 3 linked examples. Unconfirmed problems that customers contradict rank last.
+- `impact.terms`: the estimate as ordered equation terms, each with `short`, `value`, `unit`, `source` (`owner`/`default`/`derived`/`constant`), a plain-language `question` to ask the owner, and `min`/`max`. Editing a term = sending it as an override to `/api/problems/impact`.
+
+**`discovery.overview`**: `headline` ("We found 1 free fix and 1 problem a tool could help with"), counts (`quickWins`, `needTool`, `toCheck`), `topProblemKey`, and `strengths` (most-praised review themes with counts).
+
+The Part 4 contract is unchanged. Both real businesses produce a valid `/api/recommend` request (`lib/business/realSnapshots.test.ts`).
