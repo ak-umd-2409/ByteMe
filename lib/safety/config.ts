@@ -11,6 +11,8 @@ export const SAFETY_CONFIG = {
   domainMinMonths: 12,
   newDomainMonths: 6,
   lookalikeMaxDistance: 2,
+  /** Brand words this long or longer allow lookalikeMaxDistance edits. Shorter ones allow only one typo trick. */
+  lookalikeLongLength: 9,
   /** Brand words shorter than this only match exactly. */
   lookalikeMinLength: 5,
   maxPages: 6,
@@ -29,6 +31,10 @@ export const SAFETY_CONFIG = {
     /\bimprov\w*\s+(our|the)?\s*(models?|ai|algorithms?)\b/i,
     /\bmachine learning\b/i,
   ],
+  /** A "we don't train" sentence must have one of these... */
+  negationPattern: /\b(not|never|no)\b|n't\b/i,
+  /** ...and none of these, or a person must read it. */
+  qualifierPattern: /\b(unless|except|but|however|may|might|anonymi[sz]ed|aggregated?|de-identified|improve\w*)\b/i,
   pricePattern: /\$\s?\d/,
   monthlyPattern: /(per month|\/\s?mo\b|monthly|month-to-month)/i,
   contactSalesPattern: /\b(contact sales|talk to sales|request a quote|get a quote)\b/i,

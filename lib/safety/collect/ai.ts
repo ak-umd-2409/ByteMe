@@ -59,6 +59,8 @@ function emptyAi(): Ai {
   };
 }
 
+const squash = (text: string) => text.toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
+
 /** Keep an answer only if its quote is on one of the source pages. */
 function verify(key: keyof Ai, raw: { answer: string; quote: string } | null | undefined, sources: FetchedPageFact[]): AiAnswer<string> {
   if (!raw) return "unknown";
@@ -67,6 +69,8 @@ function verify(key: keyof Ai, raw: { answer: string; quote: string } | null | u
   const allowed = ALLOWED[key];
   const normalized = allowed ? answer.toLowerCase() : answer;
   if (allowed && !allowed.includes(normalized)) return "unknown";
+  // A free-text answer must be backed by its own quote ("Intuit Inc." needs a quote that names Intuit).
+  if (!allowed && !squash(raw.quote).includes(squash(answer))) return "unknown";
   const page = sources.find((p) => isVerbatim(raw.quote, p.text));
   return page ? { answer: normalized, quote: raw.quote.trim(), pageUrl: page.finalUrl } : "unknown";
 }

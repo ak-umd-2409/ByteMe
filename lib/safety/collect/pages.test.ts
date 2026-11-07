@@ -89,6 +89,19 @@ describe("findPages", () => {
     assert.ok(isFetched((await findPages(`${SITE}/`, d)).pages.home));
   });
 
+  it("holds (not blocks) a tool whose privacy policy is on another website", async () => {
+    const { deps: d } = deps({ [`${SITE}/`]: html('<a href="https://app.termly.io/policy/123">Privacy Policy</a>') });
+    assert.deepEqual((await findPages(`${SITE}/`, d)).pages.privacy, { error: "off_site" });
+  });
+
+  it("follows links to the main domain when the home page is on a subdomain", async () => {
+    const { deps: d } = deps({
+      ["https://app.tool.example/"]: html('<a href="https://tool.example/privacy-notice">Privacy</a>'),
+      [`${SITE}/privacy-notice`]: html("<p>Policy</p>"),
+    });
+    assert.equal(urlOf((await findPages("https://app.tool.example/", d)).pages.privacy), `${SITE}/privacy-notice`);
+  });
+
   it("makes at most 6 requests", async () => {
     const { fake, deps: d } = deps({ [`${SITE}/`]: html("<p>Hi</p>") });
     await findPages(`${SITE}/`, d);

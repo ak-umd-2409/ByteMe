@@ -8,6 +8,7 @@ import { classifyPage } from "../../business/website.ts";
 import { robotsAllows, safeFetch, SafeFetchError, type FetchedPage } from "../../shared/safeFetch.ts";
 import { SAFETY_CONFIG } from "../config.ts";
 import { contentHash, hasDownloadPrompt } from "../signals.ts";
+import { registrableDomain } from "./external.ts";
 import type { CollectDeps, FetchedPageFact, PageFact, PageKind } from "../types.ts";
 
 type OtherKind = Exclude<PageKind, "home">;
@@ -59,7 +60,7 @@ export async function findPages(url: string, deps: CollectDeps): Promise<FoundPa
   }
   if (home.status >= 400) return unreachable(`http_${home.status}`);
   const origin = new URL(home.finalUrl).origin;
-  const siteHost = new URL(home.finalUrl).hostname.replace(/^www\./, "");
+  const site = registrableDomain(new URL(home.finalUrl).hostname);
 
   let robots = "";
   try {
@@ -70,10 +71,11 @@ export async function findPages(url: string, deps: CollectDeps): Promise<FoundPa
   }
   const allowed = (target: string) => robotsAllows(robots, new URL(target).pathname);
 
-  const links = extractLinks(home.body, home.finalUrl).filter((link) => {
-    const host = new URL(link.href).hostname;
-    return host === siteHost || host.endsWith(`.${siteHost}`);
-  });
+  const allLinks = extractLinks(home.body, home.finalUrl);
+  const sameSite = (href: string) => registrableDomain(new URL(href).hostname) === site;
+  const links = allLinks.filter((link) => sameSite(link.href));
+  // A policy hosted elsewhere (Termly, a parent company) needs a person to look: held, never "missing".
+  const offSitePrivacy = allLinks.some((link) => !sameSite(link.href) && classifyPage(link.href, link.text) === "privacy");
 
   const pages = emptyPages(null);
   pages.home = toFact(home);
@@ -130,6 +132,7 @@ export async function findPages(url: string, deps: CollectDeps): Promise<FoundPa
     }
     if (pages[kind] === null && firstProblem) pages[kind] = { error: firstProblem };
   }
+  if (pages.privacy === null && offSitePrivacy) pages.privacy = { error: "off_site" };
 
   return {
     pages,

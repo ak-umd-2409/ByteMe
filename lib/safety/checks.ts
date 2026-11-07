@@ -69,8 +69,10 @@ export function checkDataUse(facts: SafetyFacts): SafetyCheckItem {
   if (trains !== "unknown" && trains.answer === "yes")
     return item("fail", "Uses your data to train its AI.", evidence);
   if (del !== "unknown" && del.answer === "no") return item("fail", "You can't delete your data.", evidence);
-  // The "no training" sentence itself often says "train"; only *other* risky sentences count.
-  const others = trains === "unknown" ? [] : facts.riskySentences.filter((s) => norm(s) !== norm(trains.quote));
+  // The "no training" sentence itself often says "train". It is set aside only when it
+  // reads as a plain no (a negation and no exceptions); every other risky sentence counts.
+  const plainNo = trains !== "unknown" && SAFETY_CONFIG.negationPattern.test(trains.quote) && !SAFETY_CONFIG.qualifierPattern.test(trains.quote);
+  const others = trains === "unknown" ? [] : facts.riskySentences.filter((s) => !(plainNo && norm(s) === norm(trains.quote)));
   if (trains !== "unknown" && trains.answer === "no" && others.length > 0) {
     const privacy = pageEvidence(facts.pages.privacy);
     const risky = privacy.length ? others.map((quote) => ({ ...privacy[0], quote })) : [];

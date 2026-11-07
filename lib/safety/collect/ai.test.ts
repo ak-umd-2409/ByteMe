@@ -57,6 +57,11 @@ describe("askAi", () => {
     assert.equal((await run(p, provider)).trainsOnYourData, "unknown");
   });
 
+  it("drops an answer that its own quote doesn't back up", async () => {
+    const { provider } = llm({ ...ABOUT_ANSWER, companyName: { answer: "Intuit Inc.", quote: ABOUT_ANSWER.companyName.quote } });
+    assert.equal((await run(pages(), provider)).companyName, "unknown");
+  });
+
   it("rejects an answer outside the allowed values", async () => {
     const { provider } = llm(ABOUT_ANSWER, { ...PRIVACY_ANSWER, canDeleteData: { answer: "maybe", quote: PRIVACY_ANSWER.canDeleteData.quote } });
     assert.equal((await run(pages(), provider)).canDeleteData, "unknown");

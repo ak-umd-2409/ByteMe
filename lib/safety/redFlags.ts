@@ -39,19 +39,43 @@ const hostOf = (domainOrUrl: string) => {
 const isOfficial = (host: string, brand: Brand) =>
   brand.domains.some((d) => host === d || host.endsWith(`.${d}`));
 
+const LOOKALIKE_DIGITS: Record<string, string> = { "0": "o", "1": "l", "3": "e", "4": "a", "5": "s", "7": "t" };
+
+/**
+ * One typical typo trick away from a short brand word: an extra letter
+ * (squarre), two letters swapped (sqaure), or a digit for a letter (paypa1).
+ * A plain letter change (clever vs. clover) is not counted: too many real
+ * names are one letter from a brand.
+ */
+function isTypoTrick(word: string, brand: string): boolean {
+  if (word.length === brand.length + 1)
+    return [...word].some((_, i) => word.slice(0, i) + word.slice(i + 1) === brand);
+  if (word.length !== brand.length) return false;
+  const diffs = [...word].map((c, i) => (c === brand[i] ? -1 : i)).filter((i) => i >= 0);
+  if (diffs.length === 2 && diffs[1] === diffs[0] + 1)
+    return word[diffs[0]] === brand[diffs[1]] && word[diffs[1]] === brand[diffs[0]];
+  return diffs.length === 1 && LOOKALIKE_DIGITS[word[diffs[0]]] === brand[diffs[0]];
+}
+
+/** True when `word` imitates `brandWord`. */
+function imitates(word: string, brandWord: string): boolean {
+  const w = word.toLowerCase();
+  const b = brandWord.toLowerCase();
+  if (w === b) return true;
+  const { lookalikeMaxDistance, lookalikeMinLength, lookalikeLongLength } = SAFETY_CONFIG;
+  if (w.length < lookalikeMinLength || b.length < lookalikeMinLength) return false;
+  if (b.length >= lookalikeLongLength) return editDistance(w, b) <= lookalikeMaxDistance;
+  return isTypoTrick(w, b);
+}
+
 /** A domain word that imitates a known brand, unless the domain is that brand's own. */
 export function findLookalike(domain: string, brands: Brand[] = BRANDS): { brand: string; word: string } | null {
   const host = hostOf(domain).replace(/^www\./, "");
   const words = host.split(".").slice(0, -1).flatMap((part) => part.split("-")).filter(Boolean);
-  const { lookalikeMaxDistance, lookalikeMinLength } = SAFETY_CONFIG;
   for (const brand of brands) {
     if (isOfficial(host, brand)) continue;
     for (const word of words)
-      for (const brandWord of brand.words) {
-        const short = word.length < lookalikeMinLength || brandWord.length < lookalikeMinLength;
-        const distance = editDistance(word, brandWord);
-        if (short ? distance === 0 : distance <= lookalikeMaxDistance) return { brand: brand.brand, word };
-      }
+      for (const brandWord of brand.words) if (imitates(word, brandWord)) return { brand: brand.brand, word };
   }
   return null;
 }

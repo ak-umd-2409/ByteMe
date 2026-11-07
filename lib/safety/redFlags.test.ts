@@ -26,6 +26,20 @@ describe("findLookalike", () => {
     assert.equal(findLookalike("quickbooks.intuit.com"), null);
     assert.equal(findLookalike("www.getjobber.com"), null);
   });
+  it("doesn't flag real tools whose names are near a brand by chance", () => {
+    for (const domain of ["calendar.com", "get-calendar.ai", "openart.ai", "boost.ai", "coast.app", "roast.ai", "clever.ai",
+      "cover.ai", "stride.com", "strike.com", "string.com", "hotspot.ai", "noodle.ai", "spotify.com", "paypal.me"])
+      assert.equal(findLookalike(domain), null, domain);
+  });
+  it("catches common typo tricks", () => {
+    assert.equal(findLookalike("sqaure.com")?.brand, "Square", "swapped letters");
+    assert.equal(findLookalike("paypa1.com")?.brand, "PayPal", "digit for letter");
+    assert.equal(findLookalike("shopiffy.com")?.brand, "Shopify", "doubled letter");
+  });
+  it("catches names that use the brand outright", () => {
+    assert.equal(findLookalike("chatgpt-business.app")?.brand, "OpenAI");
+    assert.equal(findLookalike("intuit-login.com")?.brand, "QuickBooks");
+  });
   it("matches short brand words only exactly", () => {
     assert.equal(findLookalike("fixit.com"), null);
     assert.equal(findLookalike("wix-helper.com")?.brand, "Wix");

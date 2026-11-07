@@ -87,6 +87,16 @@ describe("checkDataUse", () => {
     const f = factsFixture({ riskySentences: ["We do not use your data to build or tune any models."] });
     assert.equal(checkDataUse(f).result, "pass");
   });
+  it("is unknown when the AI quotes a sentence that says it DOES train as a 'no'", () => {
+    const quote = "We use your business content to train our AI models.";
+    const f = factsFixture({ riskySentences: [quote], ai: { trainsOnYourData: { answer: "no", quote } } });
+    assert.equal(checkDataUse(f).result, "unknown");
+  });
+  it("is unknown when the 'no training' sentence has an exception", () => {
+    const quote = "We do not train our models on your data unless you turn on sharing.";
+    const f = factsFixture({ riskySentences: [quote], ai: { trainsOnYourData: { answer: "no", quote } } });
+    assert.equal(checkDataUse(f).result, "unknown");
+  });
   it("is unknown when the AI says no training but a risky sentence exists", () => {
     const item = checkDataUse(factsFixture({ riskySentences: ["We may use your content to improve our models."] }));
     assert.equal(item.result, "unknown");
