@@ -1,0 +1,1510 @@
+[
+  {
+    "id": "ringwise-receptionist",
+    "name": "Ringwise Receptionist",
+    "vendor": {
+      "company": "Ringwise Labs (sample)",
+      "website": "https://ringwise.example",
+      "domain": "ringwise.example"
+    },
+    "description": "Sample tool (fictional). Answers calls you miss while you're on a job, takes the customer's details and texts them to you.",
+    "category": "AI receptionist",
+    "useCases": [
+      "missed-calls"
+    ],
+    "industries": [
+      "hvac",
+      "plumbing",
+      "electrical",
+      "landscaping",
+      "cleaning",
+      "auto_repair"
+    ],
+    "pricing": {
+      "asOf": "Nov 2026",
+      "small": {
+        "monthlyUsd": 59,
+        "note": "Sample price for a small business"
+      },
+      "medium": {
+        "monthlyUsd": 119,
+        "note": "Sample price for a medium business"
+      },
+      "large": {
+        "monthlyUsd": 249,
+        "note": "Sample price for a large business"
+      },
+      "freeTier": false,
+      "contract": "monthly",
+      "cancellation": "Cancel any time from your account.",
+      "pricingUrl": "https://ringwise.example/pricing"
+    },
+    "worksWith": [
+      {
+        "product": "Square",
+        "type": "native"
+      },
+      {
+        "product": "Google Calendar",
+        "type": "native"
+      },
+      {
+        "product": "QuickBooks",
+        "type": "zapier"
+      }
+    ],
+    "setupMinutes": 30,
+    "setupMode": "self_serve",
+    "languages": [
+      "English",
+      "Spanish"
+    ],
+    "privacyCard": {
+      "trainsOnYourData": {
+        "answer": "no",
+        "plain": "Does not use your data to train AI.",
+        "quote": "We do not use customer content to train AI models.",
+        "sourceUrl": "https://ringwise.example/privacy"
+      },
+      "canDeleteData": {
+        "answer": "yes",
+        "plain": "You can delete your data at any time.",
+        "quote": "You can delete your account and all associated data at any time.",
+        "sourceUrl": "https://ringwise.example/privacy"
+      },
+      "whereStored": {
+        "answer": "United States",
+        "plain": "Your data is stored in the US.",
+        "quote": "All customer data is stored in data centers in the United States.",
+        "sourceUrl": "https://ringwise.example/privacy"
+      },
+      "sharesOrSells": {
+        "answer": "no",
+        "plain": "Does not sell your data.",
+        "quote": "We never sell your personal information.",
+        "sourceUrl": "https://ringwise.example/privacy"
+      },
+      "securityCertification": {
+        "answer": "unknown",
+        "plain": "We couldn't confirm a security certification.",
+        "quote": null,
+        "sourceUrl": null
+      }
+    },
+    "rulesFlags": {
+      "recordsCalls": true,
+      "announcesRecording": true,
+      "hipaaReady": false,
+      "outboundAiCalls": false,
+      "personalizedPricing": false
+    },
+    "badge": "verified",
+    "safetyCheck": {
+      "ranAt": "2026-11-07",
+      "checks": {
+        "whoIsBehind": {
+          "result": "pass",
+          "reason": "Company name, street address and named founders found on the About page.",
+          "evidence": [
+            {
+              "url": "https://ringwise.example/about",
+              "checkedAt": "2026-11-07"
+            }
+          ]
+        },
+        "domainAge": {
+          "result": "pass",
+          "reason": "Website domain is over 3 years old.",
+          "evidence": [
+            {
+              "url": "https://ringwise.example",
+              "checkedAt": "2026-11-07"
+            }
+          ]
+        },
+        "privacyPolicy": {
+          "result": "pass",
+          "reason": "Privacy policy found and readable.",
+          "evidence": [
+            {
+              "url": "https://ringwise.example/privacy",
+              "checkedAt": "2026-11-07"
+            }
+          ]
+        },
+        "dataUse": {
+          "result": "pass",
+          "reason": "Does not train AI on your data by default; you can delete your data.",
+          "evidence": [
+            {
+              "url": "https://ringwise.example/privacy",
+              "checkedAt": "2026-11-07"
+            }
+          ]
+        },
+        "dataLocation": {
+          "result": "pass",
+          "reason": "Data is stored in the United States.",
+          "evidence": [
+            {
+              "url": "https://ringwise.example/privacy",
+              "checkedAt": "2026-11-07"
+            }
+          ]
+        },
+        "pricingClarity": {
+          "result": "pass",
+          "reason": "Public pricing page with a monthly plan you can cancel.",
+          "evidence": [
+            {
+              "url": "https://ringwise.example/pricing",
+              "checkedAt": "2026-11-07"
+            }
+          ]
+        },
+        "securityBasics": {
+          "result": "pass",
+          "reason": "Website uses HTTPS.",
+          "evidence": [
+            {
+              "url": "https://ringwise.example",
+              "checkedAt": "2026-11-07"
+            }
+          ]
+        },
+        "redFlags": {
+          "result": "pass",
+          "reason": "No red flags found.",
+          "evidence": [
+            {
+              "url": "https://ringwise.example",
+              "checkedAt": "2026-11-07"
+            }
+          ]
+        }
+      },
+      "redFlags": []
+    },
+    "lastChecked": "2026-11-07",
+    "sources": [
+      "https://ringwise.example/pricing",
+      "https://ringwise.example/privacy",
+      "https://ringwise.example/about"
+    ],
+    "needsVerification": [],
+    "sample": true,
+    "reviewedAt": "2026-11-07",
+    "reviewedBy": "Person B (sample review)"
+  },
+  {
+    "id": "quotequick",
+    "name": "QuoteQuick",
+    "vendor": {
+      "company": "QuoteQuick Inc. (sample)",
+      "website": "https://quotequick.example",
+      "domain": "quotequick.example"
+    },
+    "description": "Sample tool (fictional). Turns your notes from a site visit into a clean, itemized quote you can send in minutes.",
+    "category": "Quotes and estimates",
+    "useCases": [
+      "quotes"
+    ],
+    "industries": [
+      "hvac",
+      "plumbing",
+      "electrical",
+      "landscaping",
+      "cleaning",
+      "auto_repair"
+    ],
+    "pricing": {
+      "asOf": "Nov 2026",
+      "small": {
+        "monthlyUsd": 39,
+        "note": "Sample price for a small business"
+      },
+      "medium": {
+        "monthlyUsd": 79,
+        "note": "Sample price for a medium business"
+      },
+      "large": {
+        "monthlyUsd": 149,
+        "note": "Sample price for a large business"
+      },
+      "freeTier": false,
+      "contract": "monthly",
+      "cancellation": "Cancel any time from your account.",
+      "pricingUrl": "https://quotequick.example/pricing"
+    },
+    "worksWith": [
+      {
+        "product": "QuickBooks",
+        "type": "native"
+      },
+      {
+        "product": "Square",
+        "type": "zapier"
+      }
+    ],
+    "setupMinutes": 45,
+    "setupMode": "self_serve",
+    "languages": [
+      "English"
+    ],
+    "privacyCard": {
+      "trainsOnYourData": {
+        "answer": "no",
+        "plain": "Does not use your data to train AI.",
+        "quote": "We do not use customer content to train AI models.",
+        "sourceUrl": "https://quotequick.example/privacy"
+      },
+      "canDeleteData": {
+        "answer": "yes",
+        "plain": "You can delete your data at any time.",
+        "quote": "You can delete your account and all associated data at any time.",
+        "sourceUrl": "https://quotequick.example/privacy"
+      },
+      "whereStored": {
+        "answer": "United States",
+        "plain": "Your data is stored in the US.",
+        "quote": "All customer data is stored in data centers in the United States.",
+        "sourceUrl": "https://quotequick.example/privacy"
+      },
+      "sharesOrSells": {
+        "answer": "no",
+        "plain": "Does not sell your data.",
+        "quote": "We never sell your personal information.",
+        "sourceUrl": "https://quotequick.example/privacy"
+      },
+      "securityCertification": {
+        "answer": "unknown",
+        "plain": "We couldn't confirm a security certification.",
+        "quote": null,
+        "sourceUrl": null
+      }
+    },
+    "rulesFlags": {
+      "recordsCalls": false,
+      "announcesRecording": false,
+      "hipaaReady": false,
+      "outboundAiCalls": false,
+      "personalizedPricing": false
+    },
+    "badge": "verified",
+    "safetyCheck": {
+      "ranAt": "2026-11-07",
+      "checks": {
+        "whoIsBehind": {
+          "result": "pass",
+          "reason": "Company name, street address and named founders found on the About page.",
+          "evidence": [
+            {
+              "url": "https://quotequick.example/about",
+              "checkedAt": "2026-11-07"
+            }
+          ]
+        },
+        "domainAge": {
+          "result": "pass",
+          "reason": "Website domain is over 3 years old.",
+          "evidence": [
+            {
+              "url": "https://quotequick.example",
+              "checkedAt": "2026-11-07"
+            }
+          ]
+        },
+        "privacyPolicy": {
+          "result": "pass",
+          "reason": "Privacy policy found and readable.",
+          "evidence": [
+            {
+              "url": "https://quotequick.example/privacy",
+              "checkedAt": "2026-11-07"
+            }
+          ]
+        },
+        "dataUse": {
+          "result": "pass",
+          "reason": "Does not train AI on your data by default; you can delete your data.",
+          "evidence": [
+            {
+              "url": "https://quotequick.example/privacy",
+              "checkedAt": "2026-11-07"
+            }
+          ]
+        },
+        "dataLocation": {
+          "result": "pass",
+          "reason": "Data is stored in the United States.",
+          "evidence": [
+            {
+              "url": "https://quotequick.example/privacy",
+              "checkedAt": "2026-11-07"
+            }
+          ]
+        },
+        "pricingClarity": {
+          "result": "pass",
+          "reason": "Public pricing page with a monthly plan you can cancel.",
+          "evidence": [
+            {
+              "url": "https://quotequick.example/pricing",
+              "checkedAt": "2026-11-07"
+            }
+          ]
+        },
+        "securityBasics": {
+          "result": "pass",
+          "reason": "Website uses HTTPS.",
+          "evidence": [
+            {
+              "url": "https://quotequick.example",
+              "checkedAt": "2026-11-07"
+            }
+          ]
+        },
+        "redFlags": {
+          "result": "pass",
+          "reason": "No red flags found.",
+          "evidence": [
+            {
+              "url": "https://quotequick.example",
+              "checkedAt": "2026-11-07"
+            }
+          ]
+        }
+      },
+      "redFlags": []
+    },
+    "lastChecked": "2026-11-07",
+    "sources": [
+      "https://quotequick.example/pricing",
+      "https://quotequick.example/privacy",
+      "https://quotequick.example/about"
+    ],
+    "needsVerification": [],
+    "sample": true,
+    "reviewedAt": "2026-11-07",
+    "reviewedBy": "Person B (sample review)"
+  },
+  {
+    "id": "replykind",
+    "name": "ReplyKind",
+    "vendor": {
+      "company": "ReplyKind LLC (sample)",
+      "website": "https://replykind.example",
+      "domain": "replykind.example"
+    },
+    "description": "Sample tool (fictional). Drafts friendly replies to your Google reviews. You approve each one before it posts.",
+    "category": "Review replies",
+    "useCases": [
+      "reviews"
+    ],
+    "industries": [
+      "any"
+    ],
+    "pricing": {
+      "asOf": "Nov 2026",
+      "small": {
+        "monthlyUsd": 25,
+        "note": "Sample price for a small business"
+      },
+      "medium": {
+        "monthlyUsd": 49,
+        "note": "Sample price for a medium business"
+      },
+      "large": {
+        "monthlyUsd": 99,
+        "note": "Sample price for a large business"
+      },
+      "freeTier": false,
+      "contract": "monthly",
+      "cancellation": "Cancel any time from your account.",
+      "pricingUrl": "https://replykind.example/pricing"
+    },
+    "worksWith": [
+      {
+        "product": "Google Business Profile",
+        "type": "native"
+      }
+    ],
+    "setupMinutes": 15,
+    "setupMode": "self_serve",
+    "languages": [
+      "English"
+    ],
+    "privacyCard": {
+      "trainsOnYourData": {
+        "answer": "no",
+        "plain": "Does not use your data to train AI.",
+        "quote": "We do not use customer content to train AI models.",
+        "sourceUrl": "https://replykind.example/privacy"
+      },
+      "canDeleteData": {
+        "answer": "yes",
+        "plain": "You can delete your data at any time.",
+        "quote": "You can delete your account and all associated data at any time.",
+        "sourceUrl": "https://replykind.example/privacy"
+      },
+      "whereStored": {
+        "answer": "United States",
+        "plain": "Your data is stored in the US.",
+        "quote": "All customer data is stored in data centers in the United States.",
+        "sourceUrl": "https://replykind.example/privacy"
+      },
+      "sharesOrSells": {
+        "answer": "no",
+        "plain": "Does not sell your data.",
+        "quote": "We never sell your personal information.",
+        "sourceUrl": "https://replykind.example/privacy"
+      },
+      "securityCertification": {
+        "answer": "unknown",
+        "plain": "We couldn't confirm a security certification.",
+        "quote": null,
+        "sourceUrl": null
+      }
+    },
+    "rulesFlags": {
+      "recordsCalls": false,
+      "announcesRecording": false,
+      "hipaaReady": false,
+      "outboundAiCalls": false,
+      "personalizedPricing": false
+    },
+    "badge": "verified",
+    "safetyCheck": {
+      "ranAt": "2026-11-07",
+      "checks": {
+        "whoIsBehind": {
+          "result": "pass",
+          "reason": "Company name, street address and named founders found on the About page.",
+          "evidence": [
+            {
+              "url": "https://replykind.example/about",
+              "checkedAt": "2026-11-07"
+            }
+          ]
+        },
+        "domainAge": {
+          "result": "pass",
+          "reason": "Website domain is over 3 years old.",
+          "evidence": [
+            {
+              "url": "https://replykind.example",
+              "checkedAt": "2026-11-07"
+            }
+          ]
+        },
+        "privacyPolicy": {
+          "result": "pass",
+          "reason": "Privacy policy found and readable.",
+          "evidence": [
+            {
+              "url": "https://replykind.example/privacy",
+              "checkedAt": "2026-11-07"
+            }
+          ]
+        },
+        "dataUse": {
+          "result": "pass",
+          "reason": "Does not train AI on your data by default; you can delete your data.",
+          "evidence": [
+            {
+              "url": "https://replykind.example/privacy",
+              "checkedAt": "2026-11-07"
+            }
+          ]
+        },
+        "dataLocation": {
+          "result": "pass",
+          "reason": "Data is stored in the United States.",
+          "evidence": [
+            {
+              "url": "https://replykind.example/privacy",
+              "checkedAt": "2026-11-07"
+            }
+          ]
+        },
+        "pricingClarity": {
+          "result": "pass",
+          "reason": "Public pricing page with a monthly plan you can cancel.",
+          "evidence": [
+            {
+              "url": "https://replykind.example/pricing",
+              "checkedAt": "2026-11-07"
+            }
+          ]
+        },
+        "securityBasics": {
+          "result": "pass",
+          "reason": "Website uses HTTPS.",
+          "evidence": [
+            {
+              "url": "https://replykind.example",
+              "checkedAt": "2026-11-07"
+            }
+          ]
+        },
+        "redFlags": {
+          "result": "pass",
+          "reason": "No red flags found.",
+          "evidence": [
+            {
+              "url": "https://replykind.example",
+              "checkedAt": "2026-11-07"
+            }
+          ]
+        }
+      },
+      "redFlags": []
+    },
+    "lastChecked": "2026-11-07",
+    "sources": [
+      "https://replykind.example/pricing",
+      "https://replykind.example/privacy",
+      "https://replykind.example/about"
+    ],
+    "needsVerification": [],
+    "sample": true,
+    "reviewedAt": "2026-11-07",
+    "reviewedBy": "Person B (sample review)"
+  },
+  {
+    "id": "booknest",
+    "name": "BookNest",
+    "vendor": {
+      "company": "BookNest Co. (sample)",
+      "website": "https://booknest.example",
+      "domain": "booknest.example"
+    },
+    "description": "Sample tool (fictional). Lets customers book appointments online and sends reminders by text.",
+    "category": "Online booking",
+    "useCases": [
+      "booking"
+    ],
+    "industries": [
+      "salon",
+      "fitness",
+      "cleaning"
+    ],
+    "pricing": {
+      "asOf": "Nov 2026",
+      "small": {
+        "monthlyUsd": 29,
+        "note": "Sample price for a small business"
+      },
+      "medium": {
+        "monthlyUsd": 59,
+        "note": "Sample price for a medium business"
+      },
+      "large": {
+        "monthlyUsd": 99,
+        "note": "Sample price for a large business"
+      },
+      "freeTier": false,
+      "contract": "monthly",
+      "cancellation": "Cancel any time from your account.",
+      "pricingUrl": "https://booknest.example/pricing"
+    },
+    "worksWith": [
+      {
+        "product": "Google Calendar",
+        "type": "native"
+      },
+      {
+        "product": "Square",
+        "type": "zapier"
+      }
+    ],
+    "setupMinutes": 40,
+    "setupMode": "self_serve",
+    "languages": [
+      "English"
+    ],
+    "privacyCard": {
+      "trainsOnYourData": {
+        "answer": "no",
+        "plain": "Does not use your data to train AI.",
+        "quote": "We do not use customer content to train AI models.",
+        "sourceUrl": "https://booknest.example/privacy"
+      },
+      "canDeleteData": {
+        "answer": "yes",
+        "plain": "You can delete your data at any time.",
+        "quote": "You can delete your account and all associated data at any time.",
+        "sourceUrl": "https://booknest.example/privacy"
+      },
+      "whereStored": {
+        "answer": "United States",
+        "plain": "Your data is stored in the US.",
+        "quote": "All customer data is stored in data centers in the United States.",
+        "sourceUrl": "https://booknest.example/privacy"
+      },
+      "sharesOrSells": {
+        "answer": "no",
+        "plain": "Does not sell your data.",
+        "quote": "We never sell your personal information.",
+        "sourceUrl": "https://booknest.example/privacy"
+      },
+      "securityCertification": {
+        "answer": "unknown",
+        "plain": "We couldn't confirm a security certification.",
+        "quote": null,
+        "sourceUrl": null
+      }
+    },
+    "rulesFlags": {
+      "recordsCalls": false,
+      "announcesRecording": false,
+      "hipaaReady": false,
+      "outboundAiCalls": false,
+      "personalizedPricing": false
+    },
+    "badge": "listed",
+    "safetyCheck": {
+      "ranAt": "2026-11-07",
+      "checks": {
+        "whoIsBehind": {
+          "result": "pass",
+          "reason": "Company name, street address and named founders found on the About page.",
+          "evidence": [
+            {
+              "url": "https://booknest.example/about",
+              "checkedAt": "2026-11-07"
+            }
+          ]
+        },
+        "domainAge": {
+          "result": "pass",
+          "reason": "Website domain is over 3 years old.",
+          "evidence": [
+            {
+              "url": "https://booknest.example",
+              "checkedAt": "2026-11-07"
+            }
+          ]
+        },
+        "privacyPolicy": {
+          "result": "pass",
+          "reason": "Privacy policy found and readable.",
+          "evidence": [
+            {
+              "url": "https://booknest.example/privacy",
+              "checkedAt": "2026-11-07"
+            }
+          ]
+        },
+        "dataUse": {
+          "result": "pass",
+          "reason": "Does not train AI on your data by default; you can delete your data.",
+          "evidence": [
+            {
+              "url": "https://booknest.example/privacy",
+              "checkedAt": "2026-11-07"
+            }
+          ]
+        },
+        "dataLocation": {
+          "result": "pass",
+          "reason": "Data is stored in the United States.",
+          "evidence": [
+            {
+              "url": "https://booknest.example/privacy",
+              "checkedAt": "2026-11-07"
+            }
+          ]
+        },
+        "pricingClarity": {
+          "result": "pass",
+          "reason": "Public pricing page with a monthly plan you can cancel.",
+          "evidence": [
+            {
+              "url": "https://booknest.example/pricing",
+              "checkedAt": "2026-11-07"
+            }
+          ]
+        },
+        "securityBasics": {
+          "result": "pass",
+          "reason": "Website uses HTTPS.",
+          "evidence": [
+            {
+              "url": "https://booknest.example",
+              "checkedAt": "2026-11-07"
+            }
+          ]
+        },
+        "redFlags": {
+          "result": "pass",
+          "reason": "No red flags found.",
+          "evidence": [
+            {
+              "url": "https://booknest.example",
+              "checkedAt": "2026-11-07"
+            }
+          ]
+        }
+      },
+      "redFlags": []
+    },
+    "lastChecked": "2026-11-07",
+    "sources": [
+      "https://booknest.example/pricing",
+      "https://booknest.example/privacy",
+      "https://booknest.example/about"
+    ],
+    "needsVerification": [],
+    "sample": true
+  },
+  {
+    "id": "texttide",
+    "name": "TextTide",
+    "vendor": {
+      "company": "TextTide Inc. (sample)",
+      "website": "https://texttide.example",
+      "domain": "texttide.example"
+    },
+    "description": "Sample tool (fictional). Answers common customer texts and website chats for you, day or night.",
+    "category": "Customer messaging",
+    "useCases": [
+      "customer-messaging"
+    ],
+    "industries": [
+      "any"
+    ],
+    "pricing": {
+      "asOf": "Nov 2026",
+      "small": {
+        "monthlyUsd": 45,
+        "note": "Sample price for a small business"
+      },
+      "medium": {
+        "monthlyUsd": 89,
+        "note": "Sample price for a medium business"
+      },
+      "large": {
+        "monthlyUsd": 179,
+        "note": "Sample price for a large business"
+      },
+      "freeTier": false,
+      "contract": "monthly",
+      "cancellation": "Cancel any time from your account.",
+      "pricingUrl": "https://texttide.example/pricing"
+    },
+    "worksWith": [
+      {
+        "product": "Square",
+        "type": "native"
+      }
+    ],
+    "setupMinutes": 35,
+    "setupMode": "self_serve",
+    "languages": [
+      "English",
+      "Spanish"
+    ],
+    "privacyCard": {
+      "trainsOnYourData": {
+        "answer": "no",
+        "plain": "Does not use your data to train AI.",
+        "quote": "We do not use customer content to train AI models.",
+        "sourceUrl": "https://texttide.example/privacy"
+      },
+      "canDeleteData": {
+        "answer": "yes",
+        "plain": "You can delete your data at any time.",
+        "quote": "You can delete your account and all associated data at any time.",
+        "sourceUrl": "https://texttide.example/privacy"
+      },
+      "whereStored": {
+        "answer": "United States",
+        "plain": "Your data is stored in the US.",
+        "quote": "All customer data is stored in data centers in the United States.",
+        "sourceUrl": "https://texttide.example/privacy"
+      },
+      "sharesOrSells": {
+        "answer": "no",
+        "plain": "Does not sell your data.",
+        "quote": "We never sell your personal information.",
+        "sourceUrl": "https://texttide.example/privacy"
+      },
+      "securityCertification": {
+        "answer": "unknown",
+        "plain": "We couldn't confirm a security certification.",
+        "quote": null,
+        "sourceUrl": null
+      }
+    },
+    "rulesFlags": {
+      "recordsCalls": false,
+      "announcesRecording": false,
+      "hipaaReady": false,
+      "outboundAiCalls": false,
+      "personalizedPricing": false
+    },
+    "badge": "listed",
+    "safetyCheck": {
+      "ranAt": "2026-11-07",
+      "checks": {
+        "whoIsBehind": {
+          "result": "pass",
+          "reason": "Company name, street address and named founders found on the About page.",
+          "evidence": [
+            {
+              "url": "https://texttide.example/about",
+              "checkedAt": "2026-11-07"
+            }
+          ]
+        },
+        "domainAge": {
+          "result": "pass",
+          "reason": "Website domain is over 3 years old.",
+          "evidence": [
+            {
+              "url": "https://texttide.example",
+              "checkedAt": "2026-11-07"
+            }
+          ]
+        },
+        "privacyPolicy": {
+          "result": "pass",
+          "reason": "Privacy policy found and readable.",
+          "evidence": [
+            {
+              "url": "https://texttide.example/privacy",
+              "checkedAt": "2026-11-07"
+            }
+          ]
+        },
+        "dataUse": {
+          "result": "pass",
+          "reason": "Does not train AI on your data by default; you can delete your data.",
+          "evidence": [
+            {
+              "url": "https://texttide.example/privacy",
+              "checkedAt": "2026-11-07"
+            }
+          ]
+        },
+        "dataLocation": {
+          "result": "pass",
+          "reason": "Data is stored in the United States.",
+          "evidence": [
+            {
+              "url": "https://texttide.example/privacy",
+              "checkedAt": "2026-11-07"
+            }
+          ]
+        },
+        "pricingClarity": {
+          "result": "pass",
+          "reason": "Public pricing page with a monthly plan you can cancel.",
+          "evidence": [
+            {
+              "url": "https://texttide.example/pricing",
+              "checkedAt": "2026-11-07"
+            }
+          ]
+        },
+        "securityBasics": {
+          "result": "pass",
+          "reason": "Website uses HTTPS.",
+          "evidence": [
+            {
+              "url": "https://texttide.example",
+              "checkedAt": "2026-11-07"
+            }
+          ]
+        },
+        "redFlags": {
+          "result": "pass",
+          "reason": "No red flags found.",
+          "evidence": [
+            {
+              "url": "https://texttide.example",
+              "checkedAt": "2026-11-07"
+            }
+          ]
+        }
+      },
+      "redFlags": []
+    },
+    "lastChecked": "2026-11-07",
+    "sources": [
+      "https://texttide.example/pricing",
+      "https://texttide.example/privacy",
+      "https://texttide.example/about"
+    ],
+    "needsVerification": [],
+    "sample": true
+  },
+  {
+    "id": "squarre-voice-ai",
+    "name": "Squarre Voice AI",
+    "vendor": {
+      "company": "Unknown",
+      "website": "https://squarre-voice.example",
+      "domain": "squarre-voice.example"
+    },
+    "description": "Sample scam-style tool (fictional), used to show the Safety Check. Claims to be an official Square phone assistant.",
+    "category": "AI receptionist",
+    "useCases": [
+      "missed-calls"
+    ],
+    "industries": [
+      "any"
+    ],
+    "pricing": {
+      "asOf": "Nov 2026",
+      "small": {
+        "monthlyUsd": "unknown",
+        "note": "No public pricing"
+      },
+      "medium": {
+        "monthlyUsd": "unknown",
+        "note": "No public pricing"
+      },
+      "large": {
+        "monthlyUsd": "unknown",
+        "note": "No public pricing"
+      },
+      "freeTier": "unknown",
+      "contract": "unknown",
+      "cancellation": "Not stated.",
+      "pricingUrl": "unknown"
+    },
+    "worksWith": [],
+    "setupMinutes": "unknown",
+    "setupMode": "self_serve",
+    "languages": [
+      "English"
+    ],
+    "privacyCard": {
+      "trainsOnYourData": {
+        "answer": "unknown",
+        "plain": "We couldn't find an answer to this.",
+        "quote": null,
+        "sourceUrl": null
+      },
+      "canDeleteData": {
+        "answer": "unknown",
+        "plain": "We couldn't find an answer to this.",
+        "quote": null,
+        "sourceUrl": null
+      },
+      "whereStored": {
+        "answer": "unknown",
+        "plain": "We couldn't find an answer to this.",
+        "quote": null,
+        "sourceUrl": null
+      },
+      "sharesOrSells": {
+        "answer": "unknown",
+        "plain": "We couldn't find an answer to this.",
+        "quote": null,
+        "sourceUrl": null
+      },
+      "securityCertification": {
+        "answer": "unknown",
+        "plain": "We couldn't find an answer to this.",
+        "quote": null,
+        "sourceUrl": null
+      }
+    },
+    "rulesFlags": {
+      "recordsCalls": "unknown",
+      "announcesRecording": "unknown",
+      "hipaaReady": "unknown",
+      "outboundAiCalls": "unknown",
+      "personalizedPricing": "unknown"
+    },
+    "badge": "blocked",
+    "safetyCheck": {
+      "ranAt": "2026-11-07",
+      "checks": {
+        "whoIsBehind": {
+          "result": "fail",
+          "reason": "No company name, address or leadership found.",
+          "evidence": [
+            {
+              "url": "https://squarre-voice.example",
+              "checkedAt": "2026-11-07"
+            }
+          ]
+        },
+        "domainAge": {
+          "result": "fail",
+          "reason": "Website domain is 2 months old.",
+          "evidence": [
+            {
+              "url": "https://squarre-voice.example",
+              "checkedAt": "2026-11-07"
+            }
+          ]
+        },
+        "privacyPolicy": {
+          "result": "pass",
+          "reason": "Privacy policy found and readable.",
+          "evidence": [
+            {
+              "url": "https://squarre-voice.example/privacy",
+              "checkedAt": "2026-11-07"
+            }
+          ]
+        },
+        "dataUse": {
+          "result": "unknown",
+          "reason": "No policy text to read.",
+          "evidence": [
+            {
+              "url": "https://squarre-voice.example",
+              "checkedAt": "2026-11-07"
+            }
+          ]
+        },
+        "dataLocation": {
+          "result": "unknown",
+          "reason": "No policy text to read.",
+          "evidence": [
+            {
+              "url": "https://squarre-voice.example",
+              "checkedAt": "2026-11-07"
+            }
+          ]
+        },
+        "pricingClarity": {
+          "result": "fail",
+          "reason": "No public pricing page.",
+          "evidence": [
+            {
+              "url": "https://squarre-voice.example",
+              "checkedAt": "2026-11-07"
+            }
+          ]
+        },
+        "securityBasics": {
+          "result": "pass",
+          "reason": "Website uses HTTPS.",
+          "evidence": [
+            {
+              "url": "https://squarre-voice.example",
+              "checkedAt": "2026-11-07"
+            }
+          ]
+        },
+        "redFlags": {
+          "result": "fail",
+          "reason": "Name and website imitate Square (squarre-voice vs. Square).",
+          "evidence": [
+            {
+              "url": "https://squarre-voice.example",
+              "checkedAt": "2026-11-07"
+            }
+          ]
+        }
+      },
+      "redFlags": [
+        "Name and website imitate Square (squarre-voice vs. Square)."
+      ]
+    },
+    "lastChecked": "2026-11-07",
+    "sources": [
+      "https://squarre-voice.example"
+    ],
+    "needsVerification": [
+      "pricing.small.monthlyUsd",
+      "pricing.medium.monthlyUsd",
+      "pricing.large.monthlyUsd",
+      "pricing.freeTier",
+      "pricing.contract",
+      "pricing.pricingUrl",
+      "setupMinutes",
+      "rulesFlags.recordsCalls",
+      "rulesFlags.announcesRecording",
+      "rulesFlags.hipaaReady",
+      "rulesFlags.outboundAiCalls",
+      "rulesFlags.personalizedPricing"
+    ],
+    "sample": true
+  },
+  {
+    "id": "fastbooks-ai",
+    "name": "FastBooks AI",
+    "vendor": {
+      "company": "Unknown",
+      "website": "https://fastbooks-ai-download.example",
+      "domain": "fastbooks-ai-download.example"
+    },
+    "description": "Sample scam-style tool (fictional), used to show the Safety Check. Promises automatic bookkeeping if you download and install its app.",
+    "category": "Bookkeeping",
+    "useCases": [
+      "bookkeeping"
+    ],
+    "industries": [
+      "any"
+    ],
+    "pricing": {
+      "asOf": "Nov 2026",
+      "small": {
+        "monthlyUsd": "unknown",
+        "note": "No public pricing"
+      },
+      "medium": {
+        "monthlyUsd": "unknown",
+        "note": "No public pricing"
+      },
+      "large": {
+        "monthlyUsd": "unknown",
+        "note": "No public pricing"
+      },
+      "freeTier": "unknown",
+      "contract": "unknown",
+      "cancellation": "Not stated.",
+      "pricingUrl": "unknown"
+    },
+    "worksWith": [],
+    "setupMinutes": "unknown",
+    "setupMode": "self_serve",
+    "languages": [
+      "English"
+    ],
+    "privacyCard": {
+      "trainsOnYourData": {
+        "answer": "unknown",
+        "plain": "We couldn't find an answer to this.",
+        "quote": null,
+        "sourceUrl": null
+      },
+      "canDeleteData": {
+        "answer": "unknown",
+        "plain": "We couldn't find an answer to this.",
+        "quote": null,
+        "sourceUrl": null
+      },
+      "whereStored": {
+        "answer": "unknown",
+        "plain": "We couldn't find an answer to this.",
+        "quote": null,
+        "sourceUrl": null
+      },
+      "sharesOrSells": {
+        "answer": "unknown",
+        "plain": "We couldn't find an answer to this.",
+        "quote": null,
+        "sourceUrl": null
+      },
+      "securityCertification": {
+        "answer": "unknown",
+        "plain": "We couldn't find an answer to this.",
+        "quote": null,
+        "sourceUrl": null
+      }
+    },
+    "rulesFlags": {
+      "recordsCalls": "unknown",
+      "announcesRecording": "unknown",
+      "hipaaReady": "unknown",
+      "outboundAiCalls": "unknown",
+      "personalizedPricing": "unknown"
+    },
+    "badge": "blocked",
+    "safetyCheck": {
+      "ranAt": "2026-11-07",
+      "checks": {
+        "whoIsBehind": {
+          "result": "fail",
+          "reason": "No company name, address or leadership found.",
+          "evidence": [
+            {
+              "url": "https://fastbooks-ai-download.example",
+              "checkedAt": "2026-11-07"
+            }
+          ]
+        },
+        "domainAge": {
+          "result": "fail",
+          "reason": "Website domain is 5 weeks old.",
+          "evidence": [
+            {
+              "url": "https://fastbooks-ai-download.example",
+              "checkedAt": "2026-11-07"
+            }
+          ]
+        },
+        "privacyPolicy": {
+          "result": "pass",
+          "reason": "Privacy policy found and readable.",
+          "evidence": [
+            {
+              "url": "https://fastbooks-ai-download.example/privacy",
+              "checkedAt": "2026-11-07"
+            }
+          ]
+        },
+        "dataUse": {
+          "result": "unknown",
+          "reason": "No policy text to read.",
+          "evidence": [
+            {
+              "url": "https://fastbooks-ai-download.example",
+              "checkedAt": "2026-11-07"
+            }
+          ]
+        },
+        "dataLocation": {
+          "result": "unknown",
+          "reason": "No policy text to read.",
+          "evidence": [
+            {
+              "url": "https://fastbooks-ai-download.example",
+              "checkedAt": "2026-11-07"
+            }
+          ]
+        },
+        "pricingClarity": {
+          "result": "fail",
+          "reason": "No public pricing page.",
+          "evidence": [
+            {
+              "url": "https://fastbooks-ai-download.example",
+              "checkedAt": "2026-11-07"
+            }
+          ]
+        },
+        "securityBasics": {
+          "result": "pass",
+          "reason": "Website uses HTTPS.",
+          "evidence": [
+            {
+              "url": "https://fastbooks-ai-download.example",
+              "checkedAt": "2026-11-07"
+            }
+          ]
+        },
+        "redFlags": {
+          "result": "fail",
+          "reason": "Website is under 6 months old and asks you to download software.",
+          "evidence": [
+            {
+              "url": "https://fastbooks-ai-download.example",
+              "checkedAt": "2026-11-07"
+            }
+          ]
+        }
+      },
+      "redFlags": [
+        "Website is under 6 months old and asks you to download software."
+      ]
+    },
+    "lastChecked": "2026-11-07",
+    "sources": [
+      "https://fastbooks-ai-download.example"
+    ],
+    "needsVerification": [
+      "pricing.small.monthlyUsd",
+      "pricing.medium.monthlyUsd",
+      "pricing.large.monthlyUsd",
+      "pricing.freeTier",
+      "pricing.contract",
+      "pricing.pricingUrl",
+      "setupMinutes",
+      "rulesFlags.recordsCalls",
+      "rulesFlags.announcesRecording",
+      "rulesFlags.hipaaReady",
+      "rulesFlags.outboundAiCalls",
+      "rulesFlags.personalizedPricing"
+    ],
+    "sample": true
+  },
+  {
+    "id": "replybot-pro",
+    "name": "ReplyBot Pro",
+    "vendor": {
+      "company": "Unknown",
+      "website": "https://replybot-pro.example",
+      "domain": "replybot-pro.example"
+    },
+    "description": "Sample scam-style tool (fictional), used to show the Safety Check. Offers to reply to all your reviews automatically.",
+    "category": "Review replies",
+    "useCases": [
+      "reviews"
+    ],
+    "industries": [
+      "any"
+    ],
+    "pricing": {
+      "asOf": "Nov 2026",
+      "small": {
+        "monthlyUsd": "unknown",
+        "note": "No public pricing"
+      },
+      "medium": {
+        "monthlyUsd": "unknown",
+        "note": "No public pricing"
+      },
+      "large": {
+        "monthlyUsd": "unknown",
+        "note": "No public pricing"
+      },
+      "freeTier": "unknown",
+      "contract": "unknown",
+      "cancellation": "Not stated.",
+      "pricingUrl": "unknown"
+    },
+    "worksWith": [],
+    "setupMinutes": "unknown",
+    "setupMode": "self_serve",
+    "languages": [
+      "English"
+    ],
+    "privacyCard": {
+      "trainsOnYourData": {
+        "answer": "unknown",
+        "plain": "We couldn't find an answer to this.",
+        "quote": null,
+        "sourceUrl": null
+      },
+      "canDeleteData": {
+        "answer": "unknown",
+        "plain": "We couldn't find an answer to this.",
+        "quote": null,
+        "sourceUrl": null
+      },
+      "whereStored": {
+        "answer": "unknown",
+        "plain": "We couldn't find an answer to this.",
+        "quote": null,
+        "sourceUrl": null
+      },
+      "sharesOrSells": {
+        "answer": "unknown",
+        "plain": "We couldn't find an answer to this.",
+        "quote": null,
+        "sourceUrl": null
+      },
+      "securityCertification": {
+        "answer": "unknown",
+        "plain": "We couldn't find an answer to this.",
+        "quote": null,
+        "sourceUrl": null
+      }
+    },
+    "rulesFlags": {
+      "recordsCalls": "unknown",
+      "announcesRecording": "unknown",
+      "hipaaReady": "unknown",
+      "outboundAiCalls": "unknown",
+      "personalizedPricing": "unknown"
+    },
+    "badge": "blocked",
+    "safetyCheck": {
+      "ranAt": "2026-11-07",
+      "checks": {
+        "whoIsBehind": {
+          "result": "fail",
+          "reason": "No company name, address or leadership found.",
+          "evidence": [
+            {
+              "url": "https://replybot-pro.example",
+              "checkedAt": "2026-11-07"
+            }
+          ]
+        },
+        "domainAge": {
+          "result": "pass",
+          "reason": "Website domain is over 3 years old.",
+          "evidence": [
+            {
+              "url": "https://replybot-pro.example",
+              "checkedAt": "2026-11-07"
+            }
+          ]
+        },
+        "privacyPolicy": {
+          "result": "fail",
+          "reason": "No privacy policy link found on the website.",
+          "evidence": [
+            {
+              "url": "https://replybot-pro.example",
+              "checkedAt": "2026-11-07"
+            }
+          ]
+        },
+        "dataUse": {
+          "result": "unknown",
+          "reason": "No policy text to read.",
+          "evidence": [
+            {
+              "url": "https://replybot-pro.example",
+              "checkedAt": "2026-11-07"
+            }
+          ]
+        },
+        "dataLocation": {
+          "result": "unknown",
+          "reason": "No policy text to read.",
+          "evidence": [
+            {
+              "url": "https://replybot-pro.example",
+              "checkedAt": "2026-11-07"
+            }
+          ]
+        },
+        "pricingClarity": {
+          "result": "fail",
+          "reason": "No public pricing page.",
+          "evidence": [
+            {
+              "url": "https://replybot-pro.example",
+              "checkedAt": "2026-11-07"
+            }
+          ]
+        },
+        "securityBasics": {
+          "result": "pass",
+          "reason": "Website uses HTTPS.",
+          "evidence": [
+            {
+              "url": "https://replybot-pro.example",
+              "checkedAt": "2026-11-07"
+            }
+          ]
+        },
+        "redFlags": {
+          "result": "fail",
+          "reason": "No privacy policy found.",
+          "evidence": [
+            {
+              "url": "https://replybot-pro.example",
+              "checkedAt": "2026-11-07"
+            }
+          ]
+        }
+      },
+      "redFlags": [
+        "No privacy policy found."
+      ]
+    },
+    "lastChecked": "2026-11-07",
+    "sources": [
+      "https://replybot-pro.example"
+    ],
+    "needsVerification": [
+      "pricing.small.monthlyUsd",
+      "pricing.medium.monthlyUsd",
+      "pricing.large.monthlyUsd",
+      "pricing.freeTier",
+      "pricing.contract",
+      "pricing.pricingUrl",
+      "setupMinutes",
+      "rulesFlags.recordsCalls",
+      "rulesFlags.announcesRecording",
+      "rulesFlags.hipaaReady",
+      "rulesFlags.outboundAiCalls",
+      "rulesFlags.personalizedPricing"
+    ],
+    "sample": true
+  }
+]
