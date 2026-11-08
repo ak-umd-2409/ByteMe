@@ -43,6 +43,7 @@ const base = {
   status: "verified" as const,
   reviewedAt: "2026-11-07",
   demoOnly: true,
+  industries: ["any" as const],
   languages: ["English"],
   reviewRating: undefined,
   reviewCount: 0,

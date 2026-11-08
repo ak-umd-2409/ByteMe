@@ -36,6 +36,17 @@ export function SampleTag() {
   return <span className={cx(s.chip, t.sampleTag)} title="A made-up tool for the demo. The company and website don't exist.">Sample · not a real product</span>;
 }
 
+/** The same deterministic 0–100 score used to rank this tool, with its five parts on hover. */
+export function FitScoreBadge({ choice, compact = false }: { choice: ToolChoice; compact?: boolean }) {
+  const { total, parts } = choice.score;
+  const detail = `Fit Score ${total}/100: problem ${parts.problem}/35, current tools ${parts.integration}/25, budget ${parts.budget}/20, setup ${parts.setup}/10, reviews ${parts.reviews}/10.`;
+  return (
+    <span className={cx(t.fitScore, compact && t.fitScoreCompact)} title={detail} aria-label={detail}>
+      <b>{total}</b>/100 {compact ? "fit" : "Fit Score"}
+    </span>
+  );
+}
+
 /** How a tool fits with what the owner already uses: the vendor's own connection, never ours. */
 export function connection(r: CatalogRecord | undefined, currentTools: string[]): string {
   if (!r) return "";
@@ -122,13 +133,18 @@ export function WaysToFix({
 }) {
   const [tab, setTab] = useState(0);
   const byId = new Map(catalog.map((r) => [r.id, r]));
-  const kit = recs.problems.flatMap((p) => p.options).find((o) => o.kind === "starter-kit");
   const problem = recs.problems[tab] ?? recs.problems[0];
+  const problemKit = problem?.options.find((o) => o.kind === "starter-kit" && o.kitType === "problem");
+  const kits = [...(recs.starterKits ?? []), ...(problemKit ? [problemKit] : [])].filter(
+    (kit, index, all) => {
+      const signature = kit.choices.map((choice) => choice.tool.id).sort().join("|");
+      return all.findIndex((candidate) => candidate.choices.map((choice) => choice.tool.id).sort().join("|") === signature) === index;
+    },
+  );
   // One card per tool: "Done for you" is often the same tool as "Quick fix", so show it once.
   const options = (problem?.options ?? [])
     .filter((o) => o.kind !== "starter-kit")
     .filter((o, i, all) => all.findIndex((x) => x.kind !== "starter-kit" && x.choices[0]?.tool.id === o.choices[0]?.tool.id) === i);
-  const problemFor = (c: ToolChoice) => recs.problems.find((p) => c.tool.useCases.includes(p.problem.useCase))?.problem.title;
   const worksWith = (c: ToolChoice) => Object.keys(c.tool.integrations).find((k) => biz.currentTools.some((x) => same(x, k)));
 
   // "Why not these?": the engine's exclusions plus blocked catalog tools for this problem.
@@ -141,14 +157,10 @@ export function WaysToFix({
     if (r.badge === "blocked" && problem && r.useCases.includes(problem.problem.useCase) && !left.has(r.id))
       left.set(r.id, { name: r.name, badge: r.badge, reason: blockReason(r) });
 
-  // Only add up setup times the vendors published; otherwise say nothing.
-  const setupKnown = kit?.choices.every((c) => typeof byId.get(c.tool.id)?.setupMinutes === "number") ?? false;
-  const setupMin = kit && setupKnown ? kit.choices.reduce((n, c) => n + (byId.get(c.tool.id)?.setupMinutes as number), 0) : 0;
-
   return (
     <>
       <h1 className={s.title}>Ways to fix it</h1>
-      {recs.problems.some((p) => p.options.some((o) => o.choices.some((c) => byId.get(c.tool.id)?.sample))) && (
+      {[...(recs.starterKits ?? []), ...recs.problems.flatMap((p) => p.options)].some((o) => o.choices.some((c) => byId.get(c.tool.id)?.sample)) && (
         <p className={s.banner}>
           These are <b>sample tools for the demo</b>: the companies are made up. Real tools are being checked now, and only ones that pass our Safety Check and a person's review will appear here.
         </p>
@@ -157,36 +169,50 @@ export function WaysToFix({
         You sign up with each company yourself: MainStreet AI doesn't connect to your accounts. Only ✓ Verified tools, ranked against {biz.budgetAssumed ? `${usd(biz.monthlyBudget)} a month, the budget we assumed because you skipped that question,` : `your ${usd(biz.monthlyBudget)} monthly budget`}. Prices, fit, and setup cautions are shown plainly.
       </p>
 
-      {kit && (
-        <article className={s.card} style={{ maxWidth: "none" }}>
-          <div className={s.cardTop}>
-            <span className={cx(s.badge, s.ok)}>Starter Kit · fixes {kit.choices.length} problems together</span>
-            <div className={s.cardHead}>
-              <h2 className={s.h2}>{kit.choices.length} tools that work together</h2>
-              <span className={s.price}>{usd(kit.monthlyPrice)}<small>/mo</small></span>
-            </div>
-            <span className={s.small}>
-              {kit.monthlyPrice <= biz.monthlyBudget ? `${usd(biz.monthlyBudget - kit.monthlyPrice)} under ${budgetWord(biz)}` : `${usd(kit.monthlyPrice - biz.monthlyBudget)} over ${budgetWord(biz)}`}
-              {setupMin ? ` · about ${setupMin < 60 ? `${setupMin} minutes` : `${Math.round(setupMin / 30) / 2} ${Math.round(setupMin / 30) / 2 === 1 ? "hour" : "hours"}`} to set up` : ""}
-            </span>
+      {kits.length > 0 && (
+        <section className={t.kitStack} aria-labelledby="starter-kits-title">
+          <div>
+            <h2 className={s.h2} id="starter-kits-title">Starter kits</h2>
+            <p className={s.small}>Bundles of complementary tools: one can match your kind of business, and one can focus on the problem selected below.</p>
           </div>
-          <div className={t.kitRows}>
-            {kit.choices.map((c) => (
-              <button type="button" className={t.kitRow} key={c.tool.id} onClick={() => openTool(c.tool.id)}>
-                <Logo id={c.tool.id} name={c.tool.name} />
-                <b>{c.tool.name}</b>
-                <span className={t.meta}>
-                  {[problemFor(c), usd(c.tool.monthlyPrice), worksWith(c) && `works with ${worksWith(c)}`, byId.get(c.tool.id)?.sample && "sample tool"].filter(Boolean).join(" · ")}
-                </span>
-                <span className={t.chev} aria-hidden="true">›</span>
-              </button>
-            ))}
-          </div>
-          <p className={t.whyPick}>{kit.description} {kit.note}</p>
-        </article>
+          {kits.map((kit) => {
+            const setupKnown = kit.choices.every((c) => typeof byId.get(c.tool.id)?.setupMinutes === "number");
+            const setupMin = setupKnown ? kit.choices.reduce((n, c) => n + (byId.get(c.tool.id)?.setupMinutes as number), 0) : 0;
+            return (
+              <article className={s.card} style={{ maxWidth: "none" }} key={`${kit.kitType}-${kit.kitFor}`}>
+                <div className={s.cardTop}>
+                  <span className={cx(s.badge, kit.kitType === "industry" ? s.ok : s.grey)}>
+                    {kit.kitType === "industry" ? "Industry kit" : "Problem kit"} · {kit.choices.length} tools bundled
+                  </span>
+                  <div className={s.cardHead}>
+                    <h3 className={s.h2}>{kit.title}</h3>
+                    <span className={s.price}>{usd(kit.monthlyPrice)}<small>/mo total</small></span>
+                  </div>
+                  <span className={s.small}>
+                    {kit.monthlyPrice <= biz.monthlyBudget ? `${usd(biz.monthlyBudget - kit.monthlyPrice)} under ${budgetWord(biz)}` : `${usd(kit.monthlyPrice - biz.monthlyBudget)} over ${budgetWord(biz)}`}
+                    {setupMin ? ` · about ${setupMin < 60 ? `${setupMin} minutes` : `${Math.round(setupMin / 30) / 2} ${Math.round(setupMin / 30) / 2 === 1 ? "hour" : "hours"}`} to set up` : ""}
+                  </span>
+                </div>
+                <div className={t.kitRows}>
+                  {kit.choices.map((c) => (
+                    <button type="button" className={t.kitRow} key={c.tool.id} onClick={() => openTool(c.tool.id)}>
+                      <Logo id={c.tool.id} name={c.tool.name} />
+                      <span className={t.kitName}><b>{c.tool.name}</b><FitScoreBadge choice={c} compact /></span>
+                      <span className={t.meta}>
+                        {[c.fitFor.title, usd(c.tool.monthlyPrice), worksWith(c) && `works with ${worksWith(c)}`, byId.get(c.tool.id)?.sample && "sample tool"].filter(Boolean).join(" · ")}
+                      </span>
+                      <span className={t.chev} aria-hidden="true">›</span>
+                    </button>
+                  ))}
+                </div>
+                <p className={t.whyPick}>{kit.description} {kit.note}</p>
+              </article>
+            );
+          })}
+        </section>
       )}
 
-      <h2 className={s.h2} style={{ marginTop: 8 }}>{kit ? "Or fix one problem at a time" : "Fix one problem at a time"}</h2>
+      <h2 className={s.h2} style={{ marginTop: 8 }}>{kits.length ? "Or fix one problem at a time" : "Fix one problem at a time"}</h2>
       {recs.problems.length > 1 && (
         <div className={s.row} role="group" aria-label="Problem">
           {recs.problems.map((p, i) => (
@@ -213,6 +239,7 @@ export function WaysToFix({
                   </div>
                   <div className={s.row} style={{ gap: 6 }}>
                     <SafetyBadge badge={r?.badge ?? c.tool.status} />
+                    <FitScoreBadge choice={c} />
                     {r?.sample && <SampleTag />}
                   </div>
                 </div>
@@ -324,6 +351,7 @@ export function ToolDetail({
           <div className={s.cardTop}>
             <div className={s.row} style={{ gap: 6 }}>
               <SafetyBadge badge={r.badge} big />
+              {choice && <FitScoreBadge choice={choice} />}
               {r.sample && <SampleTag />}
             </div>
             <div className={s.cardHead}>
@@ -436,6 +464,7 @@ export function Compare({ rs, choices, biz, openTool }: { rs: CatalogRecord[]; c
     return list.length ? list.join(", ") : biz ? "None of yours" : "—";
   };
   const rows: [string, (r: CatalogRecord) => string][] = [
+    ["Fit Score", (r) => choices.get(r.id) ? `${choices.get(r.id)!.score.total}/100` : "—"],
     ["Cost a month", (r) => (price(r) === null ? "Not public" : usd(price(r)!))],
     ["Works with your tools", yours],
     ["Setup", (r) => (r.setupMinutes === "unknown" ? "Unknown" : `About ${r.setupMinutes} min, ${r.setupMode === "self_serve" ? "yourself" : "with help"}`)],
