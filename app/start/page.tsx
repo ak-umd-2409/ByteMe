@@ -13,5 +13,6 @@ export default function StartPage() {
   const lookup: LookupEntry[] = loadCatalog()
     .map((r) => ({ name: r.name, domain: r.vendor.domain.replace(/^www\./, "").toLowerCase(), status: r.badge, checked: r.lastChecked ?? null, sample: Boolean(r.sample) }))
     .filter((e) => e.domain);
-  return <Journey lookup={lookup} />;
+  // Screens 5–7 show the full tool records (privacy answers, safety results).
+  return <Journey lookup={lookup} catalog={loadCatalog()} />;
 }
