@@ -161,7 +161,7 @@ export async function askCardAi(pages: Record<CardPageKind, PageFact>, deps: Col
   const result = await llmJson(
     deps.llm ?? getLlmProvider(),
     replySchema,
-    { task: "catalog.card", system: CARD_SYSTEM, user, maxTokens: 2_000 },
+    { task: "catalog.card", system: CARD_SYSTEM, user, maxTokens: 8_000 },
     { cache: deps.cache },
   );
   if (!result.ok) return emptyCardAi();

@@ -124,7 +124,7 @@ async function ask<K extends readonly (keyof Ai)[]>(
   deps: CollectDeps,
 ): Promise<Partial<Ai> | null> {
   const user = sources.map((p) => `PAGE ${p.finalUrl}\n"""\n${p.text.slice(0, maxChars)}\n"""`).join("\n\n");
-  const result = await llmJson(deps.llm ?? getLlmProvider(), schema, { task, system, user, maxTokens: 700 }, { cache: deps.cache });
+  const result = await llmJson(deps.llm ?? getLlmProvider(), schema, { task, system, user, maxTokens: 4_000 }, { cache: deps.cache });
   if (!result.ok) return null;
   const value = result.value as Record<string, RawAnswer>;
   const out: Record<string, AiAnswer<string>> = {};

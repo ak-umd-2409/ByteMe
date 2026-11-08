@@ -216,6 +216,11 @@ describe("fillCard: answers", () => {
     assert.equal((await fill(fromPricing, {}, { privacyPage })).card.ai.sharesOrSells, "unknown");
   });
 
+  it("leaves room for models that think before they answer (their reply was cut off at 2,000)", async () => {
+    const { llm } = await fill(goodReply());
+    assert.ok((llm.calls[0].maxTokens ?? 0) >= 8_000);
+  });
+
   it("tells the AI the pages are untrusted and to quote word for word", async () => {
     const { llm } = await fill(goodReply());
     assert.equal(llm.calls.length, 1);
