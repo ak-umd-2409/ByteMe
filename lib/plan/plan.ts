@@ -259,7 +259,7 @@ export function buildPlan(input: PlanInput): Plan {
       });
       continue;
     }
-    if (r.badge !== "verified") {
+    if (r.badge !== "verified" || !r.reviewedAt) {
       notes.push(`${r.name} isn't Verified, so it isn't in your plan.`);
       continue;
     }

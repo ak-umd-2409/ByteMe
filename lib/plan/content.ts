@@ -34,11 +34,11 @@ export function readyContent(business: Pick<BusinessCard, "name" | "hours" | "ad
   const phone = clean(business.phone);
   const website = clean(business.website)?.replace(/^https?:\/\//, "").replace(/\/$/, "") ?? null;
 
-  // Maryland needs everyone's consent to record a call, so the greeting says so whenever
-  // a tool in the plan records calls.
+  // A recording tool requires a reviewed notice and consent flow before activation.
+  // The draft must not imply that a generic announcement alone supplies consent.
   const byId = new Map(catalog.map((r) => [r.id, r]));
   const records = plan.sections.some((s) => s.tool && byId.get(s.tool.id)?.rulesFlags.recordsCalls === true);
-  const recorded = records ? " This call is recorded so we can help you better." : "";
+  const recorded = records ? " [If calls are recorded, add a legally reviewed notice and consent flow before enabling recording.]" : "";
 
   const out: ReadyText[] = [];
 

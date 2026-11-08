@@ -4,7 +4,7 @@ import { useState } from "react";
 import s from "../start/start.module.css";
 
 /** One-tap copy (spec §5.2). Says "Copied" for a moment; falls back to selecting the text. */
-export function CopyButton({ text, label = "Copy" }: { text: string; label?: string }) {
+export function CopyButton({ text, label = "Copy", doneLabel = "✓ Copied" }: { text: string; label?: string; doneLabel?: string }) {
   const [done, setDone] = useState(false);
   return (
     <button
@@ -21,7 +21,7 @@ export function CopyButton({ text, label = "Copy" }: { text: string; label?: str
         }
       }}
     >
-      {done ? "✓ Copied" : label}
+      {done ? doneLabel : label}
     </button>
   );
 }
