@@ -12,7 +12,8 @@
     "safety:check": "node --experimental-strip-types --no-warnings scripts/safety-check.ts",
     "catalog:build": "node --experimental-strip-types --no-warnings scripts/catalog-build.ts",
     "catalog:approve": "node --experimental-strip-types --no-warnings scripts/catalog-approve.ts",
-    "catalog:combine": "node --experimental-strip-types --no-warnings scripts/catalog-combine.ts"
+    "catalog:combine": "node --experimental-strip-types --no-warnings scripts/catalog-combine.ts",
+    "catalog:logos": "node --experimental-strip-types --no-warnings scripts/fetchLogos.ts"
   },
   "dependencies": {
     "next": "^16.0.0",

@@ -1,0 +1,77 @@
+{
+  "birdeye": {
+    "path": "/logos/birdeye.png",
+    "sourceUrl": "https://cdn2.birdeye.com/version2/favicons/apple-touch-icon.png?v=eE5Y5nEK68",
+    "fetchedAt": "2026-11-08T21:58:19.838Z"
+  },
+  "brevo": {
+    "path": "/logos/brevo.svg",
+    "sourceUrl": "https://corp-backend.brevo.com/wp-content/uploads/2025/07/Brevo_logo.svg",
+    "fetchedAt": "2026-11-08T21:58:20.813Z"
+  },
+  "calendly": {
+    "path": "/logos/calendly.png",
+    "sourceUrl": "https://calendly.com/media/favicon/apple-touch-icon.png",
+    "fetchedAt": "2026-11-08T21:58:20.978Z"
+  },
+  "chatbase": {
+    "path": "/logos/chatbase.ico",
+    "sourceUrl": "https://www.chatbase.co/favicon.ico",
+    "fetchedAt": "2026-11-08T21:58:21.125Z"
+  },
+  "dialpad": {
+    "path": "/logos/dialpad.png",
+    "sourceUrl": "https://www.dialpad.com/assets/images/favicons/favicon-192x192.png",
+    "fetchedAt": "2026-11-08T21:58:21.371Z"
+  },
+  "grammarly": {
+    "path": "/logos/grammarly.png",
+    "sourceUrl": "https://static-web.grammarly.com/cms/master/public/favicon-32x32.png",
+    "fetchedAt": "2026-11-08T21:58:21.678Z"
+  },
+  "intercom": {
+    "path": "/logos/intercom.png",
+    "sourceUrl": "https://www.intercom.com/intercom-marketing-site/favicons/favicon-32x32.png",
+    "fetchedAt": "2026-11-08T21:58:39.997Z"
+  },
+  "jane": {
+    "path": "/logos/jane.png",
+    "sourceUrl": "https://jane.app/apple-touch-icon.png",
+    "fetchedAt": "2026-11-08T21:58:22.237Z"
+  },
+  "microsoft-copilot": {
+    "path": "/logos/microsoft-copilot.ico",
+    "sourceUrl": "https://www.microsoft.com/favicon.ico?v2",
+    "fetchedAt": "2026-11-08T21:58:23.074Z"
+  },
+  "notion": {
+    "path": "/logos/notion.png",
+    "sourceUrl": "https://www.notion.com/front-static/logo-ios.png",
+    "fetchedAt": "2026-11-08T21:58:23.246Z"
+  },
+  "proposify": {
+    "path": "/logos/proposify.png",
+    "sourceUrl": "https://www.proposify.com/hubfs/favicon.png",
+    "fetchedAt": "2026-11-08T21:58:23.685Z"
+  },
+  "semrush": {
+    "path": "/logos/semrush.png",
+    "sourceUrl": "https://www.semrush.com/__static__/apple-touch-icon.fe16ae843d17.png",
+    "fetchedAt": "2026-11-08T21:58:23.829Z"
+  },
+  "tidio": {
+    "path": "/logos/tidio.png",
+    "sourceUrl": "https://www.tidio.com/images/favicon/web-app-manifest-512x512.png",
+    "fetchedAt": "2026-11-08T21:58:24.494Z"
+  },
+  "upfirst": {
+    "path": "/logos/upfirst.png",
+    "sourceUrl": "https://upfirst.ai/apple-touch-icon.png",
+    "fetchedAt": "2026-11-08T21:58:27.687Z"
+  },
+  "workiz": {
+    "path": "/logos/workiz.png",
+    "sourceUrl": "https://www.workiz.com/icon.png",
+    "fetchedAt": "2026-11-08T21:58:28.051Z"
+  }
+}
