@@ -1,7 +1,7 @@
 # The owner journey: API contract
 
 **For:** the frontend teammate.
-**Status:** backend only. No UI files were changed, and the existing endpoints and the home page work exactly as before.
+**Status:** backend, plus a page at **`/start`** built from the approved wireframes v1 (`docs/specs/b-wireframes.md`, screens 1–4). The home page (`/`) and the existing endpoints are unchanged.
 
 The goal is that an owner types their business name, answers a few relevant questions, and leaves understanding what is holding the business back and how MainStreet AI helps. They should never feel they are filling in a questionnaire.
 
@@ -38,7 +38,7 @@ That is about **11 inputs and 9 information panels before the first recommendati
 | Item | Problem | Now |
 |---|---|---|
 | Team size | Nothing in problem discovery or recommendation uses it | Not asked |
-| Goals (4 chips) | Only nudges the ranking slightly; the owner's problems already say what matters | Not asked |
+| Goals (4 chips) | Only nudges the ranking | Kept as one optional "What matters most? (up to 2)" question, because it's on the approved screen 2. It breaks ties between problems |
 | "35,000+ customers?" | A privacy-law threshold almost no small business meets | Not asked (assumed no, as before) |
 | Outbound-call consent | Only relevant to outbound calling tools, which are already filtered out by default | Not asked |
 | 4 deal-breakers up front | Call recording matters only when a phone tool is possible; the rest are rare | Recording is asked only when relevant; the rest sit in one optional question |
@@ -65,7 +65,8 @@ That is about **11 inputs and 9 information panels before the first recommendati
 | Health data | health businesses only | — | ✓ (HIPAA) | asked, conditionally |
 | Job value, weekly volume, hours | only for estimates | — | — | optional follow-ups |
 | Deal-breakers, "anything else" | no | sometimes | sometimes | optional |
-| Team size, goals, 35k customers | no | — | — | not asked |
+| What matters most (goals) | no | ranking only | — | asked, up to 2 |
+| Team size, 35k customers | no | — | — | not asked |
 | Location, broadband, languages, SBDC, policies, rules list | no | — | rarely | internal / optional elsewhere |
 
 ---
@@ -106,10 +107,22 @@ Response (real output, trimmed):
   ],
   "headline": "We found 2 things worth a look in public information. 4 quick questions will sharpen this. You can skip any of them.",
   "questions": [ …see below… ],
+  "customersSay": {                                     // screen 3 "What customers say"
+    "reviewCount": 23,
+    "themes": [{ "key": "price_concerns", "label": "Price concerns", "polarity": "complaint", "countLabel": "from 1 of 23 reviews",
+                 "example": { "text": "They charged us $360 to replace a $30 pressure switch", "isQuote": true, "who": "Kelly E.", "where": "Facebook (via Birdeye)", "url": "https://…" } },
+               { "key": "praise_quality", "label": "Quality work", "polarity": "praise", "countLabel": "from 10 of 23 reviews", "example": null }],
+    "note": null
+  },
+  "toolsFound": [{ "name": "Squarespace", "url": "https://www.frederickheatingandac.com/" }],
   "sources": { "count": 10, "list": [{ "label": "…", "url": "…" }] },
-  "mode": { "places": "public_snapshot", "sampleData": false }
+  "mode": { "places": "public_snapshot", "sampleData": false, "capturedAt": "2026-11-07" }
 }
 ```
+
+`business.facts` is the "Is this right?" list: `{ id, label, value, source, editable }`. `source` is "From Google", "Your website", "Public listings" or "You told us". `value: null` means "We couldn't find this". Disputed hours are left out of the list, because the `listing.hours` question settles them.
+
+**Not listed?** Send `{ "manual": { "name": "Corner Bakery", "town": "Frederick", "website": "https://…" } }` instead of `placeId`. Maryland only for now.
 
 ### Questions
 
@@ -125,6 +138,7 @@ Every question has the same shape:
   default: Answer;              // pre-filled (e.g. tools we already saw) or null
   ifSkipped: string;            // what we'll assume; show on "Skip"
   optional: boolean;            // true → fine behind "More preferences"
+  maxSelect?: number;           // multi: most options allowed (goals: 2)
   showIf?: { questionId, includesAny: string[] };   // use journey.visible(q, answers)
   unit?, min?, max?, placeholder?;                  // number questions
   affects: ("problems" | "recommendations" | "estimate" | "next_step")[];
@@ -142,6 +156,7 @@ Which questions appear depends on the business. The full set:
 | `tools` | When a relevant tool might connect to something we couldn't detect. `default` pre-ticks what we saw | `string[]` or `["none"]` |
 | `budget` | Always | `"up_to_50"`, `"up_to_100"`, `"up_to_200"` or `"over_200"` |
 | `setup` | Always | `"self"` or `"help"` |
+| `goals` | Always (screen 2 "What matters most?") | up to 2 of `more_customers`, `save_time`, `better_reviews`, `get_paid_faster` |
 | `health_data` | Health businesses only | `"yes"` or `"no"` |
 | `deal_breakers` (optional) | Always | `string[]` from `no_contract`, `spanish_required`, `offline_required` |
 | `anything_else` (optional) | Always | free text, ≤ 300 chars |
@@ -162,6 +177,8 @@ Request:
 - `null` clears an answer (the owner skipped it after all).
 - `answers: {}` is valid. The owner can skip everything and still gets results from public evidence.
 - An invalid answer doesn't fail the call. It comes back in `ignored: [{ questionId, reason }]`.
+- **Per-problem answers:** `"problem.<key>": "yes" | "no"` for any option of the `problems` question. This is the "Might apply. Tell us." card, and it doesn't touch the others. A "yes" to `missed_inquiries` also makes `call_recording` visible.
+- **Corrections:** `"edit.name" | "edit.address" | "edit.phone" | "edit.website" | "edit.hours": "text"` (≤ 200 chars). The fact then shows "You told us".
 
 Response (real output, Frederick, owner ticked missed calls and gave two numbers):
 
@@ -217,7 +234,7 @@ Response (real output, Frederick, owner ticked missed calls and gave two numbers
 - **Every evidence item has a source.** Public findings carry `url` and `links` (for listing mismatches, every listing involved). Owner answers say "You told us". Industry patterns are never shown as evidence.
 - A listing mismatch is one item, with a `title` ("Your hours are different on different sites") and a `text` that names both sides.
 - **`impact` is null until the owner has given the numbers it needs** (`impactNeeds` lists the follow-up ids). When it appears, `math` shows the arithmetic, `yourNumbers` shows what they told us, and `assumed` names every industry assumption still in it. Free fixes and reviews never get a dollar figure; `impactNote` says why.
-- `followUps` holds at most 3 optional number questions, only for the top opportunities. Answering one moves its estimate into `impact`.
+- `followUps` holds at most 4 optional number questions, only for the top opportunities. A shared number like typical job value is asked once and used everywhere. Answering one moves its estimate into `impact`.
 - `recommendation.request` is exactly the body `/api/recommend` accepts. It includes only the focused opportunities that need a tool, and every skipped preference shows up in `assumptions`.
 - Picking the right listing value turns `fix.nextStep` into an exact list, e.g. "Change BBB, Yelp (listing 1), Birdeye and your website to show “Mon–Fri 7 AM–5 PM · Sat 8 AM–12 PM”. Then show the same address and phone number on every listing, and merge duplicate listings."
 - Choosing, wording, ranking and money figures are deterministic code: the same context and answers give the same output. If an LLM key is configured, it is used only where it already was, to read reviews and websites during `/start`.
@@ -239,17 +256,24 @@ The token is `j1.` + base64url(deflated JSON), about 5–6 KB for the real busin
 
 ---
 
-## 4. Suggested screens (for the frontend teammate to decide)
+## 4. The screens (built at `/start`, from wireframes v1)
 
-These are suggestions only; nothing here was built.
+`app/start/` (`page.tsx`, `Journey.tsx`, `start.module.css`) follows the approved style board: tokens, Tiro Bangla and Spectral (self-hosted in `public/fonts`, OFL), hard-shadow buttons, soft fields, stamp badges, two-part cards, and the step line. The styles are scoped, so the home page is untouched. Screen by screen:
 
-1. **Find:** the existing search box. On pick → `journey.start(placeId)`.
-2. **Here's what we learned:** `business` as a card, then `learned` as 3–4 lines, each with its source links. Show `headline` above the questions.
-3. **A few quick questions:** render `questions` where `!optional && journey.visible(q, answers)`, one per row or one per screen. Put "Skip" under each, with `ifSkipped` as its tooltip. Put optional ones behind "More preferences". Use `why` as the helper text.
-4. **What's holding you back:** show `opportunities` as 2–3 cards with headline, whyItMatters, `statusLabel` as a chip, up to 3 evidence lines with links, `counterEvidence` if present, and `fix.nextStep`. If `impact` exists, show the range and `math`. If not, show the `followUps` that match `impactNeeds` inline ("Want a dollar estimate? 2 quick numbers"). Then `alsoNoticed` and `toCheck` as one-liners, and `youToldUs` plus `assumptions` in an "Edit your answers" drawer.
-5. **How we can help:** if `recommendation.ready`, POST `recommendation.request` to `/api/recommend`, exactly as today. Otherwise show `recommendation.reason`.
+1. **Landing:** the stamp, the promise, and "Find my AI tools". "Saw an AI tool in an ad?" looks the domain up in `lib/catalog` and says Verified, Not yet reviewed, Blocked, or "not in our list yet".
+2. **Find your business:** name and town → `/api/business/search` (on tap), up to 3 rows, and "Not listed? Enter it yourself" (→ `manual`). The 3 quick questions are budget, setup help and what matters most (up to 2). There's an optional paste-reviews box. "Read my business" → loading checklist → `/start`.
+3. **Check what we found:** `business.facts` with source chips and Edit (→ `edit.*`), the amber "Which is right?" box (→ `listing.*`), `customersSay` and `toolsFound`, and the tools chips (→ `tools`). "Where we looked" lists every source. "Looks right" → `/answer`.
+4. **What's costing you:**
+   - One summary sentence. A total appears only from estimates built on the owner's numbers, with "not proven lost revenue" under it.
+   - Up to 3 cards: badge, headline, money line or the numbers that unlock it, "Why we think this" (proof first, counter-evidence, then the math and its named assumption), and the first step.
+   - "Might apply. Tell us." cards (→ `problem.<key>`), plus the call-recording question when relevant.
+   - "Also noticed", "Something else slowing you down?", "Anything a tool must have?", and "What you told us" with every assumption.
+5. **Ways to fix it** (screens 5–8 aren't designed yet): a plain list from `/api/recommend` in the same style, to be replaced by the next wireframes.
 
-The existing panels (ContextStrip, RulesPanel, AboutYou, ProblemsOverview) can stay as optional "details" or be retired. The older endpoints keep working either way.
+**Differences from the wireframes, on purpose:**
+- **No starting-guess dollar amounts.** The fields start empty and say "Only you know these. We won't guess them." This follows the rule of no financial impact without the owner's input.
+- **No "Team" row.** Team size isn't used anywhere.
+- **No "For reviewers" link** until screen 8 exists.
 
 ---
 

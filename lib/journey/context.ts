@@ -23,7 +23,7 @@ export interface JourneyState {
   listings: ListingsCheck | null;
   /** Source links for the "N public sources" line. */
   sources: { label: string; url: string | null }[];
-  mode: { places: string; sampleData: boolean };
+  mode: { places: string; sampleData: boolean; capturedAt?: string | null };
   answers: Answers;
 }
 
@@ -39,7 +39,7 @@ const stateSchema = v.object(
     website: v.nullable(websiteAnalysisSchema),
     listings: v.nullable(listingsSchema),
     sources: v.array(v.object({ label: v.string({ max: 200 }), url: v.nullable(v.string({ max: 500 })) }), { max: 40 }),
-    mode: v.object({ places: v.string({ max: 40 }), sampleData: v.boolean() }),
+    mode: v.object({ places: v.string({ max: 40 }), sampleData: v.boolean(), capturedAt: v.optional(v.nullable(v.string({ max: 40 }))) }),
     answers: v.record(v.unknown(), { maxKeys: 40 }),
   },
   { allowUnknown: true },

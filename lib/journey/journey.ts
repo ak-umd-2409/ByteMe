@@ -3,7 +3,7 @@ import type { ListingField } from "../business/listings.ts";
 import { industryInfo } from "../business/industry.ts";
 import type { OnboardingAnalysis } from "../business/onboarding.ts";
 import { applyCorrections } from "../business/profile.ts";
-import type { Constraint, OnboardingProfile, OwnerInputs } from "../business/types.ts";
+import type { Constraint, FactSource, Goal, OnboardingProfile, OwnerInputs } from "../business/types.ts";
 import { loadCatalog } from "../catalog/index.ts";
 import { PROBLEMS } from "../problems/catalog.ts";
 import { discoverProblems } from "../problems/discover.ts";
@@ -18,6 +18,8 @@ import type {
   Answers,
   Brief,
   BusinessCard,
+  BusinessFact,
+  CustomersSay,
   EvidenceItem,
   ImpactView,
   JourneyAnswerResponse,
@@ -39,7 +41,7 @@ import type {
 
 const MAX_OPPORTUNITIES = 3;
 const MAX_PROBLEM_OPTIONS = 4;
-const MAX_FOLLOW_UPS = 3;
+const MAX_FOLLOW_UPS = 4;
 const DEFAULT_BUDGET = 100;
 
 // ---------- Owner-facing wording ----------
@@ -82,6 +84,28 @@ const DEAL_BREAKERS: Record<string, { label: string; constraint: Constraint }> =
   spanish_required: { label: "Must work in Spanish", constraint: "spanish_required" },
   offline_required: { label: "Must work without internet", constraint: "offline_required" },
 };
+
+const FACT_SOURCE: Record<FactSource, string | null> = {
+  google_places: "From Google",
+  mock_places: "Sample listing",
+  public_listings: "Public listings",
+  website: "Your website",
+  tech_signature: "Your website",
+  review_analysis: "From reviews",
+  owner: "You told us",
+  default: null,
+  derived: "From your listing",
+};
+
+const GOAL_LABEL: Record<Goal, string> = {
+  more_customers: "More customers",
+  save_time: "Save time",
+  better_reviews: "Better reviews",
+  get_paid_faster: "Get paid faster",
+};
+
+const EDITABLE = ["name", "address", "phone", "website", "hours"] as const;
+const EDIT_LABEL: Record<(typeof EDITABLE)[number], string> = { name: "Name", address: "Address", phone: "Phone", website: "Website", hours: "Hours" };
 
 const SOURCE_LABEL: Record<Signal["source"], string> = {
   google_review: "Google review",
@@ -126,7 +150,7 @@ export function stateFromAnalysis(analysis: OnboardingAnalysis, now: Date): Jour
     website: analysis.website,
     listings: analysis.listings,
     sources: sources.slice(0, 40),
-    mode: { places: analysis.mode.places, sampleData: analysis.mode.places === "mock" },
+    mode: { places: analysis.mode.places, sampleData: analysis.mode.places === "mock", capturedAt: analysis.snapshot?.capturedAt ?? null },
     answers: {},
   };
 }
@@ -156,7 +180,27 @@ export function businessCard(state: JourneyState, profile: OnboardingProfile = s
   const hoursConflict = state.listings?.fields.some((f) => f.field === "hours" && f.status === "differs");
   const hoursFromOwner = b.hours.source === "owner";
   const ratingFromPlatform = b.rating.value !== null && (b.rating.source === "google_places" || b.rating.source === "public_listings" || b.rating.source === "mock_places");
+  const label = (src: FactSource | null) => (src ? FACT_SOURCE[src] : null);
+  const fact = (id: BusinessFact["id"], text: string, value: string | null | undefined, src: FactSource | null, editable = true): BusinessFact => ({
+    id,
+    label: text,
+    value: value || null,
+    source: value ? label(src) : null,
+    editable,
+  });
+  const conflict = conflictField(state);
+  const hoursUnsettled = conflict?.field === "hours" && !hoursFromOwner;
+  const facts: BusinessFact[] = [
+    fact("name", "Name", b.name.value, b.name.source),
+    fact("type", "Type", b.industry.value && b.industry.value !== "other" ? b.industryLabel : null, b.industry.source, false),
+    fact("address", "Address", addr?.formatted, b.address.source),
+    fact("phone", "Phone", b.phone.value, b.phone.source),
+    fact("website", "Website", b.website.value, b.website.source),
+    // Disputed hours are settled by the "Which is right?" question instead.
+    ...(hoursUnsettled ? [] : [fact("hours", "Hours", b.hours.value?.join(" · "), b.hours.source)]),
+  ];
   return {
+    facts,
     name: b.name.value ?? "Your business",
     subtitle: [b.industryLabel, where].filter(Boolean).join(" · "),
     address: addr?.formatted || null,
@@ -226,6 +270,37 @@ export function learned(state: JourneyState): LearnedItem[] {
     });
   }
   return items;
+}
+
+export function customersSay(state: JourneyState): CustomersSay {
+  const r = state.reviews;
+  const total = r.reviewCount;
+  const pick = (t: (typeof r.complaints)[number]) => {
+    const e = t.evidence.find((x) => x.quote) ?? t.evidence.find((x) => x.summary) ?? null;
+    if (!e) return null;
+    return { text: (e.quote ?? e.summary)!, isQuote: Boolean(e.quote), who: e.author, where: e.platform ?? null, url: e.url ?? null };
+  };
+  const themes = [
+    ...[...r.complaints].sort((a, b) => b.mentions - a.mentions).map((t) => ({ t, polarity: "complaint" as const, example: pick(t) })),
+    ...[...r.praise].sort((a, b) => b.mentions - a.mentions).map((t) => ({ t, polarity: "praise" as const, example: null })),
+  ]
+    .filter((x) => x.t.mentions > 0)
+    .slice(0, 4)
+    .map(({ t, polarity, example }) => ({ key: t.key, label: t.label, polarity, countLabel: `from ${t.mentions} of ${plural(total, "review")}`, example }));
+  const googleOnly = r.bySource.google > 0 && r.bySource.google === total;
+  const testimonials = r.platforms.some((p) => /testimonial/i.test(p.name));
+  const note = googleOnly
+    ? `Google only shares ${total} reviews, so this is a small sample.`
+    : testimonials
+      ? "Includes testimonials from your own website, which tend to be positive."
+      : total > 0 && total < 10
+        ? "This is a small sample."
+        : null;
+  return { reviewCount: total, themes, note };
+}
+
+export function toolsFound(state: JourneyState): { name: string; url: string | null }[] {
+  return state.profile.technology.detected.map((t) => ({ name: t.name, url: t.evidence[0]?.url ?? null }));
 }
 
 // ---------- Step 3: questions ----------
@@ -432,6 +507,19 @@ export function buildQuestions(state: JourneyState, base: DiscoveryResult = disc
     affects: ["recommendations"],
   });
 
+  questions.push({
+    id: "goals",
+    kind: "multi",
+    text: "What matters most?",
+    why: "When two problems look equally important, we put these first.",
+    maxSelect: 2,
+    options: (Object.keys(GOAL_LABEL) as Goal[]).map((g) => ({ value: g, label: GOAL_LABEL[g] })),
+    default: null,
+    ifSkipped: "We'll rank problems by the evidence alone.",
+    optional: false,
+    affects: ["problems"],
+  });
+
   if (industryInfo(state.profile.business.industry.value ?? "other").handlesHealthData) {
     questions.push({
       id: "health_data",
@@ -478,6 +566,14 @@ export function buildQuestions(state: JourneyState, base: DiscoveryResult = disc
 
 // ---------- Applying answers ----------
 
+/** Whether a question applies given the answers so far. For "problems", a per-problem "yes" counts too. */
+export function isVisible(q: JourneyQuestion, answers: Answers): boolean {
+  if (!q.showIf) return true;
+  const a = answers[q.showIf.questionId];
+  if (Array.isArray(a) && a.some((x) => q.showIf!.includesAny.includes(x))) return true;
+  return q.showIf.questionId === "problems" && q.showIf.includesAny.some((k) => answers[`problem.${k}`] === "yes");
+}
+
 export interface Applied {
   profile: OnboardingProfile;
   confirmed: Set<ProblemKey>;
@@ -495,7 +591,23 @@ export function cleanAnswers(questions: JourneyQuestion[], answers: Answers): { 
   const byId = new Map(questions.map((q) => [q.id, q]));
   const out: Answers = {};
   const ignored: { questionId: string; reason: string }[] = [];
+  const offeredProblems = new Set((byId.get("problems")?.options ?? []).map((o) => o.value).filter((v) => v !== "none"));
   for (const [id, value] of Object.entries(answers)) {
+    if (id.startsWith("problem.")) {
+      // Per-problem form of the "problems" question: "yes" / "no" for one option.
+      if (!offeredProblems.has(id.slice(8))) ignored.push({ questionId: id, reason: "We don't ask about this problem for this business." });
+      else if (value === null || value === undefined) continue;
+      else if (value === "yes" || value === "no") out[id] = value;
+      else ignored.push({ questionId: id, reason: "Answer “yes” or “no”." });
+      continue;
+    }
+    if (id.startsWith("edit.")) {
+      if (!(EDITABLE as readonly string[]).includes(id.slice(5))) ignored.push({ questionId: id, reason: "This detail can't be edited here." });
+      else if (value === null || value === undefined) continue;
+      else if (typeof value === "string" && value.trim().length > 0 && value.length <= 200) out[id] = value.trim();
+      else ignored.push({ questionId: id, reason: "Enter up to 200 characters." });
+      continue;
+    }
     const q = byId.get(id) ?? IMPACT_QUESTIONS.get(id);
     if (!q) {
       ignored.push({ questionId: id, reason: "We don't ask this question for this business." });
@@ -507,7 +619,7 @@ export function cleanAnswers(questions: JourneyQuestion[], answers: Answers): { 
       if (typeof value === "string" && allowed.has(value)) out[id] = value;
       else ignored.push({ questionId: id, reason: "Pick one of the options." });
     } else if (q.kind === "multi") {
-      if (Array.isArray(value) && value.length <= allowed.size && value.every((x) => typeof x === "string" && allowed.has(x))) {
+      if (Array.isArray(value) && value.length <= (q.maxSelect ?? allowed.size) && value.every((x) => typeof x === "string" && allowed.has(x))) {
         const picked = [...new Set(value)];
         out[id] = picked.includes("none") ? ["none"] : picked;
       } else ignored.push({ questionId: id, reason: "Pick from the options." });
@@ -530,11 +642,7 @@ export function applyAnswers(state: JourneyState, questions: JourneyQuestion[], 
   const denied = new Set<ProblemKey>();
   const unchecked = new Set<ProblemKey>();
   const label = (id: string, value: string) => byId.get(id)?.options?.find((o) => o.value === value)?.label ?? value;
-  const shown = (q: JourneyQuestion) => {
-    if (!q.showIf) return true;
-    const a = answers[q.showIf.questionId];
-    return Array.isArray(a) && a.some((x) => q.showIf!.includesAny.includes(x));
-  };
+  const shown = (q: JourneyQuestion) => isVisible(q, answers);
 
   // Problems
   const problemsQ = byId.get("problems");
@@ -544,14 +652,29 @@ export function applyAnswers(state: JourneyState, questions: JourneyQuestion[], 
     if (Array.isArray(a)) {
       for (const key of offered) (a.includes(key) ? confirmed : denied).add(key);
       youToldUs.push({ questionId: "problems", label: "Happens at your business", value: a.includes("none") ? "None of these" : a.map((k) => label("problems", k)).join("; ") });
-    } else offered.forEach((k) => unchecked.add(k));
+    }
+    // Per-problem answers ("Might apply. Tell us." → Yes / No) refine or replace the list answer.
+    for (const key of offered) {
+      const one = answers[`problem.${key}`];
+      if (one === "yes") {
+        confirmed.add(key);
+        denied.delete(key);
+      } else if (one === "no") {
+        denied.add(key);
+        confirmed.delete(key);
+      }
+    }
+    if (!Array.isArray(a)) for (const key of offered) if (!confirmed.has(key) && !denied.has(key)) unchecked.add(key);
+    const said = offered.filter((k) => answers[`problem.${k}`] !== undefined);
+    if (!Array.isArray(a) && said.length)
+      youToldUs.push({ questionId: "problems", label: "Happens at your business", value: said.map((k) => `${label("problems", k)}: ${answers[`problem.${k}`] === "yes" ? "yes" : "no"}`).join("; ") });
   }
   if (confirmed.size) owner.reportedProblems = [...confirmed];
 
   // Listing conflict
   let listingChoice: Applied["listingChoice"] = null;
   const conflict = conflictField(state);
-  const corrections: { hours?: string[]; phone?: string; address?: { formatted: string } } = {};
+  const corrections: { name?: string; website?: string; hours?: string[]; phone?: string; address?: { formatted: string } } = {};
   if (conflict) {
     const a = answers[`listing.${conflict.field}`];
     if (typeof a === "string") {
@@ -622,6 +745,22 @@ export function applyAnswers(state: JourneyState, questions: JourneyQuestion[], 
   if (typeof answers.anything_else === "string") {
     owner.biggestTimeSink = answers.anything_else;
     youToldUs.push({ questionId: "anything_else", label: "Also slowing you down", value: answers.anything_else });
+  }
+
+  // Goals
+  if (Array.isArray(answers.goals) && answers.goals.length) {
+    owner.goals = answers.goals as Goal[];
+    youToldUs.push({ questionId: "goals", label: "What matters most", value: answers.goals.map((g) => GOAL_LABEL[g as Goal] ?? g).join(", ") });
+  }
+
+  // Corrections to the business details ("Is this right?" → Edit)
+  for (const field of EDITABLE) {
+    const value = answers[`edit.${field}`];
+    if (typeof value !== "string") continue;
+    if (field === "hours") corrections.hours = [value];
+    else if (field === "address") corrections.address = { formatted: value };
+    else (corrections as Record<string, unknown>)[field] = value;
+    youToldUs.push({ questionId: `edit.${field}`, label: EDIT_LABEL[field], value });
   }
 
   // Impact numbers

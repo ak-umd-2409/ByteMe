@@ -21,6 +21,33 @@ export interface SourceLink {
 
 // ---------- Step 2: what we learned ----------
 
+/** One line of "Is this right?" (screen 3). */
+export interface BusinessFact {
+  id: "name" | "type" | "address" | "phone" | "website" | "hours";
+  label: string;
+  /** Null = "We couldn't find this". */
+  value: string | null;
+  /** "From Google", "Your website", "Public listings", "You told us"… Null when missing. */
+  source: string | null;
+  /** Edit with the answer id `edit.<id>` (free text). "type" isn't editable here. */
+  editable: boolean;
+}
+
+/** "What customers say" (screen 3). Exact excerpts only, always with who said it and where. */
+export interface CustomersSay {
+  reviewCount: number;
+  themes: {
+    key: string;
+    label: string;
+    polarity: "complaint" | "praise";
+    /** "from 3 of 14 reviews" */
+    countLabel: string;
+    example: { text: string; isQuote: boolean; who: string | null; where: string | null; url: string | null } | null;
+  }[];
+  /** e.g. "Google only shares 5 reviews, so this is a small sample." */
+  note: string | null;
+}
+
 export interface BusinessCard {
   name: string;
   /** "HVAC · Jefferson, MD" */
@@ -32,6 +59,8 @@ export interface BusinessCard {
   hours: string | null;
   /** Only a rating published by Google or a review site, never an average of the handful of reviews we read. */
   rating: { value: number; count: number | null; from: string } | null;
+  /** The same details as a checklist with where each came from. */
+  facts: BusinessFact[];
 }
 
 export interface LearnedItem {
@@ -58,6 +87,8 @@ export interface JourneyQuestion {
   /** One line: why we ask. Shown under the question. */
   why: string;
   options?: QuestionOption[];
+  /** For multi: the most options the owner may pick. */
+  maxSelect?: number;
   /** Pre-filled answer (e.g. tools we already saw). null = nothing pre-selected. */
   default: Answer;
   /** What we do if the owner skips it. Every question can be skipped. */
@@ -152,8 +183,12 @@ export interface JourneyStartResponse {
   /** "We found 2 things worth a look. A few quick questions will sharpen this." */
   headline: string;
   questions: JourneyQuestion[];
+  customersSay: CustomersSay;
+  /** Tools we could see, with where we saw them. */
+  toolsFound: { name: string; url: string | null }[];
   sources: { count: number; list: SourceLink[] };
-  mode: { places: string; sampleData: boolean };
+  /** capturedAt is set for saved public snapshots ("read from public pages saved on …"). */
+  mode: { places: string; sampleData: boolean; capturedAt: string | null };
 }
 
 export interface JourneyAnswerResponse {

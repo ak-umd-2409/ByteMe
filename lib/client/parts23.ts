@@ -117,7 +117,9 @@ export const journey = {
   visible: (question: JourneyQuestion, answers: Record<string, Answer>) => {
     if (!question.showIf) return true;
     const a = answers[question.showIf.questionId];
-    return Array.isArray(a) && a.some((x) => question.showIf!.includesAny.includes(x));
+    if (Array.isArray(a) && a.some((x) => question.showIf!.includesAny.includes(x))) return true;
+    // Per-problem answers ("problem.<key>": "yes") count for the "problems" question.
+    return question.showIf.questionId === "problems" && question.showIf.includesAny.some((k) => answers[`problem.${k}`] === "yes");
   },
 };
 

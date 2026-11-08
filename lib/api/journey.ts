@@ -1,7 +1,7 @@
 import { analyzeBusiness, OnboardingError } from "../business/onboarding.ts";
 import { PlacesError } from "../business/places.ts";
 import { decodeContext, encodeContext, MAX_CONTEXT_CHARS } from "../journey/context.ts";
-import { buildAnswer, buildQuestions, businessCard, cleanAnswers, discoverForJourney, learned, startHeadline, stateFromAnalysis } from "../journey/journey.ts";
+import { buildAnswer, buildQuestions, businessCard, cleanAnswers, customersSay, discoverForJourney, learned, startHeadline, stateFromAnalysis, toolsFound } from "../journey/journey.ts";
 import type { Answers, JourneyAnswerResponse, JourneyStartResponse } from "../journey/types.ts";
 import { log } from "../shared/logger.ts";
 import { v } from "../shared/validate.ts";
@@ -16,7 +16,16 @@ import { errorResponse, type ApiDeps, type ApiResponse } from "./handlers.ts";
 const PLACE_ID = /^[A-Za-z0-9_\-:.]{1,300}$/;
 
 const startBody = v.object({
-  placeId: v.string({ pattern: PLACE_ID }),
+  placeId: v.optional(v.string({ pattern: PLACE_ID })),
+  /** "Not listed? Enter it yourself." Maryland only for now. */
+  manual: v.optional(
+    v.object({
+      name: v.string({ min: 1, max: 120 }),
+      website: v.optional(v.string({ max: 500 })),
+      town: v.optional(v.string({ max: 80 })),
+      category: v.optional(v.string({ max: 80 })),
+    }),
+  ),
   pastedReviews: v.optional(v.string({ max: 20_000 })),
 });
 
@@ -30,9 +39,23 @@ const invalid = (errors: string[]) => errorResponse(400, "invalid_request", "Som
 export async function handleJourneyStart(body: unknown, deps: ApiDeps): Promise<ApiResponse> {
   const parsed = startBody.parse(body);
   if (!parsed.ok) return invalid(parsed.errors);
+  const { placeId, manual, pastedReviews } = parsed.value;
+  if (!placeId && !manual) return invalid(["placeId or manual: choose a business, or type its name"]);
   try {
     const analysis = await analyzeBusiness(
-      { placeId: parsed.value.placeId, pastedReviews: parsed.value.pastedReviews },
+      {
+        ...(placeId
+          ? { placeId }
+          : {
+              manual: {
+                name: manual!.name,
+                ...(manual!.website ? { website: manual!.website } : {}),
+                ...(manual!.category ? { category: manual!.category } : {}),
+                address: { city: manual!.town, state: "Maryland", stateCode: "MD", country: "US", formatted: [manual!.town, "MD"].filter(Boolean).join(", ") },
+              },
+            }),
+        pastedReviews,
+      },
       {
         places: deps.places,
         llm: deps.llm,
@@ -52,8 +75,10 @@ export async function handleJourneyStart(body: unknown, deps: ApiDeps): Promise<
       learned: learned(state),
       headline: startHeadline(base, questions),
       questions,
+      customersSay: customersSay(state),
+      toolsFound: toolsFound(state),
       sources: { count: state.sources.length, list: state.sources },
-      mode: state.mode,
+      mode: { ...state.mode, capturedAt: state.mode.capturedAt ?? null },
     };
     log.info("journey.start", { questions: questions.length, places: state.mode.places });
     return { status: 200, body: response };

@@ -37,8 +37,8 @@ describe("journey start: understand the business", () => {
       assert.ok(s.business.name.length > 0);
       assert.ok(s.learned.length >= 2 && s.learned.length <= 4);
       for (const item of s.learned) assert.ok(item.sources.length > 0 && item.sources.every((x) => x.url), `${item.id} links its sources`);
-      const core = s.questions.filter((q) => !q.optional);
-      assert.ok(core.length <= 6, `at most 6 core questions (got ${core.length})`);
+      const core = s.questions.filter((q) => !q.optional && !q.showIf);
+      assert.ok(core.length <= 6, `at most 6 core questions up front (got ${core.length})`);
       for (const q of s.questions) {
         assert.ok(q.why.length > 10, `${q.id} says why it's asked`);
         assert.ok(q.ifSkipped.length > 3, `${q.id} says what happens if skipped`);
@@ -46,7 +46,7 @@ describe("journey start: understand the business", () => {
       }
       // Things public info already answers, or that rarely matter, are not asked.
       const ids = s.questions.map((q) => q.id);
-      for (const dropped of ["team_size", "goals", "large_customer_list", "outbound_consent"]) assert.ok(!ids.includes(dropped));
+      for (const dropped of ["team_size", "large_customer_list", "outbound_consent"]) assert.ok(!ids.includes(dropped));
       // Nothing internal leaks into the summary.
       const text = JSON.stringify({ learned: s.learned, questions: s.questions });
       assert.doesNotMatch(text, /broadband|census|SBDC|weight|score|confidence/i);
@@ -86,6 +86,16 @@ describe("journey start: understand the business", () => {
     const q = s.questions.find((x) => x.id === "call_recording")!;
     assert.deepEqual(q.showIf, { questionId: "problems", includesAny: ["missed_inquiries"] });
     assert.ok(q.source?.url?.includes("mgaleg.maryland.gov"));
+  });
+
+  it("works for a business typed in by hand (not listed)", async () => {
+    const res = await handleJourneyStart({ manual: { name: "Corner Bakery", town: "Frederick" } }, deps);
+    assert.equal(res.status, 200, JSON.stringify(res.body));
+    const s = res.body as JourneyStartResponse;
+    assert.equal(s.business.name, "Corner Bakery");
+    assert.ok(s.business.facts.find((f) => f.id === "name")?.source === "You told us");
+    const a = await answer(s.context, { budget: "up_to_50" });
+    assert.ok(Array.isArray(a.opportunities));
   });
 
   it("rejects bad input", async () => {
@@ -171,7 +181,7 @@ describe("journey answer: what's holding the business back", () => {
   it("follow-up questions ask only for the numbers the top problems need", async () => {
     const s = await start(FREDERICK);
     const a = await answer(s.context, { problems: ["slow_quotes"] });
-    assert.ok(a.followUps.length >= 1 && a.followUps.length <= 3);
+    assert.ok(a.followUps.length >= 1 && a.followUps.length <= 4);
     assert.ok(a.followUps.every((q) => q.kind === "number" && q.optional));
     const quotes = a.opportunities.find((o) => o.problemKey === "slow_quotes")!;
     assert.deepEqual(quotes.impactNeeds, ["impact.slow_quotes.hours_per_week"]);
@@ -212,6 +222,66 @@ describe("journey answer: what's holding the business back", () => {
     const titles = info.evidence.map((e) => e.title);
     assert.equal(new Set(titles).size, titles.length);
     assert.equal(info.statusLabel, "Seen in 6 public listings");
+  });
+});
+
+describe("journey: what the screens need (wireframes v1)", () => {
+  it("lists each business fact with where it came from, and hides disputed hours", async () => {
+    const f = await start(FREDERICK);
+    const byId = Object.fromEntries(f.business.facts.map((x) => [x.id, x]));
+    assert.equal(byId.name.source, "Public listings");
+    assert.equal(byId.type.editable, false);
+    assert.ok(byId.hours.value);
+    const d = await start(DAVES);
+    assert.ok(!d.business.facts.some((x) => x.id === "hours"), "settled by the Which-is-right question");
+  });
+
+  it("an edit replaces the fact and says “You told us”", async () => {
+    const s = await start(FREDERICK);
+    const a = await answer(s.context, { "edit.phone": "(240) 555-0100" });
+    const phone = a.business.facts.find((x) => x.id === "phone")!;
+    assert.equal(phone.value, "(240) 555-0100");
+    assert.equal(phone.source, "You told us");
+    assert.ok(a.youToldUs.some((y) => y.questionId === "edit.phone"));
+    const bad = await answer(s.context, { "edit.type": "Bakery" });
+    assert.ok(bad.ignored.some((i) => i.questionId === "edit.type"));
+  });
+
+  it("customer themes count reviews and carry an exact, attributed excerpt", async () => {
+    const d = await start(DAVES);
+    assert.ok(d.customersSay.reviewCount > 0);
+    for (const t of d.customersSay.themes) {
+      assert.match(t.countLabel, /^from \d+ of \d+ reviews?$/);
+      if (t.example) assert.ok(t.example.url && (t.example.who || t.example.where));
+    }
+    const f = await start(FREDERICK);
+    assert.match(f.customersSay.note ?? "", /testimonials/);
+    assert.ok(f.toolsFound.some((t) => t.name === "Squarespace" && t.url));
+    assert.ok(f.mode.capturedAt);
+  });
+
+  it("per-problem Yes/No works without touching the others", async () => {
+    const s = await start(FREDERICK);
+    const a = await answer(s.context, { "problem.missed_inquiries": "yes" });
+    assert.ok(a.opportunities.some((o) => o.problemKey === "missed_inquiries" && o.basis === "you"));
+    assert.ok(a.toCheck.some((t) => t.problemKey === "slow_quotes"), "unanswered ones stay not-checked");
+    const b = await answer(a.context, { "problem.slow_quotes": "no" });
+    assert.ok(!b.toCheck.some((t) => t.problemKey === "slow_quotes"));
+    assert.ok(b.toCheck.some((t) => t.problemKey === "no_customer_follow_up"));
+    const rec = await answer(a.context, { call_recording: "no" });
+    assert.ok(rec.recommendation.ready && rec.recommendation.request.business.dealBreakers.includes("no-recording"), "recording question applies after a per-problem yes");
+    const bad = await answer(s.context, { "problem.no_online_booking": "yes" });
+    assert.ok(bad.ignored.some((i) => i.questionId === "problem.no_online_booking"), "already evidenced, not asked");
+  });
+
+  it("“what matters most” takes up to 2", async () => {
+    const s = await start(FREDERICK);
+    const q = s.questions.find((x) => x.id === "goals")!;
+    assert.equal(q.maxSelect, 2);
+    const a = await answer(s.context, { goals: ["save_time", "more_customers", "better_reviews"] });
+    assert.ok(a.ignored.some((i) => i.questionId === "goals"));
+    const b = await answer(s.context, { goals: ["save_time"] });
+    assert.ok(b.youToldUs.some((y) => y.questionId === "goals" && y.value === "Save time"));
   });
 });
 
