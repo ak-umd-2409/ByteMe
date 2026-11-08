@@ -5,8 +5,9 @@
 import type { AiAnswer, PageFact } from "../../safety/types.ts";
 import type { ListEntry } from "../list.ts";
 
-export type CardPageKind = "home" | "pricing" | "features" | "integrations" | "help";
-export const CARD_PAGE_KINDS: readonly CardPageKind[] = ["home", "pricing", "features", "integrations", "help"];
+/** "privacy" is not fetched again: it is the Safety Check's privacy page, passed in, for sharesOrSells. */
+export type CardPageKind = "home" | "pricing" | "features" | "integrations" | "help" | "privacy";
+export const CARD_PAGE_KINDS: readonly CardPageKind[] = ["home", "pricing", "features", "integrations", "help", "privacy"];
 
 export type PlanSize = "small" | "medium" | "large";
 export type YesNo = "yes" | "no";
