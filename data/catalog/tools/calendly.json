@@ -111,7 +111,7 @@
     "outboundAiCalls": false,
     "personalizedPricing": "unknown"
   },
-  "badge": "listed",
+  "badge": "verified",
   "safetyCheck": {
     "ranAt": "2026-11-08",
     "checks": {
@@ -237,5 +237,7 @@
     "rulesFlags.hipaaReady",
     "rulesFlags.personalizedPricing",
     "setupMode"
-  ]
+  ],
+  "reviewedAt": "2026-11-08",
+  "reviewedBy": "Rishabh"
 }
