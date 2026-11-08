@@ -1,7 +1,7 @@
 import { analyzeBusiness, OnboardingError } from "../business/onboarding.ts";
 import { PlacesError } from "../business/places.ts";
 import { decodeContext, encodeContext, MAX_CONTEXT_CHARS } from "../journey/context.ts";
-import { buildAnswer, buildQuestions, businessCard, cleanAnswers, customersSay, discoverForJourney, learned, startHeadline, stateFromAnalysis, toolsFound } from "../journey/journey.ts";
+import { buildAnswer, buildQuestions, businessCard, cleanAnswers, couldNotCheck, customersSay, discoverForJourney, learned, startHeadline, stateFromAnalysis, toolsFound } from "../journey/journey.ts";
 import type { Answers, JourneyAnswerResponse, JourneyStartResponse } from "../journey/types.ts";
 import { log } from "../shared/logger.ts";
 import { v } from "../shared/validate.ts";
@@ -76,6 +76,7 @@ export async function handleJourneyStart(body: unknown, deps: ApiDeps): Promise<
       headline: startHeadline(base, questions),
       questions,
       customersSay: customersSay(state),
+      couldNotCheck: couldNotCheck(analysis),
       toolsFound: toolsFound(state),
       sources: { count: state.sources.length, list: state.sources },
       mode: { ...state.mode, capturedAt: state.mode.capturedAt ?? null },

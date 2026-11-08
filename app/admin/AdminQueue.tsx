@@ -288,6 +288,24 @@ export function AdminQueue() {
         </article>
         <article className={s.card}>
           <div className={s.cardTop}>
+            <h2 className={s.h3}>Live services</h2>
+          </div>
+          <ul className={cx(t.ticks, t.plain)}>
+            <li className={queue.services.googlePlaces ? undefined : t.warnItem}>
+              Google business search: {queue.services.googlePlaces ? "on" : "off (owners can only use the saved businesses)"}
+            </li>
+            <li className={queue.services.ai ? undefined : t.warnItem}>
+              AI ({queue.services.aiModel}): {queue.services.ai ? "on" : "off (rules only; the Safety Check holds tools it can't confirm)"}
+            </li>
+            <li>
+              AI spent: ${queue.services.aiSpentUsd.toFixed(4)} of the ${queue.services.aiCapUsd} cap{queue.services.aiSpendShared ? "" : " (counted on this server only until storage is connected)"}
+            </li>
+            <li className={queue.services.weeklyRun ? undefined : t.warnItem}>Weekly discovery run: {queue.services.weeklyRun ? "on" : "off (set CRON_SECRET)"}</li>
+            <li>Sample tools: {queue.services.samplesHidden ? "hidden" : "shown, labelled as samples"}</li>
+          </ul>
+        </article>
+        <article className={s.card}>
+          <div className={s.cardTop}>
             <h2 className={s.h3}>Catalog today</h2>
           </div>
           <div className={s.row}>

@@ -94,7 +94,7 @@ const FACT_SOURCE: Record<FactSource, string | null> = {
   review_analysis: "From reviews",
   owner: "You told us",
   default: null,
-  derived: "From your listing",
+  derived: "Our best guess",
 };
 
 const GOAL_LABEL: Record<Goal, string> = {
@@ -301,6 +301,19 @@ export function customersSay(state: JourneyState): CustomersSay {
 
 export function toolsFound(state: JourneyState): { name: string; url: string | null }[] {
   return state.profile.technology.detected.map((t) => ({ name: t.name, url: t.evidence[0]?.url ?? null }));
+}
+
+/** What we couldn't look at, said plainly so a thin result isn't mistaken for a clean bill of health. */
+export function couldNotCheck(analysis: OnboardingAnalysis): string[] {
+  const out: string[] = [];
+  const w = analysis.website;
+  if (!analysis.profile.business.website.value) out.push("You don't have a website we could find, so we couldn't check online booking, prices or policies.");
+  else if (w && !w.reachable && !w.limitations.some((l) => /search engine/i.test(l)))
+    out.push(`We couldn't read your website (${w.problem ? w.problem.replace(/\.$/, "").toLowerCase() : "it didn't respond"}), so we couldn't check online booking, prices or policies.`);
+  if (analysis.reviews.reviewCount === 0) out.push("We found no reviews to read, so we couldn't learn what customers say. You can paste a few on the first screen.");
+  if (analysis.mode.places === "none")
+    out.push("We didn't look up a Google listing, so hours, phone and rating come only from what you typed and your website.");
+  return out;
 }
 
 // ---------- Step 3: questions ----------

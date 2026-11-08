@@ -184,6 +184,8 @@ export interface JourneyStartResponse {
   headline: string;
   questions: JourneyQuestion[];
   customersSay: CustomersSay;
+  /** Plain sentences about what we couldn't look at (no website, site unreadable, no reviews, no Google listing). */
+  couldNotCheck: string[];
   /** Tools we could see, with where we saw them. */
   toolsFound: { name: string; url: string | null }[];
   sources: { count: number; list: SourceLink[] };

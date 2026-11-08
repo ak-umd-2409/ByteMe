@@ -130,3 +130,18 @@ What still breaks trust or the flow:
 2. **Stage 2:** H2 (AI cache, spend tracker, model default) and H5 tests.
 3. **Stage 3 (after you add the keys):** C6, a live end-to-end run on a real Maryland business via the Vercel deployment, with fixes from what it finds. Then C4 with Rishabh.
 4. **Stage 4:** H3 after the team decides, then the medium items.
+
+---
+
+## 7. Progress
+
+| Stage | Status | PR |
+| --- | --- | --- |
+| 1: honest search, sample labels, clear fixes, "Your plan" | Done, tested | #21 |
+| 2: AI cache that survives restarts, dollar cap, live-services panel, "what we couldn't check", edge-case tests | Done, tested | #22 |
+| 3: live end-to-end on a real Maryland business | Waiting for keys (§5) | — |
+
+**AI model choice.**
+- **Owner flow:** stays on `openai/gpt-4o-mini`. It's a non-reasoning model, its JSON is reliable within the 900-token replies these tasks use, and it costs $0.15/$0.60 per million tokens.
+- **Catalog and Safety Check:** use `anthropic/claude-haiku-5.5` (`OPENROUTER_STRONG_MODEL`). Rishabh measured it at about $0.002 per tool; it needs the larger reply limits the catalog code already sets.
+- **Spending:** every call's actual cost (OpenRouter's `usage.cost`) is added up. AI stops at `LLM_BUDGET_USD` (default $20). Answers are saved for a week in Upstash, so the same page is never paid for twice.
