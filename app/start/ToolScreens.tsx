@@ -234,8 +234,9 @@ export function ToolDetail({
   choice?: ToolChoice;
   biz: Biz | null;
   picked: boolean;
-  togglePick: () => void;
-  openCompare: () => void;
+  /** Leave out (e.g. on /tools/[id]) to hide the compare buttons. */
+  togglePick?: () => void;
+  openCompare?: () => void;
   canCompare: boolean;
 }) {
   const price = r.pricing.small.monthlyUsd;
@@ -273,10 +274,12 @@ export function ToolDetail({
           <p>{r.description.replace(/^Sample (scam-style )?tool \(fictional\)[.,]?\s*/i, "")}</p>
           {r.sample && <span className={s.hint}>Sample tool for the demo: the company and website are made up.</span>}
           <a className={cx(s.btn, s.primary, s.block)} href="#get-help">Get help setting this up</a>
-          <div className={t.actions}>
-            <button type="button" className={cx(s.btn, s.secondary)} aria-pressed={picked} onClick={togglePick}>{picked ? "✓ Comparing" : "+ Compare"}</button>
-            {canCompare && <button type="button" className={cx(s.btn, s.secondary)} onClick={openCompare}>Compare picked</button>}
-          </div>
+          {togglePick && (
+            <div className={t.actions}>
+              <button type="button" className={cx(s.btn, s.secondary)} aria-pressed={picked} onClick={togglePick}>{picked ? "✓ Comparing" : "+ Compare"}</button>
+              {canCompare && openCompare && <button type="button" className={cx(s.btn, s.secondary)} onClick={openCompare}>Compare picked</button>}
+            </div>
+          )}
         </article>
 
         {biz && (

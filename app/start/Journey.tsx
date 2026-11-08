@@ -30,6 +30,7 @@ export interface LookupEntry {
   status: "verified" | "listed" | "blocked";
   checked: string | null;
   sample: boolean;
+  id?: string;
 }
 
 type Screen = "landing" | "find" | "loading" | "check" | "ask" | "problems" | "tools" | "tool" | "compare";
@@ -189,7 +190,8 @@ export function Journey({ lookup, catalog }: { lookup: LookupEntry[]; catalog: C
 
   // Landing link check
   const [toolUrl, setToolUrl] = useState("");
-  const [toolResult, setToolResult] = useState<string | null>(null);
+  const [toolResult, setToolResult] = useState<{ text: string; tone: "ok" | "bad" | "info"; toolId?: string } | null>(null);
+  const [toolChecking, setToolChecking] = useState(false);
 
   useEffect(() => {
     top.current?.scrollIntoView({ block: "start" });
@@ -354,17 +356,23 @@ export function Journey({ lookup, catalog }: { lookup: LookupEntry[]; catalog: C
     }
   };
 
-  const checkTool = () => {
-    let host = "";
+  /** Looks the link up in the catalog; anything new is added to the discovery queue (spec 1.1, 4.11). */
+  const checkTool = async () => {
+    setToolChecking(true);
+    setToolResult(null);
     try {
-      host = new URL(/^https?:\/\//.test(toolUrl.trim()) ? toolUrl.trim() : `https://${toolUrl.trim()}`).hostname.replace(/^www\./, "").toLowerCase();
+      const res = await fetch("/api/discovery/submit", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ url: toolUrl.trim(), source: "owner_check" }) });
+      const body = await res.json();
+      if (!res.ok) return setToolResult({ text: body?.error?.message ?? "We couldn't check that link right now.", tone: "bad" });
+      const hit = body.kind === "in_catalog" ? lookup.find((e) => e.id === body.toolId) : undefined;
+      const tone = body.kind === "blocked" || body.badge === "blocked" || body.status === "blocked" ? "bad" : body.badge === "verified" ? "ok" : "info";
+      const extra = hit ? `${hit.checked ? ` Last checked ${hit.checked}.` : ""}${hit.sample ? " (Sample entry.)" : ""}` : "";
+      setToolResult({ text: `${body.message}${extra}`, tone, toolId: body.kind === "in_catalog" ? body.toolId : undefined });
     } catch {
-      return setToolResult("That doesn't look like a link. Try something like https://example.com.");
+      setToolResult({ text: "We couldn't check that link right now. Please try again.", tone: "bad" });
+    } finally {
+      setToolChecking(false);
     }
-    const hit = lookup.find((e) => host === e.domain || host.endsWith(`.${e.domain}`));
-    if (!hit) return setToolResult(`${host} isn't in our list yet. A person needs to check it before we'd recommend it.`);
-    const word = hit.status === "verified" ? "✓ Verified by a person" : hit.status === "blocked" ? "⚠ Blocked: it failed our safety check" : "◷ Not yet reviewed";
-    setToolResult(`${hit.name}: ${word}${hit.checked ? ` · last checked ${hit.checked}` : ""}${hit.sample ? " (sample entry)" : ""}.`);
   };
 
   // ---------- frame ----------
@@ -392,9 +400,14 @@ export function Journey({ lookup, catalog }: { lookup: LookupEntry[]; catalog: C
             MainStreet AI
           </button>
           {screen === "landing" ? (
-            <a className={s.linkInk} href="/admin">
-              For reviewers
-            </a>
+            <span className={s.row} style={{ gap: 18 }}>
+              <a className={s.linkInk} href="/tools">
+                Browse tools
+              </a>
+              <a className={s.linkInk} href="/admin">
+                For reviewers
+              </a>
+            </span>
           ) : (
             <button
               type="button"
@@ -433,7 +446,7 @@ export function Journey({ lookup, catalog }: { lookup: LookupEntry[]; catalog: C
               <button type="button" className={cx(s.btn, s.primary, s.wide)} onClick={() => go("find")}>
                 Find my AI tools
               </button>
-              <a className={s.link} href="#how-we-check">How we check tools</a>
+              <a className={s.link} href="/tools">Browse all checked tools</a>
             </div>
             <span className={s.small}>Free · about 3 minutes · no sign-up</span>
             <div className={s.stats}>
@@ -484,7 +497,9 @@ export function Journey({ lookup, catalog }: { lookup: LookupEntry[]; catalog: C
             <div><b>What happens to your data</b><span>Does it train AI on it? Can you delete it? Where is it kept?</span></div>
             <div><b>Clear prices</b><span>A public price and the freedom to cancel any month.</span></div>
           </div>
-          <p className={s.small}>Then a person reviews it. Tools that copy a brand name or have no privacy policy are blocked automatically.</p>
+          <p className={s.small}>
+            Then a person reviews it. Tools that copy a brand name or have no privacy policy are blocked automatically. Make AI tools? <a href="/submit">Apply to be listed</a>.
+          </p>
         </section>
 
         <section className={s.adBand}>
@@ -498,13 +513,19 @@ export function Journey({ lookup, catalog }: { lookup: LookupEntry[]; catalog: C
                 Tool link
               </label>
               <input id="tool-link" className={s.input} placeholder="https://" value={toolUrl} onChange={(e) => { setToolUrl(e.target.value); setToolResult(null); }} />
-              <button type="button" className={cx(s.btn, s.secondary)} onClick={checkTool} disabled={!toolUrl.trim()}>
-                Check this tool
+              <button type="button" className={cx(s.btn, s.secondary)} onClick={() => void checkTool()} disabled={!toolUrl.trim() || toolChecking}>
+                {toolChecking ? "Checking…" : "Check this tool"}
               </button>
             </div>
             {toolResult && (
-              <p className={s.notice} aria-live="polite">
-                {toolResult}
+              <p className={toolResult.tone === "bad" ? s.error : toolResult.tone === "ok" ? s.okNote : s.notice} aria-live="polite">
+                {toolResult.text}
+                {toolResult.toolId && (
+                  <>
+                    {" "}
+                    <a href={`/tools/${toolResult.toolId}`}>See what we checked</a>
+                  </>
+                )}
               </p>
             )}
           </div>

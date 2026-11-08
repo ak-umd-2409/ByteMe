@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { loadCatalog } from "@/lib/catalog/index.ts";
+import { loadLiveCatalog } from "@/lib/discovery/index.ts";
 import { Journey, type LookupEntry } from "./Journey.tsx";
 
 export const metadata: Metadata = {
@@ -7,12 +7,16 @@ export const metadata: Metadata = {
   description: "Type your business name. We read your public listings, website and reviews, ask a few questions, and show what's costing you, with the proof.",
 };
 
-/** Owner journey: screens 1–4 of the approved wireframes (docs/specs/b-wireframes.md), on /api/journey/*. */
-export default function StartPage() {
-  // "Saw an AI tool in an ad?" looks the link up in the reviewed tool catalog (lib/catalog).
-  const lookup: LookupEntry[] = loadCatalog()
-    .map((r) => ({ name: r.name, domain: r.vendor.domain.replace(/^www\./, "").toLowerCase(), status: r.badge, checked: r.lastChecked ?? null, sample: Boolean(r.sample) }))
+// The catalog changes when reviewers approve or block tools, so read it on each visit.
+export const dynamic = "force-dynamic";
+
+/** The owner journey (docs/specs/b-wireframes.md), on /api/journey/*. */
+export default async function StartPage() {
+  // Built-in catalog plus tools checked and decided through discovery (lib/discovery).
+  const catalog = await loadLiveCatalog();
+  // "Saw an AI tool in an ad?" looks the link up here first, then asks /api/discovery/submit.
+  const lookup: LookupEntry[] = catalog
+    .map((r) => ({ name: r.name, domain: r.vendor.domain.replace(/^www\./, "").toLowerCase(), status: r.badge, checked: r.lastChecked ?? null, sample: Boolean(r.sample), id: r.id }))
     .filter((e) => e.domain);
-  // Screens 5–7 show the full tool records (privacy answers, safety results).
-  return <Journey lookup={lookup} catalog={loadCatalog()} />;
+  return <Journey lookup={lookup} catalog={catalog} />;
 }
