@@ -6,5 +6,13 @@
     "url": "https://workspace.google.com/terms/2013/1/premier_terms/",
     "foundBy": "Claude (drafted for Rishabh to check)",
     "foundAt": "2026-11-08"
+  },
+  {
+    "field": "trainsOnYourData",
+    "answer": "opt-in",
+    "quote": "Workspace does not use customer data for training models without customer's prior permission or instruction.",
+    "url": "https://knowledge.workspace.google.com/admin/generative-ai/generative-ai-in-google-workspace-privacy-hub?hl=en",
+    "foundBy": "Claude (drafted for Rishabh to check)",
+    "foundAt": "2026-11-08"
   }
 ]

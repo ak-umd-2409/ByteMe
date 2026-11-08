@@ -147,6 +147,35 @@ describe("judge scenarios", () => {
     const report = judge(factsFixture({ riskySentences: ["Staff training data and customer calls help improve our AI models."] }));
     assert.equal(report.checks.dataUse.result, "unknown");
   });
+  it("menu words, people's training and FAQ questions aren't about AI learning from your data", () => {
+    const report = judge(
+      factsFixture({
+        riskySentences: [
+          "Educator training and development",
+          "Products\nAuto-training\nPricing",
+          "Train\nTrain\nKeep high-turnover teams scheduled, trained, and ready",
+          "Education & Training Education & Training\nVocational Training",
+          "Group training\nPersonal training",
+          "Having our personnel sign strict confidentiality agreements in addition to completing periodic training to ensure they understand the confidential nature of the data we process.",
+          "The primary purpose of the call recording is to train our customer-service staff and to improve the quality of the services and products we provide.",
+          "Where does the data used to train Google's foundational language models come from?",
+          "Model training and data usage\nDoes Google use my data (including prompts) to train generative AI models?",
+        ],
+      }),
+    );
+    assert.equal(report.checks.dataUse.result, "pass");
+  });
+  for (const s of [
+    "Products\nWe use your calls to train our models.",
+    "We collect this personal information for our own purposes (including but not limited to training, product improvement, and data analytics purposes).",
+    "Customer content may be used for training.",
+    "Recordings may be kept for quality and training purposes.",
+    "✖ Use your prompt, Workspace content, webpage context, or generated responses to train generative AI models",
+    "We train models on data",
+  ])
+    it(`still needs a person when a line could mean AI learns from your data: "${s.slice(0, 40)}…"`, () => {
+      assert.equal(judge(factsFixture({ riskySentences: [s] })).checks.dataUse.result, "unknown");
+    });
   it("AI quote not on page", () => {
     // The collector turns an unverifiable quote into "unknown".
     assert.equal(judge(factsFixture({ ai: { canDeleteData: "unknown" } })).verdict, "held");
