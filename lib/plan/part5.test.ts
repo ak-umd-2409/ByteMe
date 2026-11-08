@@ -78,14 +78,15 @@ describe("free money and help (spec §5.7)", () => {
 });
 
 describe("ready-to-use words (spec §5.2)", () => {
-  it("only uses facts we have, announces recording when a tool records calls, and marks blanks", async () => {
+  it("only uses facts we have, flags the recording consent step, and marks blanks", async () => {
     const a = await journey("public-frederick-heating-ac", PHONE);
     const withPhoneTool = buildPlan({ answer: a, choices: { missed_inquiries: "ringwise-receptionist" }, catalog, currentTools: [] });
     const words = readyContent(a.business, withPhoneTool, catalog);
     const greeting = words.find((w) => w.id === "greeting")!;
     assert.match(greeting.text, new RegExp(a.business.name));
     assert.match(greeting.text, /recorded/);
-    assert.deepEqual(greeting.blanks, ["[your name]"]);
+    assert.match(greeting.text, /reviewed notice and consent flow/);
+    assert.deepEqual(greeting.blanks, ["[If calls are recorded, add a legally reviewed notice and consent flow before enabling recording.]", "[your name]"]);
     assert.equal(words.filter((w) => w.id.startsWith("review-")).length, 3);
 
     const noTool = buildPlan({ answer: a, choices: {}, catalog, currentTools: [] });

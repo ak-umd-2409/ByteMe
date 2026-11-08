@@ -6,6 +6,8 @@ Start here: **[docs/HANDOFF_PROMPT.md](docs/HANDOFF_PROMPT.md)** — full contex
 
 Feature list, scoring model and usability metrics: **[docs/FEATURE_SPEC.md](docs/FEATURE_SPEC.md)**.
 
+**Part 5 owner plan:** run `npm install` and `npm run dev`, open `http://localhost:3000/start`, finish the guided questions, and choose **Make my plan**. The plan includes a 30-day checklist, ready-to-copy text, local help, a read-only advisor link, print/email actions, Spanish, official funding leads, and day-7/day-30 check-ins. See **[docs/SECTION5_HANDOFF.md](docs/SECTION5_HANDOFF.md)** for the demo path and current limits.
+
 Everyone needs the **Superpowers** plugin installed in Claude Code before starting.
 
 Section 4 prototype: run `npm install`, then `npm run dev` and open `http://localhost:3000`. The interactive recommendation demo uses clearly labeled sample catalog data. See **[docs/SECTION4_HANDOFF.md](docs/SECTION4_HANDOFF.md)** for the engine contract, integration points, tests, and limitations.
