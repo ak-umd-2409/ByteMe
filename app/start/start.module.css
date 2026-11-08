@@ -246,3 +246,86 @@
 @media (prefers-reduced-motion: no-preference) { .dialog { animation: pop 0.22s cubic-bezier(0.2, 0.7, 0.2, 1); } }
 @keyframes pop { from { opacity: 0; transform: scale(0.96) translateY(8px); } to { opacity: 1; transform: none; } }
 @media (max-width: 760px) { .overlay { padding: 0; place-items: end stretch; } .dialog { width: 100%; max-height: 92vh; border-radius: 16px 16px 0 0; } }
+
+/* ================================================================
+ * Guided flow (find → check → questions → results → tools)
+ * ================================================================ */
+
+/* Focused screens: one readable column, centered */
+.narrow { max-width: 760px; }
+.intro { display: grid; gap: 8px; }
+.title { font-family: var(--display); font-weight: 400; font-size: 36px; line-height: 1.2; text-wrap: balance; }
+@media (max-width: 760px) { .title { font-size: 29px; } }
+.intro .lead { font-size: 19px; color: var(--text-2); max-width: 38em; }
+.opt { font-weight: 400; color: var(--text-2); }
+.stack { display: grid; gap: 8px; }
+
+/* Stepper: Find · Check · Questions · Results · Tools */
+.stepper ol { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px; }
+.stepper li { display: grid; gap: 6px; justify-items: start; font-size: 14px; color: var(--text-2); position: relative; padding-top: 10px; }
+.stepper li::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 5px; border-radius: 3px; background: var(--card-inner); }
+.stepper li.stepDone::before, .stepper li.stepNow::before { background: var(--accent); }
+.stepper .dot { display: none; }
+.stepper li.stepNow { color: var(--ink); font-weight: 700; }
+.stepper li.stepDone { color: var(--ink); }
+@media (max-width: 600px) {
+  .stepper li:not(.stepNow) .stepLabel { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+}
+
+/* Find */
+.searchCard { background: var(--card-inner); border-radius: 18px; padding: 20px; display: grid; gap: 12px; border: 2px solid var(--ink); }
+.searchRow { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr) auto; gap: 12px; align-items: end; }
+.searchCard .input { background: var(--white); }
+.searchBtn { min-width: 128px; }
+@media (max-width: 680px) { .searchRow { grid-template-columns: minmax(0, 1fr); } .searchBtn { width: 100%; } }
+.resultRow { display: flex; align-items: center; justify-content: space-between; gap: 16px; width: 100%; min-height: 72px; padding: 14px 18px; background: var(--white); border: 2px solid var(--ink); border-radius: 14px; box-shadow: 4px 4px 0 var(--ink); color: var(--ink); font: inherit; text-align: left; cursor: pointer; }
+.resultRow:hover { transform: translate(-2px, -2px); box-shadow: 6px 6px 0 var(--ink); }
+.resultRow:active { transform: translate(2px, 2px); box-shadow: 2px 2px 0 var(--ink); }
+.resultText { display: grid; gap: 2px; min-width: 0; }
+.resultText b { font-size: 18px; font-weight: 600; }
+.resultText span { font-size: 15px; color: var(--text-2); overflow-wrap: anywhere; }
+.resultGo { flex: none; font-weight: 600; color: var(--accent); white-space: nowrap; }
+@media (max-width: 520px) { .resultRow { flex-direction: column; align-items: flex-start; gap: 8px; } }
+@media (prefers-reduced-motion: no-preference) { .resultRow, .option, .pickOption { transition: transform 0.08s, box-shadow 0.08s, background-color 0.12s; } }
+
+/* One question at a time */
+.qHead { display: grid; gap: 6px; }
+.qBar { height: 6px; border-radius: 3px; background: var(--card-inner); overflow: hidden; }
+.qBar i { display: block; height: 100%; background: var(--accent); border-radius: 3px; }
+@media (prefers-reduced-motion: no-preference) { .qBar i { transition: width 0.3s; } }
+.options { display: grid; gap: 10px; }
+.option, .pickOption { display: flex; align-items: center; gap: 14px; width: 100%; min-height: 64px; padding: 12px 18px; background: var(--white); border: 2px solid var(--ink); border-radius: 14px; box-shadow: 3px 3px 0 var(--ink); color: var(--ink); font: inherit; text-align: left; cursor: pointer; }
+.option:hover:not([disabled]) { transform: translate(-1px, -1px); box-shadow: 4px 4px 0 var(--ink); }
+.option[aria-checked="true"], .pickOption[aria-checked="true"] { background: #f6e3e0; border-color: var(--accent); box-shadow: 3px 3px 0 var(--accent); }
+.option[disabled] { opacity: 0.5; cursor: not-allowed; }
+.optionNone { background: transparent; border-style: dashed; box-shadow: none; }
+.pickOption { min-height: 56px; box-shadow: none; border-width: 2px; }
+.optionMark { flex: none; width: 28px; height: 28px; border-radius: 50%; border: 2px solid var(--ink); display: grid; place-items: center; font-weight: 700; font-size: 15px; color: var(--on-accent); background: var(--white); }
+.optionSquare { border-radius: 7px; }
+[aria-checked="true"] > .optionMark { background: var(--accent); border-color: var(--accent); }
+.optionText { display: grid; gap: 2px; min-width: 0; }
+.optionText b { font-weight: 600; font-size: 17px; }
+.optionText span { font-size: 15px; color: var(--text-2); }
+
+/* Bottom action row; sticky on results so the next step is always in reach */
+.actionBar { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; padding-top: 8px; }
+.sticky { position: sticky; bottom: max(12px, env(safe-area-inset-bottom, 0px)); z-index: 5; background: var(--card-inner); border: 2px solid var(--ink); border-radius: 16px; box-shadow: 0 6px 0 rgba(42, 31, 29, 0.18); padding: 12px 12px 12px 20px; margin-top: 8px; }
+.sticky .error { flex-basis: 100%; order: -1; }
+@media (max-width: 760px) {
+  .sticky { padding: 10px; }
+  .sticky > .small { display: none; }
+  .sticky .btn { width: 100%; }
+}
+
+/* Check */
+.themeHead { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.mismatch .optionText b { font-size: 16px; }
+
+/* Results */
+.oppGrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); gap: 20px; align-items: stretch; }
+.rank { font-family: var(--display); font-size: 20px; color: var(--ink); }
+.calcBox { background: var(--white); border-radius: 12px; padding: 14px; }
+.checkRow { display: flex; justify-content: space-between; align-items: center; gap: 12px 20px; flex-wrap: wrap; padding: 12px 0; border-top: 1px solid var(--line); }
+.checkRow:first-of-type { border-top: 0; }
+.inlineForm { display: flex; gap: 10px; flex-wrap: wrap; }
+.inlineForm .input { flex: 1 1 220px; width: auto; }

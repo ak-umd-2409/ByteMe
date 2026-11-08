@@ -260,6 +260,14 @@ The token is `j1.` + base64url(deflated JSON), about 5–6 KB for the real busin
 
 ## 4. The screens (home page `/` and `/start`, wireframes v1 and v2)
 
+> **Flow (Nov 7, guided version).** The screens now run as one guided flow with a 5-part progress bar (Find · Check · Questions · Results · Tools):
+> - **Find:** one search card (name, town, Search). Tapping a result starts reading straight away; "Enter it yourself" is under the results.
+> - **Check:** one column — business details with sources and Edit, "Which is right?", what customers say, tools. Then "Looks right →".
+> - **Questions:** one at a time with big answer rows: problems → call recording (only if relevant) → health data (health businesses) → budget → setup → what matters most. Single answers move on by themselves; every question has Back and Skip, and says what we assume if skipped. All answers are sent in one `/answer` call at the end.
+> - **Results:** up to 3 numbered cards with "See the proof", a "Do any of these happen too?" list only for skipped problems, "Anything else?", "Your answers", and a sticky "Show me tools for these →" bar.
+> - **Tools:** screens 5–7 as before.
+
+
 `app/start/` (`page.tsx`, `Journey.tsx`, `start.module.css`) follows the approved style board: tokens, Tiro Bangla and Spectral (self-hosted in `public/fonts`, OFL), hard-shadow buttons, soft fields, stamp badges, two-part cards, and the step line. The styles are scoped, so the home page is untouched. Screen by screen:
 
 1. **Landing:** the stamp, the promise, and "Find my AI tools". "Saw an AI tool in an ad?" looks the domain up in `lib/catalog` and says Verified, Not yet reviewed, Blocked, or "not in our list yet".

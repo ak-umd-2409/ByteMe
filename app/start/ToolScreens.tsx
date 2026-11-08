@@ -102,7 +102,7 @@ export function WaysToFix({
 
   return (
     <>
-      <h1 className={s.h1}>Ways to fix it</h1>
+      <h1 className={s.title}>Ways to fix it</h1>
       <p className={s.small} style={{ color: "var(--ink)", marginTop: -8 }}>
         Only ✓ Verified tools. Each one fits {biz.budgetAssumed ? `${usd(biz.monthlyBudget)} a month, the budget we assumed because you skipped that question,` : `your ${usd(biz.monthlyBudget)} a month`} and works with what you already use where it can.
       </p>
