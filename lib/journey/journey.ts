@@ -1,6 +1,6 @@
-import { demoCatalog } from "../../data/mock/recommendations.ts";
 import type { ListingField } from "../business/listings.ts";
 import { industryInfo } from "../business/industry.ts";
+import { locationContext } from "../business/location.ts";
 import type { OnboardingAnalysis } from "../business/onboarding.ts";
 import { applyCorrections } from "../business/profile.ts";
 import type { Constraint, FactSource, Goal, OnboardingProfile, OwnerInputs } from "../business/types.ts";
@@ -94,7 +94,7 @@ const FACT_SOURCE: Record<FactSource, string | null> = {
   review_analysis: "From reviews",
   owner: "You told us",
   default: null,
-  derived: "From your listing",
+  derived: "Our best guess",
 };
 
 const GOAL_LABEL: Record<Goal, string> = {
@@ -303,6 +303,19 @@ export function toolsFound(state: JourneyState): { name: string; url: string | n
   return state.profile.technology.detected.map((t) => ({ name: t.name, url: t.evidence[0]?.url ?? null }));
 }
 
+/** What we couldn't look at, said plainly so a thin result isn't mistaken for a clean bill of health. */
+export function couldNotCheck(analysis: OnboardingAnalysis): string[] {
+  const out: string[] = [];
+  const w = analysis.website;
+  if (!analysis.profile.business.website.value) out.push("You don't have a website we could find, so we couldn't check online booking, prices or policies.");
+  else if (w && !w.reachable && !w.limitations.some((l) => /search engine/i.test(l)))
+    out.push(`We couldn't read your website (${w.problem ? w.problem.replace(/\.$/, "").toLowerCase() : "it didn't respond"}), so we couldn't check online booking, prices or policies.`);
+  if (analysis.reviews.reviewCount === 0) out.push("We found no reviews to read, so we couldn't learn what customers say. You can paste a few on the first screen.");
+  if (analysis.mode.places === "none")
+    out.push("We didn't look up a Google listing, so hours, phone and rating come only from what you typed and your website.");
+  return out;
+}
+
 // ---------- Step 3: questions ----------
 
 const IMPACT_KEYS: Record<string, string[] | null> = {
@@ -376,12 +389,12 @@ const IMPACT_LABEL: Record<string, string> = {
   "impact.repetitive_admin.hours_per_week": "Time on paperwork",
 };
 
-/** Products the tools for these use cases connect to, most common first. */
+/** Products that tools for these use cases connect to, most common first (the same catalog /api/recommend uses). */
 function toolOptions(useCases: Set<UseCase>): string[] {
   const counts = new Map<string, number>();
   const add = (name: string) => counts.set(name, (counts.get(name) ?? 0) + 1);
-  for (const t of demoCatalog) if (t.useCases.some((u) => useCases.has(u))) Object.keys(t.integrations).forEach(add);
-  for (const r of loadCatalog()) if (r.useCases.some((u) => useCases.has(u))) r.worksWith.filter((w) => w.type !== "none").forEach((w) => add(w.product));
+  for (const r of loadCatalog())
+    if (r.badge !== "blocked" && r.useCases.some((u) => useCases.has(u))) r.worksWith.filter((w) => w.type !== "none").forEach((w) => add(w.product));
   return [...counts.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0])).map(([name]) => name).slice(0, 6);
 }
 
@@ -970,7 +983,12 @@ export function buildAnswer(state: JourneyState, questions: JourneyQuestion[], a
     ? `${plural(opportunities.length, "thing")} to focus on at ${name}, most important first.`
     : "We didn't find anything with clear evidence. Tell us what slows you down and we'll take it from there.";
 
-  return { business: businessCard(state, applied.profile), headline, opportunities, alsoNoticed, toCheck, followUps, youToldUs: applied.youToldUs, assumptions: applied.assumptions, recommendation };
+  const sbdc = locationContext(applied.profile.business.address.value).sbdc;
+  const county = locationContext(applied.profile.business.address.value).county;
+  const localHelp = sbdc && county ? { name: `Maryland SBDC · ${sbdc.name}`, county, url: sbdc.url, phone: sbdc.phone } : null;
+  const budget = { value: applied.profile.owner.monthlyBudget.value ?? DEFAULT_BUDGET, assumed: applied.profile.owner.monthlyBudget.source !== "owner" };
+
+  return { business: businessCard(state, applied.profile), localHelp, budget, headline, opportunities, alsoNoticed, toCheck, followUps, youToldUs: applied.youToldUs, assumptions: applied.assumptions, recommendation };
 }
 
 export function startHeadline(base: DiscoveryResult, questions: JourneyQuestion[]): string {

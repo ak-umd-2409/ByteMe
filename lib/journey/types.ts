@@ -184,6 +184,8 @@ export interface JourneyStartResponse {
   headline: string;
   questions: JourneyQuestion[];
   customersSay: CustomersSay;
+  /** Plain sentences about what we couldn't look at (no website, site unreadable, no reviews, no Google listing). */
+  couldNotCheck: string[];
   /** Tools we could see, with where we saw them. */
   toolsFound: { name: string; url: string | null }[];
   sources: { count: number; list: SourceLink[] };
@@ -211,6 +213,10 @@ export interface JourneyAnswerResponse {
   recommendation:
     | { ready: true; request: RecommendationRequest; focus: ProblemKey[] }
     | { ready: false; reason: string };
+  /** Free local help for setup: the Maryland SBDC office serving the business's county (null if unknown). */
+  localHelp: { name: string; county: string; url: string; phone: string | null } | null;
+  /** The monthly budget behind the recommendations, and whether we assumed it because the owner skipped it. */
+  budget: { value: number; assumed: boolean };
   /** Answers we couldn't use, with a reason (unknown id, out-of-range number…). */
   ignored: { questionId: string; reason: string }[];
 }

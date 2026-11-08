@@ -13,6 +13,8 @@ export interface AppConfig {
   openRouterModel: string;
   /** Force rules-only mode even when a key exists (demo safety switch). */
   llmDisabled: boolean;
+  /** Stop all AI calls once this many US dollars have been spent (OpenRouter's reported cost). */
+  llmBudgetUsd: number;
   /** Hard cap on LLM calls per process per hour, to protect the $25 budget. */
   llmMaxCallsPerHour: number;
   httpTimeoutMs: number;
@@ -45,6 +47,7 @@ export function loadConfig(env: Env = process.env): AppConfig {
     openRouterModel: clean(env.OPENROUTER_MODEL) ?? "openai/gpt-4o-mini",
     llmDisabled: env.LLM_DISABLED === "1" || env.LLM_DISABLED === "true",
     llmMaxCallsPerHour: intOr(env.LLM_MAX_CALLS_PER_HOUR, 200, 0, 10_000),
+    llmBudgetUsd: Math.min(Math.max(Number(env.LLM_BUDGET_USD) || 20, 0), 25),
     httpTimeoutMs: intOr(env.HTTP_TIMEOUT_MS, 8_000, 1_000, 30_000),
     websiteMaxPages: intOr(env.WEBSITE_MAX_PAGES, 6, 1, 15),
     sampleBusinesses: env.DEMO_SAMPLE_BUSINESSES === "1" || env.DEMO_SAMPLE_BUSINESSES === "true",

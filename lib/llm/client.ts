@@ -1,6 +1,8 @@
 import { cached, hashKey, sharedCache, type Cache } from "../shared/cache.ts";
 import { loadConfig, type AppConfig } from "../shared/config.ts";
+import { getKv, type Kv } from "../shared/kv.ts";
 import { log } from "../shared/logger.ts";
+import { getLedger, type Ledger } from "./ledger.ts";
 import { parseJsonLoose, type Schema } from "../shared/validate.ts";
 import type { FetchLike } from "../shared/safeFetch.ts";
 
@@ -53,14 +55,22 @@ export function createBudget(maxPerHour: number) {
 }
 
 export function createOpenRouterProvider(
-  config: Pick<AppConfig, "openRouterApiKey" | "openRouterModel" | "llmMaxCallsPerHour">,
+  config: Pick<AppConfig, "openRouterApiKey" | "openRouterModel" | "llmMaxCallsPerHour"> & { llmBudgetUsd?: number },
   fetchImpl: FetchLike = fetch,
+  ledger: Ledger = getLedger(),
 ): LlmProvider {
   const budget = createBudget(config.llmMaxCallsPerHour);
+  const capUsd = config.llmBudgetUsd ?? 20;
   return {
     name: `openrouter:${config.openRouterModel}`,
     async complete(request) {
       if (!config.openRouterApiKey) return null;
+      // Dollar cap across the whole key (shared when Upstash is connected).
+      const spent = await ledger.spent();
+      if (spent >= capUsd) {
+        log.warn("llm.spend_cap_reached", { task: request.task, spent, capUsd });
+        return null;
+      }
       if (!budget.take()) {
         log.warn("llm.budget_exhausted", { task: request.task });
         return null;
@@ -91,7 +101,14 @@ export function createOpenRouterProvider(
           log.warn("llm.http_error", { task: request.task, status: response.status });
           return null;
         }
-        const data = (await response.json()) as { choices?: { message?: { content?: string } }[] };
+        const data = (await response.json()) as {
+          choices?: { message?: { content?: string } }[];
+          usage?: { cost?: number; prompt_tokens?: number; completion_tokens?: number };
+        };
+        // OpenRouter reports what each call cost (US dollars) in usage.cost.
+        const cost = typeof data.usage?.cost === "number" ? data.usage.cost : 0;
+        await ledger.add(cost, request.task);
+        log.info("llm.call", { task: request.task, model: config.openRouterModel, cost, inTokens: data.usage?.prompt_tokens, outTokens: data.usage?.completion_tokens });
         return data.choices?.[0]?.message?.content ?? null;
       } catch (error) {
         log.warn("llm.request_failed", { task: request.task, error });
@@ -120,13 +137,27 @@ export async function llmJson<T>(
   provider: LlmProvider,
   schema: Schema<T>,
   request: LlmRequest,
-  opts: { cache?: Cache; ttlMs?: number } = {},
+  opts: { cache?: Cache; ttlMs?: number; kv?: Kv | null } = {},
 ): Promise<LlmResult<T>> {
   if (provider === disabledProvider) return { ok: false, reason: "disabled" };
   const cache = opts.cache ?? sharedCache;
+  const kv = opts.kv === undefined ? getKv() : opts.kv;
   const key = `llm:${request.task}:${provider.name}:${hashKey(request.system, request.user)}`;
+  const ttlMs = opts.ttlMs ?? 24 * 3_600_000;
   try {
-    return await cached(cache, key, opts.ttlMs ?? 24 * 3_600_000, async () => {
+    return await cached(cache, key, ttlMs, async () => {
+      // A saved answer (Upstash) survives restarts, so the same page or reviews are never paid for twice.
+      if (kv) {
+        try {
+          const saved = await kv.get(`mainstreet:${key}`);
+          if (saved) {
+            const parsed = schema.parse(JSON.parse(saved));
+            if (parsed.ok) return { ok: true as const, value: parsed.value, provider: provider.name };
+          }
+        } catch (error) {
+          log.warn("llm.saved_cache_read_failed", { task: request.task, error });
+        }
+      }
       const text = await provider.complete(request);
       if (text === null) throw new LlmSkip("unavailable");
       const json = parseJsonLoose(text);
@@ -135,6 +166,12 @@ export async function llmJson<T>(
       if (!parsed.ok) {
         log.warn("llm.schema_rejected", { task: request.task, errors: parsed.errors.slice(0, 5) });
         throw new LlmSkip("invalid");
+      }
+      if (kv) {
+        // Keep answers a week: long enough for a hackathon, short enough to pick up changed pages.
+        kv.set(`mainstreet:${key}`, JSON.stringify(parsed.value), Math.max(ttlMs, 7 * 86_400_000) / 1000).catch((error) =>
+          log.warn("llm.saved_cache_write_failed", { task: request.task, error }),
+        );
       }
       return { ok: true as const, value: parsed.value, provider: provider.name };
     });

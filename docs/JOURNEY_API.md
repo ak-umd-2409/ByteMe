@@ -223,6 +223,8 @@ Response (real output, Frederick, owner ticked missed calls and gave two numbers
   "youToldUs":   [{ "questionId": "budget", "label": "Monthly budget", "value": "Up to $100 a month" }],
   "assumptions": [{ "questionId": "setup", "text": "You'll set tools up yourself." }],
   "recommendation": { "ready": true, "request": { "business": { … }, "problems": [ … ] }, "focus": ["missed_inquiries", "no_online_booking"] },
+  "localHelp": { "name": "Maryland SBDC · Northern Region", "county": "Frederick", "url": "https://www.marylandsbdc.org/locations/northern-region", "phone": "410-386-8390" },
+  "budget": { "value": 100, "assumed": true },     // assumed = the owner skipped the budget question
   "ignored": []
 }
 ```
@@ -256,7 +258,15 @@ The token is `j1.` + base64url(deflated JSON), about 5–6 KB for the real busin
 
 ---
 
-## 4. The screens (built at `/start`, from wireframes v1)
+## 4. The screens (home page `/` and `/start`, wireframes v1 and v2)
+
+> **Flow (Nov 7, guided version).** The screens now run as one guided flow with a 5-part progress bar (Find · Check · Questions · Results · Tools):
+> - **Find:** one search card (name, town, Search). Tapping a result starts reading straight away; "Enter it yourself" is under the results.
+> - **Check:** one column — business details with sources and Edit, "Which is right?", what customers say, tools. Then "Looks right →".
+> - **Questions:** one at a time with big answer rows: problems → call recording (only if relevant) → health data (health businesses) → budget → setup → what matters most. Single answers move on by themselves; every question has Back and Skip, and says what we assume if skipped. All answers are sent in one `/answer` call at the end.
+> - **Results:** up to 3 numbered cards with "See the proof", a "Do any of these happen too?" list only for skipped problems, "Anything else?", "Your answers", and a sticky "Show me tools for these →" bar.
+> - **Tools:** screens 5–7 as before.
+
 
 `app/start/` (`page.tsx`, `Journey.tsx`, `start.module.css`) follows the approved style board: tokens, Tiro Bangla and Spectral (self-hosted in `public/fonts`, OFL), hard-shadow buttons, soft fields, stamp badges, two-part cards, and the step line. The styles are scoped, so the home page is untouched. Screen by screen:
 
@@ -268,12 +278,16 @@ The token is `j1.` + base64url(deflated JSON), about 5–6 KB for the real busin
    - Up to 3 cards: badge, headline, money line or the numbers that unlock it, "Why we think this" (proof first, counter-evidence, then the math and its named assumption), and the first step.
    - "Might apply. Tell us." cards (→ `problem.<key>`), plus the call-recording question when relevant.
    - "Also noticed", "Something else slowing you down?", "Anything a tool must have?", and "What you told us" with every assumption.
-5. **Ways to fix it** (screens 5–8 aren't designed yet): a plain list from `/api/recommend` in the same style, to be replaced by the next wireframes.
+5. **Ways to fix it · Tool detail · Compare** (`ToolScreens.tsx`, by Rishabh): `/api/recommend` runs on the safety-checked catalog (`data/catalog`). The journey supplies the request plus two things for these screens:
+   - `budget.assumed`: the screens say "the budget we assumed" instead of "your budget" when the owner skipped the question.
+   - `localHelp`: the SBDC office for the business's county, used in "Get help setting this up" and the "No checked tool yet" card.
+
+   The "Tools you use" chips come from the same catalog's `worksWith`, so a ticked tool lines up with "Works with …" on the tool cards.
+6. **Admin queue** (`/admin`), linked as "For reviewers" on the landing page.
 
 **Differences from the wireframes, on purpose:**
 - **No starting-guess dollar amounts.** The fields start empty and say "Only you know these. We won't guess them." This follows the rule of no financial impact without the owner's input.
 - **No "Team" row.** Team size isn't used anywhere.
-- **No "For reviewers" link** until screen 8 exists.
 
 ---
 

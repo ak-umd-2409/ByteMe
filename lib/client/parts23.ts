@@ -40,7 +40,13 @@ export class ApiError extends Error {
   }
 }
 
-type Mode = { places: "mock" | "google_places"; llm: "on" | "off" };
+type Mode = { places: "mock" | "google_places" | "public_snapshot"; llm: "on" | "off" };
+export interface SavedBusiness {
+  placeId: string;
+  name: string;
+  address: string;
+  capturedAt: string;
+}
 
 async function call<T>(path: string, init?: RequestInit & { json?: unknown }, signal?: AbortSignal): Promise<T> {
   let response: Response;
@@ -62,7 +68,7 @@ async function call<T>(path: string, init?: RequestInit & { json?: unknown }, si
 
 export const api = {
   search: (q: string, near?: string, signal?: AbortSignal) =>
-    call<{ query: string; matches: BusinessMatch[]; mode: Mode; sampleData: boolean }>(
+    call<{ query: string; matches: BusinessMatch[]; mode: Mode; sampleData: boolean; liveSearch: boolean; saved: SavedBusiness[] }>(
       `/api/business/search?${new URLSearchParams({ q, ...(near ? { near } : {}) })}`,
       undefined,
       signal,
