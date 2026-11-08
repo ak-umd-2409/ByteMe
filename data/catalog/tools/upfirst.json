@@ -146,8 +146,8 @@
         ]
       },
       "dataUse": {
-        "result": "unknown",
-        "reason": "The privacy policy isn't clear about whether it uses your information to make its AI better. A person needs to read it.",
+        "result": "pass",
+        "reason": "Doesn't use your information to make its AI better. You can delete your information.",
         "evidence": [
           {
             "quote": "We do not sell Customer Content, use it for advertising or marketing, or use it to train artificial intelligence models, and we do not permit our service providers to do so.",
@@ -158,11 +158,6 @@
             "quote": "To request deletion of your Customer Content or account, email privacy@upfirst.ai.",
             "url": "https://upfirst.ai/privacy-policy",
             "checkedAt": "2026-11-08"
-          },
-          {
-            "url": "https://upfirst.ai/privacy-policy",
-            "checkedAt": "2026-11-08",
-            "quote": "Our AI sub-processors process Customer Content under zero data retention terms and may not use it to train their models."
           }
         ]
       },
@@ -209,7 +204,7 @@
       }
     },
     "redFlags": [],
-    "verdict": "held",
+    "verdict": "ready",
     "warnings": []
   },
   "lastChecked": "2026-11-08",

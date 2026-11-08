@@ -74,11 +74,7 @@
       "source": "person",
       "foundBy": "Claude (drafted for Rishabh to check)"
     },
-    "leaderName": {
-      "answer": "Naveen Gupta (CEO, Co-Founder)",
-      "quote": "Leadership team Naveen Gupta CEO, Co-Founder Neeraj Gupta CEO, Co-Founder",
-      "pageUrl": "https://birdeye.com/aboutus/"
-    },
+    "leaderName": "unknown",
     "trainsOnYourData": {
       "answer": "anonymized",
       "quote": "We do create aggregated and anonymized datasets for analytics and product improvement purposes as detailed in our Terms, but we ensure such data does not identify any Clients, Partners or end users or any Client confidential information.",
@@ -88,7 +84,7 @@
     },
     "canDeleteData": {
       "answer": "yes",
-      "quote": "If you wish to cancel your account or request that we no longer use your information to provide you the Services, you may delete your account (this will be done by Birdeye’s customer care team).",
+      "quote": "If you delete your account, your Data will no longer be stored in our servers.",
       "pageUrl": "https://birdeye.com/privacy/"
     },
     "whereStored": {

@@ -6,7 +6,7 @@
     "website": "https://www.chatbase.co",
     "domain": "chatbase.co"
   },
-  "description": "AI agents that meet customers at every stage of their journey, across chat, email, and voice, to resolve issues end to end and increase revenue.",
+  "description": "Website chat.",
   "category": "Website chat",
   "useCases": [
     "customer-messaging"
@@ -18,15 +18,15 @@
     "asOf": "Nov 2026",
     "small": {
       "monthlyUsd": 32,
-      "note": "Hobby plan"
+      "note": "Cheapest paid plan"
     },
     "medium": {
       "monthlyUsd": 120,
-      "note": "Basic plan"
+      "note": "Middle plan"
     },
     "large": {
       "monthlyUsd": 400,
-      "note": "Business Popular plan"
+      "note": "Top plan"
     },
     "freeTier": "unknown",
     "contract": "annual",
@@ -88,10 +88,10 @@
       "sourceUrl": "https://www.chatbase.co/legal/privacy"
     },
     "sharesOrSells": {
-      "answer": "unknown",
-      "plain": "We couldn't confirm whether it sells or shares your data.",
-      "quote": null,
-      "sourceUrl": null
+      "answer": "no",
+      "plain": "Does not sell or share your data.",
+      "quote": "We do not sell personal information to anyone and only share it with third parties who are facilitating the delivery of our services.",
+      "sourceUrl": "https://www.chatbase.co/legal/privacy"
     },
     "securityCertification": {
       "answer": "SOC 2",
@@ -103,7 +103,7 @@
   "rulesFlags": {
     "recordsCalls": "unknown",
     "announcesRecording": "unknown",
-    "hipaaReady": "unknown",
+    "hipaaReady": true,
     "outboundAiCalls": "unknown",
     "personalizedPricing": "unknown"
   },
@@ -148,8 +148,8 @@
         ]
       },
       "dataUse": {
-        "result": "unknown",
-        "reason": "The privacy policy isn't clear about whether it uses your information to make its AI better. A person needs to read it.",
+        "result": "pass",
+        "reason": "Doesn't use your information to make its AI better. You can delete your information.",
         "evidence": [
           {
             "quote": "No AI Training : We do not use your data to train AI models.",
@@ -160,11 +160,6 @@
             "quote": "All personal data that Chatbase controls may be deleted upon verified request from Data Subjects or their authorized agents.",
             "url": "https://www.chatbase.co/legal/privacy",
             "checkedAt": "2026-11-08"
-          },
-          {
-            "url": "https://www.chatbase.co/legal/privacy",
-            "checkedAt": "2026-11-08",
-            "quote": "We want to explicitly affirm that any data obtained through Google Workspace APIs is not used to develop, improve, or train generalized AI and/or ML models."
           }
         ]
       },
@@ -211,17 +206,16 @@
       }
     },
     "redFlags": [],
-    "verdict": "held",
+    "verdict": "ready",
     "warnings": [
       "We couldn't find when the website started."
     ]
   },
   "lastChecked": "2026-11-08",
   "sources": [
-    "https://www.chatbase.co/",
     "https://www.chatbase.co/pricing",
-    "https://www.chatbase.co/llm-info",
     "https://www.chatbase.co/legal/privacy",
+    "https://www.chatbase.co/llm-info",
     "https://www.chatbase.co/integrations/slack",
     "https://www.chatbase.co/industry/tech"
   ],
@@ -231,9 +225,9 @@
     "setupMinutes",
     "rulesFlags.recordsCalls",
     "rulesFlags.announcesRecording",
-    "rulesFlags.hipaaReady",
     "rulesFlags.outboundAiCalls",
     "rulesFlags.personalizedPricing",
+    "description",
     "setupMode",
     "languages"
   ]
