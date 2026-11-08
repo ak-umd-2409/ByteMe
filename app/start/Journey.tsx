@@ -137,6 +137,8 @@ export function Journey({ lookup, catalog }: { lookup: LookupEntry[]; catalog: C
   // Screen 4
   const [numbers, setNumbers] = useState<Record<string, string>>({});
   const [elseText, setElseText] = useState("");
+  const [openOpp, setOpenOpp] = useState<string | null>(null);
+  const seeMoreBtn = useRef<HTMLButtonElement | null>(null);
 
   // Tools
   const [recs, setRecs] = useState<RecommendationResult | null>(null);
@@ -151,6 +153,17 @@ export function Journey({ lookup, catalog }: { lookup: LookupEntry[]; catalog: C
   useEffect(() => {
     top.current?.scrollIntoView({ block: "start" });
   }, [screen]);
+
+  // "See more" pop-up: Escape closes it, and focus goes back to the button that opened it.
+  useEffect(() => {
+    if (!openOpp) return;
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") setOpenOpp(null); };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [openOpp]);
+  useEffect(() => {
+    if (!openOpp) seeMoreBtn.current?.focus();
+  }, [openOpp]);
 
   const go = (next: Screen) => {
     setError(null);
@@ -823,14 +836,65 @@ export function Journey({ lookup, catalog }: { lookup: LookupEntry[]; catalog: C
           </p>
         )}
 
-        <div className={s.grid3}>
-          {opps.map((o, i) => (
-            <article className={s.card} key={o.id}>
-              <div className={s.cardTop}>
+        <div className={s.grid3} style={{ alignItems: "stretch" }}>
+          {opps.map((o) => (
+            <article className={cx(s.card, s.pcard)} key={o.id}>
+              <div className={cx(s.cardTop, s.pcTop)}>
                 <StatusBadge status={o.status} />
                 <h2 className={s.h3}>{o.headline}</h2>
                 <span className={s.small}>{o.statusLabel}</span>
               </div>
+              <div className={s.pcBody}>
+                {o.impact ? (
+                  <p className={s.money}>
+                    <span className={s.small}>{o.impact.kind === "time_cost" ? "Your time: about" : "Might be worth about"}</span> <b className={s.num}>{usd(o.impact.monthly.expected)} a month</b>
+                  </p>
+                ) : o.impactNeeds.length ? (
+                  <span className={s.small}>Add {o.impactNeeds.length === 1 ? "1 number" : `${o.impactNeeds.length} numbers`} to see what it might be worth</span>
+                ) : (
+                  <span className={s.small}>No dollar figure for this one</span>
+                )}
+                <p className={s.clamp}>{o.whyItMatters}</p>
+                <p className={s.firstStep}>
+                  <b>First step:</b> {o.fix.nextStep} <span className={s.small}>· {o.fix.label}</span>
+                </p>
+              </div>
+              <button
+                type="button"
+                className={cx(s.btn, s.secondary, s.seeMore)}
+                aria-haspopup="dialog"
+                onClick={(e) => {
+                  seeMoreBtn.current = e.currentTarget;
+                  setOpenOpp(o.id);
+                }}
+              >
+                See more
+              </button>
+            </article>
+          ))}
+        </div>
+
+        {(() => {
+          const o = opps.find((x) => x.id === openOpp);
+          if (!o) return null;
+          return (
+            <div className={s.overlay} onClick={(e) => { if (e.target === e.currentTarget) setOpenOpp(null); }}>
+              <div className={s.dialog} role="dialog" aria-modal="true" aria-labelledby="opp-title">
+                <div className={s.dialogTop}>
+                  <div className={s.col} style={{ gap: 6 }}>
+                    <StatusBadge status={o.status} />
+                    <h2 className={s.h2} id="opp-title">{o.headline}</h2>
+                    <span className={s.small}>{o.statusLabel}</span>
+                  </div>
+                  <button type="button" className={cx(s.btn, s.secondary, s.closeBtn)} onClick={() => setOpenOpp(null)} autoFocus>
+                    Close ✕
+                  </button>
+                </div>
+                <div className={s.dialogBody}>
+                  <p>{o.whyItMatters}</p>
+                  <p className={s.firstStep}>
+                    <b>First step:</b> {o.fix.nextStep} <span className={s.small}>· {o.fix.label}</span>
+                  </p>
               {o.impact ? (
                 <p className={s.money}>
                   <span className={s.small}>{o.impact.kind === "time_cost" ? "Your time: about" : "Might be worth about"}</span> <b className={s.num}>{usd(o.impact.monthly.expected)} a month</b>
@@ -869,10 +933,8 @@ export function Journey({ lookup, catalog }: { lookup: LookupEntry[]; catalog: C
               ) : (
                 o.impactNote && <p className={s.small}>{o.impactNote}</p>
               )}
-              <p>{o.whyItMatters}</p>
-              <details className={s.disc} open={i === 0}>
-                <summary>Why we think this</summary>
-                <div className={s.discBody}>
+                <div className={s.col} style={{ gap: 10 }}>
+                  <h3 className={s.h3}>Why we think this</h3>
                   <ul className={s.evid}>
                     {o.evidence.map((e, k) => (
                       <li key={k} className={e.observed ? undefined : s.unsure}>
@@ -914,14 +976,12 @@ export function Journey({ lookup, catalog }: { lookup: LookupEntry[]; catalog: C
                     </div>
                   )}
                 </div>
-              </details>
-              <p className={s.firstStep}>
-                <b>First step:</b> {o.fix.nextStep} <span className={s.small}>· {o.fix.label}</span>
-              </p>
               {o.alsoCovers.length > 0 && <span className={s.small}>Also covers: {o.alsoCovers.map((c) => c.headline.toLowerCase()).join(", ")}.</span>}
-            </article>
-          ))}
-        </div>
+                </div>
+              </div>
+            </div>
+          );
+        })()}
 
         <div className={s.grid2}>
           <div className={s.col} style={{ gap: 12 }}>
