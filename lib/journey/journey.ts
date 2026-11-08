@@ -310,7 +310,14 @@ export function couldNotCheck(analysis: OnboardingAnalysis): string[] {
   if (!analysis.profile.business.website.value) out.push("You don't have a website we could find, so we couldn't check online booking, prices or policies.");
   else if (w && !w.reachable && !w.limitations.some((l) => /search engine/i.test(l)))
     out.push(`We couldn't read your website (${w.problem ? w.problem.replace(/\.$/, "").toLowerCase() : "it didn't respond"}), so we couldn't check online booking, prices or policies.`);
-  if (analysis.reviews.reviewCount === 0) out.push("We found no reviews to read, so we couldn't learn what customers say. You can paste a few on the first screen.");
+  if (analysis.reviews.reviewCount === 0) {
+    const ratings = analysis.profile.business.reviewCount?.value ?? null;
+    out.push(
+      typeof ratings === "number" && ratings > 0
+        ? `Google didn't share the text of any of your ${ratings.toLocaleString("en-US")} reviews, so we couldn't learn what customers say. You can paste a few on the first screen.`
+        : "We found no reviews to read, so we couldn't learn what customers say. You can paste a few on the first screen.",
+    );
+  }
   if (analysis.mode.places === "none")
     out.push("We didn't look up a Google listing, so hours, phone and rating come only from what you typed and your website.");
   return out;

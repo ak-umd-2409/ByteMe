@@ -108,7 +108,8 @@ export function mapGooglePlace(place: GooglePlace): PlaceDetails {
       id: review.name ?? `google-${place.id}-${index}`,
       source: "google" as const,
       rating: typeof review.rating === "number" ? review.rating : null,
-      text: (review.originalText?.text ?? review.text?.text ?? "").trim(),
+      // Prefer the review in its own words; fall back to Google's translation when that's all there is.
+      text: (review.originalText?.text?.trim() || review.text?.text?.trim() || "").trim(),
       author: review.authorAttribution?.displayName ?? null,
       authorUrl: review.authorAttribution?.uri ?? null,
       publishedAt: review.publishTime ?? null,
@@ -130,6 +131,7 @@ export function mapGooglePlace(place: GooglePlace): PlaceDetails {
     googleMapsUrl: place.googleMapsUri ?? null,
     businessStatus: place.businessStatus ?? null,
     reviews,
+    reviewsSent: place.reviews?.length ?? 0,
     provider: "google_places",
   };
 }
@@ -192,12 +194,22 @@ export function createGooglePlacesProvider(
       if (!/^[A-Za-z0-9_-]{10,300}$/.test(placeId)) return Promise.resolve(null);
       // Short TTL: Google restricts storing Places content, reviews especially.
       return cached(cache, `places:details:${placeId}`, 30 * 60_000, async () => {
+        // languageCode: reviews come back with text in English (plus the original), so the
+        // review rules, which are English, can read them.
         const data = (await call(
-          `https://places.googleapis.com/v1/places/${encodeURIComponent(placeId)}`,
+          `https://places.googleapis.com/v1/places/${encodeURIComponent(placeId)}?languageCode=en&regionCode=US`,
           { method: "GET" },
           DETAIL_FIELDS,
         )) as GooglePlace | null;
-        return data ? mapGooglePlace(data) : null;
+        if (!data) return null;
+        const mapped = mapGooglePlace(data);
+        // So a missing-reviews problem can be told apart: did Google send none, or did we drop them?
+        log.info("places.details", {
+          reviewsSent: data.reviews?.length ?? 0,
+          reviewsKept: mapped.reviews.length,
+          ratings: data.userRatingCount ?? 0,
+        });
+        return mapped;
       });
     },
   };

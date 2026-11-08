@@ -35,7 +35,7 @@ describe("business lookup", () => {
   it("maps a Google Places response and sends the field mask + key header", async () => {
     const placeId = "ChIJabcdefghij12345";
     const { impl, calls } = fakeFetch({
-      [`https://places.googleapis.com/v1/places/${placeId}`]: {
+      [`https://places.googleapis.com/v1/places/${placeId}?languageCode=en&regionCode=US`]: {
         headers: { "content-type": "application/json" },
         body: JSON.stringify({
           id: placeId,
