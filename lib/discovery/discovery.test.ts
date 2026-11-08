@@ -191,6 +191,13 @@ describe("storage and the service layer", () => {
     assert.deepEqual(calls, ["GET", "SET", "GET"]);
   });
 
+  it("CATALOG_SAMPLES=hide removes the made-up demo tools everywhere", async () => {
+    const all = await loadLiveCatalog(memoryStore(), {} as unknown as NodeJS.ProcessEnv);
+    const real = await loadLiveCatalog(memoryStore(), { CATALOG_SAMPLES: "hide" } as unknown as NodeJS.ProcessEnv);
+    assert.ok(all.some((r) => r.sample));
+    assert.ok(!real.some((r) => r.sample));
+  });
+
   it("owners still get the built-in catalog if storage is down", async () => {
     const broken = { ...memoryStore(), load: async () => Promise.reject(new Error("down")) };
     assert.equal((await loadLiveCatalog(broken)).length, catalog.length);

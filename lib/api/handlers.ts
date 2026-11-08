@@ -4,6 +4,7 @@ import { getPlacesProvider, PlacesError, type PlacesProvider } from "../business
 import { applyCorrections, type ProfileCorrections } from "../business/profile.ts";
 import type { ListingsCheck } from "../business/listings.ts";
 import type { OnboardingProfile, ReviewAnalysis, WebsiteAnalysis } from "../business/types.ts";
+import { PUBLIC_SNAPSHOTS } from "../../data/real/index.ts";
 import { disabledProvider, getLlmProvider, type LlmProvider } from "../llm/client.ts";
 import { PROBLEMS } from "../problems/catalog.ts";
 import { discoverProblems, polishExplanations } from "../problems/discover.ts";
@@ -62,7 +63,19 @@ export async function handleSearch(query: Record<string, string | undefined>, de
     const matches = await deps.places.search(parsed.value.q, parsed.value.near);
     return {
       status: 200,
-      body: { query: parsed.value.q, matches, mode: modeOf(deps), sampleData: matches.some((m) => m.provider === "mock"), realSnapshot: matches.some((m) => m.provider === "public_snapshot") },
+      body: {
+        query: parsed.value.q,
+        matches,
+        mode: modeOf(deps),
+        sampleData: matches.some((m) => m.provider === "mock"),
+        realSnapshot: matches.some((m) => m.provider === "public_snapshot"),
+        // Live Google search is off: say so, and offer the real businesses we saved instead of guessing.
+        liveSearch: deps.places.kind === "google_places",
+        saved:
+          deps.places.kind === "google_places"
+            ? []
+            : PUBLIC_SNAPSHOTS.map((x) => ({ placeId: x.placeId, name: x.details.name, address: x.details.address.formatted, capturedAt: x.capturedAt })),
+      },
     };
   } catch (error) {
     if (error instanceof PlacesError) return errorResponse(502, "places_unavailable", error.message);
