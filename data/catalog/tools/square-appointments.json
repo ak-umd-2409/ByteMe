@@ -1,0 +1,221 @@
+{
+  "id": "square-appointments",
+  "name": "Square Appointments",
+  "vendor": {
+    "company": "Block, Inc.",
+    "website": "https://squareup.com/us/en/appointments",
+    "domain": "squareup.com"
+  },
+  "description": "Use Square booking software to manage appointments, staff availability, and services all from one place — synced in real time.",
+  "category": "Booking",
+  "useCases": [
+    "booking"
+  ],
+  "industries": [
+    "salon",
+    "fitness",
+    "health_clinic",
+    "professional_services"
+  ],
+  "existingProduct": "Square",
+  "pricing": {
+    "asOf": "Nov 2026",
+    "small": {
+      "monthlyUsd": "unknown",
+      "note": ""
+    },
+    "medium": {
+      "monthlyUsd": "unknown",
+      "note": ""
+    },
+    "large": {
+      "monthlyUsd": "unknown",
+      "note": ""
+    },
+    "freeTier": "unknown",
+    "contract": "unknown",
+    "cancellation": "unknown",
+    "pricingUrl": "https://squareup.com/us/en/appointments/pricing"
+  },
+  "worksWith": [
+    {
+      "product": "QuickBooks",
+      "type": "native"
+    },
+    {
+      "product": "Xero",
+      "type": "native"
+    },
+    {
+      "product": "Google Calendar",
+      "type": "native"
+    }
+  ],
+  "setupMinutes": "unknown",
+  "setupMode": "needs_help",
+  "languages": [
+    "English"
+  ],
+  "privacyCard": {
+    "trainsOnYourData": {
+      "answer": "yes",
+      "plain": "Uses your data to train its AI.",
+      "quote": "This also enables us to do internal research, measure, track, and analyze trends and usage, to improve our products and services, and, in the United States, to provide our products and services when instructed by your customers.",
+      "sourceUrl": "https://squareup.com/us/en/legal/general/privacy"
+    },
+    "canDeleteData": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm whether you can delete your data.",
+      "quote": null,
+      "sourceUrl": null
+    },
+    "whereStored": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm where your data is stored.",
+      "quote": null,
+      "sourceUrl": null
+    },
+    "sharesOrSells": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm whether it sells or shares your data.",
+      "quote": null,
+      "sourceUrl": null
+    },
+    "securityCertification": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm a security certification.",
+      "quote": null,
+      "sourceUrl": null
+    }
+  },
+  "rulesFlags": {
+    "recordsCalls": "unknown",
+    "announcesRecording": "unknown",
+    "hipaaReady": "unknown",
+    "outboundAiCalls": "unknown",
+    "personalizedPricing": "unknown"
+  },
+  "badge": "listed",
+  "safetyCheck": {
+    "ranAt": "2026-11-08",
+    "checks": {
+      "whoIsBehind": {
+        "result": "pass",
+        "reason": "Run by Block, Inc., a company at 1955 Broadway, Suite 600, Oakland, CA 94612, United States.",
+        "evidence": [
+          {
+            "quote": "© 2026 Block, Inc.",
+            "url": "https://squareup.com/us/en/about",
+            "checkedAt": "2026-11-08"
+          },
+          {
+            "quote": "If your Country of Residence is the United States, your Square entity is Block, Inc., 1955 Broadway, Suite 600, Oakland, CA 94612, United States.",
+            "url": "https://squareup.com/us/en/legal/general/privacy",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "domainAge": {
+        "result": "pass",
+        "reason": "The website has been around since May 2007.",
+        "evidence": [
+          {
+            "url": "https://rdap.org/domain/squareup.com",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "privacyPolicy": {
+        "result": "pass",
+        "reason": "Has a full privacy policy that says what they do with your information.",
+        "evidence": [
+          {
+            "url": "https://squareup.com/us/en/legal/general/privacy",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "dataUse": {
+        "result": "fail",
+        "reason": "It may use your customers' information to make its AI better, and we found no way to stop it.",
+        "evidence": [
+          {
+            "quote": "This also enables us to do internal research, measure, track, and analyze trends and usage, to improve our products and services, and, in the United States, to provide our products and services when instructed by your customers.",
+            "url": "https://squareup.com/us/en/legal/general/privacy",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "dataLocation": {
+        "result": "unknown",
+        "reason": "We couldn't find which country your information is kept in.",
+        "evidence": [
+          {
+            "url": "https://squareup.com/us/en/legal/general/privacy",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "pricingClarity": {
+        "result": "pass",
+        "reason": "Shows a clear monthly price.",
+        "evidence": [
+          {
+            "url": "https://squareup.com/us/en/pricing",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "securityBasics": {
+        "result": "pass",
+        "reason": "Your connection to this website is private (https). This tool handles payments or health information, but we found no proof that an outside company checked its security (like PCI or SOC 2).",
+        "evidence": [
+          {
+            "url": "https://squareup.com/us/en/appointments",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "redFlags": {
+        "result": "pass",
+        "reason": "No warning signs found. (We didn't check Google's list of unsafe websites.)",
+        "evidence": [
+          {
+            "url": "https://squareup.com/us/en/appointments",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      }
+    },
+    "redFlags": [],
+    "verdict": "held",
+    "warnings": [
+      "We couldn't find which country your information is kept in.",
+      "We couldn't find the name of the person who runs this company.",
+      "This tool handles payments or health information, but we found no proof that an outside company checked its security (like PCI or SOC 2)."
+    ]
+  },
+  "lastChecked": "2026-11-08",
+  "sources": [
+    "https://squareup.com/us/en/appointments",
+    "https://squareup.com/us/en/about",
+    "https://squareup.com/us/en/legal/general/privacy",
+    "https://squareup.com/us/en/appointments/integrations"
+  ],
+  "needsVerification": [
+    "pricing.small.monthlyUsd",
+    "pricing.medium.monthlyUsd",
+    "pricing.large.monthlyUsd",
+    "pricing.freeTier",
+    "pricing.contract",
+    "pricing.cancellation",
+    "setupMinutes",
+    "rulesFlags.recordsCalls",
+    "rulesFlags.announcesRecording",
+    "rulesFlags.hipaaReady",
+    "rulesFlags.outboundAiCalls",
+    "rulesFlags.personalizedPricing",
+    "setupMode",
+    "languages"
+  ]
+}

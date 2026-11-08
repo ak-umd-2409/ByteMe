@@ -1,0 +1,221 @@
+{
+  "id": "ruby",
+  "name": "Ruby",
+  "vendor": {
+    "company": "Ruby Receptionists, Inc.",
+    "website": "https://www.ruby.com",
+    "domain": "ruby.com"
+  },
+  "description": "Ruby combines real people with AI-enhanced technology to answer calls, capture leads, and keep your business connected 24/7.",
+  "category": "Receptionist service",
+  "useCases": [
+    "missed-calls"
+  ],
+  "industries": [
+    "professional_services",
+    "hvac",
+    "plumbing",
+    "electrical",
+    "landscaping",
+    "cleaning"
+  ],
+  "pricing": {
+    "asOf": "Nov 2026",
+    "small": {
+      "monthlyUsd": 250,
+      "note": "50 minutes per month plan"
+    },
+    "medium": {
+      "monthlyUsd": 720,
+      "note": "200 minutes per month plan"
+    },
+    "large": {
+      "monthlyUsd": 1725,
+      "note": "500 minutes per month plan"
+    },
+    "freeTier": "unknown",
+    "contract": "monthly",
+    "cancellation": "unknown",
+    "pricingUrl": "https://www.ruby.com/plans-and-pricing/"
+  },
+  "worksWith": [
+    {
+      "product": "Clio",
+      "type": "zapier"
+    },
+    {
+      "product": "Grasshopper",
+      "type": "zapier"
+    },
+    {
+      "product": "Zapier",
+      "type": "zapier"
+    },
+    {
+      "product": "Salesforce",
+      "type": "native"
+    }
+  ],
+  "setupMinutes": "unknown",
+  "setupMode": "needs_help",
+  "languages": [
+    "English",
+    "Spanish"
+  ],
+  "privacyCard": {
+    "trainsOnYourData": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm whether it uses your data to train AI.",
+      "quote": null,
+      "sourceUrl": null
+    },
+    "canDeleteData": {
+      "answer": "no",
+      "plain": "You can't delete your data.",
+      "quote": "Accordingly, we are not obligated to delete Personal Information in response to a Consumer request and, given the necessity of data retention in order to continue to provide Services to our Customers and the technical concerns with ad hoc deletion, we will not delete Personal Information in response to such requests.",
+      "sourceUrl": "https://www.ruby.com/privacy/"
+    },
+    "whereStored": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm where your data is stored.",
+      "quote": null,
+      "sourceUrl": null
+    },
+    "sharesOrSells": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm whether it sells or shares your data.",
+      "quote": null,
+      "sourceUrl": null
+    },
+    "securityCertification": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm a security certification.",
+      "quote": null,
+      "sourceUrl": null
+    }
+  },
+  "rulesFlags": {
+    "recordsCalls": "unknown",
+    "announcesRecording": "unknown",
+    "hipaaReady": "unknown",
+    "outboundAiCalls": "unknown",
+    "personalizedPricing": "unknown"
+  },
+  "badge": "listed",
+  "safetyCheck": {
+    "ranAt": "2026-11-08",
+    "checks": {
+      "whoIsBehind": {
+        "result": "unknown",
+        "reason": "We couldn't find an address for Ruby Receptionists, Inc.",
+        "evidence": [
+          {
+            "quote": "©2026 Ruby. All Rights Reserved. Ruby is a registered trademark of Ruby Receptionists, Inc.",
+            "url": "https://www.ruby.com/about/",
+            "checkedAt": "2026-11-08"
+          },
+          {
+            "quote": "Stephanie Copeland Weber President and Chief Operating Officer",
+            "url": "https://www.ruby.com/about/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "domainAge": {
+        "result": "pass",
+        "reason": "The website has been around since August 1994.",
+        "evidence": [
+          {
+            "url": "https://rdap.org/domain/ruby.com",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "privacyPolicy": {
+        "result": "pass",
+        "reason": "Has a full privacy policy that says what they do with your information.",
+        "evidence": [
+          {
+            "url": "https://www.ruby.com/privacy/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "dataUse": {
+        "result": "fail",
+        "reason": "You can't delete your information.",
+        "evidence": [
+          {
+            "quote": "Accordingly, we are not obligated to delete Personal Information in response to a Consumer request and, given the necessity of data retention in order to continue to provide Services to our Customers and the technical concerns with ad hoc deletion, we will not delete Personal Information in response to such requests.",
+            "url": "https://www.ruby.com/privacy/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "dataLocation": {
+        "result": "unknown",
+        "reason": "We couldn't find which country your information is kept in.",
+        "evidence": [
+          {
+            "url": "https://www.ruby.com/privacy/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "pricingClarity": {
+        "result": "pass",
+        "reason": "Shows a clear monthly price.",
+        "evidence": [
+          {
+            "url": "https://www.ruby.com/plans-and-pricing/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "securityBasics": {
+        "result": "pass",
+        "reason": "Your connection to this website is private (https).",
+        "evidence": [
+          {
+            "url": "https://www.ruby.com/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "redFlags": {
+        "result": "pass",
+        "reason": "No warning signs found. (We didn't check Google's list of unsafe websites.)",
+        "evidence": [
+          {
+            "url": "https://www.ruby.com/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      }
+    },
+    "redFlags": [],
+    "verdict": "held",
+    "warnings": [
+      "We couldn't find which country your information is kept in."
+    ]
+  },
+  "lastChecked": "2026-11-08",
+  "sources": [
+    "https://www.ruby.com/",
+    "https://www.ruby.com/plans-and-pricing/",
+    "https://www.ruby.com/about/",
+    "https://www.ruby.com/privacy/",
+    "https://www.ruby.com/solutions/integrations/"
+  ],
+  "needsVerification": [
+    "pricing.freeTier",
+    "pricing.cancellation",
+    "setupMinutes",
+    "rulesFlags.recordsCalls",
+    "rulesFlags.announcesRecording",
+    "rulesFlags.hipaaReady",
+    "rulesFlags.outboundAiCalls",
+    "rulesFlags.personalizedPricing",
+    "setupMode"
+  ]
+}

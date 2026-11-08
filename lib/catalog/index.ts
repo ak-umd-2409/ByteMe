@@ -4,16 +4,28 @@
  * The catalog is read from JSON files in data/catalog, so it works with no
  * database, network or LLM. Add a new file by adding one import line below.
  */
+import real from "../../data/catalog/real.json" with { type: "json" };
 import sample from "../../data/catalog/sample.json" with { type: "json" };
 import type { IndustryKey } from "../business/types.ts";
 import type { CatalogTool, UseCase } from "../recommend/types.ts";
+import testTools from "./testTools.json" with { type: "json" };
 import { toCatalogTool } from "./toCatalogTool.ts";
 import type { CatalogRecord } from "./types.ts";
 
-const FILES: unknown[][] = [sample];
+/** What the app reads: the real catalog plus the 3 made-up scam tools (always blocked). */
+const FILES: unknown[][] = [real, sample];
 
 export function loadCatalog(): CatalogRecord[] {
   return structuredClone(FILES.flat()) as CatalogRecord[];
+}
+
+/**
+ * Tests only: the 3 scams plus 5 made-up "good" tools with stable ids
+ * (ringwise-receptionist, quotequick, replykind, booknest, texttide).
+ * Never shown to owners.
+ */
+export function loadTestCatalog(): CatalogRecord[] {
+  return structuredClone([...testTools, ...sample]) as CatalogRecord[];
 }
 
 export interface ToolFilters {

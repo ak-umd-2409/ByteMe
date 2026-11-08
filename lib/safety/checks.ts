@@ -76,6 +76,18 @@ const ANSWERS_PASS: Record<string, string> = {
   "opt-out": "Uses your information to make its AI better, but you can turn this off.",
 };
 
+/** "We do not ... train AI models" with no escape ("unless", "except", "but", "however"): agrees with a "no" answer. */
+// The "not" must govern use/train directly ("we do not use", "is not used", "do not sell ... or use"),
+// and the sentence must have no escape, condition, second clause (;) or line break.
+const deniesTraining = (s: string) =>
+  /\btrain\w*/i.test(s) &&
+  /\b(do(es)? not|don't|doesn't|never|will not|won't|may not|(is|are) not|isn't|aren't)\s+(use|used|process\w*|train\w*|sell\b[^;\n]{0,80}\bor use)\b/i.test(s) &&
+  !/[;\n]|\b(unless|except|but|however|if|before|opt\w*)\b/i.test(s);
+/** Staff "security training" is about people, not AI: set aside unless the sentence also talks about AI. */
+const aboutStaffTraining = (s: string) =>
+  /\b(security|staff|employee|personnel|compliance|privacy) training\b/i.test(s) &&
+  !/\b(models?|ai|artificial intelligence|machine learning|algorithms?)\b/i.test(s);
+
 export function checkDataUse(facts: SafetyFacts): SafetyCheckItem {
   const { trainsOnYourData: trains, canDeleteData: del } = facts.ai;
   const evidence = answerEvidence(facts, trains, del);
@@ -92,7 +104,7 @@ export function checkDataUse(facts: SafetyFacts): SafetyCheckItem {
     const quoteOk = trains.answer === "no" ? negationPattern.test(trains.quote) && !qualifierPattern.test(trains.quote) : true;
     const sameCase: Record<string, RegExp | undefined> = { anonymized: anonymizedPattern, "opt-in": consentPattern };
     const explained = (s: string) => (quoteOk && norm(s) === norm(trains.quote)) || Boolean(sameCase[trains.answer]?.test(s));
-    const others = facts.riskySentences.filter((s) => !explained(s));
+    const others = facts.riskySentences.filter((s) => !explained(s) && !deniesTraining(s) && !aboutStaffTraining(s));
     if (others.length > 0) {
       const privacy = pageEvidence(facts.pages.privacy);
       const risky = privacy.length ? others.map((quote) => ({ ...privacy[0], quote })) : [];
@@ -121,7 +133,7 @@ export function trainingWarning(facts: SafetyFacts): string | null {
   if (trains.answer === "anonymized")
     return "This tool learns from how people use it. It may use your customers' calls or messages to get better, but it removes names and phone numbers first. Good to know: don't share card numbers or health details with it.";
   if (trains.answer === "opt-out")
-    return "Turn this setting off after you sign up. This tool may use your customers' calls or messages to get better. You can stop this in its settings.";
+    return "Ask them to stop this after you sign up. This tool may use your customers' calls or messages to get better, and it says you can opt out. Its privacy policy says how.";
   return null;
 }
 

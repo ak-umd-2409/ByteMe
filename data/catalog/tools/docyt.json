@@ -1,0 +1,237 @@
+{
+  "id": "docyt",
+  "name": "Docyt",
+  "vendor": {
+    "company": "Docyt, Inc.",
+    "website": "https://docyt.com",
+    "domain": "docyt.com"
+  },
+  "description": "An AI-Native ERP handling accounting, payments, and business intelligence in one platform.",
+  "category": "Bookkeeping",
+  "useCases": [
+    "bookkeeping",
+    "admin-paperwork"
+  ],
+  "industries": [
+    "restaurant",
+    "retail"
+  ],
+  "pricing": {
+    "asOf": "Nov 2026",
+    "small": {
+      "monthlyUsd": "unknown",
+      "note": ""
+    },
+    "medium": {
+      "monthlyUsd": "unknown",
+      "note": ""
+    },
+    "large": {
+      "monthlyUsd": "unknown",
+      "note": ""
+    },
+    "freeTier": "unknown",
+    "contract": "unknown",
+    "cancellation": "unknown",
+    "pricingUrl": "https://www.docyt.com/faq/"
+  },
+  "worksWith": [
+    {
+      "product": "QuickBooks",
+      "type": "native"
+    },
+    {
+      "product": "Sage",
+      "type": "native"
+    },
+    {
+      "product": "NetSuite",
+      "type": "native"
+    },
+    {
+      "product": "Claude",
+      "type": "native"
+    }
+  ],
+  "setupMinutes": "unknown",
+  "setupMode": "needs_help",
+  "languages": [
+    "English"
+  ],
+  "privacyCard": {
+    "trainsOnYourData": {
+      "answer": "no",
+      "plain": "Does not use your data to train AI.",
+      "quote": "Your data is never used to train AI models .",
+      "sourceUrl": "https://www.docyt.com/privacy/"
+    },
+    "canDeleteData": {
+      "answer": "yes",
+      "plain": "You can delete your data.",
+      "quote": "Delete files anytime. They’ll be removed from Docyt servers on the timeline above.",
+      "sourceUrl": "https://www.docyt.com/privacy/"
+    },
+    "whereStored": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm where your data is stored.",
+      "quote": null,
+      "sourceUrl": null
+    },
+    "sharesOrSells": {
+      "answer": "no",
+      "plain": "Does not sell or share your data.",
+      "quote": "We don’t sell your information. Ever.",
+      "sourceUrl": "https://www.docyt.com/privacy/"
+    },
+    "securityCertification": {
+      "answer": "SOC 2 Type II",
+      "plain": "Security checked by an outside company: SOC 2 Type II.",
+      "quote": "We maintain SOC 2 Type II compliance , independent proof that our security practices meet strict standards.",
+      "sourceUrl": "https://www.docyt.com/privacy/"
+    }
+  },
+  "rulesFlags": {
+    "recordsCalls": "unknown",
+    "announcesRecording": "unknown",
+    "hipaaReady": "unknown",
+    "outboundAiCalls": "unknown",
+    "personalizedPricing": "unknown"
+  },
+  "badge": "listed",
+  "safetyCheck": {
+    "ranAt": "2026-11-08",
+    "checks": {
+      "whoIsBehind": {
+        "result": "unknown",
+        "reason": "We couldn't find an address for Docyt, Inc.",
+        "evidence": [
+          {
+            "quote": "© 2026 Docyt, Inc. All rights reserved.",
+            "url": "https://www.docyt.com/company/",
+            "checkedAt": "2026-11-08"
+          },
+          {
+            "quote": "Sid Saxena Co-founder and CEO",
+            "url": "https://www.docyt.com/company/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "domainAge": {
+        "result": "pass",
+        "reason": "The website has been around since April 2015.",
+        "evidence": [
+          {
+            "url": "https://rdap.org/domain/docyt.com",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "privacyPolicy": {
+        "result": "pass",
+        "reason": "Has a full privacy policy that says what they do with your information.",
+        "evidence": [
+          {
+            "url": "https://www.docyt.com/privacy/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "dataUse": {
+        "result": "unknown",
+        "reason": "The privacy policy isn't clear about whether it uses your information to make its AI better. A person needs to read it.",
+        "evidence": [
+          {
+            "quote": "Your data is never used to train AI models .",
+            "url": "https://www.docyt.com/privacy/",
+            "checkedAt": "2026-11-08"
+          },
+          {
+            "quote": "Delete files anytime. They’ll be removed from Docyt servers on the timeline above.",
+            "url": "https://www.docyt.com/privacy/",
+            "checkedAt": "2026-11-08"
+          },
+          {
+            "url": "https://www.docyt.com/privacy/",
+            "checkedAt": "2026-11-08",
+            "quote": "And here’s the key part:\nYour data is never used to train AI models ."
+          },
+          {
+            "url": "https://www.docyt.com/privacy/",
+            "checkedAt": "2026-11-08",
+            "quote": "That provider’s own privacy policy and your settings with them govern how long they keep the conversation and whether they use it to train their models."
+          }
+        ]
+      },
+      "dataLocation": {
+        "result": "unknown",
+        "reason": "We couldn't find which country your information is kept in.",
+        "evidence": [
+          {
+            "url": "https://www.docyt.com/privacy/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "pricingClarity": {
+        "result": "fail",
+        "reason": "The website doesn't show a clear monthly price.",
+        "evidence": [
+          {
+            "url": "https://www.docyt.com/faq/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "securityBasics": {
+        "result": "pass",
+        "reason": "Your connection to this website is private (https).",
+        "evidence": [
+          {
+            "url": "https://www.docyt.com/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "redFlags": {
+        "result": "pass",
+        "reason": "No warning signs found. (We didn't check Google's list of unsafe websites.)",
+        "evidence": [
+          {
+            "url": "https://docyt.com/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      }
+    },
+    "redFlags": [],
+    "verdict": "held",
+    "warnings": [
+      "We couldn't find which country your information is kept in.",
+      "The website doesn't show a clear monthly price."
+    ]
+  },
+  "lastChecked": "2026-11-08",
+  "sources": [
+    "https://www.docyt.com/faq/",
+    "https://www.docyt.com/privacy/",
+    "https://www.docyt.com/company/",
+    "https://www.docyt.com/help/connect-ai-assistant/"
+  ],
+  "needsVerification": [
+    "pricing.small.monthlyUsd",
+    "pricing.medium.monthlyUsd",
+    "pricing.large.monthlyUsd",
+    "pricing.freeTier",
+    "pricing.contract",
+    "pricing.cancellation",
+    "setupMinutes",
+    "rulesFlags.recordsCalls",
+    "rulesFlags.announcesRecording",
+    "rulesFlags.hipaaReady",
+    "rulesFlags.outboundAiCalls",
+    "rulesFlags.personalizedPricing",
+    "setupMode",
+    "languages"
+  ]
+}

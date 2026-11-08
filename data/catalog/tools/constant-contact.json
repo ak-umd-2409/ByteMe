@@ -1,0 +1,167 @@
+{
+  "id": "constant-contact",
+  "name": "Constant Contact",
+  "vendor": {
+    "company": "Constant Contact",
+    "website": "https://www.constantcontact.com",
+    "domain": "constantcontact.com"
+  },
+  "description": "Email marketing.",
+  "category": "Email marketing",
+  "useCases": [
+    "email-marketing",
+    "marketing"
+  ],
+  "industries": [
+    "any"
+  ],
+  "pricing": {
+    "asOf": "Nov 2026",
+    "small": {
+      "monthlyUsd": "unknown",
+      "note": ""
+    },
+    "medium": {
+      "monthlyUsd": "unknown",
+      "note": ""
+    },
+    "large": {
+      "monthlyUsd": "unknown",
+      "note": ""
+    },
+    "freeTier": "unknown",
+    "contract": "unknown",
+    "cancellation": "unknown",
+    "pricingUrl": "unknown"
+  },
+  "worksWith": [],
+  "setupMinutes": "unknown",
+  "setupMode": "needs_help",
+  "languages": [
+    "English"
+  ],
+  "privacyCard": {
+    "trainsOnYourData": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm whether it uses your data to train AI.",
+      "quote": null,
+      "sourceUrl": null
+    },
+    "canDeleteData": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm whether you can delete your data.",
+      "quote": null,
+      "sourceUrl": null
+    },
+    "whereStored": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm where your data is stored.",
+      "quote": null,
+      "sourceUrl": null
+    },
+    "sharesOrSells": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm whether it sells or shares your data.",
+      "quote": null,
+      "sourceUrl": null
+    },
+    "securityCertification": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm a security certification.",
+      "quote": null,
+      "sourceUrl": null
+    }
+  },
+  "rulesFlags": {
+    "recordsCalls": "unknown",
+    "announcesRecording": "unknown",
+    "hipaaReady": "unknown",
+    "outboundAiCalls": "unknown",
+    "personalizedPricing": "unknown"
+  },
+  "badge": "listed",
+  "safetyCheck": {
+    "ranAt": "2026-11-08",
+    "checks": {
+      "whoIsBehind": {
+        "result": "unknown",
+        "reason": "We couldn't find an About or Contact page that says who is behind this tool.",
+        "evidence": []
+      },
+      "domainAge": {
+        "result": "pass",
+        "reason": "The website has been around since September 1998.",
+        "evidence": [
+          {
+            "url": "https://rdap.org/domain/constantcontact.com",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "privacyPolicy": {
+        "result": "unknown",
+        "reason": "We couldn't open the privacy policy.",
+        "evidence": []
+      },
+      "dataUse": {
+        "result": "unknown",
+        "reason": "We couldn't find whether it uses your information to make its AI better or whether you can delete your information.",
+        "evidence": []
+      },
+      "dataLocation": {
+        "result": "unknown",
+        "reason": "We couldn't find which country your information is kept in.",
+        "evidence": []
+      },
+      "pricingClarity": {
+        "result": "unknown",
+        "reason": "We couldn't open the pricing page.",
+        "evidence": []
+      },
+      "securityBasics": {
+        "result": "unknown",
+        "reason": "We couldn't open the website.",
+        "evidence": []
+      },
+      "redFlags": {
+        "result": "pass",
+        "reason": "No warning signs found. (We didn't check Google's list of unsafe websites.)",
+        "evidence": [
+          {
+            "url": "https://www.constantcontact.com/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      }
+    },
+    "redFlags": [],
+    "verdict": "held",
+    "warnings": [
+      "We couldn't find which country your information is kept in.",
+      "We couldn't open the pricing page.",
+      "We couldn't find the name of the person who runs this company."
+    ]
+  },
+  "lastChecked": "2026-11-08",
+  "sources": [
+    "https://www.constantcontact.com"
+  ],
+  "needsVerification": [
+    "pricing.small.monthlyUsd",
+    "pricing.medium.monthlyUsd",
+    "pricing.large.monthlyUsd",
+    "pricing.freeTier",
+    "pricing.contract",
+    "pricing.cancellation",
+    "pricing.pricingUrl",
+    "setupMinutes",
+    "rulesFlags.recordsCalls",
+    "rulesFlags.announcesRecording",
+    "rulesFlags.hipaaReady",
+    "rulesFlags.outboundAiCalls",
+    "rulesFlags.personalizedPricing",
+    "description",
+    "setupMode",
+    "languages"
+  ]
+}

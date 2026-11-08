@@ -1,0 +1,18 @@
+[
+  {
+    "field": "address",
+    "answer": "2479 E Bayshore Rd, Suite 188, Palo Alto, CA 94303",
+    "quote": "2479 E Bayshore Rd, Suite 188, Palo Alto, CA 94303",
+    "url": "https://birdeye.com/aboutus/",
+    "foundBy": "Claude (drafted for Rishabh to check)",
+    "foundAt": "2026-11-08"
+  },
+  {
+    "field": "trainsOnYourData",
+    "answer": "anonymized",
+    "quote": "We do create aggregated and anonymized datasets for analytics and product improvement purposes as detailed in our Terms, but we ensure such data does not identify any Clients, Partners or end users or any Client confidential information.",
+    "url": "https://birdeye.com/ai-policy/",
+    "foundBy": "Claude (drafted for Rishabh to check)",
+    "foundAt": "2026-11-08"
+  }
+]

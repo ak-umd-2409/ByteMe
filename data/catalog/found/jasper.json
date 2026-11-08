@@ -1,0 +1,18 @@
+[
+  {
+    "field": "trainsOnYourData",
+    "answer": "no",
+    "quote": "With Jasper, your data stays yours, and is never used for training purposes.",
+    "url": "https://www.jasper.ai/enterprise",
+    "foundBy": "Claude (drafted for Rishabh to check)",
+    "foundAt": "2026-11-08"
+  },
+  {
+    "field": "canDeleteData",
+    "answer": "yes",
+    "quote": "You have the right to ask Us to delete or remove Personal Data when there is no good reason for Us to continue processing it.",
+    "url": "https://www.jasper.ai/legal/privacy",
+    "foundBy": "Claude (drafted for Rishabh to check)",
+    "foundAt": "2026-11-08"
+  }
+]

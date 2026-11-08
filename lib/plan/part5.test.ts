@@ -4,7 +4,7 @@ import { handleJourneyAnswer, handleJourneyStart } from "../api/journey.ts";
 import type { ApiDeps } from "../api/handlers.ts";
 import { handlePlanOpen, handlePlanShare, openSavedShare, type PlanDeps } from "../api/plan.ts";
 import { getPlacesProvider } from "../business/places.ts";
-import { loadCatalog } from "../catalog/index.ts";
+import { loadTestCatalog as loadCatalog } from "../catalog/index.ts";
 import type { JourneyAnswerResponse, JourneyStartResponse } from "../journey/types.ts";
 import { disabledProvider } from "../llm/client.ts";
 import { loadConfig } from "../shared/config.ts";

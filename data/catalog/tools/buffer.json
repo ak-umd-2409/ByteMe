@@ -1,0 +1,217 @@
+{
+  "id": "buffer",
+  "name": "Buffer",
+  "vendor": {
+    "company": "Buffer",
+    "website": "https://buffer.com",
+    "domain": "buffer.com"
+  },
+  "description": "Social media.",
+  "category": "Social media",
+  "useCases": [
+    "marketing"
+  ],
+  "industries": [
+    "any"
+  ],
+  "pricing": {
+    "asOf": "Nov 2026",
+    "small": {
+      "monthlyUsd": 5,
+      "note": "Essentials plan"
+    },
+    "medium": {
+      "monthlyUsd": 10,
+      "note": "Team plan"
+    },
+    "large": {
+      "monthlyUsd": "unknown",
+      "note": ""
+    },
+    "freeTier": "unknown",
+    "contract": "unknown",
+    "cancellation": "unknown",
+    "pricingUrl": "https://buffer.com/pricing?cta=bufferSite-globalNav-pricing-pricing-1"
+  },
+  "worksWith": [
+    {
+      "product": "Canva",
+      "type": "native"
+    },
+    {
+      "product": "ChatGPT",
+      "type": "native"
+    },
+    {
+      "product": "Claude",
+      "type": "native"
+    }
+  ],
+  "setupMinutes": "unknown",
+  "setupMode": "self_serve",
+  "languages": [
+    "English"
+  ],
+  "privacyCard": {
+    "trainsOnYourData": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm whether it uses your data to train AI.",
+      "quote": null,
+      "sourceUrl": null
+    },
+    "canDeleteData": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm whether you can delete your data.",
+      "quote": null,
+      "sourceUrl": null
+    },
+    "whereStored": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm where your data is stored.",
+      "quote": null,
+      "sourceUrl": null
+    },
+    "sharesOrSells": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm whether it sells or shares your data.",
+      "quote": null,
+      "sourceUrl": null
+    },
+    "securityCertification": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm a security certification.",
+      "quote": null,
+      "sourceUrl": null
+    }
+  },
+  "rulesFlags": {
+    "recordsCalls": "unknown",
+    "announcesRecording": "unknown",
+    "hipaaReady": "unknown",
+    "outboundAiCalls": "unknown",
+    "personalizedPricing": "unknown"
+  },
+  "badge": "listed",
+  "safetyCheck": {
+    "ranAt": "2026-11-08",
+    "checks": {
+      "whoIsBehind": {
+        "result": "pass",
+        "reason": "Run by Buffer, a company at 2443 Fillmore Street #380-7163.",
+        "evidence": [
+          {
+            "quote": "We’re Buffer 👋",
+            "url": "https://buffer.com/about",
+            "checkedAt": "2026-11-08"
+          },
+          {
+            "quote": "2443 Fillmore Street #380-7163",
+            "url": "https://buffer.com/legal",
+            "checkedAt": "2026-11-08"
+          },
+          {
+            "quote": "Early into Buffer’s journey, our Founder and CEO, Joel Gascoigne, read the book How to Win Friends and Influence People by Dale Carnegie.",
+            "url": "https://buffer.com/about",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "domainAge": {
+        "result": "pass",
+        "reason": "The website has been around since October 1996.",
+        "evidence": [
+          {
+            "url": "https://rdap.org/domain/buffer.com",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "privacyPolicy": {
+        "result": "pass",
+        "reason": "Has a full privacy policy that says what they do with your information.",
+        "evidence": [
+          {
+            "url": "https://buffer.com/legal",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "dataUse": {
+        "result": "unknown",
+        "reason": "We couldn't find whether it uses your information to make its AI better or whether you can delete your information.",
+        "evidence": [
+          {
+            "url": "https://buffer.com/legal",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "dataLocation": {
+        "result": "unknown",
+        "reason": "We couldn't find which country your information is kept in.",
+        "evidence": [
+          {
+            "url": "https://buffer.com/legal",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "pricingClarity": {
+        "result": "pass",
+        "reason": "Shows a clear monthly price.",
+        "evidence": [
+          {
+            "url": "https://buffer.com/pricing?cta=bufferSite-globalNav-pricing-pricing-1",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "securityBasics": {
+        "result": "pass",
+        "reason": "Your connection to this website is private (https).",
+        "evidence": [
+          {
+            "url": "https://buffer.com/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "redFlags": {
+        "result": "pass",
+        "reason": "No warning signs found. (We didn't check Google's list of unsafe websites.)",
+        "evidence": [
+          {
+            "url": "https://buffer.com/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      }
+    },
+    "redFlags": [],
+    "verdict": "held",
+    "warnings": [
+      "We couldn't find which country your information is kept in."
+    ]
+  },
+  "lastChecked": "2026-11-08",
+  "sources": [
+    "https://buffer.com/pricing?cta=bufferSite-globalNav-pricing-pricing-1",
+    "https://buffer.com/integrations/canva?cta=bufferSite-globalNav-tools-canva-1",
+    "https://buffer.com/about",
+    "https://buffer.com/"
+  ],
+  "needsVerification": [
+    "pricing.large.monthlyUsd",
+    "pricing.freeTier",
+    "pricing.contract",
+    "pricing.cancellation",
+    "setupMinutes",
+    "rulesFlags.recordsCalls",
+    "rulesFlags.announcesRecording",
+    "rulesFlags.hipaaReady",
+    "rulesFlags.outboundAiCalls",
+    "rulesFlags.personalizedPricing",
+    "description",
+    "languages"
+  ]
+}

@@ -1,0 +1,26 @@
+[
+  {
+    "field": "address",
+    "answer": "115 E Main St., Ste A1B",
+    "quote": "115 E Main St., Ste A1B",
+    "url": "https://calendly.com/legal/privacy-notice",
+    "foundBy": "Claude (drafted for Rishabh to check)",
+    "foundAt": "2026-11-08"
+  },
+  {
+    "field": "trainsOnYourData",
+    "answer": "no",
+    "quote": "Calendly does not sell customer data or use it to train AI models.",
+    "url": "https://calendly.com/help/ai-at-calendly",
+    "foundBy": "Claude (drafted for Rishabh to check)",
+    "foundAt": "2026-11-08"
+  },
+  {
+    "field": "canDeleteData",
+    "answer": "yes",
+    "quote": "If you do not wish to receive any service-related emails from us, you have the option to delete your account.",
+    "url": "https://calendly.com/legal/privacy-notice",
+    "foundBy": "Claude (drafted for Rishabh to check)",
+    "foundAt": "2026-11-08"
+  }
+]

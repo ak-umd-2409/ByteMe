@@ -1,0 +1,205 @@
+{
+  "id": "xero",
+  "name": "Xero",
+  "vendor": {
+    "company": "Xero Limited",
+    "website": "https://www.xero.com",
+    "domain": "xero.com"
+  },
+  "description": "Manage all your accounting needs in one place.",
+  "category": "Bookkeeping",
+  "useCases": [
+    "bookkeeping"
+  ],
+  "industries": [
+    "any"
+  ],
+  "existingProduct": "Xero",
+  "pricing": {
+    "asOf": "Nov 2026",
+    "small": {
+      "monthlyUsd": 27,
+      "note": "Cheapest paid plan"
+    },
+    "medium": {
+      "monthlyUsd": 59,
+      "note": "Middle plan"
+    },
+    "large": {
+      "monthlyUsd": 97,
+      "note": "Top plan"
+    },
+    "freeTier": "unknown",
+    "contract": "monthly",
+    "cancellation": "Cancel with one month's notice",
+    "pricingUrl": "https://www.xero.com/us/pricing-plans/"
+  },
+  "worksWith": [
+    {
+      "product": "Gusto",
+      "type": "native"
+    },
+    {
+      "product": "Avalara",
+      "type": "native"
+    }
+  ],
+  "setupMinutes": "unknown",
+  "setupMode": "needs_help",
+  "languages": [
+    "English"
+  ],
+  "privacyCard": {
+    "trainsOnYourData": {
+      "answer": "yes",
+      "plain": "Uses your data to train its AI.",
+      "quote": "To improve our services. For example, we analyze collected data to improve our websites, apps and services, to develop new products and services, and inform other business decisions by understanding customer behavior (including using AI/ML).",
+      "sourceUrl": "https://www.xero.com/us/legal/privacy/"
+    },
+    "canDeleteData": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm whether you can delete your data.",
+      "quote": null,
+      "sourceUrl": null
+    },
+    "whereStored": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm where your data is stored.",
+      "quote": null,
+      "sourceUrl": null
+    },
+    "sharesOrSells": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm whether it sells or shares your data.",
+      "quote": null,
+      "sourceUrl": null
+    },
+    "securityCertification": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm a security certification.",
+      "quote": null,
+      "sourceUrl": null
+    }
+  },
+  "rulesFlags": {
+    "recordsCalls": "unknown",
+    "announcesRecording": "unknown",
+    "hipaaReady": "unknown",
+    "outboundAiCalls": "unknown",
+    "personalizedPricing": "unknown"
+  },
+  "badge": "listed",
+  "safetyCheck": {
+    "ranAt": "2026-11-08",
+    "checks": {
+      "whoIsBehind": {
+        "result": "unknown",
+        "reason": "We couldn't find an address for Xero Limited.",
+        "evidence": [
+          {
+            "quote": "© 2026 Xero Limited. All rights reserved. \"Xero\", \"Beautiful business\" and \"Your business supercharged\" are trademarks of Xero Limited.",
+            "url": "https://www.xero.com/us/about/coaches-onboarding/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "domainAge": {
+        "result": "pass",
+        "reason": "The website has been around since June 1997.",
+        "evidence": [
+          {
+            "url": "https://rdap.org/domain/xero.com",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "privacyPolicy": {
+        "result": "pass",
+        "reason": "Has a full privacy policy that says what they do with your information.",
+        "evidence": [
+          {
+            "url": "https://www.xero.com/us/legal/privacy/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "dataUse": {
+        "result": "fail",
+        "reason": "It may use your customers' information to make its AI better, and we found no way to stop it.",
+        "evidence": [
+          {
+            "quote": "To improve our services. For example, we analyze collected data to improve our websites, apps and services, to develop new products and services, and inform other business decisions by understanding customer behavior (including using AI/ML).",
+            "url": "https://www.xero.com/us/legal/privacy/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "dataLocation": {
+        "result": "unknown",
+        "reason": "We couldn't find which country your information is kept in.",
+        "evidence": [
+          {
+            "url": "https://www.xero.com/us/legal/privacy/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "pricingClarity": {
+        "result": "pass",
+        "reason": "Shows a clear monthly price.",
+        "evidence": [
+          {
+            "url": "https://www.xero.com/us/pricing-plans/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "securityBasics": {
+        "result": "pass",
+        "reason": "Your connection to this website is private (https). This tool handles payments or health information, but we found no proof that an outside company checked its security (like PCI or SOC 2).",
+        "evidence": [
+          {
+            "url": "https://www.xero.com/us/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "redFlags": {
+        "result": "pass",
+        "reason": "No warning signs found. (We didn't check Google's list of unsafe websites.)",
+        "evidence": [
+          {
+            "url": "https://www.xero.com/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      }
+    },
+    "redFlags": [],
+    "verdict": "held",
+    "warnings": [
+      "We couldn't find which country your information is kept in.",
+      "We couldn't find the name of the person who runs this company.",
+      "This tool handles payments or health information, but we found no proof that an outside company checked its security (like PCI or SOC 2)."
+    ]
+  },
+  "lastChecked": "2026-11-08",
+  "sources": [
+    "https://www.xero.com/us/",
+    "https://www.xero.com/us/pricing-plans/",
+    "https://www.xero.com/us/about/coaches-onboarding/",
+    "https://www.xero.com/us/legal/privacy/",
+    "https://www.xero.com/us/accounting-software/all-features/"
+  ],
+  "needsVerification": [
+    "pricing.freeTier",
+    "setupMinutes",
+    "rulesFlags.recordsCalls",
+    "rulesFlags.announcesRecording",
+    "rulesFlags.hipaaReady",
+    "rulesFlags.outboundAiCalls",
+    "rulesFlags.personalizedPricing",
+    "setupMode",
+    "languages"
+  ]
+}

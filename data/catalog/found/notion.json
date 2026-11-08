@@ -1,0 +1,26 @@
+[
+  {
+    "field": "trainsOnYourData",
+    "answer": "opt-in",
+    "quote": "Notion AI will not use your data to train our models unless you opt in to a request to share your data.",
+    "url": "https://www.notion.com/pricing",
+    "foundBy": "Claude (drafted for Rishabh to check)",
+    "foundAt": "2026-11-08"
+  },
+  {
+    "field": "canDeleteData",
+    "answer": "yes",
+    "quote": "Request Deletion of your information, subject to certain exceptions prescribed by law.",
+    "url": "https://www.notion.com/trust/privacy-policy",
+    "foundBy": "Claude (drafted for Rishabh to check)",
+    "foundAt": "2026-11-08"
+  },
+  {
+    "field": "address",
+    "answer": "685 Market St.",
+    "quote": "685 Market St.",
+    "url": "https://www.notion.com/trust/privacy-policy",
+    "foundBy": "Claude (drafted for Rishabh to check)",
+    "foundAt": "2026-11-08"
+  }
+]

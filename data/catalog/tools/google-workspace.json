@@ -1,0 +1,226 @@
+{
+  "id": "google-workspace",
+  "name": "Gemini for Google Workspace",
+  "vendor": {
+    "company": "Google",
+    "website": "https://workspace.google.com",
+    "domain": "workspace.google.com"
+  },
+  "description": "Join millions of businesses that run on premium versions of Gmail, Calendar, Drive, Meet, and more.",
+  "category": "Office suite",
+  "useCases": [
+    "admin-paperwork",
+    "email-marketing"
+  ],
+  "industries": [
+    "any"
+  ],
+  "existingProduct": "Google Workspace",
+  "pricing": {
+    "asOf": "Nov 2026",
+    "small": {
+      "monthlyUsd": 7,
+      "note": "Cheapest paid plan"
+    },
+    "medium": {
+      "monthlyUsd": 14,
+      "note": "Middle plan"
+    },
+    "large": {
+      "monthlyUsd": 22,
+      "note": "Top plan"
+    },
+    "freeTier": "unknown",
+    "contract": "monthly",
+    "cancellation": "unknown",
+    "pricingUrl": "https://workspace.google.com/pricing.html?source=gafb-home-globalnav-en&hl=en&ga_region=noram&ga_country=us&ga_lang=en"
+  },
+  "worksWith": [
+    {
+      "product": "DocuSign",
+      "type": "native"
+    },
+    {
+      "product": "Adobe",
+      "type": "native"
+    }
+  ],
+  "setupMinutes": "unknown",
+  "setupMode": "needs_help",
+  "languages": [
+    "English"
+  ],
+  "privacyCard": {
+    "trainsOnYourData": {
+      "answer": "opt-in",
+      "plain": "Uses your data to train AI only if you agree.",
+      "quote": "Workspace does not use customer data for training models without customer's prior permission or instruction.",
+      "sourceUrl": "https://knowledge.workspace.google.com/admin/generative-ai/generative-ai-in-google-workspace-privacy-hub"
+    },
+    "canDeleteData": {
+      "answer": "yes",
+      "plain": "You can delete your data.",
+      "quote": "Users can manually delete data within Workspace apps",
+      "sourceUrl": "https://knowledge.workspace.google.com/admin/generative-ai/generative-ai-in-google-workspace-privacy-hub"
+    },
+    "whereStored": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm where your data is stored.",
+      "quote": null,
+      "sourceUrl": null
+    },
+    "sharesOrSells": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm whether it sells or shares your data.",
+      "quote": null,
+      "sourceUrl": null
+    },
+    "securityCertification": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm a security certification.",
+      "quote": null,
+      "sourceUrl": null
+    }
+  },
+  "rulesFlags": {
+    "recordsCalls": "unknown",
+    "announcesRecording": "unknown",
+    "hipaaReady": "unknown",
+    "outboundAiCalls": "unknown",
+    "personalizedPricing": "unknown"
+  },
+  "badge": "listed",
+  "safetyCheck": {
+    "ranAt": "2026-11-08",
+    "checks": {
+      "whoIsBehind": {
+        "result": "unknown",
+        "reason": "We couldn't find an address for Google.",
+        "evidence": [
+          {
+            "quote": "Sign me up to receive news, product updates, event information and special offers about Google Cloud (including Google Workspace) from Google.",
+            "url": "https://workspace.google.com/contact/?source=gafb-home-globalnav-en",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "domainAge": {
+        "result": "pass",
+        "reason": "The website has been around since September 1997.",
+        "evidence": [
+          {
+            "url": "https://rdap.org/domain/google.com",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "privacyPolicy": {
+        "result": "pass",
+        "reason": "Has a full privacy policy that says what they do with your information.",
+        "evidence": [
+          {
+            "url": "https://knowledge.workspace.google.com/admin/generative-ai/generative-ai-in-google-workspace-privacy-hub",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "dataUse": {
+        "result": "unknown",
+        "reason": "The privacy policy isn't clear about whether it uses your information to make its AI better. A person needs to read it.",
+        "evidence": [
+          {
+            "quote": "Workspace does not use customer data for training models without customer's prior permission or instruction.",
+            "url": "https://knowledge.workspace.google.com/admin/generative-ai/generative-ai-in-google-workspace-privacy-hub",
+            "checkedAt": "2026-11-08"
+          },
+          {
+            "quote": "Users can manually delete data within Workspace apps",
+            "url": "https://knowledge.workspace.google.com/admin/generative-ai/generative-ai-in-google-workspace-privacy-hub",
+            "checkedAt": "2026-11-08"
+          },
+          {
+            "url": "https://knowledge.workspace.google.com/admin/generative-ai/generative-ai-in-google-workspace-privacy-hub",
+            "checkedAt": "2026-11-08",
+            "quote": "Model training and data usage\nDoes Google use my data (including prompts) to train generative AI models?"
+          },
+          {
+            "url": "https://knowledge.workspace.google.com/admin/generative-ai/generative-ai-in-google-workspace-privacy-hub",
+            "checkedAt": "2026-11-08",
+            "quote": "This commitment is outlined in the 'Training Restriction' section of the Google Workspace Service Specific Terms ."
+          },
+          {
+            "url": "https://knowledge.workspace.google.com/admin/generative-ai/generative-ai-in-google-workspace-privacy-hub",
+            "checkedAt": "2026-11-08",
+            "quote": "Where does the data used to train Google's foundational language models come from?"
+          }
+        ]
+      },
+      "dataLocation": {
+        "result": "unknown",
+        "reason": "We couldn't find which country your information is kept in.",
+        "evidence": [
+          {
+            "url": "https://knowledge.workspace.google.com/admin/generative-ai/generative-ai-in-google-workspace-privacy-hub",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "pricingClarity": {
+        "result": "pass",
+        "reason": "Shows a clear monthly price.",
+        "evidence": [
+          {
+            "url": "https://workspace.google.com/pricing.html?source=gafb-home-globalnav-en&hl=en&ga_region=noram&ga_country=us&ga_lang=en",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "securityBasics": {
+        "result": "pass",
+        "reason": "Your connection to this website is private (https).",
+        "evidence": [
+          {
+            "url": "https://workspace.google.com/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "redFlags": {
+        "result": "pass",
+        "reason": "No warning signs found. (We didn't check Google's list of unsafe websites.)",
+        "evidence": [
+          {
+            "url": "https://workspace.google.com/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      }
+    },
+    "redFlags": [],
+    "verdict": "held",
+    "warnings": [
+      "We couldn't find which country your information is kept in.",
+      "We couldn't find the name of the person who runs this company."
+    ]
+  },
+  "lastChecked": "2026-11-08",
+  "sources": [
+    "https://workspace.google.com/",
+    "https://workspace.google.com/pricing.html?source=gafb-home-globalnav-en&hl=en&ga_region=noram&ga_country=us&ga_lang=en",
+    "https://workspace.google.com/contact/?source=gafb-home-globalnav-en",
+    "https://knowledge.workspace.google.com/admin/generative-ai/generative-ai-in-google-workspace-privacy-hub",
+    "https://workspace.google.com/integrations/"
+  ],
+  "needsVerification": [
+    "pricing.freeTier",
+    "pricing.cancellation",
+    "setupMinutes",
+    "rulesFlags.recordsCalls",
+    "rulesFlags.announcesRecording",
+    "rulesFlags.hipaaReady",
+    "rulesFlags.outboundAiCalls",
+    "rulesFlags.personalizedPricing",
+    "setupMode",
+    "languages"
+  ]
+}

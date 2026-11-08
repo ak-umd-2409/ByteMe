@@ -1,0 +1,233 @@
+{
+  "id": "marketman",
+  "name": "MarketMan",
+  "vendor": {
+    "company": "MarketMan, Inc.",
+    "website": "https://www.marketman.com",
+    "domain": "marketman.com"
+  },
+  "description": "Our cloud-based inventory management and purchasing solution simplifies all back-of-house operations, streamlining everything from inventory to budgeting, reporting, supplier management, and food costing.",
+  "category": "Restaurant inventory",
+  "useCases": [
+    "inventory"
+  ],
+  "industries": [
+    "restaurant",
+    "cafe"
+  ],
+  "pricing": {
+    "asOf": "Nov 2026",
+    "small": {
+      "monthlyUsd": 249,
+      "note": "Cheapest paid plan"
+    },
+    "medium": {
+      "monthlyUsd": 299,
+      "note": "Middle plan"
+    },
+    "large": {
+      "monthlyUsd": "unknown",
+      "note": ""
+    },
+    "freeTier": "unknown",
+    "contract": "monthly",
+    "cancellation": "unknown",
+    "pricingUrl": "https://www.marketman.com/pricing-for-restaurant-inventory-management-system"
+  },
+  "worksWith": [
+    {
+      "product": "Square",
+      "type": "native"
+    },
+    {
+      "product": "Toast",
+      "type": "native"
+    },
+    {
+      "product": "Lightspeed",
+      "type": "native"
+    },
+    {
+      "product": "QuickBooks",
+      "type": "native"
+    },
+    {
+      "product": "Xero",
+      "type": "native"
+    },
+    {
+      "product": "Sysco",
+      "type": "native"
+    },
+    {
+      "product": "US Foods",
+      "type": "native"
+    },
+    {
+      "product": "Gordon Food Service",
+      "type": "native"
+    }
+  ],
+  "setupMinutes": "unknown",
+  "setupMode": "needs_help",
+  "languages": [
+    "English"
+  ],
+  "privacyCard": {
+    "trainsOnYourData": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm whether it uses your data to train AI.",
+      "quote": null,
+      "sourceUrl": null
+    },
+    "canDeleteData": {
+      "answer": "yes",
+      "plain": "You can delete your data.",
+      "quote": "Request deletion of your personal data, subject to legal or contractual obligations.",
+      "sourceUrl": "https://www.marketman.com/privacy"
+    },
+    "whereStored": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm where your data is stored.",
+      "quote": null,
+      "sourceUrl": null
+    },
+    "sharesOrSells": {
+      "answer": "no",
+      "plain": "Does not sell or share your data.",
+      "quote": "WE DO NOT SELL PERSONAL DATA .",
+      "sourceUrl": "https://www.marketman.com/privacy"
+    },
+    "securityCertification": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm a security certification.",
+      "quote": null,
+      "sourceUrl": null
+    }
+  },
+  "rulesFlags": {
+    "recordsCalls": "unknown",
+    "announcesRecording": "unknown",
+    "hipaaReady": "unknown",
+    "outboundAiCalls": "unknown",
+    "personalizedPricing": "unknown"
+  },
+  "badge": "listed",
+  "safetyCheck": {
+    "ranAt": "2026-11-08",
+    "checks": {
+      "whoIsBehind": {
+        "result": "pass",
+        "reason": "Run by MarketMan, Inc., a company at 1555 Shoreline Drive, #150, Boise, ID 83702.",
+        "evidence": [
+          {
+            "quote": "© 2026 MarketMan, Inc. All Rights reserved",
+            "url": "https://www.marketman.com/about-us",
+            "checkedAt": "2026-11-08"
+          },
+          {
+            "quote": "1555 Shoreline Drive, #150, Boise, ID 83702",
+            "url": "https://www.marketman.com/privacy",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "domainAge": {
+        "result": "pass",
+        "reason": "The website has been around since April 2002.",
+        "evidence": [
+          {
+            "url": "https://rdap.org/domain/marketman.com",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "privacyPolicy": {
+        "result": "pass",
+        "reason": "Has a full privacy policy that says what they do with your information.",
+        "evidence": [
+          {
+            "url": "https://www.marketman.com/privacy",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "dataUse": {
+        "result": "unknown",
+        "reason": "We couldn't find whether it uses your information to make its AI better.",
+        "evidence": [
+          {
+            "quote": "Request deletion of your personal data, subject to legal or contractual obligations.",
+            "url": "https://www.marketman.com/privacy",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "dataLocation": {
+        "result": "unknown",
+        "reason": "We couldn't find which country your information is kept in.",
+        "evidence": [
+          {
+            "url": "https://www.marketman.com/privacy",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "pricingClarity": {
+        "result": "pass",
+        "reason": "Shows a clear monthly price.",
+        "evidence": [
+          {
+            "url": "https://www.marketman.com/pricing-for-restaurant-inventory-management-system",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "securityBasics": {
+        "result": "pass",
+        "reason": "Your connection to this website is private (https).",
+        "evidence": [
+          {
+            "url": "https://www.marketman.com/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "redFlags": {
+        "result": "pass",
+        "reason": "No warning signs found. (We didn't check Google's list of unsafe websites.)",
+        "evidence": [
+          {
+            "url": "https://www.marketman.com/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      }
+    },
+    "redFlags": [],
+    "verdict": "held",
+    "warnings": [
+      "We couldn't find which country your information is kept in.",
+      "We couldn't find the name of the person who runs this company."
+    ]
+  },
+  "lastChecked": "2026-11-08",
+  "sources": [
+    "https://www.marketman.com/platform",
+    "https://www.marketman.com/pricing-for-restaurant-inventory-management-system",
+    "https://www.marketman.com/privacy",
+    "https://www.marketman.com/about-us"
+  ],
+  "needsVerification": [
+    "pricing.large.monthlyUsd",
+    "pricing.freeTier",
+    "pricing.cancellation",
+    "setupMinutes",
+    "rulesFlags.recordsCalls",
+    "rulesFlags.announcesRecording",
+    "rulesFlags.hipaaReady",
+    "rulesFlags.outboundAiCalls",
+    "rulesFlags.personalizedPricing",
+    "languages"
+  ]
+}

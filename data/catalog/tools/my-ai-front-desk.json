@@ -1,0 +1,229 @@
+{
+  "id": "my-ai-front-desk",
+  "name": "My AI Front Desk",
+  "vendor": {
+    "company": "AI Front Desk, Inc.",
+    "website": "https://www.myaifrontdesk.com",
+    "domain": "myaifrontdesk.com"
+  },
+  "description": "AI receptionist that calls, texts, emails, and chats",
+  "category": "AI receptionist",
+  "useCases": [
+    "missed-calls",
+    "booking"
+  ],
+  "industries": [
+    "any"
+  ],
+  "pricing": {
+    "asOf": "Nov 2026",
+    "small": {
+      "monthlyUsd": 99,
+      "note": "Cheapest paid plan"
+    },
+    "medium": {
+      "monthlyUsd": "unknown",
+      "note": ""
+    },
+    "large": {
+      "monthlyUsd": "unknown",
+      "note": ""
+    },
+    "freeTier": "unknown",
+    "contract": "monthly",
+    "cancellation": "Cancel anytime",
+    "pricingUrl": "https://www.myaifrontdesk.com/pricing"
+  },
+  "worksWith": [
+    {
+      "product": "Yardi",
+      "type": "native"
+    },
+    {
+      "product": "RealPage",
+      "type": "native"
+    },
+    {
+      "product": "Entrata",
+      "type": "native"
+    },
+    {
+      "product": "AppFolio",
+      "type": "native"
+    },
+    {
+      "product": "Buildium",
+      "type": "native"
+    },
+    {
+      "product": "ResMan",
+      "type": "native"
+    },
+    {
+      "product": "DocuSign",
+      "type": "native"
+    },
+    {
+      "product": "Knock CRM",
+      "type": "native"
+    }
+  ],
+  "setupMinutes": 5,
+  "setupMode": "needs_help",
+  "languages": [
+    "English"
+  ],
+  "privacyCard": {
+    "trainsOnYourData": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm whether it uses your data to train AI.",
+      "quote": null,
+      "sourceUrl": null
+    },
+    "canDeleteData": {
+      "answer": "yes",
+      "plain": "You can delete your data.",
+      "quote": "Request deletion of personal information, subject to legal and operational limitations",
+      "sourceUrl": "https://www.myaifrontdesk.com/privacy-policy"
+    },
+    "whereStored": {
+      "answer": "United States",
+      "plain": "Your data is stored in United States.",
+      "quote": "Our Services are operated from the United States. If you access the Services from outside the United States, you acknowledge that information will be processed and stored in the United States and other jurisdictions where we or our service providers operate.",
+      "sourceUrl": "https://www.myaifrontdesk.com/privacy-policy"
+    },
+    "sharesOrSells": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm whether it sells or shares your data.",
+      "quote": null,
+      "sourceUrl": null
+    },
+    "securityCertification": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm a security certification.",
+      "quote": null,
+      "sourceUrl": null
+    }
+  },
+  "rulesFlags": {
+    "recordsCalls": "unknown",
+    "announcesRecording": "unknown",
+    "hipaaReady": "unknown",
+    "outboundAiCalls": "unknown",
+    "personalizedPricing": "unknown"
+  },
+  "badge": "listed",
+  "safetyCheck": {
+    "ranAt": "2026-11-08",
+    "checks": {
+      "whoIsBehind": {
+        "result": "unknown",
+        "reason": "We couldn't find an address for AI Front Desk, Inc.",
+        "evidence": [
+          {
+            "quote": "© 2026 AI Front Desk, Inc. All rights reserved.",
+            "url": "https://www.myaifrontdesk.com/about",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "domainAge": {
+        "result": "pass",
+        "reason": "The website has been around since March 2023.",
+        "evidence": [
+          {
+            "url": "https://rdap.org/domain/myaifrontdesk.com",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "privacyPolicy": {
+        "result": "pass",
+        "reason": "Has a full privacy policy that says what they do with your information.",
+        "evidence": [
+          {
+            "url": "https://www.myaifrontdesk.com/privacy-policy",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "dataUse": {
+        "result": "unknown",
+        "reason": "We couldn't find whether it uses your information to make its AI better.",
+        "evidence": [
+          {
+            "quote": "Request deletion of personal information, subject to legal and operational limitations",
+            "url": "https://www.myaifrontdesk.com/privacy-policy",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "dataLocation": {
+        "result": "pass",
+        "reason": "Your information is kept in United States.",
+        "evidence": [
+          {
+            "quote": "Our Services are operated from the United States. If you access the Services from outside the United States, you acknowledge that information will be processed and stored in the United States and other jurisdictions where we or our service providers operate.",
+            "url": "https://www.myaifrontdesk.com/privacy-policy",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "pricingClarity": {
+        "result": "pass",
+        "reason": "Shows a clear monthly price.",
+        "evidence": [
+          {
+            "url": "https://www.myaifrontdesk.com/pricing",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "securityBasics": {
+        "result": "pass",
+        "reason": "Your connection to this website is private (https).",
+        "evidence": [
+          {
+            "url": "https://www.myaifrontdesk.com/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "redFlags": {
+        "result": "pass",
+        "reason": "No warning signs found. (We didn't check Google's list of unsafe websites.)",
+        "evidence": [
+          {
+            "url": "https://www.myaifrontdesk.com/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      }
+    },
+    "redFlags": [],
+    "verdict": "held",
+    "warnings": [
+      "We couldn't find the name of the person who runs this company."
+    ]
+  },
+  "lastChecked": "2026-11-08",
+  "sources": [
+    "https://www.myaifrontdesk.com/",
+    "https://www.myaifrontdesk.com/pricing",
+    "https://www.myaifrontdesk.com/about",
+    "https://www.myaifrontdesk.com/privacy-policy",
+    "https://www.myaifrontdesk.com/multifamily/yardi-ai-integration"
+  ],
+  "needsVerification": [
+    "pricing.medium.monthlyUsd",
+    "pricing.large.monthlyUsd",
+    "pricing.freeTier",
+    "rulesFlags.recordsCalls",
+    "rulesFlags.announcesRecording",
+    "rulesFlags.hipaaReady",
+    "rulesFlags.outboundAiCalls",
+    "rulesFlags.personalizedPricing",
+    "setupMode",
+    "languages"
+  ]
+}

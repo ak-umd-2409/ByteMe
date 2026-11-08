@@ -3,7 +3,7 @@ import { describe, it } from "node:test";
 import { handleJourneyAnswer, handleJourneyStart } from "../api/journey.ts";
 import type { ApiDeps } from "../api/handlers.ts";
 import { getPlacesProvider } from "../business/places.ts";
-import { loadCatalog } from "../catalog/index.ts";
+import { loadTestCatalog as loadCatalog } from "../catalog/index.ts";
 import type { CatalogRecord } from "../catalog/types.ts";
 import type { JourneyAnswerResponse, JourneyStartResponse } from "../journey/types.ts";
 import { disabledProvider } from "../llm/client.ts";

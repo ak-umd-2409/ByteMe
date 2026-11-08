@@ -1,0 +1,51 @@
+{
+  "input": {
+    "url": "https://www.godaddy.com/",
+    "name": "GoDaddy Airo",
+    "handlesSensitiveData": false
+  },
+  "collectedAt": "2026-11-08",
+  "pages": {
+    "home": {
+      "error": "http_403"
+    },
+    "about": {
+      "error": "http_403"
+    },
+    "contact": {
+      "error": "http_403"
+    },
+    "privacy": {
+      "error": "http_403"
+    },
+    "pricing": {
+      "error": "http_403"
+    },
+    "terms": {
+      "error": "http_403"
+    }
+  },
+  "domain": {
+    "name": "godaddy.com",
+    "registeredAt": "1999-03-02",
+    "source": "rdap"
+  },
+  "https": false,
+  "downloadPrompt": false,
+  "ai": {
+    "ran": {
+      "about": false,
+      "privacy": false
+    },
+    "companyName": "unknown",
+    "address": "unknown",
+    "leaderName": "unknown",
+    "trainsOnYourData": "unknown",
+    "canDeleteData": "unknown",
+    "whereStored": "unknown",
+    "securityCertification": "unknown",
+    "policyAddress": "unknown"
+  },
+  "riskySentences": [],
+  "safeBrowsing": "not_run"
+}

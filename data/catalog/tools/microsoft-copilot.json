@@ -1,0 +1,219 @@
+{
+  "id": "microsoft-copilot",
+  "name": "Microsoft 365 Copilot",
+  "vendor": {
+    "company": "Microsoft",
+    "website": "https://www.microsoft.com/en-us/microsoft-365/copilot",
+    "domain": "microsoft.com"
+  },
+  "description": "Copilot connects with your work content and the apps you already use, bringing together the latest AI models to help you create finished work, not just answers.",
+  "category": "Office suite",
+  "useCases": [
+    "admin-paperwork"
+  ],
+  "industries": [
+    "any"
+  ],
+  "existingProduct": "Microsoft 365",
+  "pricing": {
+    "asOf": "Nov 2026",
+    "small": {
+      "monthlyUsd": "unknown",
+      "note": ""
+    },
+    "medium": {
+      "monthlyUsd": "unknown",
+      "note": ""
+    },
+    "large": {
+      "monthlyUsd": "unknown",
+      "note": ""
+    },
+    "freeTier": "unknown",
+    "contract": "monthly",
+    "cancellation": "unknown",
+    "pricingUrl": "https://www.microsoft.com/en-us/copilot/pricing/business"
+  },
+  "worksWith": [
+    {
+      "product": "Word",
+      "type": "native"
+    },
+    {
+      "product": "Excel",
+      "type": "native"
+    },
+    {
+      "product": "PowerPoint",
+      "type": "native"
+    },
+    {
+      "product": "Outlook",
+      "type": "native"
+    },
+    {
+      "product": "Teams",
+      "type": "native"
+    }
+  ],
+  "setupMinutes": "unknown",
+  "setupMode": "needs_help",
+  "languages": [
+    "English"
+  ],
+  "privacyCard": {
+    "trainsOnYourData": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm whether it uses your data to train AI.",
+      "quote": null,
+      "sourceUrl": null
+    },
+    "canDeleteData": {
+      "answer": "yes",
+      "plain": "You can delete your data.",
+      "quote": "Do you have a question about Microsoft privacy? We explain how customers can export or delete personal data and more in the Privacy FAQs.",
+      "sourceUrl": "https://www.microsoft.com/en-us/privacy?icid=DSM_Footer_Company_Privacy"
+    },
+    "whereStored": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm where your data is stored.",
+      "quote": null,
+      "sourceUrl": null
+    },
+    "sharesOrSells": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm whether it sells or shares your data.",
+      "quote": null,
+      "sourceUrl": null
+    },
+    "securityCertification": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm a security certification.",
+      "quote": null,
+      "sourceUrl": null
+    }
+  },
+  "rulesFlags": {
+    "recordsCalls": "unknown",
+    "announcesRecording": "unknown",
+    "hipaaReady": "unknown",
+    "outboundAiCalls": "unknown",
+    "personalizedPricing": "unknown"
+  },
+  "badge": "listed",
+  "safetyCheck": {
+    "ranAt": "2026-11-08",
+    "checks": {
+      "whoIsBehind": {
+        "result": "unknown",
+        "reason": "We couldn't find an address for Microsoft.",
+        "evidence": [
+          {
+            "quote": "Microsoft’s mission is to empower every person and every organization on the planet to achieve more.",
+            "url": "https://www.microsoft.com/en-us/about",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "domainAge": {
+        "result": "pass",
+        "reason": "The website has been around since May 1991.",
+        "evidence": [
+          {
+            "url": "https://rdap.org/domain/microsoft.com",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "privacyPolicy": {
+        "result": "pass",
+        "reason": "Has a full privacy policy that says what they do with your information.",
+        "evidence": [
+          {
+            "url": "https://www.microsoft.com/en-us/privacy?icid=DSM_Footer_Company_Privacy",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "dataUse": {
+        "result": "unknown",
+        "reason": "We couldn't find whether it uses your information to make its AI better.",
+        "evidence": [
+          {
+            "quote": "Do you have a question about Microsoft privacy? We explain how customers can export or delete personal data and more in the Privacy FAQs.",
+            "url": "https://www.microsoft.com/en-us/privacy?icid=DSM_Footer_Company_Privacy",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "dataLocation": {
+        "result": "unknown",
+        "reason": "We couldn't find which country your information is kept in.",
+        "evidence": [
+          {
+            "url": "https://www.microsoft.com/en-us/privacy?icid=DSM_Footer_Company_Privacy",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "pricingClarity": {
+        "result": "pass",
+        "reason": "Shows a clear monthly price.",
+        "evidence": [
+          {
+            "url": "https://www.microsoft.com/en-us/copilot/pricing/business",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "securityBasics": {
+        "result": "pass",
+        "reason": "Your connection to this website is private (https).",
+        "evidence": [
+          {
+            "url": "https://www.microsoft.com/en-us/copilot",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "redFlags": {
+        "result": "pass",
+        "reason": "No warning signs found. (We didn't check Google's list of unsafe websites.)",
+        "evidence": [
+          {
+            "url": "https://www.microsoft.com/en-us/microsoft-365/copilot",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      }
+    },
+    "redFlags": [],
+    "verdict": "held",
+    "warnings": [
+      "We couldn't find which country your information is kept in.",
+      "We couldn't find the name of the person who runs this company."
+    ]
+  },
+  "lastChecked": "2026-11-08",
+  "sources": [
+    "https://www.microsoft.com/en-us/copilot",
+    "https://www.microsoft.com/en-us/copilot/pricing/business",
+    "https://www.microsoft.com/en-us/about",
+    "https://www.microsoft.com/en-us/privacy?icid=DSM_Footer_Company_Privacy"
+  ],
+  "needsVerification": [
+    "pricing.small.monthlyUsd",
+    "pricing.medium.monthlyUsd",
+    "pricing.large.monthlyUsd",
+    "pricing.freeTier",
+    "pricing.cancellation",
+    "setupMinutes",
+    "rulesFlags.recordsCalls",
+    "rulesFlags.announcesRecording",
+    "rulesFlags.hipaaReady",
+    "rulesFlags.outboundAiCalls",
+    "rulesFlags.personalizedPricing",
+    "setupMode",
+    "languages"
+  ]
+}

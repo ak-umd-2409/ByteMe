@@ -1,0 +1,201 @@
+{
+  "id": "squarespace",
+  "name": "Squarespace",
+  "vendor": {
+    "company": "Squarespace",
+    "website": "https://www.squarespace.com",
+    "domain": "squarespace.com"
+  },
+  "description": "Create a personalized website with ease",
+  "category": "Website builder",
+  "useCases": [
+    "website-seo"
+  ],
+  "industries": [
+    "any"
+  ],
+  "existingProduct": "Squarespace",
+  "pricing": {
+    "asOf": "Nov 2026",
+    "small": {
+      "monthlyUsd": "unknown",
+      "note": ""
+    },
+    "medium": {
+      "monthlyUsd": "unknown",
+      "note": ""
+    },
+    "large": {
+      "monthlyUsd": "unknown",
+      "note": ""
+    },
+    "freeTier": "unknown",
+    "contract": "annual",
+    "cancellation": "unknown",
+    "pricingUrl": "https://www.squarespace.com/pricing"
+  },
+  "worksWith": [],
+  "setupMinutes": "unknown",
+  "setupMode": "needs_help",
+  "languages": [
+    "English"
+  ],
+  "privacyCard": {
+    "trainsOnYourData": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm whether it uses your data to train AI.",
+      "quote": null,
+      "sourceUrl": null
+    },
+    "canDeleteData": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm whether you can delete your data.",
+      "quote": null,
+      "sourceUrl": null
+    },
+    "whereStored": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm where your data is stored.",
+      "quote": null,
+      "sourceUrl": null
+    },
+    "sharesOrSells": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm whether it sells or shares your data.",
+      "quote": null,
+      "sourceUrl": null
+    },
+    "securityCertification": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm a security certification.",
+      "quote": null,
+      "sourceUrl": null
+    }
+  },
+  "rulesFlags": {
+    "recordsCalls": "unknown",
+    "announcesRecording": "unknown",
+    "hipaaReady": "unknown",
+    "outboundAiCalls": "unknown",
+    "personalizedPricing": "unknown"
+  },
+  "badge": "listed",
+  "safetyCheck": {
+    "ranAt": "2026-11-08",
+    "checks": {
+      "whoIsBehind": {
+        "result": "pass",
+        "reason": "Run by Squarespace, a company at 8 Clarkson St, New York, NY 10014, USA.",
+        "evidence": [
+          {
+            "quote": "Squarespace was founded in Anthony’s dorm room at the University of Maryland.",
+            "url": "https://www.squarespace.com/about/company",
+            "checkedAt": "2026-11-08"
+          },
+          {
+            "quote": "8 Clarkson St New York, NY 10014, USA",
+            "url": "https://www.squarespace.com/about/company",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "domainAge": {
+        "result": "pass",
+        "reason": "The website has been around since March 2003.",
+        "evidence": [
+          {
+            "url": "https://rdap.org/domain/squarespace.com",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "privacyPolicy": {
+        "result": "pass",
+        "reason": "Has a full privacy policy that says what they do with your information.",
+        "evidence": [
+          {
+            "url": "https://www.squarespace.com/privacy",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "dataUse": {
+        "result": "unknown",
+        "reason": "We couldn't find whether it uses your information to make its AI better or whether you can delete your information.",
+        "evidence": [
+          {
+            "url": "https://www.squarespace.com/privacy",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "dataLocation": {
+        "result": "unknown",
+        "reason": "We couldn't find which country your information is kept in.",
+        "evidence": [
+          {
+            "url": "https://www.squarespace.com/privacy",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "pricingClarity": {
+        "result": "pass",
+        "reason": "Shows a clear monthly price.",
+        "evidence": [
+          {
+            "url": "https://www.squarespace.com/pricing",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "securityBasics": {
+        "result": "pass",
+        "reason": "Your connection to this website is private (https).",
+        "evidence": [
+          {
+            "url": "https://www.squarespace.com/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "redFlags": {
+        "result": "pass",
+        "reason": "No warning signs found. (We didn't check Google's list of unsafe websites.)",
+        "evidence": [
+          {
+            "url": "https://www.squarespace.com/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      }
+    },
+    "redFlags": [],
+    "verdict": "held",
+    "warnings": [
+      "We couldn't find which country your information is kept in.",
+      "We couldn't find the name of the person who runs this company."
+    ]
+  },
+  "lastChecked": "2026-11-08",
+  "sources": [
+    "https://www.squarespace.com/",
+    "https://www.squarespace.com/pricing",
+    "https://www.squarespace.com/about/company"
+  ],
+  "needsVerification": [
+    "pricing.small.monthlyUsd",
+    "pricing.medium.monthlyUsd",
+    "pricing.large.monthlyUsd",
+    "pricing.freeTier",
+    "pricing.cancellation",
+    "setupMinutes",
+    "rulesFlags.recordsCalls",
+    "rulesFlags.announcesRecording",
+    "rulesFlags.hipaaReady",
+    "rulesFlags.outboundAiCalls",
+    "rulesFlags.personalizedPricing",
+    "setupMode",
+    "languages"
+  ]
+}

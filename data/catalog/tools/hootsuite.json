@@ -1,0 +1,222 @@
+{
+  "id": "hootsuite",
+  "name": "Hootsuite",
+  "vendor": {
+    "company": "Hootsuite Inc.",
+    "website": "https://www.hootsuite.com",
+    "domain": "hootsuite.com"
+  },
+  "description": "Take the busywork out of social media marketing. With Hootsuite, you can spot opportunities, get answers, and take action faster, all from one connected platform.",
+  "category": "Social media",
+  "useCases": [
+    "marketing"
+  ],
+  "industries": [
+    "any"
+  ],
+  "pricing": {
+    "asOf": "Nov 2026",
+    "small": {
+      "monthlyUsd": 99,
+      "note": "Standard plan"
+    },
+    "medium": {
+      "monthlyUsd": 199,
+      "note": "Professional plan"
+    },
+    "large": {
+      "monthlyUsd": 399,
+      "note": "Advanced plan"
+    },
+    "freeTier": false,
+    "contract": "monthly",
+    "cancellation": "canceling any time before your trial ends",
+    "pricingUrl": "https://www.hootsuite.com/plans"
+  },
+  "worksWith": [
+    {
+      "product": "Salesforce",
+      "type": "native"
+    },
+    {
+      "product": "Monday.com",
+      "type": "native"
+    },
+    {
+      "product": "Wrike",
+      "type": "native"
+    },
+    {
+      "product": "Slack",
+      "type": "native"
+    },
+    {
+      "product": "Canva",
+      "type": "native"
+    },
+    {
+      "product": "Adobe Express",
+      "type": "native"
+    },
+    {
+      "product": "Google My Business",
+      "type": "native"
+    },
+    {
+      "product": "Asana",
+      "type": "native"
+    }
+  ],
+  "setupMinutes": "unknown",
+  "setupMode": "self_serve",
+  "languages": [
+    "English"
+  ],
+  "privacyCard": {
+    "trainsOnYourData": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm whether it uses your data to train AI.",
+      "quote": null,
+      "sourceUrl": null
+    },
+    "canDeleteData": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm whether you can delete your data.",
+      "quote": null,
+      "sourceUrl": null
+    },
+    "whereStored": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm where your data is stored.",
+      "quote": null,
+      "sourceUrl": null
+    },
+    "sharesOrSells": {
+      "answer": "yes",
+      "plain": "May sell or share your data.",
+      "quote": "Where the sponsors or other organizations wish to collect your information for their marketing purposes, we may facilitate this (e.g., information may be collected on the same registration form).",
+      "sourceUrl": "https://www.hootsuite.com/legal/privacy"
+    },
+    "securityCertification": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm a security certification.",
+      "quote": null,
+      "sourceUrl": null
+    }
+  },
+  "rulesFlags": {
+    "recordsCalls": "unknown",
+    "announcesRecording": "unknown",
+    "hipaaReady": "unknown",
+    "outboundAiCalls": false,
+    "personalizedPricing": false
+  },
+  "badge": "listed",
+  "safetyCheck": {
+    "ranAt": "2026-11-08",
+    "checks": {
+      "whoIsBehind": {
+        "result": "unknown",
+        "reason": "We couldn't find an address for Hootsuite Inc.",
+        "evidence": [
+          {
+            "quote": "© 2026 Hootsuite Inc. All Rights Reserved.",
+            "url": "https://www.hootsuite.com/about/hootgiving",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "domainAge": {
+        "result": "pass",
+        "reason": "The website has been around since January 2009.",
+        "evidence": [
+          {
+            "url": "https://rdap.org/domain/hootsuite.com",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "privacyPolicy": {
+        "result": "pass",
+        "reason": "Has a full privacy policy that says what they do with your information.",
+        "evidence": [
+          {
+            "url": "https://www.hootsuite.com/legal/privacy",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "dataUse": {
+        "result": "unknown",
+        "reason": "We couldn't find whether it uses your information to make its AI better or whether you can delete your information.",
+        "evidence": [
+          {
+            "url": "https://www.hootsuite.com/legal/privacy",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "dataLocation": {
+        "result": "unknown",
+        "reason": "We couldn't find which country your information is kept in.",
+        "evidence": [
+          {
+            "url": "https://www.hootsuite.com/legal/privacy",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "pricingClarity": {
+        "result": "pass",
+        "reason": "Shows a clear monthly price.",
+        "evidence": [
+          {
+            "url": "https://www.hootsuite.com/plans",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "securityBasics": {
+        "result": "pass",
+        "reason": "Your connection to this website is private (https).",
+        "evidence": [
+          {
+            "url": "https://www.hootsuite.com/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "redFlags": {
+        "result": "pass",
+        "reason": "No warning signs found. (We didn't check Google's list of unsafe websites.)",
+        "evidence": [
+          {
+            "url": "https://www.hootsuite.com/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      }
+    },
+    "redFlags": [],
+    "verdict": "held",
+    "warnings": [
+      "We couldn't find which country your information is kept in.",
+      "We couldn't find the name of the person who runs this company."
+    ]
+  },
+  "lastChecked": "2026-11-08",
+  "sources": [
+    "https://www.hootsuite.com/",
+    "https://www.hootsuite.com/plans",
+    "https://www.hootsuite.com/legal/privacy",
+    "https://www.hootsuite.com/about/hootgiving",
+    "https://www.hootsuite.com/platform/integrations"
+  ],
+  "needsVerification": [
+    "setupMinutes",
+    "rulesFlags.recordsCalls",
+    "rulesFlags.announcesRecording",
+    "rulesFlags.hipaaReady",
+    "languages"
+  ]
+}

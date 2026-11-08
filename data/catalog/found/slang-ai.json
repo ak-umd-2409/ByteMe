@@ -1,0 +1,26 @@
+[
+  {
+    "field": "address",
+    "answer": "85 Broad St., Flr 17, New York, NY 10004",
+    "quote": "Slang AI, 85 Broad St., Flr 17, New York, NY 10004",
+    "url": "https://www.slang.ai/privacy-policy",
+    "foundBy": "Claude (drafted for Rishabh to check)",
+    "foundAt": "2026-11-08"
+  },
+  {
+    "field": "canDeleteData",
+    "answer": "yes",
+    "quote": "You have the right to request that we delete the Personal Data that we have collected about you.",
+    "url": "https://www.slang.ai/privacy-policy",
+    "foundBy": "Claude (drafted for Rishabh to check)",
+    "foundAt": "2026-11-08"
+  },
+  {
+    "field": "trainsOnYourData",
+    "answer": "anonymized",
+    "quote": "We may use such aggregated, de-identified or anonymized data and share it with third parties for our lawful business purposes, including to analyze, build and improve the Services and promote our business, provided that we will not share such data in a manner that could identify you.",
+    "url": "https://www.slang.ai/privacy-policy",
+    "foundBy": "Claude (drafted for Rishabh to check)",
+    "foundAt": "2026-11-08"
+  }
+]

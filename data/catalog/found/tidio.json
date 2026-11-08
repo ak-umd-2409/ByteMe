@@ -1,0 +1,18 @@
+[
+  {
+    "field": "trainsOnYourData",
+    "answer": "opt-out",
+    "quote": "Customers may opt-out of improvement training via support.",
+    "url": "https://www.tidio.com/terms/",
+    "foundBy": "Claude (drafted for Rishabh to check)",
+    "foundAt": "2026-11-08"
+  },
+  {
+    "field": "address",
+    "answer": "1301 Sansome Street",
+    "quote": "To make a CCPA request, you or an Authorized Agent (as indicated below) may email us here , or write us at Tidio LLC, 1301 Sansome Street (San Francisco, CA 94111 U.S.A.) (Attn: CCPA Request ).",
+    "url": "https://www.tidio.com/privacy-policy/",
+    "foundBy": "Claude (drafted for Rishabh to check)",
+    "foundAt": "2026-11-08"
+  }
+]

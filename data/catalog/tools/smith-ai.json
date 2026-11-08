@@ -1,0 +1,238 @@
+{
+  "id": "smith-ai",
+  "name": "Smith.ai",
+  "vendor": {
+    "company": "Smith.ai, Inc.",
+    "website": "https://smith.ai",
+    "domain": "smith.ai"
+  },
+  "description": "Smith.ai runs end-to-end intake for law firms. AI and live agents trained on your firm convert callers, 24/7.",
+  "category": "AI receptionist",
+  "useCases": [
+    "missed-calls",
+    "booking"
+  ],
+  "industries": [
+    "hvac",
+    "plumbing",
+    "electrical",
+    "landscaping",
+    "cleaning",
+    "professional_services",
+    "health_clinic"
+  ],
+  "pricing": {
+    "asOf": "Nov 2026",
+    "small": {
+      "monthlyUsd": 150,
+      "note": "Cheapest paid plan"
+    },
+    "medium": {
+      "monthlyUsd": "unknown",
+      "note": ""
+    },
+    "large": {
+      "monthlyUsd": 500,
+      "note": "Top plan"
+    },
+    "freeTier": "unknown",
+    "contract": "monthly",
+    "cancellation": "unknown",
+    "pricingUrl": "https://smith.ai/pricing/ai-receptionist"
+  },
+  "worksWith": [
+    {
+      "product": "Clio",
+      "type": "zapier"
+    },
+    {
+      "product": "Zapier",
+      "type": "zapier"
+    },
+    {
+      "product": "Calendly",
+      "type": "native"
+    },
+    {
+      "product": "CallRail",
+      "type": "native"
+    },
+    {
+      "product": "8am™ MyCase",
+      "type": "native"
+    },
+    {
+      "product": "AccuLynx",
+      "type": "native"
+    },
+    {
+      "product": "Airtable",
+      "type": "native"
+    },
+    {
+      "product": "3CX",
+      "type": "native"
+    }
+  ],
+  "setupMinutes": "unknown",
+  "setupMode": "needs_help",
+  "languages": [
+    "English"
+  ],
+  "privacyCard": {
+    "trainsOnYourData": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm whether it uses your data to train AI.",
+      "quote": null,
+      "sourceUrl": null
+    },
+    "canDeleteData": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm whether you can delete your data.",
+      "quote": null,
+      "sourceUrl": null
+    },
+    "whereStored": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm where your data is stored.",
+      "quote": null,
+      "sourceUrl": null
+    },
+    "sharesOrSells": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm whether it sells or shares your data.",
+      "quote": null,
+      "sourceUrl": null
+    },
+    "securityCertification": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm a security certification.",
+      "quote": null,
+      "sourceUrl": null
+    }
+  },
+  "rulesFlags": {
+    "recordsCalls": "unknown",
+    "announcesRecording": "unknown",
+    "hipaaReady": "unknown",
+    "outboundAiCalls": "unknown",
+    "personalizedPricing": "unknown"
+  },
+  "badge": "listed",
+  "safetyCheck": {
+    "ranAt": "2026-11-08",
+    "checks": {
+      "whoIsBehind": {
+        "result": "unknown",
+        "reason": "We couldn't find an address for Smith.ai, Inc.",
+        "evidence": [
+          {
+            "quote": "Smith.ai, Inc. ©2026 All Rights Reserved",
+            "url": "https://smith.ai/why-us",
+            "checkedAt": "2026-11-08"
+          },
+          {
+            "quote": "— Suresh Khanna, CEO, Smith.ai",
+            "url": "https://smith.ai/why-us",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "domainAge": {
+        "result": "pass",
+        "reason": "The website has been around since December 2017.",
+        "evidence": [
+          {
+            "url": "https://rdap.org/domain/smith.ai",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "privacyPolicy": {
+        "result": "unknown",
+        "reason": "The privacy policy is too short to tell what they do with your information.",
+        "evidence": [
+          {
+            "url": "https://smith.ai/privacy",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "dataUse": {
+        "result": "unknown",
+        "reason": "We couldn't find whether it uses your information to make its AI better or whether you can delete your information.",
+        "evidence": [
+          {
+            "url": "https://smith.ai/privacy",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "dataLocation": {
+        "result": "unknown",
+        "reason": "We couldn't find which country your information is kept in.",
+        "evidence": [
+          {
+            "url": "https://smith.ai/privacy",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "pricingClarity": {
+        "result": "pass",
+        "reason": "Shows a clear monthly price.",
+        "evidence": [
+          {
+            "url": "https://smith.ai/pricing/ai-receptionist",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "securityBasics": {
+        "result": "pass",
+        "reason": "Your connection to this website is private (https).",
+        "evidence": [
+          {
+            "url": "https://smith.ai/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "redFlags": {
+        "result": "pass",
+        "reason": "No warning signs found. (We didn't check Google's list of unsafe websites.)",
+        "evidence": [
+          {
+            "url": "https://smith.ai/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      }
+    },
+    "redFlags": [],
+    "verdict": "held",
+    "warnings": [
+      "We couldn't find which country your information is kept in."
+    ]
+  },
+  "lastChecked": "2026-11-08",
+  "sources": [
+    "https://smith.ai/",
+    "https://smith.ai/pricing/ai-receptionist",
+    "https://smith.ai/why-us",
+    "https://smith.ai/integrations"
+  ],
+  "needsVerification": [
+    "pricing.medium.monthlyUsd",
+    "pricing.freeTier",
+    "pricing.cancellation",
+    "setupMinutes",
+    "rulesFlags.recordsCalls",
+    "rulesFlags.announcesRecording",
+    "rulesFlags.hipaaReady",
+    "rulesFlags.outboundAiCalls",
+    "rulesFlags.personalizedPricing",
+    "setupMode",
+    "languages"
+  ]
+}

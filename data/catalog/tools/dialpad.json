@@ -1,0 +1,245 @@
+{
+  "id": "dialpad",
+  "name": "Dialpad",
+  "vendor": {
+    "company": "Dialpad, Inc.",
+    "website": "https://www.dialpad.com",
+    "domain": "dialpad.com"
+  },
+  "description": "Dialpad connects conversations, customer context, and workflows so your teams and AI can resolve needs faster⁠—with the full picture in view.",
+  "category": "Business phone",
+  "useCases": [
+    "missed-calls",
+    "customer-messaging"
+  ],
+  "industries": [
+    "any"
+  ],
+  "pricing": {
+    "asOf": "Nov 2026",
+    "small": {
+      "monthlyUsd": 89,
+      "note": "Essentials plan"
+    },
+    "medium": {
+      "monthlyUsd": 119,
+      "note": "Advanced plan"
+    },
+    "large": {
+      "monthlyUsd": 149,
+      "note": "Premium plan"
+    },
+    "freeTier": "unknown",
+    "contract": "unknown",
+    "cancellation": "unknown",
+    "pricingUrl": "https://www.dialpad.com/pricing/"
+  },
+  "worksWith": [
+    {
+      "product": "Salesforce",
+      "type": "native"
+    },
+    {
+      "product": "Zendesk",
+      "type": "native"
+    },
+    {
+      "product": "Microsoft Teams",
+      "type": "native"
+    },
+    {
+      "product": "Google Workspace",
+      "type": "native"
+    },
+    {
+      "product": "HubSpot",
+      "type": "native"
+    },
+    {
+      "product": "ServiceNow",
+      "type": "native"
+    },
+    {
+      "product": "Calendly",
+      "type": "native"
+    }
+  ],
+  "setupMinutes": "unknown",
+  "setupMode": "needs_help",
+  "languages": [
+    "English",
+    "Français"
+  ],
+  "privacyCard": {
+    "trainsOnYourData": {
+      "answer": "opt-out",
+      "plain": "Uses your data to improve its AI unless you turn it off.",
+      "quote": "The AI Training section of Dialpad’s Privacy Policy explains in straightforward language how customer data processed through Dialpad’s AI products is used to improve the services—and how any customer, from a large company to an individual user, can opt out of this usage.",
+      "sourceUrl": "https://www.dialpad.com/blog/how-dialpadgpt-keeps-your-data-secure/"
+    },
+    "canDeleteData": {
+      "answer": "yes",
+      "plain": "You can delete your data.",
+      "quote": "We’ll retain data until you choose to delete it.",
+      "sourceUrl": "https://www.dialpad.com/trust/"
+    },
+    "whereStored": {
+      "answer": "United States",
+      "plain": "Your data is stored in United States.",
+      "quote": "All permanent customer data, such as contact lists, call records, recordings, and transcripts, is stored in the United States via Google Cloud Platform, and backed up daily.",
+      "sourceUrl": "https://www.dialpad.com/trust/"
+    },
+    "sharesOrSells": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm whether it sells or shares your data.",
+      "quote": null,
+      "sourceUrl": null
+    },
+    "securityCertification": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm a security certification.",
+      "quote": null,
+      "sourceUrl": null
+    }
+  },
+  "rulesFlags": {
+    "recordsCalls": "unknown",
+    "announcesRecording": "unknown",
+    "hipaaReady": "unknown",
+    "outboundAiCalls": "unknown",
+    "personalizedPricing": "unknown"
+  },
+  "badge": "verified",
+  "safetyCheck": {
+    "ranAt": "2026-11-08",
+    "checks": {
+      "whoIsBehind": {
+        "result": "pass",
+        "reason": "Run by Dialpad, Inc., a company at 2700 Camino Ramon, Suite 490.",
+        "evidence": [
+          {
+            "quote": "© 2026 DIALPAD, INC.",
+            "url": "https://www.dialpad.com/about-us/",
+            "checkedAt": "2026-11-08"
+          },
+          {
+            "quote": "2700 Camino Ramon, Suite 490",
+            "url": "https://www.dialpad.com/legal/",
+            "checkedAt": "2026-11-08"
+          },
+          {
+            "quote": "Craig Walker is a Silicon Valley fixture with more than 20 years of experience as an entrepreneur, venture capitalist, corporate executive, and attorney.",
+            "url": "https://www.dialpad.com/about-us/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "domainAge": {
+        "result": "pass",
+        "reason": "The website has been around since February 1999.",
+        "evidence": [
+          {
+            "url": "https://rdap.org/domain/dialpad.com",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "privacyPolicy": {
+        "result": "pass",
+        "reason": "Has a full privacy policy that says what they do with your information.",
+        "evidence": [
+          {
+            "url": "https://www.dialpad.com/trust/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "dataUse": {
+        "result": "pass",
+        "reason": "Uses your information to make its AI better, but you can turn this off. You can delete your information.",
+        "evidence": [
+          {
+            "quote": "The AI Training section of Dialpad’s Privacy Policy explains in straightforward language how customer data processed through Dialpad’s AI products is used to improve the services—and how any customer, from a large company to an individual user, can opt out of this usage.",
+            "url": "https://www.dialpad.com/blog/how-dialpadgpt-keeps-your-data-secure/",
+            "checkedAt": "2026-11-08"
+          },
+          {
+            "quote": "We’ll retain data until you choose to delete it.",
+            "url": "https://www.dialpad.com/trust/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "dataLocation": {
+        "result": "pass",
+        "reason": "Your information is kept in United States.",
+        "evidence": [
+          {
+            "quote": "All permanent customer data, such as contact lists, call records, recordings, and transcripts, is stored in the United States via Google Cloud Platform, and backed up daily.",
+            "url": "https://www.dialpad.com/trust/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "pricingClarity": {
+        "result": "pass",
+        "reason": "Shows a clear monthly price.",
+        "evidence": [
+          {
+            "url": "https://www.dialpad.com/pricing/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "securityBasics": {
+        "result": "pass",
+        "reason": "Your connection to this website is private (https).",
+        "evidence": [
+          {
+            "url": "https://www.dialpad.com/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "redFlags": {
+        "result": "pass",
+        "reason": "No warning signs found. (We didn't check Google's list of unsafe websites.)",
+        "evidence": [
+          {
+            "url": "https://www.dialpad.com/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      }
+    },
+    "redFlags": [],
+    "verdict": "ready",
+    "warnings": [
+      "Ask them to stop this after you sign up. This tool may use your customers' calls or messages to get better, and it says you can opt out. Its privacy policy says how."
+    ]
+  },
+  "lastChecked": "2026-11-08",
+  "sources": [
+    "https://www.dialpad.com/",
+    "https://www.dialpad.com/pricing/",
+    "https://www.dialpad.com/about-us/",
+    "https://www.dialpad.com/blog/how-dialpadgpt-keeps-your-data-secure/",
+    "https://www.dialpad.com/trust/",
+    "https://www.dialpad.com/ai-contact-center/",
+    "https://ecosystem.dialpad.com/"
+  ],
+  "needsVerification": [
+    "pricing.freeTier",
+    "pricing.contract",
+    "pricing.cancellation",
+    "setupMinutes",
+    "rulesFlags.recordsCalls",
+    "rulesFlags.announcesRecording",
+    "rulesFlags.hipaaReady",
+    "rulesFlags.outboundAiCalls",
+    "rulesFlags.personalizedPricing",
+    "setupMode"
+  ],
+  "reviewedAt": "2026-11-08",
+  "reviewedBy": "Rishabh"
+}

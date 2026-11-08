@@ -1,0 +1,207 @@
+{
+  "id": "freshbooks",
+  "name": "FreshBooks",
+  "vendor": {
+    "company": "FreshBooks",
+    "website": "https://www.freshbooks.com",
+    "domain": "freshbooks.com"
+  },
+  "description": "FreshBooks gives you the tools you need for tasks like invoicing, billing your clients, preparing detailed financial reports, and making informed business decisions alongside your accountant.",
+  "category": "Bookkeeping",
+  "useCases": [
+    "bookkeeping",
+    "quotes"
+  ],
+  "industries": [
+    "professional_services",
+    "hvac",
+    "plumbing",
+    "electrical",
+    "landscaping",
+    "cleaning"
+  ],
+  "pricing": {
+    "asOf": "Nov 2026",
+    "small": {
+      "monthlyUsd": "unknown",
+      "note": ""
+    },
+    "medium": {
+      "monthlyUsd": "unknown",
+      "note": ""
+    },
+    "large": {
+      "monthlyUsd": 14,
+      "note": "Top plan"
+    },
+    "freeTier": "unknown",
+    "contract": "monthly",
+    "cancellation": "unknown",
+    "pricingUrl": "https://www.freshbooks.com/pricing"
+  },
+  "worksWith": [],
+  "setupMinutes": "unknown",
+  "setupMode": "needs_help",
+  "languages": [
+    "English"
+  ],
+  "privacyCard": {
+    "trainsOnYourData": {
+      "answer": "yes",
+      "plain": "Uses your data to train its AI.",
+      "quote": "You agree that FreshBooks may, in its sole discretion, collect and use Usage Data to support, maintain, and improve its products and services, and to enforce its rights relating thereto.",
+      "sourceUrl": "https://www.freshbooks.com/policies/privacy"
+    },
+    "canDeleteData": {
+      "answer": "yes",
+      "plain": "You can delete your data.",
+      "quote": "Right of erasure – You have the right to request that your Personal Information be permanently erased/deleted.",
+      "sourceUrl": "https://www.freshbooks.com/policies/privacy"
+    },
+    "whereStored": {
+      "answer": "United States, Switzerland, the United Kingdom, the European Economic Area, and other non-EU countries",
+      "plain": "Your data is stored in United States, Switzerland, the United Kingdom, the European Economic Area, and other non-EU countries.",
+      "quote": "Personal Information may be transferred, processed, and stored outside of the jurisdiction in which it was collected to our servers, partners, or vendors located in the United States, Switzerland, the United Kingdom, the European Economic Area, and other non-EU countries.",
+      "sourceUrl": "https://www.freshbooks.com/policies/privacy"
+    },
+    "sharesOrSells": {
+      "answer": "no",
+      "plain": "Does not sell or share your data.",
+      "quote": "*FreshBooks does not sell Personal Information.",
+      "sourceUrl": "https://www.freshbooks.com/policies/privacy"
+    },
+    "securityCertification": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm a security certification.",
+      "quote": null,
+      "sourceUrl": null
+    }
+  },
+  "rulesFlags": {
+    "recordsCalls": "unknown",
+    "announcesRecording": "unknown",
+    "hipaaReady": "unknown",
+    "outboundAiCalls": "unknown",
+    "personalizedPricing": "unknown"
+  },
+  "badge": "listed",
+  "safetyCheck": {
+    "ranAt": "2026-11-08",
+    "checks": {
+      "whoIsBehind": {
+        "result": "unknown",
+        "reason": "We couldn't find an address for FreshBooks.",
+        "evidence": [
+          {
+            "quote": "© 2026 FreshBooks",
+            "url": "https://www.freshbooks.com/accounting",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "domainAge": {
+        "result": "pass",
+        "reason": "The website has been around since March 2004.",
+        "evidence": [
+          {
+            "url": "https://rdap.org/domain/freshbooks.com",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "privacyPolicy": {
+        "result": "pass",
+        "reason": "Has a full privacy policy that says what they do with your information.",
+        "evidence": [
+          {
+            "url": "https://www.freshbooks.com/policies/privacy",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "dataUse": {
+        "result": "fail",
+        "reason": "It may use your customers' information to make its AI better, and we found no way to stop it.",
+        "evidence": [
+          {
+            "quote": "You agree that FreshBooks may, in its sole discretion, collect and use Usage Data to support, maintain, and improve its products and services, and to enforce its rights relating thereto.",
+            "url": "https://www.freshbooks.com/policies/privacy",
+            "checkedAt": "2026-11-08"
+          },
+          {
+            "quote": "Right of erasure – You have the right to request that your Personal Information be permanently erased/deleted.",
+            "url": "https://www.freshbooks.com/policies/privacy",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "dataLocation": {
+        "result": "pass",
+        "reason": "Your information is kept in United States, Switzerland, the United Kingdom, the European Economic Area, and other non-EU countries.",
+        "evidence": [
+          {
+            "quote": "Personal Information may be transferred, processed, and stored outside of the jurisdiction in which it was collected to our servers, partners, or vendors located in the United States, Switzerland, the United Kingdom, the European Economic Area, and other non-EU countries.",
+            "url": "https://www.freshbooks.com/policies/privacy",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "pricingClarity": {
+        "result": "pass",
+        "reason": "Shows a clear monthly price.",
+        "evidence": [
+          {
+            "url": "https://www.freshbooks.com/pricing",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "securityBasics": {
+        "result": "pass",
+        "reason": "Your connection to this website is private (https). This tool handles payments or health information, but we found no proof that an outside company checked its security (like PCI or SOC 2).",
+        "evidence": [
+          {
+            "url": "https://www.freshbooks.com/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "redFlags": {
+        "result": "pass",
+        "reason": "No warning signs found. (We didn't check Google's list of unsafe websites.)",
+        "evidence": [
+          {
+            "url": "https://www.freshbooks.com/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      }
+    },
+    "redFlags": [],
+    "verdict": "held",
+    "warnings": [
+      "We couldn't find the name of the person who runs this company.",
+      "This tool handles payments or health information, but we found no proof that an outside company checked its security (like PCI or SOC 2)."
+    ]
+  },
+  "lastChecked": "2026-11-08",
+  "sources": [
+    "https://www.freshbooks.com/accounting",
+    "https://www.freshbooks.com/pricing",
+    "https://www.freshbooks.com/",
+    "https://auth.freshbooks.com/service/auth/integrations/sign_in?_gl=1*y5hk91*_gcl_au*MTg5MjcyNjY1NC4xNzExOTc4MDAx*_ga*MTc4MDg0MTQ4OS4xNjg5NzcyNDcy*_ga_LNDHWTHSMK*MTcxOTU3ODM5Ni4yNTkuMC4xNzE5NTc4Mzk2LjYwLjAuMA..",
+    "https://www.freshbooks.com/policies/privacy"
+  ],
+  "needsVerification": [
+    "pricing.small.monthlyUsd",
+    "pricing.medium.monthlyUsd",
+    "pricing.freeTier",
+    "pricing.cancellation",
+    "setupMinutes",
+    "rulesFlags.recordsCalls",
+    "rulesFlags.announcesRecording",
+    "rulesFlags.hipaaReady",
+    "rulesFlags.outboundAiCalls",
+    "rulesFlags.personalizedPricing"
+  ]
+}

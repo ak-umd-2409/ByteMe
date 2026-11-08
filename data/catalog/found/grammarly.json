@@ -1,0 +1,26 @@
+[
+  {
+    "field": "address",
+    "answer": "2261 Market Street STE 85232, San Francisco, CA 94114",
+    "quote": "You may give notice to Superhuman at the following address: Superhuman Platform Inc., 2261 Market Street STE 85232, San Francisco, CA 94114, United States.",
+    "url": "https://www.grammarly.com/terms",
+    "foundBy": "Claude (drafted for Rishabh to check)",
+    "foundAt": "2026-11-08"
+  },
+  {
+    "field": "trainsOnYourData",
+    "answer": "opt-out",
+    "quote": "The Product Improvement and Training control allows users of Grammarly Free, Premium, and single-user Pro accounts to opt out of allowing us to use their content, including content processed by Grammarly Go, to train our models and improve our product for everyone.",
+    "url": "https://support.grammarly.com/hc/en-us/articles/25555503115277-Product-Improvement-and-Training-Control",
+    "foundBy": "Claude (drafted for Rishabh to check)",
+    "foundAt": "2026-11-08"
+  },
+  {
+    "field": "companyName",
+    "answer": "Superhuman Platform Inc.",
+    "quote": "You may give notice to Superhuman at the following address: Superhuman Platform Inc., 2261 Market Street STE 85232, San Francisco, CA 94114, United States.",
+    "url": "https://www.grammarly.com/terms",
+    "foundBy": "Claude (drafted for Rishabh to check)",
+    "foundAt": "2026-11-08"
+  }
+]

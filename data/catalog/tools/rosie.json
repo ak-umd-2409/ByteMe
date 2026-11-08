@@ -1,0 +1,213 @@
+{
+  "id": "rosie",
+  "name": "Rosie",
+  "vendor": {
+    "company": "Rosie",
+    "website": "https://heyrosie.com",
+    "domain": "heyrosie.com"
+  },
+  "description": "Rosie is trained on your business and works 24/7 — answering questions, booking appointments, and texting you the details of every call.",
+  "category": "AI receptionist",
+  "useCases": [
+    "missed-calls",
+    "booking"
+  ],
+  "industries": [
+    "hvac",
+    "plumbing",
+    "electrical",
+    "landscaping",
+    "cleaning",
+    "auto_repair",
+    "professional_services"
+  ],
+  "pricing": {
+    "asOf": "Nov 2026",
+    "small": {
+      "monthlyUsd": 49,
+      "note": "Cheapest paid plan"
+    },
+    "medium": {
+      "monthlyUsd": "unknown",
+      "note": ""
+    },
+    "large": {
+      "monthlyUsd": "unknown",
+      "note": ""
+    },
+    "freeTier": "unknown",
+    "contract": "monthly",
+    "cancellation": "unknown",
+    "pricingUrl": "https://heyrosie.com/pricing"
+  },
+  "worksWith": [
+    {
+      "product": "Zapier",
+      "type": "zapier"
+    }
+  ],
+  "setupMinutes": "unknown",
+  "setupMode": "needs_help",
+  "languages": [
+    "English"
+  ],
+  "privacyCard": {
+    "trainsOnYourData": {
+      "answer": "yes",
+      "plain": "Uses your data to train its AI.",
+      "quote": "Rosie may also use the data provided to an AI Receptionist for our legitimate interest in training and improving our Services or for analytics and statistical purposes.",
+      "sourceUrl": "https://heyrosie.com/legal/privacy"
+    },
+    "canDeleteData": {
+      "answer": "yes",
+      "plain": "You can delete your data.",
+      "quote": "We delete Subscriber account data 30 days after the Subscriber’s subscription is cancelled.",
+      "sourceUrl": "https://heyrosie.com/legal/privacy"
+    },
+    "whereStored": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm where your data is stored.",
+      "quote": null,
+      "sourceUrl": null
+    },
+    "sharesOrSells": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm whether it sells or shares your data.",
+      "quote": null,
+      "sourceUrl": null
+    },
+    "securityCertification": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm a security certification.",
+      "quote": null,
+      "sourceUrl": null
+    }
+  },
+  "rulesFlags": {
+    "recordsCalls": "unknown",
+    "announcesRecording": "unknown",
+    "hipaaReady": "unknown",
+    "outboundAiCalls": "unknown",
+    "personalizedPricing": "unknown"
+  },
+  "badge": "listed",
+  "safetyCheck": {
+    "ranAt": "2026-11-08",
+    "checks": {
+      "whoIsBehind": {
+        "result": "unknown",
+        "reason": "We couldn't find an address for Rosie.",
+        "evidence": [
+          {
+            "quote": "© 2026 Rosie",
+            "url": "https://heyrosie.com/about",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "domainAge": {
+        "result": "pass",
+        "reason": "The website has been around since May 2013.",
+        "evidence": [
+          {
+            "url": "https://rdap.org/domain/heyrosie.com",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "privacyPolicy": {
+        "result": "pass",
+        "reason": "Has a full privacy policy that says what they do with your information.",
+        "evidence": [
+          {
+            "url": "https://heyrosie.com/legal/privacy",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "dataUse": {
+        "result": "fail",
+        "reason": "It may use your customers' information to make its AI better, and we found no way to stop it.",
+        "evidence": [
+          {
+            "quote": "Rosie may also use the data provided to an AI Receptionist for our legitimate interest in training and improving our Services or for analytics and statistical purposes.",
+            "url": "https://heyrosie.com/legal/privacy",
+            "checkedAt": "2026-11-08"
+          },
+          {
+            "quote": "We delete Subscriber account data 30 days after the Subscriber’s subscription is cancelled.",
+            "url": "https://heyrosie.com/legal/privacy",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "dataLocation": {
+        "result": "unknown",
+        "reason": "We couldn't find which country your information is kept in.",
+        "evidence": [
+          {
+            "url": "https://heyrosie.com/legal/privacy",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "pricingClarity": {
+        "result": "pass",
+        "reason": "Shows a clear monthly price.",
+        "evidence": [
+          {
+            "url": "https://heyrosie.com/pricing",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "securityBasics": {
+        "result": "pass",
+        "reason": "Your connection to this website is private (https).",
+        "evidence": [
+          {
+            "url": "https://heyrosie.com/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "redFlags": {
+        "result": "pass",
+        "reason": "No warning signs found. (We didn't check Google's list of unsafe websites.)",
+        "evidence": [
+          {
+            "url": "https://heyrosie.com/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      }
+    },
+    "redFlags": [],
+    "verdict": "held",
+    "warnings": [
+      "We couldn't find which country your information is kept in.",
+      "We couldn't find the name of the person who runs this company."
+    ]
+  },
+  "lastChecked": "2026-11-08",
+  "sources": [
+    "https://heyrosie.com/",
+    "https://heyrosie.com/pricing",
+    "https://heyrosie.com/about",
+    "https://heyrosie.com/legal/privacy"
+  ],
+  "needsVerification": [
+    "pricing.medium.monthlyUsd",
+    "pricing.large.monthlyUsd",
+    "pricing.freeTier",
+    "pricing.cancellation",
+    "setupMinutes",
+    "rulesFlags.recordsCalls",
+    "rulesFlags.announcesRecording",
+    "rulesFlags.hipaaReady",
+    "rulesFlags.outboundAiCalls",
+    "rulesFlags.personalizedPricing",
+    "setupMode",
+    "languages"
+  ]
+}

@@ -1,0 +1,227 @@
+{
+  "id": "goodcall",
+  "name": "Goodcall",
+  "vendor": {
+    "company": "Goodcall",
+    "website": "https://www.goodcall.com",
+    "domain": "goodcall.com"
+  },
+  "description": "An AI answering service and receptionist for your business.",
+  "category": "AI receptionist",
+  "useCases": [
+    "missed-calls",
+    "booking"
+  ],
+  "industries": [
+    "hvac",
+    "plumbing",
+    "electrical",
+    "landscaping",
+    "cleaning",
+    "auto_repair",
+    "restaurant",
+    "salon",
+    "retail"
+  ],
+  "pricing": {
+    "asOf": "Nov 2026",
+    "small": {
+      "monthlyUsd": 79,
+      "note": "Cheapest paid plan"
+    },
+    "medium": {
+      "monthlyUsd": 129,
+      "note": "Middle plan"
+    },
+    "large": {
+      "monthlyUsd": 299,
+      "note": "Top plan"
+    },
+    "freeTier": "unknown",
+    "contract": "monthly",
+    "cancellation": "unknown",
+    "pricingUrl": "https://www.goodcall.com/pricing"
+  },
+  "worksWith": [
+    {
+      "product": "Google Calendar",
+      "type": "native"
+    },
+    {
+      "product": "Google Sheet",
+      "type": "native"
+    },
+    {
+      "product": "HighLevel",
+      "type": "native"
+    },
+    {
+      "product": "Zapier",
+      "type": "zapier"
+    }
+  ],
+  "setupMinutes": "unknown",
+  "setupMode": "needs_help",
+  "languages": [
+    "English"
+  ],
+  "privacyCard": {
+    "trainsOnYourData": {
+      "answer": "yes",
+      "plain": "Uses your data to train its AI.",
+      "quote": "Additionally, the AI Assistant feature includes saving audio and the transcription from calls, both to enable the AI Assistant and to train and improve the models that the feature is based on, such as speech recognition and understanding.",
+      "sourceUrl": "https://help.goodcall.com/en/articles/8007565-privacy"
+    },
+    "canDeleteData": {
+      "answer": "no",
+      "plain": "You can't delete your data.",
+      "quote": "If you are such an individual and would no longer like your information to be used by one of our Customers or if you would like to access, correct, or request deletion of your information, please contact the Customer that you interact with directly.",
+      "sourceUrl": "https://help.goodcall.com/en/articles/8007565-privacy"
+    },
+    "whereStored": {
+      "answer": "United States",
+      "plain": "Your data is stored in United States.",
+      "quote": "By using the Services, submitting any information on the Site, or otherwise providing us with any information, you fully understand and acknowledge this transfer, processing and storage of your information in the United States.",
+      "sourceUrl": "https://help.goodcall.com/en/articles/8007565-privacy"
+    },
+    "sharesOrSells": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm whether it sells or shares your data.",
+      "quote": null,
+      "sourceUrl": null
+    },
+    "securityCertification": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm a security certification.",
+      "quote": null,
+      "sourceUrl": null
+    }
+  },
+  "rulesFlags": {
+    "recordsCalls": "unknown",
+    "announcesRecording": "unknown",
+    "hipaaReady": "unknown",
+    "outboundAiCalls": "unknown",
+    "personalizedPricing": "unknown"
+  },
+  "badge": "listed",
+  "safetyCheck": {
+    "ranAt": "2026-11-08",
+    "checks": {
+      "whoIsBehind": {
+        "result": "unknown",
+        "reason": "We couldn't find an address for Goodcall.",
+        "evidence": [
+          {
+            "quote": "Goodcall began inside Google in 2017 to make AI accessible to any business, starting with the phone.",
+            "url": "https://www.goodcall.com/about",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "domainAge": {
+        "result": "pass",
+        "reason": "The website has been around since September 1996.",
+        "evidence": [
+          {
+            "url": "https://rdap.org/domain/goodcall.com",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "privacyPolicy": {
+        "result": "pass",
+        "reason": "Has a full privacy policy that says what they do with your information.",
+        "evidence": [
+          {
+            "url": "https://help.goodcall.com/en/articles/8007565-privacy",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "dataUse": {
+        "result": "fail",
+        "reason": "It may use your customers' information to make its AI better, and we found no way to stop it.",
+        "evidence": [
+          {
+            "quote": "Additionally, the AI Assistant feature includes saving audio and the transcription from calls, both to enable the AI Assistant and to train and improve the models that the feature is based on, such as speech recognition and understanding.",
+            "url": "https://help.goodcall.com/en/articles/8007565-privacy",
+            "checkedAt": "2026-11-08"
+          },
+          {
+            "quote": "If you are such an individual and would no longer like your information to be used by one of our Customers or if you would like to access, correct, or request deletion of your information, please contact the Customer that you interact with directly.",
+            "url": "https://help.goodcall.com/en/articles/8007565-privacy",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "dataLocation": {
+        "result": "pass",
+        "reason": "Your information is kept in United States.",
+        "evidence": [
+          {
+            "quote": "By using the Services, submitting any information on the Site, or otherwise providing us with any information, you fully understand and acknowledge this transfer, processing and storage of your information in the United States.",
+            "url": "https://help.goodcall.com/en/articles/8007565-privacy",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "pricingClarity": {
+        "result": "fail",
+        "reason": "No price on the website. You have to talk to their sales team.",
+        "evidence": [
+          {
+            "url": "https://www.goodcall.com/pricing",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "securityBasics": {
+        "result": "pass",
+        "reason": "Your connection to this website is private (https).",
+        "evidence": [
+          {
+            "url": "https://www.goodcall.com/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "redFlags": {
+        "result": "pass",
+        "reason": "No warning signs found. (We didn't check Google's list of unsafe websites.)",
+        "evidence": [
+          {
+            "url": "https://www.goodcall.com/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      }
+    },
+    "redFlags": [],
+    "verdict": "held",
+    "warnings": [
+      "No price on the website. You have to talk to their sales team.",
+      "We couldn't find the name of the person who runs this company."
+    ]
+  },
+  "lastChecked": "2026-11-08",
+  "sources": [
+    "https://www.goodcall.com/",
+    "https://www.goodcall.com/pricing",
+    "https://www.goodcall.com/how-it-works",
+    "https://www.goodcall.com/about",
+    "https://help.goodcall.com/en/articles/8007565-privacy",
+    "https://www.goodcall.com/answering-ai-with-zapier"
+  ],
+  "needsVerification": [
+    "pricing.freeTier",
+    "pricing.cancellation",
+    "setupMinutes",
+    "rulesFlags.recordsCalls",
+    "rulesFlags.announcesRecording",
+    "rulesFlags.hipaaReady",
+    "rulesFlags.outboundAiCalls",
+    "rulesFlags.personalizedPricing",
+    "setupMode"
+  ]
+}

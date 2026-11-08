@@ -1,0 +1,200 @@
+{
+  "id": "brightlocal",
+  "name": "BrightLocal",
+  "vendor": {
+    "company": "BrightLocal Ltd",
+    "website": "https://www.brightlocal.com",
+    "domain": "brightlocal.com"
+  },
+  "description": "Track rankings, manage listings, and grow your reputation in one platform.",
+  "category": "Local SEO",
+  "useCases": [
+    "website-seo",
+    "reviews"
+  ],
+  "industries": [
+    "any"
+  ],
+  "pricing": {
+    "asOf": "Nov 2026",
+    "small": {
+      "monthlyUsd": 31,
+      "note": "Track plan"
+    },
+    "medium": {
+      "monthlyUsd": "unknown",
+      "note": ""
+    },
+    "large": {
+      "monthlyUsd": "unknown",
+      "note": ""
+    },
+    "freeTier": true,
+    "contract": "monthly",
+    "cancellation": "unknown",
+    "pricingUrl": "https://www.brightlocal.com/pricing/"
+  },
+  "worksWith": [],
+  "setupMinutes": "unknown",
+  "setupMode": "self_serve",
+  "languages": [
+    "English"
+  ],
+  "privacyCard": {
+    "trainsOnYourData": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm whether it uses your data to train AI.",
+      "quote": null,
+      "sourceUrl": null
+    },
+    "canDeleteData": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm whether you can delete your data.",
+      "quote": null,
+      "sourceUrl": null
+    },
+    "whereStored": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm where your data is stored.",
+      "quote": null,
+      "sourceUrl": null
+    },
+    "sharesOrSells": {
+      "answer": "no",
+      "plain": "Does not sell or share your data.",
+      "quote": "We will never sell your personal data to a third party.",
+      "sourceUrl": "https://www.brightlocal.com/privacy-policy/"
+    },
+    "securityCertification": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm a security certification.",
+      "quote": null,
+      "sourceUrl": null
+    }
+  },
+  "rulesFlags": {
+    "recordsCalls": "unknown",
+    "announcesRecording": "unknown",
+    "hipaaReady": "unknown",
+    "outboundAiCalls": "unknown",
+    "personalizedPricing": "unknown"
+  },
+  "badge": "listed",
+  "safetyCheck": {
+    "ranAt": "2026-11-08",
+    "checks": {
+      "whoIsBehind": {
+        "result": "pass",
+        "reason": "Run by BrightLocal Ltd, a company at First Floor, Huntingdon House, 20-25 North Street, Brighton, BN1 1EB, UK.",
+        "evidence": [
+          {
+            "quote": "© 2026 BrightLocal Ltd. All rights reserved. BrightLocal® is a registered trademark in the USA, EU and UK.",
+            "url": "https://www.brightlocal.com/about-us/",
+            "checkedAt": "2026-11-08"
+          },
+          {
+            "quote": "Address: First Floor, Huntingdon House, 20-25 North Street, Brighton, BN1 1EB, UK",
+            "url": "https://www.brightlocal.com/privacy-policy/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "domainAge": {
+        "result": "pass",
+        "reason": "The website has been around since May 2010.",
+        "evidence": [
+          {
+            "url": "https://rdap.org/domain/brightlocal.com",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "privacyPolicy": {
+        "result": "pass",
+        "reason": "Has a full privacy policy that says what they do with your information.",
+        "evidence": [
+          {
+            "url": "https://www.brightlocal.com/privacy-policy/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "dataUse": {
+        "result": "unknown",
+        "reason": "We couldn't find whether it uses your information to make its AI better or whether you can delete your information.",
+        "evidence": [
+          {
+            "url": "https://www.brightlocal.com/privacy-policy/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "dataLocation": {
+        "result": "unknown",
+        "reason": "We couldn't find which country your information is kept in.",
+        "evidence": [
+          {
+            "url": "https://www.brightlocal.com/privacy-policy/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "pricingClarity": {
+        "result": "fail",
+        "reason": "The website doesn't show a clear monthly price.",
+        "evidence": [
+          {
+            "url": "https://www.brightlocal.com/free-local-seo-tools/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "securityBasics": {
+        "result": "pass",
+        "reason": "Your connection to this website is private (https).",
+        "evidence": [
+          {
+            "url": "https://www.brightlocal.com/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "redFlags": {
+        "result": "pass",
+        "reason": "No warning signs found. (We didn't check Google's list of unsafe websites.)",
+        "evidence": [
+          {
+            "url": "https://www.brightlocal.com/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      }
+    },
+    "redFlags": [],
+    "verdict": "held",
+    "warnings": [
+      "We couldn't find which country your information is kept in.",
+      "The website doesn't show a clear monthly price.",
+      "We couldn't find the name of the person who runs this company."
+    ]
+  },
+  "lastChecked": "2026-11-08",
+  "sources": [
+    "https://www.brightlocal.com/",
+    "https://www.brightlocal.com/local-seo-tools/",
+    "https://www.brightlocal.com/privacy-policy/",
+    "https://www.brightlocal.com/about-us/"
+  ],
+  "needsVerification": [
+    "pricing.medium.monthlyUsd",
+    "pricing.large.monthlyUsd",
+    "pricing.cancellation",
+    "setupMinutes",
+    "rulesFlags.recordsCalls",
+    "rulesFlags.announcesRecording",
+    "rulesFlags.hipaaReady",
+    "rulesFlags.outboundAiCalls",
+    "rulesFlags.personalizedPricing",
+    "languages"
+  ]
+}

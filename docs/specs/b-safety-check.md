@@ -118,7 +118,7 @@ The first real-world run held every real tool (Square, Rosie, My AI Front Desk, 
    | --- | --- | --- |
    | No training, or only if you say yes (`no`, `opt-in`) | pass | — |
    | Only uses data with names removed (`anonymized`) | pass | Warning: **"This tool learns from how people use it."** It may use your customers' calls or messages to get better, but it removes names and phone numbers first. Don't share card numbers or health details with it. |
-   | Uses it unless you switch it off (`opt-out`) | pass | Warning: **"Turn this setting off after you sign up."** This tool may use your customers' calls or messages to get better. You can stop this in its settings. |
+   | Uses it unless you switch it off (`opt-out`) | pass | Warning: **"Ask them to stop this after you sign up."** This tool may use your customers' calls or messages to get better, and it says you can opt out. Its privacy policy says how. (Some tools stop by email or through support, so the warning never promises a setting.) |
    | Uses it and you can't stop it (`yes`) | fail | — |
 
    Safeguards: an `anonymized` answer counts only if its quote has a word like "de-identified", "aggregated" or "anonymized". An `opt-out` answer counts only if its quote says how to opt out or turn it off. Otherwise the answer is "unknown". Any *other* sentence about training that the quote doesn't explain still means "a person must read it" (`unknown` → held).

@@ -1,0 +1,212 @@
+{
+  "id": "durable",
+  "name": "Durable",
+  "vendor": {
+    "company": "Durable Technologies Inc",
+    "website": "https://durable.co",
+    "domain": "durable.co"
+  },
+  "description": "Launch a website, get customers, and grow your business faster with AI.",
+  "category": "Website builder",
+  "useCases": [
+    "website-seo",
+    "marketing"
+  ],
+  "industries": [
+    "hvac",
+    "plumbing",
+    "electrical",
+    "landscaping",
+    "cleaning",
+    "professional_services"
+  ],
+  "pricing": {
+    "asOf": "Nov 2026",
+    "small": {
+      "monthlyUsd": 25,
+      "note": "Launch plan"
+    },
+    "medium": {
+      "monthlyUsd": "unknown",
+      "note": ""
+    },
+    "large": {
+      "monthlyUsd": "unknown",
+      "note": ""
+    },
+    "freeTier": "unknown",
+    "contract": "monthly",
+    "cancellation": "unknown",
+    "pricingUrl": "https://durable.com/pricing"
+  },
+  "worksWith": [
+    {
+      "product": "Google Business Profile",
+      "type": "native"
+    }
+  ],
+  "setupMinutes": "unknown",
+  "setupMode": "needs_help",
+  "languages": [
+    "English"
+  ],
+  "privacyCard": {
+    "trainsOnYourData": {
+      "answer": "yes",
+      "plain": "Uses your data to train its AI.",
+      "quote": "To train machine learning models",
+      "sourceUrl": "https://durable.com/privacy-policy"
+    },
+    "canDeleteData": {
+      "answer": "yes",
+      "plain": "You can delete your data.",
+      "quote": "To request the deletion of Personal Data held about you",
+      "sourceUrl": "https://durable.com/privacy-policy"
+    },
+    "whereStored": {
+      "answer": "Canada",
+      "plain": "Your data is stored in Canada.",
+      "quote": "If you are located outside Canada and choose to provide information to us, please note that we transfer the data, including Personal Data, to Canada and process it there and in other jurisdictions where our Service Providers operate.",
+      "sourceUrl": "https://durable.com/privacy-policy"
+    },
+    "sharesOrSells": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm whether it sells or shares your data.",
+      "quote": null,
+      "sourceUrl": null
+    },
+    "securityCertification": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm a security certification.",
+      "quote": null,
+      "sourceUrl": null
+    }
+  },
+  "rulesFlags": {
+    "recordsCalls": "unknown",
+    "announcesRecording": "unknown",
+    "hipaaReady": "unknown",
+    "outboundAiCalls": "unknown",
+    "personalizedPricing": "unknown"
+  },
+  "badge": "listed",
+  "safetyCheck": {
+    "ranAt": "2026-11-08",
+    "checks": {
+      "whoIsBehind": {
+        "result": "unknown",
+        "reason": "We couldn't find an address for Durable Technologies Inc.",
+        "evidence": [
+          {
+            "quote": "©2026 Durable Technologies Inc",
+            "url": "https://durable.com/about",
+            "checkedAt": "2026-11-08"
+          },
+          {
+            "quote": "From James Clift,",
+            "url": "https://durable.com/about",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "domainAge": {
+        "result": "unknown",
+        "reason": "We couldn't find when the website started.",
+        "evidence": []
+      },
+      "privacyPolicy": {
+        "result": "pass",
+        "reason": "Has a full privacy policy that says what they do with your information.",
+        "evidence": [
+          {
+            "url": "https://durable.com/privacy-policy",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "dataUse": {
+        "result": "fail",
+        "reason": "It may use your customers' information to make its AI better, and we found no way to stop it.",
+        "evidence": [
+          {
+            "quote": "To train machine learning models",
+            "url": "https://durable.com/privacy-policy",
+            "checkedAt": "2026-11-08"
+          },
+          {
+            "quote": "To request the deletion of Personal Data held about you",
+            "url": "https://durable.com/privacy-policy",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "dataLocation": {
+        "result": "pass",
+        "reason": "Your information is kept in Canada.",
+        "evidence": [
+          {
+            "quote": "If you are located outside Canada and choose to provide information to us, please note that we transfer the data, including Personal Data, to Canada and process it there and in other jurisdictions where our Service Providers operate.",
+            "url": "https://durable.com/privacy-policy",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "pricingClarity": {
+        "result": "pass",
+        "reason": "Shows a clear monthly price.",
+        "evidence": [
+          {
+            "url": "https://durable.com/pricing",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "securityBasics": {
+        "result": "pass",
+        "reason": "Your connection to this website is private (https).",
+        "evidence": [
+          {
+            "url": "https://durable.com/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "redFlags": {
+        "result": "pass",
+        "reason": "No warning signs found. (We didn't check Google's list of unsafe websites.)",
+        "evidence": [
+          {
+            "url": "https://durable.co/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      }
+    },
+    "redFlags": [],
+    "verdict": "held",
+    "warnings": [
+      "We couldn't find when the website started."
+    ]
+  },
+  "lastChecked": "2026-11-08",
+  "sources": [
+    "https://durable.com/",
+    "https://durable.com/pricing",
+    "https://durable.com/about",
+    "https://durable.com/privacy-policy"
+  ],
+  "needsVerification": [
+    "pricing.medium.monthlyUsd",
+    "pricing.large.monthlyUsd",
+    "pricing.freeTier",
+    "pricing.cancellation",
+    "setupMinutes",
+    "rulesFlags.recordsCalls",
+    "rulesFlags.announcesRecording",
+    "rulesFlags.hipaaReady",
+    "rulesFlags.outboundAiCalls",
+    "rulesFlags.personalizedPricing",
+    "setupMode",
+    "languages"
+  ]
+}

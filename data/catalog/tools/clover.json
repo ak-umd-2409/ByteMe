@@ -1,0 +1,204 @@
+{
+  "id": "clover",
+  "name": "Clover",
+  "vendor": {
+    "company": "Clover",
+    "website": "https://www.clover.com",
+    "domain": "clover.com"
+  },
+  "description": "POS.",
+  "category": "POS",
+  "useCases": [
+    "inventory",
+    "bookkeeping"
+  ],
+  "industries": [
+    "retail",
+    "restaurant",
+    "cafe"
+  ],
+  "existingProduct": "Clover",
+  "pricing": {
+    "asOf": "Nov 2026",
+    "small": {
+      "monthlyUsd": "unknown",
+      "note": ""
+    },
+    "medium": {
+      "monthlyUsd": "unknown",
+      "note": ""
+    },
+    "large": {
+      "monthlyUsd": "unknown",
+      "note": ""
+    },
+    "freeTier": "unknown",
+    "contract": "unknown",
+    "cancellation": "unknown",
+    "pricingUrl": "https://www.clover.com/pricing"
+  },
+  "worksWith": [],
+  "setupMinutes": "unknown",
+  "setupMode": "needs_help",
+  "languages": [
+    "English"
+  ],
+  "privacyCard": {
+    "trainsOnYourData": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm whether it uses your data to train AI.",
+      "quote": null,
+      "sourceUrl": null
+    },
+    "canDeleteData": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm whether you can delete your data.",
+      "quote": null,
+      "sourceUrl": null
+    },
+    "whereStored": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm where your data is stored.",
+      "quote": null,
+      "sourceUrl": null
+    },
+    "sharesOrSells": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm whether it sells or shares your data.",
+      "quote": null,
+      "sourceUrl": null
+    },
+    "securityCertification": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm a security certification.",
+      "quote": null,
+      "sourceUrl": null
+    }
+  },
+  "rulesFlags": {
+    "recordsCalls": "unknown",
+    "announcesRecording": "unknown",
+    "hipaaReady": "unknown",
+    "outboundAiCalls": "unknown",
+    "personalizedPricing": "unknown"
+  },
+  "badge": "listed",
+  "safetyCheck": {
+    "ranAt": "2026-11-08",
+    "checks": {
+      "whoIsBehind": {
+        "result": "fail",
+        "reason": "The website doesn't say which company is behind this tool.",
+        "evidence": [
+          {
+            "url": "https://www.clover.com/about",
+            "checkedAt": "2026-11-08"
+          },
+          {
+            "url": "https://www.clover.com/contact",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "domainAge": {
+        "result": "pass",
+        "reason": "The website has been around since August 1991.",
+        "evidence": [
+          {
+            "url": "https://rdap.org/domain/clover.com",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "privacyPolicy": {
+        "result": "unknown",
+        "reason": "The privacy policy is too short to tell what they do with your information.",
+        "evidence": [
+          {
+            "url": "https://www.clover.com/privacy-policy",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "dataUse": {
+        "result": "unknown",
+        "reason": "We couldn't find whether it uses your information to make its AI better or whether you can delete your information.",
+        "evidence": [
+          {
+            "url": "https://www.clover.com/privacy-policy",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "dataLocation": {
+        "result": "unknown",
+        "reason": "We couldn't find which country your information is kept in.",
+        "evidence": [
+          {
+            "url": "https://www.clover.com/privacy-policy",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "pricingClarity": {
+        "result": "fail",
+        "reason": "The website doesn't show a clear monthly price.",
+        "evidence": [
+          {
+            "url": "https://www.clover.com/pricing",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "securityBasics": {
+        "result": "pass",
+        "reason": "Your connection to this website is private (https). This tool handles payments or health information, but we found no proof that an outside company checked its security (like PCI or SOC 2).",
+        "evidence": [
+          {
+            "url": "https://www.clover.com/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "redFlags": {
+        "result": "pass",
+        "reason": "No warning signs found. (We didn't check Google's list of unsafe websites.)",
+        "evidence": [
+          {
+            "url": "https://www.clover.com/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      }
+    },
+    "redFlags": [],
+    "verdict": "held",
+    "warnings": [
+      "We couldn't find which country your information is kept in.",
+      "The website doesn't show a clear monthly price.",
+      "We couldn't find the name of the person who runs this company.",
+      "This tool handles payments or health information, but we found no proof that an outside company checked its security (like PCI or SOC 2)."
+    ]
+  },
+  "lastChecked": "2026-11-08",
+  "sources": [
+    "https://www.clover.com"
+  ],
+  "needsVerification": [
+    "pricing.small.monthlyUsd",
+    "pricing.medium.monthlyUsd",
+    "pricing.large.monthlyUsd",
+    "pricing.freeTier",
+    "pricing.contract",
+    "pricing.cancellation",
+    "setupMinutes",
+    "rulesFlags.recordsCalls",
+    "rulesFlags.announcesRecording",
+    "rulesFlags.hipaaReady",
+    "rulesFlags.outboundAiCalls",
+    "rulesFlags.personalizedPricing",
+    "description",
+    "setupMode",
+    "languages"
+  ]
+}

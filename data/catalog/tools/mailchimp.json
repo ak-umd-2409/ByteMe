@@ -1,0 +1,179 @@
+{
+  "id": "mailchimp",
+  "name": "Mailchimp",
+  "vendor": {
+    "company": "The Rocket Science Group",
+    "website": "https://mailchimp.com",
+    "domain": "mailchimp.com"
+  },
+  "description": "Mailchimp is a full marketing platform , which means you get a wide range of tools in one place for various types of marketing .",
+  "category": "Email marketing",
+  "useCases": [
+    "email-marketing",
+    "marketing"
+  ],
+  "industries": [
+    "any"
+  ],
+  "existingProduct": "Mailchimp",
+  "pricing": {
+    "asOf": "Nov 2026",
+    "small": {
+      "monthlyUsd": 20,
+      "note": "Cheapest paid plan"
+    },
+    "medium": {
+      "monthlyUsd": "unknown",
+      "note": ""
+    },
+    "large": {
+      "monthlyUsd": "unknown",
+      "note": ""
+    },
+    "freeTier": true,
+    "contract": "monthly",
+    "cancellation": "Cancel or downgrade to our Essentials or basic Free plans at any time",
+    "pricingUrl": "https://mailchimp.com/pricing/marketing/"
+  },
+  "worksWith": [],
+  "setupMinutes": "unknown",
+  "setupMode": "self_serve",
+  "languages": [
+    "English"
+  ],
+  "privacyCard": {
+    "trainsOnYourData": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm whether it uses your data to train AI.",
+      "quote": null,
+      "sourceUrl": null
+    },
+    "canDeleteData": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm whether you can delete your data.",
+      "quote": null,
+      "sourceUrl": null
+    },
+    "whereStored": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm where your data is stored.",
+      "quote": null,
+      "sourceUrl": null
+    },
+    "sharesOrSells": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm whether it sells or shares your data.",
+      "quote": null,
+      "sourceUrl": null
+    },
+    "securityCertification": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm a security certification.",
+      "quote": null,
+      "sourceUrl": null
+    }
+  },
+  "rulesFlags": {
+    "recordsCalls": "unknown",
+    "announcesRecording": "unknown",
+    "hipaaReady": "unknown",
+    "outboundAiCalls": "unknown",
+    "personalizedPricing": "unknown"
+  },
+  "badge": "listed",
+  "safetyCheck": {
+    "ranAt": "2026-11-08",
+    "checks": {
+      "whoIsBehind": {
+        "result": "unknown",
+        "reason": "We couldn't find an address for The Rocket Science Group.",
+        "evidence": [
+          {
+            "quote": "©2001-2026 All Rights Reserved. Mailchimp® is a registered trademark of The Rocket Science Group. Apple and the Apple logo are trademarks of Apple Inc.",
+            "url": "https://mailchimp.com/help/about-additional-charges/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "domainAge": {
+        "result": "pass",
+        "reason": "The website has been around since June 2001.",
+        "evidence": [
+          {
+            "url": "https://rdap.org/domain/mailchimp.com",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "privacyPolicy": {
+        "result": "unknown",
+        "reason": "We couldn't open the privacy policy.",
+        "evidence": []
+      },
+      "dataUse": {
+        "result": "unknown",
+        "reason": "We couldn't find whether it uses your information to make its AI better or whether you can delete your information.",
+        "evidence": []
+      },
+      "dataLocation": {
+        "result": "unknown",
+        "reason": "We couldn't find which country your information is kept in.",
+        "evidence": []
+      },
+      "pricingClarity": {
+        "result": "pass",
+        "reason": "Shows a clear monthly price.",
+        "evidence": [
+          {
+            "url": "https://mailchimp.com/pricing/marketing/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "securityBasics": {
+        "result": "pass",
+        "reason": "Your connection to this website is private (https).",
+        "evidence": [
+          {
+            "url": "https://mailchimp.com/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "redFlags": {
+        "result": "pass",
+        "reason": "No warning signs found. (We didn't check Google's list of unsafe websites.)",
+        "evidence": [
+          {
+            "url": "https://mailchimp.com/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      }
+    },
+    "redFlags": [],
+    "verdict": "held",
+    "warnings": [
+      "We couldn't find which country your information is kept in.",
+      "We couldn't find the name of the person who runs this company."
+    ]
+  },
+  "lastChecked": "2026-11-08",
+  "sources": [
+    "https://mailchimp.com/features/",
+    "https://mailchimp.com/",
+    "https://mailchimp.com/pricing/marketing/",
+    "https://mailchimp.com/help/about-additional-charges/"
+  ],
+  "needsVerification": [
+    "pricing.medium.monthlyUsd",
+    "pricing.large.monthlyUsd",
+    "setupMinutes",
+    "rulesFlags.recordsCalls",
+    "rulesFlags.announcesRecording",
+    "rulesFlags.hipaaReady",
+    "rulesFlags.outboundAiCalls",
+    "rulesFlags.personalizedPricing",
+    "languages"
+  ]
+}

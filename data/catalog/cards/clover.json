@@ -1,0 +1,98 @@
+{
+  "input": {
+    "id": "clover",
+    "name": "Clover",
+    "url": "https://www.clover.com",
+    "category": "POS",
+    "useCases": [
+      "inventory",
+      "bookkeeping"
+    ],
+    "industries": [
+      "retail",
+      "restaurant",
+      "cafe"
+    ],
+    "existingProduct": "Clover",
+    "sensitive": true,
+    "batch": 2
+  },
+  "collectedAt": "2026-11-08",
+  "pages": {
+    "home": {
+      "url": "https://www.clover.com/",
+      "finalUrl": "https://www.clover.com/",
+      "status": 200,
+      "fetchedAt": "2026-11-08",
+      "contentHash": "0332a75b44b11627d38066b001e25633",
+      "text": "POS System & Credit Card Readers | Clover"
+    },
+    "pricing": {
+      "url": "https://www.clover.com/pricing",
+      "finalUrl": "https://www.clover.com/pricing",
+      "status": 200,
+      "fetchedAt": "2026-11-08",
+      "contentHash": "0332a75b44b11627d38066b001e25633",
+      "text": "POS System & Credit Card Readers | Clover"
+    },
+    "features": {
+      "url": "https://www.clover.com/features",
+      "finalUrl": "https://www.clover.com/features",
+      "status": 200,
+      "fetchedAt": "2026-11-08",
+      "contentHash": "0332a75b44b11627d38066b001e25633",
+      "text": "POS System & Credit Card Readers | Clover"
+    },
+    "integrations": {
+      "url": "https://www.clover.com/integrations",
+      "finalUrl": "https://www.clover.com/pos/integration-services",
+      "status": 200,
+      "fetchedAt": "2026-11-08",
+      "contentHash": "0332a75b44b11627d38066b001e25633",
+      "text": "POS System & Credit Card Readers | Clover"
+    },
+    "help": {
+      "url": "https://www.clover.com/help",
+      "finalUrl": "https://www.clover.com/help",
+      "status": 200,
+      "fetchedAt": "2026-11-08",
+      "contentHash": "29b667d382af0ff3400a3e9c8ce00100",
+      "text": "Clover Help"
+    },
+    "privacy": {
+      "url": "https://www.clover.com/privacy",
+      "finalUrl": "https://www.clover.com/privacy-policy",
+      "status": 200,
+      "fetchedAt": "2026-11-08",
+      "contentHash": "0332a75b44b11627d38066b001e25633",
+      "text": "POS System & Credit Card Readers | Clover"
+    }
+  },
+  "ai": {
+    "ran": true,
+    "description": "unknown",
+    "plans": {
+      "small": "unknown",
+      "medium": "unknown",
+      "large": "unknown"
+    },
+    "planNotes": {
+      "small": "",
+      "medium": "",
+      "large": ""
+    },
+    "freeTier": "unknown",
+    "contract": "unknown",
+    "cancellation": "unknown",
+    "worksWith": [],
+    "setupMinutes": "unknown",
+    "setupMode": "unknown",
+    "languages": "unknown",
+    "recordsCalls": "unknown",
+    "announcesRecording": "unknown",
+    "hipaaReady": "unknown",
+    "outboundAiCalls": "unknown",
+    "personalizedPricing": "unknown",
+    "sharesOrSells": "unknown"
+  }
+}

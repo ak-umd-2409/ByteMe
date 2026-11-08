@@ -1,0 +1,18 @@
+[
+  {
+    "field": "address",
+    "answer": "111 East 5th Ave, Vancouver, BC, V5T 4L1",
+    "quote": "Hootsuite Inc., 111 East 5th Ave, Vancouver, BC, V5T 4L1",
+    "url": "https://www.hootsuite.com/legal/terms",
+    "foundBy": "Claude (drafted for Rishabh to check)",
+    "foundAt": "2026-11-08"
+  },
+  {
+    "field": "canDeleteData",
+    "answer": "yes",
+    "quote": "The right to have your personal information deleted",
+    "url": "https://www.hootsuite.com/legal/privacy",
+    "foundBy": "Claude (drafted for Rishabh to check)",
+    "foundAt": "2026-11-08"
+  }
+]

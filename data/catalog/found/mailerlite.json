@@ -1,0 +1,18 @@
+[
+  {
+    "field": "companyName",
+    "answer": "MailerLite, Inc.",
+    "quote": "(b) MailerLite, Inc., a Delaware corporation at 548 Market St, PMB 98174, San Francisco, CA 94104-5401, United States, if the Customer's billing address on the applicable Order Form is located anywhere else in the world.",
+    "url": "https://www.mailerlite.com/legal/privacy-policy",
+    "foundBy": "Claude (drafted for Rishabh to check)",
+    "foundAt": "2026-11-08"
+  },
+  {
+    "field": "address",
+    "answer": "548 Market St, PMB 98174, San Francisco, CA 94104-5401",
+    "quote": "(b) MailerLite, Inc., a Delaware corporation at 548 Market St, PMB 98174, San Francisco, CA 94104-5401, United States, if the Customer's billing address on the applicable Order Form is located anywhere else in the world.",
+    "url": "https://www.mailerlite.com/legal/privacy-policy",
+    "foundBy": "Claude (drafted for Rishabh to check)",
+    "foundAt": "2026-11-08"
+  }
+]

@@ -1,0 +1,221 @@
+{
+  "id": "quickbooks",
+  "name": "QuickBooks Intuit Assist",
+  "vendor": {
+    "company": "Intuit Inc.",
+    "website": "https://quickbooks.intuit.com",
+    "domain": "quickbooks.intuit.com"
+  },
+  "description": "QuickBooks is scalable, cloud-based accounting software for all types of businesses.",
+  "category": "Bookkeeping",
+  "useCases": [
+    "bookkeeping",
+    "admin-paperwork"
+  ],
+  "industries": [
+    "any"
+  ],
+  "existingProduct": "QuickBooks",
+  "pricing": {
+    "asOf": "Nov 2026",
+    "small": {
+      "monthlyUsd": 10,
+      "note": "Cheapest paid plan"
+    },
+    "medium": {
+      "monthlyUsd": "unknown",
+      "note": ""
+    },
+    "large": {
+      "monthlyUsd": 170,
+      "note": "Top plan"
+    },
+    "freeTier": "unknown",
+    "contract": "monthly",
+    "cancellation": "unknown",
+    "pricingUrl": "https://quickbooks.intuit.com/pricing/"
+  },
+  "worksWith": [
+    {
+      "product": "Shopify",
+      "type": "native"
+    },
+    {
+      "product": "PayPal",
+      "type": "native"
+    },
+    {
+      "product": "Square",
+      "type": "native"
+    },
+    {
+      "product": "Amazon Business",
+      "type": "native"
+    },
+    {
+      "product": "Etsy",
+      "type": "native"
+    }
+  ],
+  "setupMinutes": "unknown",
+  "setupMode": "needs_help",
+  "languages": [
+    "English"
+  ],
+  "privacyCard": {
+    "trainsOnYourData": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm whether it uses your data to train AI.",
+      "quote": null,
+      "sourceUrl": null
+    },
+    "canDeleteData": {
+      "answer": "yes",
+      "plain": "You can delete your data.",
+      "quote": "You also have the power to download, update, and delete your data right from your Intuit Account without having to call or email us.",
+      "sourceUrl": "https://www.intuit.com/privacy/"
+    },
+    "whereStored": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm where your data is stored.",
+      "quote": null,
+      "sourceUrl": null
+    },
+    "sharesOrSells": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm whether it sells or shares your data.",
+      "quote": null,
+      "sourceUrl": null
+    },
+    "securityCertification": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm a security certification.",
+      "quote": null,
+      "sourceUrl": null
+    }
+  },
+  "rulesFlags": {
+    "recordsCalls": "unknown",
+    "announcesRecording": "unknown",
+    "hipaaReady": "unknown",
+    "outboundAiCalls": "unknown",
+    "personalizedPricing": "unknown"
+  },
+  "badge": "listed",
+  "safetyCheck": {
+    "ranAt": "2026-11-08",
+    "checks": {
+      "whoIsBehind": {
+        "result": "unknown",
+        "reason": "We couldn't find an address for Intuit Inc.",
+        "evidence": [
+          {
+            "quote": "© 2026 Intuit Inc. All rights reserved.",
+            "url": "https://www.intuit.com/company/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "domainAge": {
+        "result": "pass",
+        "reason": "The website has been around since February 1994.",
+        "evidence": [
+          {
+            "url": "https://rdap.org/domain/intuit.com",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "privacyPolicy": {
+        "result": "pass",
+        "reason": "Has a full privacy policy that says what they do with your information.",
+        "evidence": [
+          {
+            "url": "https://www.intuit.com/privacy/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "dataUse": {
+        "result": "unknown",
+        "reason": "We couldn't find whether it uses your information to make its AI better.",
+        "evidence": [
+          {
+            "quote": "You also have the power to download, update, and delete your data right from your Intuit Account without having to call or email us.",
+            "url": "https://www.intuit.com/privacy/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "dataLocation": {
+        "result": "unknown",
+        "reason": "We couldn't find which country your information is kept in.",
+        "evidence": [
+          {
+            "url": "https://www.intuit.com/privacy/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "pricingClarity": {
+        "result": "pass",
+        "reason": "Shows a clear monthly price.",
+        "evidence": [
+          {
+            "url": "https://quickbooks.intuit.com/pricing/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "securityBasics": {
+        "result": "pass",
+        "reason": "Your connection to this website is private (https). This tool handles payments or health information, but we found no proof that an outside company checked its security (like PCI or SOC 2).",
+        "evidence": [
+          {
+            "url": "https://quickbooks.intuit.com/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "redFlags": {
+        "result": "pass",
+        "reason": "No warning signs found. (We didn't check Google's list of unsafe websites.)",
+        "evidence": [
+          {
+            "url": "https://quickbooks.intuit.com/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      }
+    },
+    "redFlags": [],
+    "verdict": "held",
+    "warnings": [
+      "We couldn't find which country your information is kept in.",
+      "We couldn't find the name of the person who runs this company.",
+      "This tool handles payments or health information, but we found no proof that an outside company checked its security (like PCI or SOC 2)."
+    ]
+  },
+  "lastChecked": "2026-11-08",
+  "sources": [
+    "https://quickbooks.intuit.com/",
+    "https://quickbooks.intuit.com/products/",
+    "https://quickbooks.intuit.com/pricing/",
+    "https://www.intuit.com/company/",
+    "https://www.intuit.com/privacy/",
+    "https://quickbooks.intuit.com/online/integrations/"
+  ],
+  "needsVerification": [
+    "pricing.medium.monthlyUsd",
+    "pricing.freeTier",
+    "pricing.cancellation",
+    "setupMinutes",
+    "rulesFlags.recordsCalls",
+    "rulesFlags.announcesRecording",
+    "rulesFlags.hipaaReady",
+    "rulesFlags.outboundAiCalls",
+    "rulesFlags.personalizedPricing",
+    "setupMode",
+    "languages"
+  ]
+}

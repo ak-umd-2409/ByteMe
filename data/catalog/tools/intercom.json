@@ -1,0 +1,243 @@
+{
+  "id": "intercom",
+  "name": "Intercom Fin",
+  "vendor": {
+    "company": "Fin",
+    "website": "https://www.intercom.com",
+    "domain": "intercom.com"
+  },
+  "description": "With an omnichannel inbox, AI-powered ticketing, and Copilot working alongside your human team, you have everything you need to onboard faster, work more efficiently, and deliver better customer experiences.",
+  "category": "Website chat",
+  "useCases": [
+    "customer-messaging"
+  ],
+  "industries": [
+    "retail",
+    "professional_services"
+  ],
+  "pricing": {
+    "asOf": "Nov 2026",
+    "small": {
+      "monthlyUsd": 19,
+      "note": "Cheapest paid plan"
+    },
+    "medium": {
+      "monthlyUsd": 85,
+      "note": "Middle plan"
+    },
+    "large": {
+      "monthlyUsd": 132,
+      "note": "Top plan"
+    },
+    "freeTier": "unknown",
+    "contract": "annual",
+    "cancellation": "unknown",
+    "pricingUrl": "https://www.intercom.com/pricing"
+  },
+  "worksWith": [
+    {
+      "product": "Salesforce",
+      "type": "native"
+    },
+    {
+      "product": "Shopify",
+      "type": "native"
+    },
+    {
+      "product": "HubSpot",
+      "type": "native"
+    },
+    {
+      "product": "GitHub",
+      "type": "native"
+    },
+    {
+      "product": "Slack",
+      "type": "native"
+    },
+    {
+      "product": "Zendesk",
+      "type": "native"
+    },
+    {
+      "product": "Zapier",
+      "type": "zapier"
+    }
+  ],
+  "setupMinutes": "unknown",
+  "setupMode": "needs_help",
+  "languages": [
+    "English",
+    "Spanish",
+    "French",
+    "Mandarin",
+    "Hindi"
+  ],
+  "privacyCard": {
+    "trainsOnYourData": {
+      "answer": "opt-out",
+      "plain": "Uses your data to improve its AI unless you turn it off.",
+      "quote": "Fin can use anonymized customer data for model fine-tuning, and you can opt out at any time, with data deleted within 30 days.",
+      "sourceUrl": "https://www.intercom.com/security"
+    },
+    "canDeleteData": {
+      "answer": "yes",
+      "plain": "You can delete your data.",
+      "quote": "You can ask us to delete the Personal Information that we have collected from you.",
+      "sourceUrl": "https://www.intercom.com/legal/privacy"
+    },
+    "whereStored": {
+      "answer": "United States",
+      "plain": "Your data is stored in United States.",
+      "quote": "The Intercom Services and Sites, and our messenger domains are provided and hosted in the United States.",
+      "sourceUrl": "https://www.intercom.com/legal/privacy"
+    },
+    "sharesOrSells": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm whether it sells or shares your data.",
+      "quote": null,
+      "sourceUrl": null
+    },
+    "securityCertification": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm a security certification.",
+      "quote": null,
+      "sourceUrl": null
+    }
+  },
+  "rulesFlags": {
+    "recordsCalls": "unknown",
+    "announcesRecording": "unknown",
+    "hipaaReady": "unknown",
+    "outboundAiCalls": "unknown",
+    "personalizedPricing": "unknown"
+  },
+  "badge": "verified",
+  "safetyCheck": {
+    "ranAt": "2026-11-08",
+    "checks": {
+      "whoIsBehind": {
+        "result": "pass",
+        "reason": "Run by Fin, a company at 124 St Stephen's Green, Dublin 2, DC02 C628.",
+        "evidence": [
+          {
+            "quote": "The company is renamed from Intercom to Fin.",
+            "url": "https://fin.ai/about",
+            "checkedAt": "2026-11-08"
+          },
+          {
+            "quote": "When we refer to Intercom, we mean Intercom R&D Unlimited Company, a company registered in Ireland with offices at 124 St Stephen's Green, Dublin 2, DC02 C628; Intercom, Inc. a Delaware corporation with offices at 55 2nd Street, 4th Fl., San Francisco, CA 94105, USA;",
+            "url": "https://www.intercom.com/legal/privacy",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "domainAge": {
+        "result": "pass",
+        "reason": "The website has been around since December 1993.",
+        "evidence": [
+          {
+            "url": "https://rdap.org/domain/intercom.com",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "privacyPolicy": {
+        "result": "pass",
+        "reason": "Has a full privacy policy that says what they do with your information.",
+        "evidence": [
+          {
+            "url": "https://www.intercom.com/legal/privacy",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "dataUse": {
+        "result": "pass",
+        "reason": "Uses your information to make its AI better, but you can turn this off. You can delete your information.",
+        "evidence": [
+          {
+            "quote": "Fin can use anonymized customer data for model fine-tuning, and you can opt out at any time, with data deleted within 30 days.",
+            "url": "https://www.intercom.com/security",
+            "checkedAt": "2026-11-08"
+          },
+          {
+            "quote": "You can ask us to delete the Personal Information that we have collected from you.",
+            "url": "https://www.intercom.com/legal/privacy",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "dataLocation": {
+        "result": "pass",
+        "reason": "Your information is kept in United States.",
+        "evidence": [
+          {
+            "quote": "The Intercom Services and Sites, and our messenger domains are provided and hosted in the United States.",
+            "url": "https://www.intercom.com/legal/privacy",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "pricingClarity": {
+        "result": "pass",
+        "reason": "Shows a clear monthly price.",
+        "evidence": [
+          {
+            "url": "https://www.intercom.com/pricing",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "securityBasics": {
+        "result": "pass",
+        "reason": "Your connection to this website is private (https).",
+        "evidence": [
+          {
+            "url": "https://www.intercom.com/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "redFlags": {
+        "result": "pass",
+        "reason": "No warning signs found. (We didn't check Google's list of unsafe websites.)",
+        "evidence": [
+          {
+            "url": "https://www.intercom.com/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      }
+    },
+    "redFlags": [],
+    "verdict": "ready",
+    "warnings": [
+      "We couldn't find the name of the person who runs this company.",
+      "Ask them to stop this after you sign up. This tool may use your customers' calls or messages to get better, and it says you can opt out. Its privacy policy says how."
+    ]
+  },
+  "lastChecked": "2026-11-08",
+  "sources": [
+    "https://www.intercom.com/",
+    "https://www.intercom.com/pricing",
+    "https://www.intercom.com/helpdesk/help-center",
+    "https://fin.ai/about",
+    "https://www.intercom.com/security",
+    "https://www.intercom.com/legal/privacy",
+    "https://www.intercom.com/integrations"
+  ],
+  "needsVerification": [
+    "pricing.freeTier",
+    "pricing.cancellation",
+    "setupMinutes",
+    "rulesFlags.recordsCalls",
+    "rulesFlags.announcesRecording",
+    "rulesFlags.hipaaReady",
+    "rulesFlags.outboundAiCalls",
+    "rulesFlags.personalizedPricing",
+    "setupMode"
+  ],
+  "reviewedAt": "2026-11-08",
+  "reviewedBy": "Rishabh"
+}

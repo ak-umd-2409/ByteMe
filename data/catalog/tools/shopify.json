@@ -1,0 +1,222 @@
+{
+  "id": "shopify",
+  "name": "Shopify Magic",
+  "vendor": {
+    "company": "Shopify",
+    "website": "https://www.shopify.com",
+    "domain": "shopify.com"
+  },
+  "description": "Dream big and build fast on Shopify. The world’s best commerce platform.",
+  "category": "Online store",
+  "useCases": [
+    "inventory",
+    "marketing",
+    "website-seo"
+  ],
+  "industries": [
+    "retail"
+  ],
+  "existingProduct": "Shopify",
+  "pricing": {
+    "asOf": "Nov 2026",
+    "small": {
+      "monthlyUsd": 39,
+      "note": "Cheapest paid plan"
+    },
+    "medium": {
+      "monthlyUsd": 105,
+      "note": "Middle plan"
+    },
+    "large": {
+      "monthlyUsd": 2300,
+      "note": "Top plan"
+    },
+    "freeTier": "unknown",
+    "contract": "monthly",
+    "cancellation": "unknown",
+    "pricingUrl": "https://www.shopify.com/pricing"
+  },
+  "worksWith": [
+    {
+      "product": "QuickBooks",
+      "type": "native"
+    },
+    {
+      "product": "Klaviyo",
+      "type": "native"
+    },
+    {
+      "product": "Printful",
+      "type": "native"
+    }
+  ],
+  "setupMinutes": "unknown",
+  "setupMode": "needs_help",
+  "languages": [
+    "English",
+    "Español (Intl.)"
+  ],
+  "privacyCard": {
+    "trainsOnYourData": {
+      "answer": "yes",
+      "plain": "Uses your data to train its AI.",
+      "quote": "One of the ways in which we are able to help merchants using Shopify is by using techniques like \"machine learning\" (some laws, including certain EEA and UK laws, may refer to this as \"automated decision-making\") to help us improve our services.",
+      "sourceUrl": "https://www.shopify.com/legal/privacy"
+    },
+    "canDeleteData": {
+      "answer": "yes",
+      "plain": "You can delete your data.",
+      "quote": "Depending on how you use Shopify, you may have the right to request access to, correct, amend, delete, port to another service provider, restrict, or object to certain uses of your Personal Data.",
+      "sourceUrl": "https://www.shopify.com/legal/privacy"
+    },
+    "whereStored": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm where your data is stored.",
+      "quote": null,
+      "sourceUrl": null
+    },
+    "sharesOrSells": {
+      "answer": "no",
+      "plain": "Does not sell or share your data.",
+      "quote": "We do not \"sell\" your Personal Data as that term is defined under US Privacy Laws.",
+      "sourceUrl": "https://www.shopify.com/legal/privacy"
+    },
+    "securityCertification": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm a security certification.",
+      "quote": null,
+      "sourceUrl": null
+    }
+  },
+  "rulesFlags": {
+    "recordsCalls": "unknown",
+    "announcesRecording": "unknown",
+    "hipaaReady": "unknown",
+    "outboundAiCalls": "unknown",
+    "personalizedPricing": "unknown"
+  },
+  "badge": "listed",
+  "safetyCheck": {
+    "ranAt": "2026-11-08",
+    "checks": {
+      "whoIsBehind": {
+        "result": "pass",
+        "reason": "Run by Shopify, a company at 151 O'Connor Street, Ground Floor, Ottawa, Ontario K2P 2L8, Canada.",
+        "evidence": [
+          {
+            "quote": "Shopify is a complete commerce platform to sell online or in person—whether you're running a side hustle, retail shop, or global brand.",
+            "url": "https://www.shopify.com/about",
+            "checkedAt": "2026-11-08"
+          },
+          {
+            "quote": "Shopify Inc. Attn: Privacy Officer 151 O'Connor Street Ground Floor Ottawa Ontario K2P 2L8 Canada",
+            "url": "https://www.shopify.com/legal/privacy",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "domainAge": {
+        "result": "pass",
+        "reason": "The website has been around since March 2005.",
+        "evidence": [
+          {
+            "url": "https://rdap.org/domain/shopify.com",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "privacyPolicy": {
+        "result": "pass",
+        "reason": "Has a full privacy policy that says what they do with your information.",
+        "evidence": [
+          {
+            "url": "https://www.shopify.com/legal/privacy",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "dataUse": {
+        "result": "fail",
+        "reason": "It may use your customers' information to make its AI better, and we found no way to stop it.",
+        "evidence": [
+          {
+            "quote": "One of the ways in which we are able to help merchants using Shopify is by using techniques like \"machine learning\" (some laws, including certain EEA and UK laws, may refer to this as \"automated decision-making\") to help us improve our services.",
+            "url": "https://www.shopify.com/legal/privacy",
+            "checkedAt": "2026-11-08"
+          },
+          {
+            "quote": "Depending on how you use Shopify, you may have the right to request access to, correct, amend, delete, port to another service provider, restrict, or object to certain uses of your Personal Data.",
+            "url": "https://www.shopify.com/legal/privacy",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "dataLocation": {
+        "result": "unknown",
+        "reason": "We couldn't find which country your information is kept in.",
+        "evidence": [
+          {
+            "url": "https://www.shopify.com/legal/privacy",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "pricingClarity": {
+        "result": "pass",
+        "reason": "Shows a clear monthly price.",
+        "evidence": [
+          {
+            "url": "https://www.shopify.com/pricing",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "securityBasics": {
+        "result": "pass",
+        "reason": "Your connection to this website is private (https). This tool handles payments or health information, but we found no proof that an outside company checked its security (like PCI or SOC 2).",
+        "evidence": [
+          {
+            "url": "https://www.shopify.com/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "redFlags": {
+        "result": "pass",
+        "reason": "No warning signs found. (We didn't check Google's list of unsafe websites.)",
+        "evidence": [
+          {
+            "url": "https://www.shopify.com/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      }
+    },
+    "redFlags": [],
+    "verdict": "held",
+    "warnings": [
+      "We couldn't find which country your information is kept in.",
+      "We couldn't find the name of the person who runs this company.",
+      "This tool handles payments or health information, but we found no proof that an outside company checked its security (like PCI or SOC 2)."
+    ]
+  },
+  "lastChecked": "2026-11-08",
+  "sources": [
+    "https://www.shopify.com/",
+    "https://www.shopify.com/pricing",
+    "https://www.shopify.com/legal/privacy",
+    "https://www.shopify.com/about",
+    "https://apps.shopify.com/"
+  ],
+  "needsVerification": [
+    "pricing.freeTier",
+    "pricing.cancellation",
+    "setupMinutes",
+    "rulesFlags.recordsCalls",
+    "rulesFlags.announcesRecording",
+    "rulesFlags.hipaaReady",
+    "rulesFlags.outboundAiCalls",
+    "rulesFlags.personalizedPricing",
+    "setupMode"
+  ]
+}

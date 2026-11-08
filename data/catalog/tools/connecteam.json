@@ -1,0 +1,226 @@
+{
+  "id": "connecteam",
+  "name": "Connecteam",
+  "vendor": {
+    "company": "Connecteam",
+    "website": "https://connecteam.com",
+    "domain": "connecteam.com"
+  },
+  "description": "Connecteam brings scheduling, time tracking, communication, and HR into one simple app, so work runs smoothly and you stay in control",
+  "category": "Staff scheduling",
+  "useCases": [
+    "staff-scheduling",
+    "admin-paperwork"
+  ],
+  "industries": [
+    "hvac",
+    "plumbing",
+    "electrical",
+    "landscaping",
+    "cleaning",
+    "retail"
+  ],
+  "pricing": {
+    "asOf": "Nov 2026",
+    "small": {
+      "monthlyUsd": 29,
+      "note": "Cheapest paid plan"
+    },
+    "medium": {
+      "monthlyUsd": 49,
+      "note": "Middle plan"
+    },
+    "large": {
+      "monthlyUsd": 99,
+      "note": "Top plan"
+    },
+    "freeTier": "unknown",
+    "contract": "monthly",
+    "cancellation": "unknown",
+    "pricingUrl": "https://connecteam.com/pricing/"
+  },
+  "worksWith": [
+    {
+      "product": "Gusto",
+      "type": "zapier"
+    },
+    {
+      "product": "Lightspeed",
+      "type": "native"
+    },
+    {
+      "product": "Wix Bookings",
+      "type": "native"
+    },
+    {
+      "product": "PrismHR",
+      "type": "native"
+    },
+    {
+      "product": "Shopify POS",
+      "type": "native"
+    },
+    {
+      "product": "Clover",
+      "type": "native"
+    }
+  ],
+  "setupMinutes": "unknown",
+  "setupMode": "needs_help",
+  "languages": [
+    "English"
+  ],
+  "privacyCard": {
+    "trainsOnYourData": {
+      "answer": "yes",
+      "plain": "Uses your data to train its AI.",
+      "quote": "To maintain internal records of communications, calls and meetings (including with the use of artificial intelligence) for the purpose of training our staff, refining our artificial intelligence representative and improving our Services.",
+      "sourceUrl": "https://connecteam.com/privacy/"
+    },
+    "canDeleteData": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm whether you can delete your data.",
+      "quote": null,
+      "sourceUrl": null
+    },
+    "whereStored": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm where your data is stored.",
+      "quote": null,
+      "sourceUrl": null
+    },
+    "sharesOrSells": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm whether it sells or shares your data.",
+      "quote": null,
+      "sourceUrl": null
+    },
+    "securityCertification": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm a security certification.",
+      "quote": null,
+      "sourceUrl": null
+    }
+  },
+  "rulesFlags": {
+    "recordsCalls": "unknown",
+    "announcesRecording": "unknown",
+    "hipaaReady": "unknown",
+    "outboundAiCalls": "unknown",
+    "personalizedPricing": "unknown"
+  },
+  "badge": "listed",
+  "safetyCheck": {
+    "ranAt": "2026-11-08",
+    "checks": {
+      "whoIsBehind": {
+        "result": "unknown",
+        "reason": "We couldn't find an address for Connecteam.",
+        "evidence": [
+          {
+            "quote": "All Rights Reserved © Connecteam.com",
+            "url": "https://connecteam.com/about/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "domainAge": {
+        "result": "pass",
+        "reason": "The website has been around since May 2015.",
+        "evidence": [
+          {
+            "url": "https://rdap.org/domain/connecteam.com",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "privacyPolicy": {
+        "result": "pass",
+        "reason": "Has a full privacy policy that says what they do with your information.",
+        "evidence": [
+          {
+            "url": "https://connecteam.com/privacy/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "dataUse": {
+        "result": "fail",
+        "reason": "It may use your customers' information to make its AI better, and we found no way to stop it.",
+        "evidence": [
+          {
+            "quote": "To maintain internal records of communications, calls and meetings (including with the use of artificial intelligence) for the purpose of training our staff, refining our artificial intelligence representative and improving our Services.",
+            "url": "https://connecteam.com/privacy/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "dataLocation": {
+        "result": "unknown",
+        "reason": "We couldn't find which country your information is kept in.",
+        "evidence": [
+          {
+            "url": "https://connecteam.com/privacy/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "pricingClarity": {
+        "result": "pass",
+        "reason": "Shows a clear monthly price.",
+        "evidence": [
+          {
+            "url": "https://connecteam.com/pricing/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "securityBasics": {
+        "result": "pass",
+        "reason": "Your connection to this website is private (https).",
+        "evidence": [
+          {
+            "url": "https://connecteam.com/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "redFlags": {
+        "result": "pass",
+        "reason": "No warning signs found. (We didn't check Google's list of unsafe websites.)",
+        "evidence": [
+          {
+            "url": "https://connecteam.com/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      }
+    },
+    "redFlags": [],
+    "verdict": "held",
+    "warnings": [
+      "We couldn't find which country your information is kept in.",
+      "We couldn't find the name of the person who runs this company."
+    ]
+  },
+  "lastChecked": "2026-11-08",
+  "sources": [
+    "https://connecteam.com/",
+    "https://connecteam.com/pricing/",
+    "https://connecteam.com/about/",
+    "https://connecteam.com/privacy/",
+    "https://connecteam.com/integrations/"
+  ],
+  "needsVerification": [
+    "pricing.freeTier",
+    "pricing.cancellation",
+    "setupMinutes",
+    "rulesFlags.recordsCalls",
+    "rulesFlags.announcesRecording",
+    "rulesFlags.hipaaReady",
+    "rulesFlags.outboundAiCalls",
+    "rulesFlags.personalizedPricing",
+    "setupMode",
+    "languages"
+  ]
+}

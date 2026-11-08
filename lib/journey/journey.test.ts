@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
-import { loadCatalog } from "../catalog/index.ts";
+import { loadTestCatalog as loadCatalog } from "../catalog/index.ts";
 import { toCatalogTool } from "../catalog/toCatalogTool.ts";
 import { handleJourneyAnswer, handleJourneyStart } from "../api/journey.ts";
 import type { ApiDeps } from "../api/handlers.ts";
@@ -131,10 +131,13 @@ describe("journey answer: what's holding the business back", () => {
 
   it("owner answers confirm problems, set filters and unlock estimates from their own numbers", async () => {
     const s = await start(FREDERICK);
+    // The tool choices follow the real catalog; pick QuickBooks when offered, else the first choice.
+    const offeredTools = s.questions.find((q) => q.id === "tools")?.options?.map((o) => o.value) ?? [];
+    assert.ok(offeredTools.length > 0, "the tools question offers at least one product");
     const a = await answer(s.context, {
       problems: ["missed_inquiries"],
       call_recording: "no",
-      tools: ["QuickBooks"],
+      tools: offeredTools.includes("QuickBooks") ? ["QuickBooks"] : offeredTools.slice(0, 1),
       budget: "up_to_200",
       setup: "help",
       "impact.missed_per_week": 3,
@@ -154,7 +157,9 @@ describe("journey answer: what's holding the business back", () => {
       assert.equal(b.monthlyBudget, 200);
       assert.equal(b.needsHelp, true);
       assert.ok(b.dealBreakers.includes("no-recording"));
-      assert.ok(b.currentTools.includes("QuickBooks") && b.currentTools.includes("Squarespace"));
+      // QuickBooks counts only when the real catalog offers it as an option (it follows the catalog).
+      assert.ok(b.currentTools.includes("Squarespace"));
+      for (const t of offeredTools.includes("QuickBooks") ? ["QuickBooks"] : offeredTools.slice(0, 1)) assert.ok(b.currentTools.includes(t));
       assert.ok(a.recommendation.request.problems.some((p) => p.useCase === "missed-calls"));
       // The request is exactly what Part 4 accepts.
       // Same catalog /api/recommend uses.

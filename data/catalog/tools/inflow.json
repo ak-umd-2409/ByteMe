@@ -1,0 +1,221 @@
+{
+  "id": "inflow",
+  "name": "inFlow Inventory",
+  "vendor": {
+    "company": "Archon Systems Inc.",
+    "website": "https://www.inflowinventory.com",
+    "domain": "inflowinventory.com"
+  },
+  "description": "Easily manage stock levels, track sales and purchases, and reorder ahead of time.",
+  "category": "Inventory",
+  "useCases": [
+    "inventory"
+  ],
+  "industries": [
+    "retail",
+    "farm"
+  ],
+  "pricing": {
+    "asOf": "Nov 2026",
+    "small": {
+      "monthlyUsd": "unknown",
+      "note": ""
+    },
+    "medium": {
+      "monthlyUsd": "unknown",
+      "note": ""
+    },
+    "large": {
+      "monthlyUsd": "unknown",
+      "note": ""
+    },
+    "freeTier": "unknown",
+    "contract": "annual",
+    "cancellation": "unknown",
+    "pricingUrl": "https://www.inflowinventory.com/software-pricing-inflow"
+  },
+  "worksWith": [
+    {
+      "product": "Shopify",
+      "type": "native"
+    },
+    {
+      "product": "WooCommerce",
+      "type": "native"
+    },
+    {
+      "product": "QuickBooks Online",
+      "type": "native"
+    },
+    {
+      "product": "Xero",
+      "type": "native"
+    }
+  ],
+  "setupMinutes": "unknown",
+  "setupMode": "needs_help",
+  "languages": [
+    "English"
+  ],
+  "privacyCard": {
+    "trainsOnYourData": {
+      "answer": "yes",
+      "plain": "Uses your data to train its AI.",
+      "quote": "We do not collect your personal information to sell it to third parties. We transfer it to provide you with our services for which you have subscribed and we use it to improve our products and services .",
+      "sourceUrl": "https://www.inflowinventory.com/privacy"
+    },
+    "canDeleteData": {
+      "answer": "yes",
+      "plain": "You can delete your data.",
+      "quote": "The right to erasure. This enables an Individual to request the deletion or removal of their personal data where there is no compelling reason for Archon to keep using it.",
+      "sourceUrl": "https://www.inflowinventory.com/privacy"
+    },
+    "whereStored": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm where your data is stored.",
+      "quote": null,
+      "sourceUrl": null
+    },
+    "sharesOrSells": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm whether it sells or shares your data.",
+      "quote": null,
+      "sourceUrl": null
+    },
+    "securityCertification": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm a security certification.",
+      "quote": null,
+      "sourceUrl": null
+    }
+  },
+  "rulesFlags": {
+    "recordsCalls": "unknown",
+    "announcesRecording": "unknown",
+    "hipaaReady": "unknown",
+    "outboundAiCalls": "unknown",
+    "personalizedPricing": "unknown"
+  },
+  "badge": "listed",
+  "safetyCheck": {
+    "ranAt": "2026-11-08",
+    "checks": {
+      "whoIsBehind": {
+        "result": "unknown",
+        "reason": "We couldn't find an address for Archon Systems Inc.",
+        "evidence": [
+          {
+            "quote": "inFlow is a trademark of Archon Systems, Inc.",
+            "url": "https://www.inflowinventory.com/software-about-us",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "domainAge": {
+        "result": "pass",
+        "reason": "The website has been around since May 2007.",
+        "evidence": [
+          {
+            "url": "https://rdap.org/domain/inflowinventory.com",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "privacyPolicy": {
+        "result": "pass",
+        "reason": "Has a full privacy policy that says what they do with your information.",
+        "evidence": [
+          {
+            "url": "https://www.inflowinventory.com/privacy",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "dataUse": {
+        "result": "fail",
+        "reason": "It may use your customers' information to make its AI better, and we found no way to stop it.",
+        "evidence": [
+          {
+            "quote": "We do not collect your personal information to sell it to third parties. We transfer it to provide you with our services for which you have subscribed and we use it to improve our products and services .",
+            "url": "https://www.inflowinventory.com/privacy",
+            "checkedAt": "2026-11-08"
+          },
+          {
+            "quote": "The right to erasure. This enables an Individual to request the deletion or removal of their personal data where there is no compelling reason for Archon to keep using it.",
+            "url": "https://www.inflowinventory.com/privacy",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "dataLocation": {
+        "result": "unknown",
+        "reason": "We couldn't find which country your information is kept in.",
+        "evidence": [
+          {
+            "url": "https://www.inflowinventory.com/privacy",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "pricingClarity": {
+        "result": "pass",
+        "reason": "Shows a clear monthly price.",
+        "evidence": [
+          {
+            "url": "https://www.inflowinventory.com/software-pricing-inflow",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "securityBasics": {
+        "result": "pass",
+        "reason": "Your connection to this website is private (https).",
+        "evidence": [
+          {
+            "url": "https://www.inflowinventory.com/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "redFlags": {
+        "result": "pass",
+        "reason": "No warning signs found. (We didn't check Google's list of unsafe websites.)",
+        "evidence": [
+          {
+            "url": "https://www.inflowinventory.com/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      }
+    },
+    "redFlags": [],
+    "verdict": "held",
+    "warnings": [
+      "We couldn't find which country your information is kept in.",
+      "We couldn't find the name of the person who runs this company."
+    ]
+  },
+  "lastChecked": "2026-11-08",
+  "sources": [
+    "https://www.inflowinventory.com/",
+    "https://www.inflowinventory.com/software-pricing-inflow",
+    "https://www.inflowinventory.com/software-about-us",
+    "https://www.inflowinventory.com/privacy",
+    "https://www.inflowinventory.com/inflow-manufacturing"
+  ],
+  "needsVerification": [
+    "pricing.small.monthlyUsd",
+    "pricing.medium.monthlyUsd",
+    "pricing.large.monthlyUsd",
+    "pricing.freeTier",
+    "pricing.cancellation",
+    "setupMinutes",
+    "rulesFlags.recordsCalls",
+    "rulesFlags.announcesRecording",
+    "rulesFlags.hipaaReady",
+    "rulesFlags.outboundAiCalls",
+    "rulesFlags.personalizedPricing",
+    "setupMode",
+    "languages"
+  ]
+}

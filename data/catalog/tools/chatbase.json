@@ -1,0 +1,236 @@
+{
+  "id": "chatbase",
+  "name": "Chatbase",
+  "vendor": {
+    "company": "Chatbase Inc.",
+    "website": "https://www.chatbase.co",
+    "domain": "chatbase.co"
+  },
+  "description": "Website chat.",
+  "category": "Website chat",
+  "useCases": [
+    "customer-messaging"
+  ],
+  "industries": [
+    "any"
+  ],
+  "pricing": {
+    "asOf": "Nov 2026",
+    "small": {
+      "monthlyUsd": 32,
+      "note": "Cheapest paid plan"
+    },
+    "medium": {
+      "monthlyUsd": 120,
+      "note": "Middle plan"
+    },
+    "large": {
+      "monthlyUsd": 400,
+      "note": "Top plan"
+    },
+    "freeTier": "unknown",
+    "contract": "annual",
+    "cancellation": "unknown",
+    "pricingUrl": "https://www.chatbase.co/pricing"
+  },
+  "worksWith": [
+    {
+      "product": "Slack",
+      "type": "native"
+    },
+    {
+      "product": "Shopify",
+      "type": "native"
+    },
+    {
+      "product": "Stripe",
+      "type": "native"
+    },
+    {
+      "product": "Zendesk",
+      "type": "native"
+    },
+    {
+      "product": "Intercom",
+      "type": "native"
+    },
+    {
+      "product": "WhatsApp",
+      "type": "native"
+    },
+    {
+      "product": "Instagram",
+      "type": "native"
+    }
+  ],
+  "setupMinutes": "unknown",
+  "setupMode": "needs_help",
+  "languages": [
+    "English"
+  ],
+  "privacyCard": {
+    "trainsOnYourData": {
+      "answer": "no",
+      "plain": "Does not use your data to train AI.",
+      "quote": "No AI Training : We do not use your data to train AI models.",
+      "sourceUrl": "https://www.chatbase.co/legal/privacy"
+    },
+    "canDeleteData": {
+      "answer": "yes",
+      "plain": "You can delete your data.",
+      "quote": "All personal data that Chatbase controls may be deleted upon verified request from Data Subjects or their authorized agents.",
+      "sourceUrl": "https://www.chatbase.co/legal/privacy"
+    },
+    "whereStored": {
+      "answer": "United States",
+      "plain": "Your data is stored in United States.",
+      "quote": "Your personal data is stored by Chatbase on its servers, and on the servers of the cloud-based database management services Chatbase engages, located in the United States.",
+      "sourceUrl": "https://www.chatbase.co/legal/privacy"
+    },
+    "sharesOrSells": {
+      "answer": "no",
+      "plain": "Does not sell or share your data.",
+      "quote": "We do not sell personal information to anyone and only share it with third parties who are facilitating the delivery of our services.",
+      "sourceUrl": "https://www.chatbase.co/legal/privacy"
+    },
+    "securityCertification": {
+      "answer": "SOC 2",
+      "plain": "Security checked by an outside company: SOC 2.",
+      "quote": "Compliance : We are GDPR and SOC 2 compliant.",
+      "sourceUrl": "https://www.chatbase.co/legal/privacy"
+    }
+  },
+  "rulesFlags": {
+    "recordsCalls": "unknown",
+    "announcesRecording": "unknown",
+    "hipaaReady": true,
+    "outboundAiCalls": "unknown",
+    "personalizedPricing": "unknown"
+  },
+  "badge": "verified",
+  "safetyCheck": {
+    "ranAt": "2026-11-08",
+    "checks": {
+      "whoIsBehind": {
+        "result": "pass",
+        "reason": "Run by Chatbase Inc., a company at 2261 Market Street STE 85690, San Francisco CA 94114.",
+        "evidence": [
+          {
+            "quote": "© 2026 Chatbase Inc.",
+            "url": "https://www.chatbase.co/llm-info",
+            "checkedAt": "2026-11-08"
+          },
+          {
+            "quote": "Chatbase Inc. 2261 Market Street STE 85690, San Francisco CA 94114 privacy@chatbase.co",
+            "url": "https://www.chatbase.co/legal/privacy",
+            "checkedAt": "2026-11-08"
+          },
+          {
+            "quote": "Chatbase was founded by Yasser Elsaid, who is also CEO.",
+            "url": "https://www.chatbase.co/llm-info",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "domainAge": {
+        "result": "unknown",
+        "reason": "We couldn't find when the website started.",
+        "evidence": []
+      },
+      "privacyPolicy": {
+        "result": "pass",
+        "reason": "Has a full privacy policy that says what they do with your information.",
+        "evidence": [
+          {
+            "url": "https://www.chatbase.co/legal/privacy",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "dataUse": {
+        "result": "pass",
+        "reason": "Doesn't use your information to make its AI better. You can delete your information.",
+        "evidence": [
+          {
+            "quote": "No AI Training : We do not use your data to train AI models.",
+            "url": "https://www.chatbase.co/legal/privacy",
+            "checkedAt": "2026-11-08"
+          },
+          {
+            "quote": "All personal data that Chatbase controls may be deleted upon verified request from Data Subjects or their authorized agents.",
+            "url": "https://www.chatbase.co/legal/privacy",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "dataLocation": {
+        "result": "pass",
+        "reason": "Your information is kept in United States.",
+        "evidence": [
+          {
+            "quote": "Your personal data is stored by Chatbase on its servers, and on the servers of the cloud-based database management services Chatbase engages, located in the United States.",
+            "url": "https://www.chatbase.co/legal/privacy",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "pricingClarity": {
+        "result": "pass",
+        "reason": "Shows a clear monthly price.",
+        "evidence": [
+          {
+            "url": "https://www.chatbase.co/pricing",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "securityBasics": {
+        "result": "pass",
+        "reason": "Your connection to this website is private (https).",
+        "evidence": [
+          {
+            "url": "https://www.chatbase.co/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "redFlags": {
+        "result": "pass",
+        "reason": "No warning signs found. (We didn't check Google's list of unsafe websites.)",
+        "evidence": [
+          {
+            "url": "https://www.chatbase.co/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      }
+    },
+    "redFlags": [],
+    "verdict": "ready",
+    "warnings": [
+      "We couldn't find when the website started."
+    ]
+  },
+  "lastChecked": "2026-11-08",
+  "sources": [
+    "https://www.chatbase.co/pricing",
+    "https://www.chatbase.co/legal/privacy",
+    "https://www.chatbase.co/llm-info",
+    "https://www.chatbase.co/integrations/slack",
+    "https://www.chatbase.co/industry/tech"
+  ],
+  "needsVerification": [
+    "pricing.freeTier",
+    "pricing.cancellation",
+    "setupMinutes",
+    "rulesFlags.recordsCalls",
+    "rulesFlags.announcesRecording",
+    "rulesFlags.outboundAiCalls",
+    "rulesFlags.personalizedPricing",
+    "description",
+    "setupMode",
+    "languages"
+  ],
+  "reviewedAt": "2026-11-08",
+  "reviewedBy": "Rishabh"
+}

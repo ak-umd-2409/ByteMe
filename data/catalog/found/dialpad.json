@@ -1,0 +1,18 @@
+[
+  {
+    "field": "address",
+    "answer": "2700 Camino Ramon, Suite 490",
+    "quote": "2700 Camino Ramon, Suite 490",
+    "url": "https://www.dialpad.com/legal/",
+    "foundBy": "Claude (drafted for Rishabh to check)",
+    "foundAt": "2026-11-08"
+  },
+  {
+    "field": "trainsOnYourData",
+    "answer": "opt-out",
+    "quote": "The AI Training section of Dialpad’s Privacy Policy explains in straightforward language how customer data processed through Dialpad’s AI products is used to improve the services—and how any customer, from a large company to an individual user, can opt out of this usage.",
+    "url": "https://www.dialpad.com/blog/how-dialpadgpt-keeps-your-data-secure/",
+    "foundBy": "Claude (drafted for Rishabh to check)",
+    "foundAt": "2026-11-08"
+  }
+]

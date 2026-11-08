@@ -1,0 +1,250 @@
+{
+  "id": "jasper",
+  "name": "Jasper",
+  "vendor": {
+    "company": "Jasper AI, INC.",
+    "website": "https://www.jasper.ai",
+    "domain": "jasper.ai"
+  },
+  "description": "Jasper combines forward-deployed experts, context, governance and agents in one system so that every message you put into the market builds your brand, not noise.",
+  "category": "AI writing",
+  "useCases": [
+    "marketing"
+  ],
+  "industries": [
+    "any"
+  ],
+  "pricing": {
+    "asOf": "Nov 2026",
+    "small": {
+      "monthlyUsd": 59,
+      "note": "Pro plan"
+    },
+    "medium": {
+      "monthlyUsd": "unknown",
+      "note": ""
+    },
+    "large": {
+      "monthlyUsd": "unknown",
+      "note": ""
+    },
+    "freeTier": "unknown",
+    "contract": "monthly",
+    "cancellation": "unknown",
+    "pricingUrl": "https://www.jasper.ai/pricing"
+  },
+  "worksWith": [
+    {
+      "product": "Google Drive",
+      "type": "native"
+    },
+    {
+      "product": "Microsoft SharePoint",
+      "type": "native"
+    },
+    {
+      "product": "Adobe Workfront",
+      "type": "native"
+    },
+    {
+      "product": "Semrush",
+      "type": "native"
+    },
+    {
+      "product": "Box",
+      "type": "native"
+    },
+    {
+      "product": "Salesforce",
+      "type": "native"
+    },
+    {
+      "product": "Monday.com",
+      "type": "native"
+    },
+    {
+      "product": "Asana",
+      "type": "native"
+    },
+    {
+      "product": "Webflow",
+      "type": "native"
+    }
+  ],
+  "setupMinutes": "unknown",
+  "setupMode": "needs_help",
+  "languages": [
+    "English"
+  ],
+  "privacyCard": {
+    "trainsOnYourData": {
+      "answer": "no",
+      "plain": "Does not use your data to train AI.",
+      "quote": "With Jasper, your data stays yours, and is never used for training purposes.",
+      "sourceUrl": "https://www.jasper.ai/enterprise"
+    },
+    "canDeleteData": {
+      "answer": "yes",
+      "plain": "You can delete your data.",
+      "quote": "You have the right to ask Us to delete or remove Personal Data when there is no good reason for Us to continue processing it.",
+      "sourceUrl": "https://www.jasper.ai/legal/privacy"
+    },
+    "whereStored": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm where your data is stored.",
+      "quote": null,
+      "sourceUrl": null
+    },
+    "sharesOrSells": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm whether it sells or shares your data.",
+      "quote": null,
+      "sourceUrl": null
+    },
+    "securityCertification": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm a security certification.",
+      "quote": null,
+      "sourceUrl": null
+    }
+  },
+  "rulesFlags": {
+    "recordsCalls": "unknown",
+    "announcesRecording": "unknown",
+    "hipaaReady": "unknown",
+    "outboundAiCalls": "unknown",
+    "personalizedPricing": "unknown"
+  },
+  "badge": "verified",
+  "safetyCheck": {
+    "ranAt": "2026-11-08",
+    "checks": {
+      "whoIsBehind": {
+        "result": "pass",
+        "reason": "Run by Jasper AI, INC., a company at 3001 Bee Caves Rd., Ste. 100 A, Rollingwood, TX 78746.",
+        "evidence": [
+          {
+            "quote": "© 2026 Jasper AI, INC.",
+            "url": "https://www.jasper.ai/company",
+            "checkedAt": "2026-11-08"
+          },
+          {
+            "quote": "“Company” (referred to herein as either the \"Company\", \"We\", \"Us\" or \"Our\") means Jasper AI, Inc., a Delaware corporation with offices at 3001 Bee Caves Rd., Ste. 100 A, Rollingwood, TX 78746.",
+            "url": "https://www.jasper.ai/legal/privacy",
+            "checkedAt": "2026-11-08"
+          },
+          {
+            "quote": "Timothy Young Chief Executive Officer",
+            "url": "https://www.jasper.ai/company",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "domainAge": {
+        "result": "pass",
+        "reason": "The website has been around since December 2017.",
+        "evidence": [
+          {
+            "url": "https://rdap.org/domain/jasper.ai",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "privacyPolicy": {
+        "result": "pass",
+        "reason": "Has a full privacy policy that says what they do with your information.",
+        "evidence": [
+          {
+            "url": "https://www.jasper.ai/legal/privacy",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "dataUse": {
+        "result": "pass",
+        "reason": "Doesn't use your information to make its AI better. You can delete your information.",
+        "evidence": [
+          {
+            "quote": "With Jasper, your data stays yours, and is never used for training purposes.",
+            "url": "https://www.jasper.ai/enterprise",
+            "checkedAt": "2026-11-08"
+          },
+          {
+            "quote": "You have the right to ask Us to delete or remove Personal Data when there is no good reason for Us to continue processing it.",
+            "url": "https://www.jasper.ai/legal/privacy",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "dataLocation": {
+        "result": "unknown",
+        "reason": "We couldn't find which country your information is kept in.",
+        "evidence": [
+          {
+            "url": "https://www.jasper.ai/legal/privacy",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "pricingClarity": {
+        "result": "pass",
+        "reason": "Shows a clear monthly price.",
+        "evidence": [
+          {
+            "url": "https://www.jasper.ai/pricing",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "securityBasics": {
+        "result": "pass",
+        "reason": "Your connection to this website is private (https).",
+        "evidence": [
+          {
+            "url": "https://www.jasper.ai/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "redFlags": {
+        "result": "pass",
+        "reason": "No warning signs found. (We didn't check Google's list of unsafe websites.)",
+        "evidence": [
+          {
+            "url": "https://www.jasper.ai/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      }
+    },
+    "redFlags": [],
+    "verdict": "ready",
+    "warnings": [
+      "We couldn't find which country your information is kept in."
+    ]
+  },
+  "lastChecked": "2026-11-08",
+  "sources": [
+    "https://www.jasper.ai/",
+    "https://www.jasper.ai/pricing",
+    "https://www.jasper.ai/company",
+    "https://www.jasper.ai/enterprise",
+    "https://www.jasper.ai/legal/privacy",
+    "https://www.jasper.ai/integrations"
+  ],
+  "needsVerification": [
+    "pricing.medium.monthlyUsd",
+    "pricing.large.monthlyUsd",
+    "pricing.freeTier",
+    "pricing.cancellation",
+    "setupMinutes",
+    "rulesFlags.recordsCalls",
+    "rulesFlags.announcesRecording",
+    "rulesFlags.hipaaReady",
+    "rulesFlags.outboundAiCalls",
+    "rulesFlags.personalizedPricing",
+    "languages"
+  ],
+  "reviewedAt": "2026-11-08",
+  "reviewedBy": "Rishabh"
+}

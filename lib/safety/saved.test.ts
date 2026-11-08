@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 import { isVerbatim } from "../business/reviews.ts";
+import { loadFound } from "../catalog/found.ts";
 import { loadCatalog } from "../catalog/index.ts";
 import { validateCatalog } from "../catalog/validate.ts";
 import { factsFixture } from "./fixtures.ts";
@@ -50,7 +51,15 @@ describe("saved fact sheets for the sample catalog", () => {
           const answer = facts.ai[key];
           if (answer === "unknown") continue;
           const page = Object.values(facts.pages).find((p) => isFetched(p) && p.finalUrl === answer.pageUrl);
-          assert.ok(page && isFetched(page) && isVerbatim(answer.quote, page.text), `${key} quote not on ${answer.pageUrl}`);
+          if (page && isFetched(page)) {
+            assert.ok(isVerbatim(answer.quote, page.text), `${key} quote not on ${answer.pageUrl}`);
+            continue;
+          }
+          // A fact a person found was checked on its live page at build time. That page isn't
+          // saved, so the same sentence must be in the tool's found-facts file.
+          assert.equal((answer as { source?: string }).source, "person", `${key}: no saved page ${answer.pageUrl}`);
+          const found = loadFound(record.id).some((f) => f.field === key && f.quote.trim() === answer.quote);
+          assert.ok(found, `${key}: person's answer isn't in data/catalog/found/${record.id}.json`);
         }
       });
     });

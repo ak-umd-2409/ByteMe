@@ -1,0 +1,76 @@
+{
+  "input": {
+    "url": "https://www.clover.com/",
+    "name": "Clover",
+    "handlesSensitiveData": true
+  },
+  "collectedAt": "2026-11-08",
+  "pages": {
+    "home": {
+      "url": "https://www.clover.com/",
+      "finalUrl": "https://www.clover.com/",
+      "status": 200,
+      "fetchedAt": "2026-11-08",
+      "contentHash": "0332a75b44b11627d38066b001e25633",
+      "text": "POS System & Credit Card Readers | Clover"
+    },
+    "about": {
+      "url": "https://www.clover.com/about",
+      "finalUrl": "https://www.clover.com/about",
+      "status": 200,
+      "fetchedAt": "2026-11-08",
+      "contentHash": "0332a75b44b11627d38066b001e25633",
+      "text": "POS System & Credit Card Readers | Clover"
+    },
+    "contact": {
+      "url": "https://www.clover.com/contact",
+      "finalUrl": "https://www.clover.com/contact",
+      "status": 200,
+      "fetchedAt": "2026-11-08",
+      "contentHash": "0332a75b44b11627d38066b001e25633",
+      "text": "POS System & Credit Card Readers | Clover"
+    },
+    "privacy": {
+      "url": "https://www.clover.com/privacy",
+      "finalUrl": "https://www.clover.com/privacy-policy",
+      "status": 200,
+      "fetchedAt": "2026-11-08",
+      "contentHash": "0332a75b44b11627d38066b001e25633",
+      "text": "POS System & Credit Card Readers | Clover"
+    },
+    "pricing": {
+      "url": "https://www.clover.com/pricing",
+      "finalUrl": "https://www.clover.com/pricing",
+      "status": 200,
+      "fetchedAt": "2026-11-08",
+      "contentHash": "0332a75b44b11627d38066b001e25633",
+      "text": "POS System & Credit Card Readers | Clover"
+    },
+    "terms": {
+      "error": "limit"
+    }
+  },
+  "domain": {
+    "name": "clover.com",
+    "registeredAt": "1991-08-27",
+    "source": "rdap"
+  },
+  "https": true,
+  "downloadPrompt": false,
+  "ai": {
+    "ran": {
+      "about": true,
+      "privacy": true
+    },
+    "companyName": "unknown",
+    "address": "unknown",
+    "leaderName": "unknown",
+    "trainsOnYourData": "unknown",
+    "canDeleteData": "unknown",
+    "whereStored": "unknown",
+    "securityCertification": "unknown",
+    "policyAddress": "unknown"
+  },
+  "riskySentences": [],
+  "safeBrowsing": "not_run"
+}
