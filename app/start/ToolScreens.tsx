@@ -56,7 +56,15 @@ export function blockReason(r: CatalogRecord): string {
 const SBDC_URL = "https://www.marylandsbdc.org/";
 const SCORE_URL = "https://www.score.org/find-mentor";
 
-export type Biz = Pick<BusinessProfile, "monthlyBudget" | "currentTools" | "needsHelp">;
+export type Biz = Pick<BusinessProfile, "monthlyBudget" | "currentTools" | "needsHelp"> & {
+  /** True when the owner skipped the budget question and we assumed it (/api/journey/answer → budget.assumed). */
+  budgetAssumed?: boolean;
+  /** The SBDC office for the business's county (/api/journey/answer → localHelp). */
+  help?: { name: string; county: string; url: string; phone: string | null } | null;
+};
+
+/** "your budget" or "the budget we assumed", so an assumed number never reads as the owner's. */
+const budgetWord = (biz: Biz | null) => (biz?.budgetAssumed ? "the budget we assumed" : "your budget");
 
 // ---------------------------------------------------------------- 5 · Ways to fix it
 
@@ -96,7 +104,7 @@ export function WaysToFix({
     <>
       <h1 className={s.h1}>Ways to fix it</h1>
       <p className={s.small} style={{ color: "var(--ink)", marginTop: -8 }}>
-        Only ✓ Verified tools. Each one fits your {usd(biz.monthlyBudget)} a month and works with what you already use where it can.
+        Only ✓ Verified tools. Each one fits {biz.budgetAssumed ? `${usd(biz.monthlyBudget)} a month, the budget we assumed because you skipped that question,` : `your ${usd(biz.monthlyBudget)} a month`} and works with what you already use where it can.
       </p>
 
       {kit && (
@@ -108,7 +116,7 @@ export function WaysToFix({
               <span className={s.price}>{usd(kit.monthlyPrice)}<small>/mo</small></span>
             </div>
             <span className={s.small}>
-              {kit.monthlyPrice <= biz.monthlyBudget ? `${usd(biz.monthlyBudget - kit.monthlyPrice)} under your budget` : `${usd(kit.monthlyPrice - biz.monthlyBudget)} over your budget`}
+              {kit.monthlyPrice <= biz.monthlyBudget ? `${usd(biz.monthlyBudget - kit.monthlyPrice)} under ${budgetWord(biz)}` : `${usd(kit.monthlyPrice - biz.monthlyBudget)} over ${budgetWord(biz)}`}
               {setupMin ? ` · about ${Math.max(1, Math.round(setupMin / 30) / 2)} hours to set up` : ""}
             </span>
           </div>
@@ -180,7 +188,7 @@ export function WaysToFix({
           </div>
           <p>None of the tools we know for &ldquo;{problem?.problem.title}&rdquo; has passed our safety check yet. The first step on the previous screen works without a tool, and a free advisor can help you choose one.</p>
           <div className={t.actions}>
-            <a className={cx(s.btn, s.primary)} href={SBDC_URL} target="_blank" rel="noreferrer">Get free help from the Maryland SBDC</a>
+            <a className={cx(s.btn, s.primary)} href={biz.help?.url ?? SBDC_URL} target="_blank" rel="noreferrer">Get free help from the Maryland SBDC</a>
           </div>
         </article>
       )}
@@ -240,7 +248,11 @@ export function ToolDetail({
   const help = (
     <article className={s.card} id="get-help">
       <div className={s.cardTop}><h2 className={s.h3}>Get help setting this up</h2></div>
-      <a className={t.helpRow} href={SBDC_URL} target="_blank" rel="noreferrer"><b>Maryland SBDC</b><span>Free advising from the office for your county</span><span className={t.chev} aria-hidden="true">›</span></a>
+      <a className={t.helpRow} href={biz?.help?.url ?? SBDC_URL} target="_blank" rel="noreferrer">
+        <b>{biz?.help?.name ?? "Maryland SBDC"}</b>
+        <span>{biz?.help ? `Free advising for ${biz.help.county} County${biz.help.phone ? ` · ${biz.help.phone}` : ""}` : "Free advising from the office for your county"}</span>
+        <span className={t.chev} aria-hidden="true">›</span>
+      </a>
       <a className={t.helpRow} href={SCORE_URL} target="_blank" rel="noreferrer"><b>SCORE mentor</b><span>Free one-on-one help, by video or in person</span><span className={t.chev} aria-hidden="true">›</span></a>
       <div className={t.helpRow} aria-disabled="true"><b>Local helper</b><span>A vetted student or freelancer · coming soon</span></div>
     </article>
@@ -272,7 +284,7 @@ export function ToolDetail({
             <div className={s.cardTop}><h2 className={s.h3}>Why it fits your business</h2></div>
             <ul className={t.ticks}>
               {yours.length > 0 && <li><b>Works with your {yours.map((w) => w.product).join(" and ")}.</b> {yours.some((w) => w.type === "native") ? "Built in, no extra app." : "Connects through Zapier."}</li>}
-              {price !== "unknown" && (price <= biz.monthlyBudget ? <li><b>{usd(biz.monthlyBudget - price)} under your budget.</b> {r.pricing.cancellation}</li> : <li className={t.warnItem}><b>{usd(price - biz.monthlyBudget)} over your budget.</b></li>)}
+              {price !== "unknown" && (price <= biz.monthlyBudget ? <li><b>{usd(biz.monthlyBudget - price)} under {budgetWord(biz)}.</b> {r.pricing.cancellation}</li> : <li className={t.warnItem}><b>{usd(price - biz.monthlyBudget)} over {budgetWord(biz)}.</b></li>)}
               {r.setupMinutes !== "unknown" && <li><b>About {r.setupMinutes} minutes to set up</b>{r.setupMode === "self_serve" ? ", yourself." : ", best with a helper."}</li>}
               {r.languages.includes("Spanish") && <li><b>Speaks Spanish</b> too.</li>}
               {choice && <li className={t.q}><b>Fit {choice.score.total} of 100.</b> {choice.why}</li>}

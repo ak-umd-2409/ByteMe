@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
-import { demoCatalog } from "../../data/mock/recommendations.ts";
+import { loadCatalog } from "../catalog/index.ts";
+import { toCatalogTool } from "../catalog/toCatalogTool.ts";
 import { handleJourneyAnswer, handleJourneyStart } from "../api/journey.ts";
 import type { ApiDeps } from "../api/handlers.ts";
 import { getPlacesProvider } from "../business/places.ts";
@@ -122,6 +123,10 @@ describe("journey answer: what's holding the business back", () => {
     assert.ok(a.assumptions.some((x) => x.questionId === "budget"));
     assert.equal(a.youToldUs.length, 0);
     assert.ok(a.recommendation.ready);
+    assert.deepEqual(a.budget, { value: 100, assumed: true });
+    // Free local help for the county (Jefferson is in Frederick County).
+    assert.equal(a.localHelp?.name, "Maryland SBDC · Northern Region");
+    assert.equal(a.localHelp?.county, "Frederick");
   });
 
   it("owner answers confirm problems, set filters and unlock estimates from their own numbers", async () => {
@@ -152,12 +157,19 @@ describe("journey answer: what's holding the business back", () => {
       assert.ok(b.currentTools.includes("QuickBooks") && b.currentTools.includes("Squarespace"));
       assert.ok(a.recommendation.request.problems.some((p) => p.useCase === "missed-calls"));
       // The request is exactly what Part 4 accepts.
-      const out = recommend(b, a.recommendation.request.problems, demoCatalog);
+      // Same catalog /api/recommend uses.
+      const catalog = loadCatalog().map(toCatalogTool).filter((x): x is NonNullable<typeof x> => x !== null);
+      const out = recommend(b, a.recommendation.request.problems, catalog);
+      const missed = out.problems.find((p) => p.problem.useCase === "missed-calls")!;
+      // The owner said no recording, and the only Verified phone tool records calls, so it's left out, with a reason.
+      assert.equal(missed.options.length, 0);
+      assert.ok(missed.excluded.some((x) => /record/i.test(x.reason)));
       assert.equal(out.forBusiness, "Frederick Heating & Air Conditioning");
       assert.equal(out.problems.length, a.recommendation.request.problems.length);
     }
     assert.equal(a.assumptions.length, 0);
     assert.ok(a.youToldUs.some((y) => y.questionId === "budget"));
+    assert.deepEqual(a.budget, { value: 200, assumed: false });
   });
 
   it("problems the owner says don't happen disappear; their own words bring one back", async () => {
