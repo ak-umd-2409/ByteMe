@@ -17,7 +17,12 @@ export type UseCase = (typeof USE_CASES)[number];
 export type ToolStatus = "verified" | "listed" | "blocked";
 export type IntegrationKind = "native" | "via-zapier";
 export type RecommendationKind =
-  "already-have" | "quick-fix" | "starter-kit" | "lowest-cost" | "done-for-you";
+  | "already-have"
+  | "quick-fix"
+  | "starter-kit"
+  | "lowest-cost"
+  | "alternative"
+  | "done-for-you";
 
 export interface Problem {
   id: string;
@@ -92,6 +97,8 @@ export interface ToolChoice {
   score: FitScore;
   why: string;
   badges: string[];
+  /** Setup conditions the owner must handle before enabling an optional feature. */
+  warnings: string[];
 }
 
 export interface Recommendation {

@@ -27,12 +27,6 @@ export function exclusionReason(
   if (tool.status !== "verified" || !tool.reviewedAt)
     return "Not yet verified by a human reviewer.";
   if (
-    business.state.toUpperCase() === "MD" &&
-    tool.flags.recordsCalls &&
-    !tool.flags.announcesRecording
-  )
-    return "Call recording consent could not be confirmed for Maryland.";
-  if (
     business.handlesHealthData &&
     (!tool.flags.hipaaReady || !tool.flags.baaAvailable)
   )
@@ -43,11 +37,6 @@ export function exclusionReason(
     tool.flags.personalizesPrices
   )
     return "Personalized pricing is unsuitable for this Maryland food business.";
-  if (
-    tool.flags.outboundAICalls &&
-    (!business.hasOutboundCallConsent || !tool.flags.requiresOutboundConsent)
-  )
-    return "Outbound AI calls require a documented consent path.";
   if (
     business.handlesLargeCustomerList &&
     (!tool.flags.dataDeletion || !tool.flags.dataMinimization)
@@ -164,11 +153,30 @@ function choice(
       : []),
     ...(tool.languages.some((l) => same(l, "Spanish")) ? ["Spanish"] : []),
   ];
+  const warnings = [
+    ...(business.state.toUpperCase() === "MD" &&
+    tool.flags.recordsCalls &&
+    !tool.flags.announcesRecording
+      ? [
+          "Keep call recording off until you confirm the tool gives the required recording notice.",
+        ]
+      : []),
+    ...(tool.flags.outboundAICalls && !business.hasOutboundCallConsent
+      ? [
+          "Use inbound answering first. Before enabling outbound AI calls, collect any required customer consent.",
+        ]
+      : []),
+    ...(tool.monthlyPrice > business.monthlyBudget
+      ? [
+          `Its listed price is $${Math.round(tool.monthlyPrice - business.monthlyBudget)} above your monthly budget.`,
+        ]
+      : []),
+  ];
   const why =
     `${tool.name} addresses ${problem.title.toLowerCase()}${matched ? ` and works with ${matched}` : ""}. ` +
     `${tool.monthlyPrice <= business.monthlyBudget ? "Its listed monthly cost fits your budget" : "Its listed monthly cost exceeds your budget"}; ` +
     `setup is estimated at ${tool.setupMinutes} minutes.`;
-  return { tool, score, why, badges };
+  return { tool, score, why, badges, warnings };
 }
 
 function sortedChoices(
@@ -323,6 +331,26 @@ export function recommend(
         note: "Advisor availability and implementation services are not guaranteed.",
         helpUrl: "https://www.marylandsbdc.org/locations",
       });
+    // Recommendation types can point to the same winner (for example, the best
+    // fit can also be the cheapest). Keep up to three distinct Verified tools
+    // visible so a good candidate never disappears without explanation.
+    const surfaced = new Set(
+      options
+        .filter((option) => option.kind !== "starter-kit")
+        .flatMap((option) => option.choices.map((candidate) => candidate.tool.id)),
+    );
+    for (const candidate of candidates) {
+      if (surfaced.size >= 3) break;
+      if (surfaced.has(candidate.tool.id)) continue;
+      options.push({
+        kind: "alternative",
+        title: "Another verified option",
+        description: "A checked alternative worth comparing with the best fit.",
+        choices: [candidate],
+        monthlyPrice: candidate.tool.monthlyPrice,
+      });
+      surfaced.add(candidate.tool.id);
+    }
     return { problem, options, excluded };
   });
   const comparison = [

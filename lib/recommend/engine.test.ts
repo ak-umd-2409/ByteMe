@@ -64,14 +64,7 @@ test("never recommends listed, blocked, or unreviewed tools", () => {
   assert.equal(result.problems[0].excluded.length, 3);
 });
 
-test("Maryland recording, health, food pricing, and owner deal breakers act as hard filters", () => {
-  assert.match(
-    exclusionReason(
-      tool("phone", { flags: { recordsCalls: true } }),
-      business,
-    ) || "",
-    /recording/i,
-  );
+test("health, food pricing, and owner deal breakers act as hard filters", () => {
   assert.match(
     exclusionReason(tool("health"), { ...business, handlesHealthData: true }) ||
       "",
@@ -178,7 +171,7 @@ test("a strict budget suppresses the kit rather than proposing an unaffordable b
   assert.ok(!result.problems[0].options.some((o) => o.kind === "starter-kit"));
 });
 
-test("outbound AI calls without documented consent are excluded", () => {
+test("verified outbound AI tools stay eligible with a consent warning", () => {
   const result = recommend(
     business,
     [problems[0]],
@@ -188,6 +181,62 @@ test("outbound AI calls without documented consent are excluded", () => {
       }),
     ],
   );
+  assert.ok(result.problems[0].options.length > 0);
+  const choice = result.problems[0].options[0].choices[0];
+  assert.equal(choice.tool.id, "outbound");
+  assert.ok(choice.warnings.some((warning) => /consent/i.test(warning)));
+  assert.equal(result.problems[0].excluded.length, 0);
+});
+
+test("verified recording tools stay eligible with a Maryland setup warning", () => {
+  const result = recommend(
+    business,
+    [problems[0]],
+    [tool("recording", { flags: { recordsCalls: true } })],
+  );
+  assert.ok(result.problems[0].options.length > 0);
+  const choice = result.problems[0].options[0].choices[0];
+  assert.ok(choice.warnings.some((warning) => /recording notice/i.test(warning)));
+});
+
+test("surfaces other verified candidates when best fit is also the cheapest", () => {
+  const result = recommend(
+    business,
+    [problems[0]],
+    [
+      tool("best-and-cheapest", { monthlyPrice: 40, reviewRating: 5 }),
+      tool("second-verified", { monthlyPrice: 80, reviewRating: 4.5 }),
+    ],
+  );
+  const ids = result.problems[0].options
+    .filter((option) => option.kind !== "starter-kit")
+    .flatMap((option) => option.choices.map((candidate) => candidate.tool.id));
+  assert.deepEqual([...new Set(ids)], ["best-and-cheapest", "second-verified"]);
+  assert.ok(result.problems[0].options.some((option) => option.kind === "alternative"));
+});
+
+test("shows an above-budget verified alternative with a clear warning", () => {
+  const result = recommend(
+    business,
+    [problems[0]],
+    [
+      tool("within-budget", { monthlyPrice: 50 }),
+      tool("above-budget", { monthlyPrice: 250 }),
+    ],
+  );
+  const alternative = result.problems[0].options.find(
+    (option) => option.kind === "alternative",
+  )!;
+  assert.equal(alternative.choices[0].tool.id, "above-budget");
+  assert.ok(alternative.choices[0].warnings.some((warning) => /above your monthly budget/i.test(warning)));
+});
+
+test("an owner's no-recording choice still excludes recording tools", () => {
+  const result = recommend(
+    { ...business, dealBreakers: ["no-recording"] },
+    [problems[0]],
+    [tool("recording")],
+  );
   assert.equal(result.problems[0].options.length, 0);
-  assert.match(result.problems[0].excluded[0].reason, /consent/i);
+  assert.match(result.problems[0].excluded[0].reason, /asked for no call recording/i);
 });

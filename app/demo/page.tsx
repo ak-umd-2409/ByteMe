@@ -48,6 +48,7 @@ const OPTION_LABEL: Record<string, string> = {
   "quick-fix": "Quick fix",
   "starter-kit": "Starter kit",
   "lowest-cost": "Lowest cost",
+  alternative: "Another verified option",
   "done-for-you": "Done for you",
 };
 

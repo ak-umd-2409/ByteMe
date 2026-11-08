@@ -63,6 +63,7 @@ const KIND_LABEL: Record<Recommendation["kind"], string> = {
   "quick-fix": "Quick fix · best fit",
   "starter-kit": "Starter Kit",
   "lowest-cost": "Lowest cost",
+  alternative: "Another verified option",
   "done-for-you": "Done for you",
 };
 
@@ -153,7 +154,7 @@ export function WaysToFix({
         </p>
       )}
       <p className={s.small} style={{ color: "var(--ink)", marginTop: -8 }}>
-        You sign up with each company yourself: MainStreet AI doesn't connect to your accounts. Only ✓ Verified tools. Each one fits {biz.budgetAssumed ? `${usd(biz.monthlyBudget)} a month, the budget we assumed because you skipped that question,` : `your ${usd(biz.monthlyBudget)} a month`} and works with what you already use where it can.
+        You sign up with each company yourself: MainStreet AI doesn't connect to your accounts. Only ✓ Verified tools, ranked against {biz.budgetAssumed ? `${usd(biz.monthlyBudget)} a month, the budget we assumed because you skipped that question,` : `your ${usd(biz.monthlyBudget)} monthly budget`}. Prices, fit, and setup cautions are shown plainly.
       </p>
 
       {kit && (
@@ -216,6 +217,9 @@ export function WaysToFix({
                   </div>
                 </div>
                 <p className={t.whyPick}>{plainWhy(c.why, r)}</p>
+                {c.warnings.map((warning) => (
+                  <p className={s.banner} key={warning}><b>Before you switch this on:</b> {warning}</p>
+                ))}
                 <span className={s.small}>{connection(r, biz.currentTools)}</span>
                 {c.badges.filter((b) => !/catalog/i.test(b)).length > 0 && (
                   <div className={s.row}>
@@ -329,6 +333,9 @@ export function ToolDetail({
             <span className={s.small}>{r.category} · by {r.vendor.company} · last checked {date(r.lastChecked)}</span>
           </div>
           <p>{r.description.replace(/^Sample (scam-style )?tool \(fictional\)[.,]?\s*/i, "")}</p>
+          {choice?.warnings.map((warning) => (
+            <p className={s.banner} key={warning}><b>Before you switch this on:</b> {warning}</p>
+          ))}
           {r.sample ? (
             <p className={s.banner}>Sample tool for the demo: the company and website are made up. You can't sign up for it.</p>
           ) : (
