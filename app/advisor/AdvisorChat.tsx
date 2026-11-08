@@ -226,14 +226,14 @@ export function AdvisorChat({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [initialQuestion]);
 
-  const list = starters({ industry: industry ?? known.industry, firstProblem: known.firstProblem, budget: known.budget });
+  // Four good questions are easier to pick from than eight.
+  const list = starters({ industry: industry ?? known.industry, firstProblem: known.firstProblem, budget: known.budget }).slice(0, 4);
 
   return (
     <div className={`${a.chat} ${variant === "panel" ? a.panelChat : ""}`}>
       <div className={a.thread} aria-live="polite">
         {messages.length === 0 && (
           <div className={a.welcome}>
-            <span className={a.badge}>✳ MainStreet Business Advisor</span>
             <h2 className={a.welcomeTitle}>{known.business ? `Ask me anything about ${known.business}.` : "Ask where AI could help your business."}</h2>
             <p>
               {known.business

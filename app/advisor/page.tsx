@@ -11,7 +11,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<Rec
   const q = await searchParams;
   const one = (v: string | string[] | undefined) => (typeof v === "string" ? v.slice(0, 600) : null);
   return (
-    <Shell current="advisor">
+    <Shell current="advisor" advisor={false}>
       <AdvisorPage question={one(q.q)} industry={one(q.industry)} />
     </Shell>
   );

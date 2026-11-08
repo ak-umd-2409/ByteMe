@@ -1,0 +1,47 @@
+/*
+ * Site frame shared by every page: header, logo, minimal nav, footer.
+ * Uses the tokens set on .app (app/start/start.module.css).
+ */
+
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: rgba(255, 253, 249, 0.86);
+  -webkit-backdrop-filter: saturate(1.4) blur(12px);
+  backdrop-filter: saturate(1.4) blur(12px);
+  border-bottom: 1px solid var(--line);
+}
+.inner { max-width: 1180px; margin: 0 auto; min-height: 64px; padding: 0 32px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+@media (max-width: 760px) { .inner { padding: 0 16px; min-height: 58px; } }
+
+/* Logo: mark + wordmark */
+.brand { display: inline-flex; align-items: center; gap: 10px; color: var(--ink) !important; text-decoration: none !important; min-height: 44px; }
+.mark { width: 30px; height: 30px; flex: none; display: block; }
+.word { font-family: var(--display); font-size: 22px; line-height: 1; letter-spacing: -0.005em; white-space: nowrap; }
+.ai { font-family: var(--body); font-weight: 600; font-size: 12px; letter-spacing: 0.14em; color: var(--accent); margin-left: 5px; vertical-align: 3px; }
+
+/* Nav */
+.nav { display: flex; align-items: center; gap: 6px; }
+.link { color: var(--ink) !important; text-decoration: none !important; font: 500 15px var(--body); min-height: 44px; padding: 0 12px; border-radius: 999px; display: inline-flex; align-items: center; }
+.link:hover { background: var(--card-inner); }
+.link[aria-current="page"] { color: var(--accent) !important; font-weight: 600; }
+.cta { margin-left: 6px; background: var(--accent); color: var(--on-accent) !important; text-decoration: none !important; font: 600 15px var(--body); min-height: 40px; padding: 0 18px; border-radius: 999px; display: inline-flex; align-items: center; gap: 6px; }
+.cta:hover { background: var(--accent-hover); }
+.quiet { background: none; border: 0; cursor: pointer; color: var(--text-2); font: 500 15px var(--body); min-height: 44px; padding: 0 12px; border-radius: 999px; }
+.quiet:hover { background: var(--card-inner); color: var(--ink); }
+@media (max-width: 640px) {
+  .link { display: none; }
+  .word { font-size: 20px; }
+}
+
+/* Footer */
+.footer { background: transparent; color: var(--ink); border-top: 1px solid var(--line); margin-top: 72px; }
+.footInner { max-width: 1180px; margin: 0 auto; padding: 28px 32px 40px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 16px 32px; }
+.footNav { display: flex; flex-wrap: wrap; gap: 4px 20px; }
+.footNav a { color: var(--text-2) !important; font-size: 15px; text-decoration: none !important; min-height: 36px; display: inline-flex; align-items: center; }
+.footNav a:hover { color: var(--ink) !important; text-decoration: underline !important; }
+.fine { flex-basis: 100%; font-size: 13px; color: var(--text-2); max-width: 70ch; }
+@media (max-width: 760px) { .footInner { padding: 24px 16px 96px; } }
+
+@media print { .header, .footer { display: none !important; } }

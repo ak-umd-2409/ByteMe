@@ -25,6 +25,7 @@ import type { CatalogRecord } from "@/lib/catalog/types.ts";
 import s from "./start.module.css";
 import { PlanScreen } from "./PlanScreen.tsx";
 import { AdvisorPanel } from "../advisor/AdvisorPanel.tsx";
+import { SiteHeader, siteStyles as site } from "../ui/Site.tsx";
 import { saveResults } from "../advisor/saved.ts";
 import { Compare, ToolDetail, WaysToFix, type Biz } from "./ToolScreens.tsx";
 
@@ -431,30 +432,12 @@ export function Journey({ lookup, catalog, watchCount = 0, entry }: { lookup: Lo
 
   const frame = (children: React.ReactNode, opts: { narrow?: boolean } = {}) => (
     <div className={s.app} ref={top}>
-      <header className={s.topbar}>
-        <div className={s.topbarInner}>
-          {entry?.screen === "find" ? (
-            <a className={s.brand} href="/" style={{ textDecoration: "none" }}>
-              MainStreet AI
-            </a>
-          ) : (
-            <button type="button" className={s.brand} onClick={startOver}>
-              MainStreet AI
-            </button>
-          )}
-          {screen === "landing" ? (
-            <span className={s.row} style={{ gap: 18 }}>
-              <a className={s.linkInk} href="/tools">
-                Browse tools
-              </a>
-              <a className={s.linkInk} href="/admin">
-                For reviewers
-              </a>
-            </span>
-          ) : (
+      <SiteHeader
+        right={
+          screen === "landing" || screen === "find" ? undefined : (
             <button
               type="button"
-              className={s.linkInk}
+              className={site.quiet}
               onClick={
                 screen === "loading"
                   ? () => {
@@ -466,17 +449,22 @@ export function Journey({ lookup, catalog, watchCount = 0, entry }: { lookup: Lo
             >
               {screen === "loading" ? "Cancel" : "Start over"}
             </button>
-          )}
-        </div>
-      </header>
+          )
+        }
+      />
       <main className={cx(s.page, opts.narrow && s.narrow)} key={screen === "ask" ? `ask-${qIndex}` : screen}>
         {children}
       </main>
-      {result && (screen === "problems" || screen === "tools" || screen === "tool" || screen === "compare" || screen === "plan") && (
+      {screen !== "loading" && (
         <AdvisorPanel
           floating
-          context={result.context}
-          known={{ business: result.business.name, industry: result.recommendation.ready ? result.recommendation.request.business.industry.toLowerCase() : null, firstProblem: result.opportunities[0]?.headline ?? null, budget: result.budget?.value ?? null }}
+          raised={screen === "problems" || screen === "tools"}
+          context={result?.context ?? null}
+          known={
+            result
+              ? { business: result.business.name, industry: result.recommendation.ready ? result.recommendation.request.business.industry.toLowerCase() : null, firstProblem: result.opportunities[0]?.headline ?? null, budget: result.budget?.value ?? null }
+              : { industry: null }
+          }
         />
       )}
     </div>
@@ -638,9 +626,7 @@ export function Journey({ lookup, catalog, watchCount = 0, entry }: { lookup: Lo
           <section className={s.col} aria-live="polite">
             {searchInfo && !searchInfo.liveSearch && (
               <div className={s.notice}>
-                <b>Live Google search isn't switched on for this site yet.</b> We can only look up businesses we saved from their public pages
-                {searchInfo.saved.length ? ` (${searchInfo.saved.map((b) => b.name).join(" and ")})` : ""}. Nothing here is made up, and we never
-                swap in a different business for the one you typed.
+                Live search is off in this demo, so we can only find businesses we saved from public pages. We never swap in a different one.
               </div>
             )}
             <h2 className={s.h3}>
@@ -758,6 +744,10 @@ export function Journey({ lookup, catalog, watchCount = 0, entry }: { lookup: Lo
     const listingQ = start.questions.find((x) => x.id.startsWith("listing."));
     const toolsQ = q("tools");
     const b = start.business;
+    // Most details share one source; name it once instead of on every row.
+    const sourceCounts = new Map<string, number>();
+    for (const f of b.facts) if (f.id !== "name" && f.source) sourceCounts.set(f.source, (sourceCounts.get(f.source) ?? 0) + 1);
+    const commonSource = [...sourceCounts].sort((x, y) => y[1] - x[1])[0]?.[0] ?? null;
     return frame(
       <>
         <Steps n={2} />
@@ -791,7 +781,7 @@ export function Journey({ lookup, catalog, watchCount = 0, entry }: { lookup: Lo
               .map((f) => {
                 const edited = answers[`edit.${f.id}`];
                 const value = typeof edited === "string" ? edited : f.value;
-                const source = typeof edited === "string" ? "You told us" : f.source;
+                const source = typeof edited === "string" ? "You told us" : f.source === commonSource ? null : f.source;
                 return (
                   <div className={s.fact} key={f.id}>
                     <dt>{f.label}</dt>
@@ -835,6 +825,7 @@ export function Journey({ lookup, catalog, watchCount = 0, entry }: { lookup: Lo
                 );
               })}
           </dl>
+          {commonSource && <p className={s.small}>From {commonSource.toLowerCase()} unless marked.</p>}
           {listingQ && (
             <div className={s.mismatch}>
               <b>{listingQ.text}</b>
@@ -1320,64 +1311,66 @@ export function Journey({ lookup, catalog, watchCount = 0, entry }: { lookup: Lo
         )}
 
         <div className={s.grid2}>
-          <section className={s.card}>
-            <div className={s.cardTop}>
-              <h2 className={s.h3}>Anything else?</h2>
+          <details className={s.disc}>
+            <summary>Something else slowing you down?</summary>
+            <div className={s.discBody}>
+              <form
+                className={s.col}
+                style={{ gap: 10 }}
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  void send({ anything_else: elseText.trim() || null });
+                }}
+              >
+                <label htmlFor="else" className={s.sr}>
+                  Something else slowing you down?
+                </label>
+                <div className={s.inlineForm}>
+                  <input id="else" className={s.input} value={elseText} onChange={(e) => setElseText(e.target.value)} placeholder="e.g. chasing unpaid invoices" maxLength={300} />
+                  <button type="submit" className={cx(s.btn, s.secondary)} disabled={busy || !elseText.trim()}>
+                    Add
+                  </button>
+                </div>
+              </form>
+              {dealQ && (
+                <>
+                  <span className={s.sub}>{dealQ.text}</span>
+                  <ChoiceQuestion q={dealQ} value={answers.deal_breakers} onChange={(v) => void send({ deal_breakers: v })} />
+                </>
+              )}
             </div>
-            <form
-              className={s.col}
-              style={{ gap: 10 }}
-              onSubmit={(e) => {
-                e.preventDefault();
-                void send({ anything_else: elseText.trim() || null });
-              }}
-            >
-              <label htmlFor="else" className={s.sub}>
-                Something else slowing you down?
-              </label>
-              <div className={s.inlineForm}>
-                <input id="else" className={s.input} value={elseText} onChange={(e) => setElseText(e.target.value)} placeholder="e.g. chasing unpaid invoices" maxLength={300} />
-                <button type="submit" className={cx(s.btn, s.secondary)} disabled={busy || !elseText.trim()}>
-                  Add
-                </button>
-              </div>
-            </form>
-            {dealQ && (
-              <>
-                <span className={s.sub}>{dealQ.text}</span>
-                <ChoiceQuestion q={dealQ} value={answers.deal_breakers} onChange={(v) => void send({ deal_breakers: v })} />
-              </>
-            )}
-          </section>
-          <section className={s.card}>
-            <div className={s.cardTop}>
-              <h2 className={s.h3}>Your answers</h2>
+          </details>
+          <details className={s.disc}>
+            <summary>
+              Your answers{result.assumptions.length > 0 ? ` and ${plural(result.assumptions.length, "assumption")}` : ""}
+            </summary>
+            <div className={s.discBody}>
+              {result.youToldUs.length === 0 && result.assumptions.length === 0 && <p className={s.small}>Nothing yet.</p>}
+              <ul className={s.todo}>
+                {result.youToldUs.map((y) => (
+                  <li key={y.questionId}>
+                    {y.label}: <b>{y.value}</b>
+                  </li>
+                ))}
+                {result.assumptions.map((a) => (
+                  <li key={a.questionId} className={s.small}>
+                    We assumed: {a.text}
+                  </li>
+                ))}
+              </ul>
+              <button
+                type="button"
+                className={s.link}
+                style={{ justifySelf: "start", paddingLeft: 0 }}
+                onClick={() => {
+                  setQIndex(0);
+                  go("ask");
+                }}
+              >
+                Change your answers
+              </button>
             </div>
-            {result.youToldUs.length === 0 && result.assumptions.length === 0 && <p className={s.small}>Nothing yet.</p>}
-            <ul className={s.todo}>
-              {result.youToldUs.map((y) => (
-                <li key={y.questionId}>
-                  {y.label}: <b>{y.value}</b>
-                </li>
-              ))}
-              {result.assumptions.map((a) => (
-                <li key={a.questionId} className={s.small}>
-                  We assumed: {a.text}
-                </li>
-              ))}
-            </ul>
-            <button
-              type="button"
-              className={s.link}
-              style={{ justifySelf: "start", paddingLeft: 0 }}
-              onClick={() => {
-                setQIndex(0);
-                go("ask");
-              }}
-            >
-              Change your answers
-            </button>
-          </section>
+          </details>
         </div>
 
         <div className={cx(s.actionBar, s.sticky)}>

@@ -89,6 +89,24 @@ const budgetWord = (biz: Biz | null) => (biz?.budgetAssumed ? "the budget we ass
 
 // ---------------------------------------------------------------- 5 · Ways to fix it
 
+/**
+ * The engine's reason in plain words. When a tool hasn't published its setup time, the engine
+ * ranks with a placeholder; that placeholder is never shown to the owner as a real estimate.
+ */
+function plainWhy(why: string, r: CatalogRecord | undefined): string {
+  let out = why.replace(/^(.+?) addresses (.+?)( and works with [^.]+)?\. /, (_m, name: string, problem: string, works = "") => `${name} helps with “${problem}”${works}. `);
+  if (!r || r.setupMinutes === "unknown") out = out.replace(/; setup is estimated at \d+ minutes\./, ".");
+  return out;
+}
+
+/** Setup time from the tool's own record; nothing is shown as an estimate when it's unknown. */
+function setupLine(r: CatalogRecord | undefined): string {
+  if (!r) return "";
+  const who = r.setupMode === "needs_help" ? "best with a helper" : r.setupMode === "self_serve" ? "you can do it yourself" : "";
+  if (r.setupMinutes === "unknown") return who ? `Setup: ${who}` : "";
+  return `Setup about ${r.setupMinutes} min${who ? `, ${who}` : ""}`;
+}
+
 export function WaysToFix({
   recs, biz, catalog, picks, togglePick, openTool, openCompare, back,
 }: {
@@ -119,7 +137,9 @@ export function WaysToFix({
     if (r.badge === "blocked" && problem && r.useCases.includes(problem.problem.useCase) && !left.has(r.id))
       left.set(r.id, { name: r.name, badge: r.badge, reason: blockReason(r) });
 
-  const setupMin = kit ? kit.choices.reduce((n, c) => n + c.tool.setupMinutes, 0) : 0;
+  // Only add up setup times the vendors published; otherwise say nothing.
+  const setupKnown = kit?.choices.every((c) => typeof byId.get(c.tool.id)?.setupMinutes === "number") ?? false;
+  const setupMin = kit && setupKnown ? kit.choices.reduce((n, c) => n + (byId.get(c.tool.id)?.setupMinutes as number), 0) : 0;
 
   return (
     <>
@@ -192,14 +212,14 @@ export function WaysToFix({
                     {r?.sample && <SampleTag />}
                   </div>
                 </div>
-                <p className={t.whyPick}>{c.why}</p>
+                <p className={t.whyPick}>{plainWhy(c.why, r)}</p>
                 <span className={s.small}>{connection(r, biz.currentTools)}</span>
                 {c.badges.filter((b) => !/catalog/i.test(b)).length > 0 && (
                   <div className={s.row}>
                     {c.badges.filter((b) => !/catalog/i.test(b)).slice(0, 3).map((b) => <span className={s.chip} key={b}>{b}</span>)}
                   </div>
                 )}
-                <span className={s.small}>Fit {c.score.total} of 100 · setup about {c.tool.setupMinutes} min{r?.setupMode === "needs_help" ? " with help" : r ? ", by yourself" : ""}</span>
+                {setupLine(r) && <span className={s.small}>{setupLine(r)}</span>}
                 <OfficialLink r={r} />
                 <div className={t.actions}>
                   <button type="button" className={cx(s.btn, s.primary)} onClick={() => openTool(c.tool.id)}>See details</button>
@@ -327,10 +347,10 @@ export function ToolDetail({
             <div className={s.cardTop}><h2 className={s.h3}>Why it fits your business</h2></div>
             <ul className={t.ticks}>
               {yours.length > 0 && <li><b>Works with your {yours.map((w) => w.product).join(" and ")}.</b> {yours.some((w) => w.type === "native") ? "Built in, no extra app." : "Connects through Zapier."}</li>}
-              {price !== "unknown" && (price <= biz.monthlyBudget ? <li><b>{usd(biz.monthlyBudget - price)} under {budgetWord(biz)}.</b> {r.pricing.cancellation}</li> : <li className={t.warnItem}><b>{usd(price - biz.monthlyBudget)} over {budgetWord(biz)}.</b></li>)}
+              {price !== "unknown" && (price <= biz.monthlyBudget ? <li><b>{usd(biz.monthlyBudget - price)} under {budgetWord(biz)}.</b> {r.pricing.cancellation !== "unknown" && r.pricing.cancellation}</li> : <li className={t.warnItem}><b>{usd(price - biz.monthlyBudget)} over {budgetWord(biz)}.</b></li>)}
               {r.setupMinutes !== "unknown" && <li><b>About {r.setupMinutes} minutes to set up</b>{r.setupMode === "self_serve" ? ", yourself." : ", best with a helper."}</li>}
               {r.languages.includes("Spanish") && <li><b>Speaks Spanish</b> too.</li>}
-              {choice && <li className={t.q}><b>Fit {choice.score.total} of 100.</b> {choice.why}</li>}
+              {choice && <li className={t.q}><b>Why we picked it:</b> {plainWhy(choice.why, r)}</li>}
             </ul>
           </article>
         )}
