@@ -93,7 +93,7 @@ function trainingQuoteOk(answer: string, quote: string): boolean {
 /** Keep an answer only if its quote is on one of the source pages. */
 type RawAnswer = unknown;
 
-function verify(key: keyof Ai, raw: RawAnswer, sources: FetchedPageFact[]): AiAnswer<string> {
+export function verify(key: keyof Ai, raw: RawAnswer, sources: FetchedPageFact[]): AiAnswer<string> {
   // Only { answer: text, quote: text } counts. Models sometimes write null,
   // { answer: null, quote: null } or a bare word: all mean "couldn't tell".
   if (typeof raw !== "object" || raw === null) return "unknown";
