@@ -6,6 +6,8 @@ import watch from "../../data/catalog/list.json" with { type: "json" };
 import type { ListEntry } from "../catalog/list.ts";
 import type { CatalogRecord } from "../catalog/types.ts";
 import { decide, liveCatalog, runDiscovery, submit, type CheckFn, type Decision, type SubmitInput } from "./discovery.ts";
+import { getLedger } from "../llm/ledger.ts";
+import { loadConfig } from "../shared/config.ts";
 import { getStore, type DiscoveryStore } from "./store.ts";
 import type { DiscoveryState } from "./types.ts";
 
@@ -58,8 +60,21 @@ export async function queueView(store: DiscoveryStore = getStore()) {
   const state: DiscoveryState = await store.load();
   const catalog = liveCatalog(loadCatalog(), state);
   const count = (b: CatalogRecord["badge"]) => catalog.filter((r) => r.badge === b).length;
+  const config = loadConfig();
+  const ledger = getLedger();
   return {
     storage: { kind: store.kind, describe: store.describe },
+    /** What's switched on for this deployment, so the team can see what's real. */
+    services: {
+      googlePlaces: Boolean(config.googlePlacesApiKey),
+      ai: Boolean(config.openRouterApiKey) && !config.llmDisabled,
+      aiModel: config.openRouterModel,
+      aiSpentUsd: Math.round((await ledger.spent()) * 10_000) / 10_000,
+      aiCapUsd: config.llmBudgetUsd,
+      aiSpendShared: ledger.kind === "redis",
+      weeklyRun: Boolean(process.env.CRON_SECRET),
+      samplesHidden: process.env.CATALOG_SAMPLES === "hide",
+    },
     counts: { verified: count("verified"), listed: count("listed"), blocked: count("blocked"), watchList: loadList().length },
     candidates: [...state.candidates].sort((a, b) => b.addedAt.localeCompare(a.addedAt)),
     records: state.records,

@@ -721,6 +721,16 @@ export function Journey({ lookup, catalog, watchCount = 0 }: { lookup: LookupEnt
           <h1 className={s.title}>Here's what we found</h1>
           <p className={s.lead}>Check the details. Fix anything that's wrong, then we'll ask a few quick questions.</p>
         </header>
+        {start.couldNotCheck.length > 0 && (
+          <div className={s.notice}>
+            <b>What we couldn't check</b>
+            <ul className={s.todo} style={{ marginTop: 6 }}>
+              {start.couldNotCheck.map((x) => (
+                <li key={x}>{x}</li>
+              ))}
+            </ul>
+          </div>
+        )}
 
         <article className={s.card}>
           <div className={s.cardTop}>
