@@ -231,3 +231,18 @@
 .app a.btn { text-decoration: none; }
 .app a.primary { color: var(--on-accent); }
 .app a.secondary { color: var(--ink); }
+
+/* Problem cards: same height, "See more" opens a pop-up (approved wireframe) */
+.pcard { display: flex; flex-direction: column; padding: 0; gap: 0; overflow: hidden; }
+.pcTop { margin: 0; border-radius: 0; min-height: 128px; align-content: start; }
+.pcBody { padding: 16px 20px 8px; display: grid; gap: 12px; align-content: start; flex: 1; }
+.clamp { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.seeMore { margin: 8px 20px 20px; }
+.overlay { position: fixed; inset: 0; z-index: 50; background: rgba(42, 31, 29, 0.5); display: grid; place-items: center; padding: max(16px, env(safe-area-inset-top, 0px)) 16px max(16px, env(safe-area-inset-bottom, 0px)); }
+.dialog { background: var(--card-inner); border-radius: 16px; width: min(680px, 100%); max-height: 100%; overflow: auto; box-shadow: 0 0 0 3px var(--ink); }
+.dialogTop { background: var(--sage); padding: 16px 20px; display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; position: sticky; top: 0; z-index: 1; }
+.dialogBody { padding: 16px 20px 24px; display: grid; gap: 14px; }
+.closeBtn { min-height: 44px; padding: 0 14px; font-size: 15px; flex: none; }
+@media (prefers-reduced-motion: no-preference) { .dialog { animation: pop 0.22s cubic-bezier(0.2, 0.7, 0.2, 1); } }
+@keyframes pop { from { opacity: 0; transform: scale(0.96) translateY(8px); } to { opacity: 1; transform: none; } }
+@media (max-width: 760px) { .overlay { padding: 0; place-items: end stretch; } .dialog { width: 100%; max-height: 92vh; border-radius: 16px 16px 0 0; } }
