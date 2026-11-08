@@ -20,9 +20,50 @@ describe("toCatalogTool", () => {
     const f = toCatalogTool(r)!.flags;
     assert.equal(f.recordsCalls, true);
     assert.equal(f.outboundAICalls, true);
-    assert.equal(f.personalizesPrices, true);
     assert.equal(f.announcesRecording, false);
     assert.equal(f.hipaaReady, false);
+  });
+
+  it("assumes a pricing tool may personalize prices when unknown", () => {
+    const r = validRecord();
+    r.category = "Dynamic pricing";
+    r.rulesFlags.personalizedPricing = "unknown";
+    assert.equal(toCatalogTool(r)!.flags.personalizesPrices, true);
+  });
+
+  it("doesn't assume phone risks for a tool that never touches a phone", () => {
+    const r = validRecord();
+    r.category = "AI writing";
+    r.useCases = ["admin-paperwork"];
+    for (const k of Object.keys(r.rulesFlags) as (keyof typeof r.rulesFlags)[]) r.rulesFlags[k] = "unknown";
+    const f = toCatalogTool(r)!.flags;
+    assert.equal(f.recordsCalls, false);
+    assert.equal(f.outboundAICalls, false);
+    assert.equal(f.personalizesPrices, false);
+    // Still cautious about health data: unknown is never "HIPAA-ready".
+    assert.equal(f.hipaaReady, false);
+  });
+
+  it("treats a business phone tool as a phone tool even without the missed-calls use case", () => {
+    const r = validRecord();
+    r.category = "Business phone";
+    r.useCases = ["customer-messaging"];
+    r.rulesFlags.recordsCalls = "unknown";
+    r.rulesFlags.outboundAiCalls = "unknown";
+    const f = toCatalogTool(r)!.flags;
+    assert.equal(f.recordsCalls, true);
+    assert.equal(f.outboundAICalls, true);
+  });
+
+  it("keeps a confirmed answer even for a tool that isn't a phone tool", () => {
+    const r = validRecord();
+    r.category = "Booking";
+    r.useCases = ["booking"];
+    r.rulesFlags.recordsCalls = true;
+    r.rulesFlags.personalizedPricing = true;
+    const f = toCatalogTool(r)!.flags;
+    assert.equal(f.recordsCalls, true);
+    assert.equal(f.personalizesPrices, true);
   });
 
   it("never claims a tool handles outbound-call consent without evidence", () => {

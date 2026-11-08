@@ -24,6 +24,8 @@ import type { RecommendationResult } from "@/lib/recommend/types.ts";
 import type { CatalogRecord } from "@/lib/catalog/types.ts";
 import s from "./start.module.css";
 import { PlanScreen } from "./PlanScreen.tsx";
+import { AdvisorPanel } from "../advisor/AdvisorPanel.tsx";
+import { saveResults } from "../advisor/saved.ts";
 import { Compare, ToolDetail, WaysToFix, type Biz } from "./ToolScreens.tsx";
 
 export interface LookupEntry {
@@ -143,8 +145,11 @@ function OptionList({ q, value, onPick }: { q: JourneyQuestion; value: Answer | 
   );
 }
 
-export function Journey({ lookup, catalog, watchCount = 0 }: { lookup: LookupEntry[]; catalog: CatalogRecord[]; watchCount?: number }) {
-  const [screen, setScreen] = useState<Screen>("landing");
+/** How the owner arrived: from the homepage's name box, the "see a real example" link, or straight in. */
+export type JourneyEntry = { screen?: "landing" | "find"; query?: string; town?: string; example?: boolean };
+
+export function Journey({ lookup, catalog, watchCount = 0, entry }: { lookup: LookupEntry[]; catalog: CatalogRecord[]; watchCount?: number; entry?: JourneyEntry }) {
+  const [screen, setScreen] = useState<Screen>(entry?.screen === "find" || entry?.query ? "find" : "landing");
   const [error, setError] = useState<string | null>(null);
   const top = useRef<HTMLDivElement>(null);
 
@@ -163,6 +168,18 @@ export function Journey({ lookup, catalog, watchCount = 0 }: { lookup: LookupEnt
   // Journey
   const [start, setStart] = useState<JourneyStartResponse | null>(null);
   const [result, setResult] = useState<JourneyAnswerResponse | null>(null);
+  // Keep the latest results in this tab so the Business Advisor page can answer about them.
+  useEffect(() => {
+    if (!result) return;
+    saveResults({
+      context: result.context,
+      business: result.business.name,
+      industry: result.recommendation.ready ? result.recommendation.request.business.industry.toLowerCase() : null,
+      firstProblem: result.opportunities[0]?.headline ?? null,
+      problems: result.opportunities.map((o) => o.headline),
+      budget: result.budget?.value ?? null,
+    });
+  }, [result]);
   const [context, setContext] = useState<string | null>(null);
   const [answers, setAnswers] = useState<Answers>({});
   // Read by delayed callbacks (auto-advance), so they always see the latest answers.
@@ -232,7 +249,7 @@ export function Journey({ lookup, catalog, watchCount = 0 }: { lookup: LookupEnt
     setToolId(null);
     setNumbers({});
     setQIndex(0);
-    go("landing");
+    go(entry?.screen === "find" ? "find" : "landing");
   };
 
   const setAnswer = (id: string, value: Answer) =>
@@ -270,15 +287,30 @@ export function Journey({ lookup, catalog, watchCount = 0 }: { lookup: LookupEnt
     }
   };
 
+  // Arriving from the homepage: search the name they typed, or open the saved real example.
+  const entered = useRef(false);
+  useEffect(() => {
+    if (entered.current || !entry) return;
+    entered.current = true;
+    if (entry.example) void read({ placeId: "public-frederick-heating-ac", label: "Frederick Heating & Air Conditioning" });
+    else if (entry.query) {
+      setName(entry.query);
+      if (entry.town) setTown(entry.town);
+      void searchFor(entry.query, entry.town ?? "");
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   // ---------- actions ----------
 
-  const search = async () => {
-    if (!name.trim()) return setError("Type your business name first.");
+  const search = async () => searchFor(name, town);
+  const searchFor = async (n: string, t: string) => {
+    if (!n.trim()) return setError("Type your business name first.");
     setSearching(true);
     setError(null);
     setManual(false);
     try {
-      const res = await api.search(name.trim(), town.trim() || undefined);
+      const res = await api.search(n.trim(), t.trim() || undefined);
       setMatches(res.matches.slice(0, 3));
       setSearchInfo({ liveSearch: res.liveSearch, saved: res.saved ?? [] });
     } catch (e) {
@@ -401,9 +433,15 @@ export function Journey({ lookup, catalog, watchCount = 0 }: { lookup: LookupEnt
     <div className={s.app} ref={top}>
       <header className={s.topbar}>
         <div className={s.topbarInner}>
-          <button type="button" className={s.brand} onClick={startOver}>
-            MainStreet AI
-          </button>
+          {entry?.screen === "find" ? (
+            <a className={s.brand} href="/" style={{ textDecoration: "none" }}>
+              MainStreet AI
+            </a>
+          ) : (
+            <button type="button" className={s.brand} onClick={startOver}>
+              MainStreet AI
+            </button>
+          )}
           {screen === "landing" ? (
             <span className={s.row} style={{ gap: 18 }}>
               <a className={s.linkInk} href="/tools">
@@ -434,6 +472,13 @@ export function Journey({ lookup, catalog, watchCount = 0 }: { lookup: LookupEnt
       <main className={cx(s.page, opts.narrow && s.narrow)} key={screen === "ask" ? `ask-${qIndex}` : screen}>
         {children}
       </main>
+      {result && (screen === "problems" || screen === "tools" || screen === "tool" || screen === "compare" || screen === "plan") && (
+        <AdvisorPanel
+          floating
+          context={result.context}
+          known={{ business: result.business.name, industry: result.recommendation.ready ? result.recommendation.request.business.industry.toLowerCase() : null, firstProblem: result.opportunities[0]?.headline ?? null, budget: result.budget?.value ?? null }}
+        />
+      )}
     </div>
   );
 
