@@ -1103,7 +1103,9 @@ export function Journey({ lookup, catalog }: { lookup: LookupEntry[]; catalog: C
 
   // ---------- 5 · Ways to fix it · 6 · Tool detail · 7 · Compare ----------
   const req = result?.recommendation.ready ? result.recommendation.request.business : null;
-  const biz: Biz | null = req ? { monthlyBudget: req.monthlyBudget, currentTools: req.currentTools, needsHelp: req.needsHelp } : null;
+  const biz: Biz | null = req
+    ? { monthlyBudget: req.monthlyBudget, currentTools: req.currentTools, needsHelp: req.needsHelp, budgetAssumed: result?.budget.assumed, help: result?.localHelp }
+    : null;
   const choices = new Map((recs?.problems ?? []).flatMap((p) => p.options.flatMap((o) => o.choices)).map((c) => [c.tool.id, c] as const));
   const togglePick = (id: string) => setPicks((prev) => (prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id].slice(-3)));
   const openTool = (id: string) => { setCameFrom(screen === "tool" ? cameFrom : screen); setToolId(id); go("tool"); };
