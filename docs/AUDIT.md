@@ -141,6 +141,7 @@ What still breaks trust or the flow:
 | 2: AI cache that survives restarts, dollar cap, live-services panel, "what we couldn't check", edge-case tests | Done, tested | #22 |
 | 3: live end-to-end on a real Maryland business | Waiting for keys (§5) | — |
 | Part 5 (setup and handoff): 30-day plan, ready-to-use words, send to SBDC advisor, email, free money and help | Done, tested (§8) | #23 |
+| Homepage, onboarding entry and Business Advisor (research-backed) | Done, tested (§9) | #28 |
 
 **AI model choice.**
 - **Owner flow:** stays on `openai/gpt-4o-mini`. It's a non-reasoning model, its JSON is reliable within the 900-token replies these tasks use, and it costs $0.15/$0.60 per million tokens.
@@ -165,3 +166,16 @@ What still breaks trust or the flow:
 **Tested:** 8 new unit tests (`lib/plan/part5.test.ts`: weeks, links per county, ready words, saved and "#" links, storage failure, edited links). A browser run on desktop and phone covered the whole flow from search to plan: copy, email links, a saved link through a local stand-in for Upstash, the advisor opening it, a missing link, the "#" fallback and a broken link.
 
 **Not yet tested live:** saved links on Vercel need Upstash (the same `KV_REST_API_URL` / `KV_REST_API_TOKEN` as the review queue). Until it's added, the site uses the long "#" links.
+
+---
+
+## 9. Homepage, onboarding and Business Advisor
+
+Research behind it: `docs/RESEARCH.md`. Advisor design: `docs/ADVISOR.md`.
+
+| Piece | Status | Real or illustrative |
+| --- | --- | --- |
+| Homepage at `/` | Done. Hero with the business-name box, problem section, how it helps, how it works, trust, examples, advisor and final call to action | Preview is a **real** result built from the saved Frederick Heating public data. Quotes and figures are real, verified and linked. The HVAC example is a real finding; the other four are labelled **illustrative**. Every tool shown is a real checked tool with its catalog price. |
+| Onboarding entry | Done. The homepage name box opens `/start` and searches straight away; "see a real example" opens the saved business; `/start` opens on "Find your business" | Live search needs `GOOGLE_PLACES_API_KEY`; without it, the saved Maryland businesses are offered and labelled |
+| Questions | Unchanged: up to 4, one at a time, skippable, accurate count. The goals question stays because it breaks ties when ranking problems | — |
+| Business Advisor | Done: `/advisor`, the side panel in the journey, `POST /api/advisor` | With `OPENROUTER_API_KEY` the AI writes each answer from the full business brief and the checked catalog, and the server checks tools, prices and names. With no key, rules-based answers from the same data |

@@ -1,0 +1,98 @@
+{
+  "checked": "2026-11-08",
+  "note": "Every quote is word for word from the linked page, short, and attributed. None of these people are MainStreet AI customers. Full library: docs/RESEARCH.md.",
+  "quotes": [
+    {
+      "id": "sbcs-nobody-to-teach",
+      "pain": "Don't know where to start",
+      "quote": "I don't know how, and there is nobody to teach me.",
+      "who": "A small-business owner",
+      "where": "Answer to the Federal Reserve's 2024 Small Business Credit Survey",
+      "outlet": "Federal Reserve Bank of San Francisco",
+      "date": "2026-03-23",
+      "type": "Survey answer",
+      "url": "https://www.frbsf.org/research-and-insights/publications/community-development-articles/2026/03/ai-and-small-businesses/"
+    },
+    {
+      "id": "bitar-lose",
+      "pain": "Losing the personal touch",
+      "quote": "I'm also interested in what we might lose if we let it do too much.",
+      "who": "Elias Bitar",
+      "where": "Owner, Norma's, Cherry Hill, NJ",
+      "outlet": "Tablet magazine",
+      "date": "2026-10-09",
+      "type": "Owner's own column",
+      "url": "https://www.tablethotels.com/magazine/en/2026/10/manual-override"
+    },
+    {
+      "id": "parker-guidance",
+      "pain": "Stuck at experimenting",
+      "quote": "With the right guidance and training, AI can be transformational for Main Street.",
+      "who": "Khari Parker",
+      "where": "Co-founder, Connie's Chicken and Waffles, Baltimore",
+      "outlet": "Goldman Sachs 10,000 Small Businesses Voices release",
+      "date": "2026-03-17",
+      "type": "Press release",
+      "url": "https://www.businesswire.com/news/home/20260317141697/en/Survey-Small-Businesses-Embrace-AI-But-Need-Training-and-Support-to-Fully-Harness-It"
+    },
+    {
+      "id": "bell-assistant",
+      "pain": "Staying in charge",
+      "quote": "AI should be an assistant, not the main owner, boss, of the company",
+      "who": "Keiontae Bell",
+      "where": "Pearce Bespoke franchise, Scottsdale, AZ",
+      "outlet": "Scripps News",
+      "date": "2026-08-06",
+      "type": "News interview",
+      "url": "https://www.turnto23.com/politics/economy/from-employees-to-entrepreneurs-whats-driving-the-small-business-boom"
+    },
+    {
+      "id": "sbcs-confidential",
+      "pain": "Customer data and privacy",
+      "quote": "We have confidential client data and proprietary IP.",
+      "who": "A small-business owner",
+      "where": "Answer to the Federal Reserve's 2024 Small Business Credit Survey",
+      "outlet": "Federal Reserve Bank of San Francisco research brief",
+      "date": "2026-07-15",
+      "type": "Survey answer",
+      "url": "https://www.frbsf.org/wp-content/uploads/ai-adoption-among-small-businesses-cdrb202601.pdf"
+    },
+    {
+      "id": "naser-phones",
+      "pain": "Missed calls",
+      "quote": "We can't imagine going back to like a Friday night and answering the phones",
+      "who": "Tony Naser",
+      "where": "Crush Pizza, Massachusetts",
+      "outlet": "Boston Globe",
+      "date": "2026-01",
+      "type": "News interview",
+      "url": "https://www.bostonglobe.com/2026/01/18/business/ai-restaurants-phone-pizza/"
+    }
+  ],
+  "figures": [
+    {
+      "id": "fed-finding-tools",
+      "value": "54%",
+      "text": "of small employer firms planning to use AI say finding tools that meet their needs is a challenge.",
+      "source": "Federal Reserve Banks, 2025 Small Business Credit Survey",
+      "date": "2026-03",
+      "url": "https://www.fedsmallbusiness.org/-/media/project/clevelandfedtenant/fsbsite/reports/2026/2026-report-on-employer-firms/2026-report-on-employer-firms.pdf"
+    },
+    {
+      "id": "fed-not-applicable",
+      "value": "56%",
+      "text": "of small employer firms with no AI plans say AI isn't applicable to their business.",
+      "source": "Federal Reserve Banks, 2025 Small Business Credit Survey",
+      "date": "2026-03",
+      "url": "https://www.fedsmallbusiness.org/-/media/project/clevelandfedtenant/fsbsite/reports/2026/2026-report-on-employer-firms/2026-report-on-employer-firms.pdf"
+    },
+    {
+      "id": "fed-accuracy",
+      "value": "46%",
+      "text": "of small employer firms already using AI name accuracy as a challenge.",
+      "source": "Federal Reserve Banks, 2025 Small Business Credit Survey",
+      "date": "2026-03",
+      "url": "https://www.fedsmallbusiness.org/-/media/project/clevelandfedtenant/fsbsite/reports/2026/2026-report-on-employer-firms/2026-report-on-employer-firms.pdf"
+    }
+  ]
+}
