@@ -39,10 +39,6 @@
     {
       "product": "DocuSign",
       "type": "native"
-    },
-    {
-      "product": "Adobe",
-      "type": "native"
     }
   ],
   "setupMinutes": "unknown",
@@ -55,13 +51,13 @@
       "answer": "opt-in",
       "plain": "Uses your data to train AI only if you agree.",
       "quote": "Workspace does not use customer data for training models without customer's prior permission or instruction.",
-      "sourceUrl": "https://knowledge.workspace.google.com/admin/generative-ai/generative-ai-in-google-workspace-privacy-hub"
+      "sourceUrl": "https://knowledge.workspace.google.com/admin/generative-ai/generative-ai-in-google-workspace-privacy-hub?hl=en"
     },
     "canDeleteData": {
       "answer": "yes",
       "plain": "You can delete your data.",
-      "quote": "Users can manually delete data within Workspace apps",
-      "sourceUrl": "https://knowledge.workspace.google.com/admin/generative-ai/generative-ai-in-google-workspace-privacy-hub"
+      "quote": "Os usuários podem excluir dados manualmente nos apps do Workspace",
+      "sourceUrl": "https://knowledge.workspace.google.com/admin/generative-ai/generative-ai-in-google-workspace-privacy-hub?hl=pt-br"
     },
     "whereStored": {
       "answer": "unknown",
@@ -70,10 +66,10 @@
       "sourceUrl": null
     },
     "sharesOrSells": {
-      "answer": "unknown",
-      "plain": "We couldn't confirm whether it sells or shares your data.",
-      "quote": null,
-      "sourceUrl": null
+      "answer": "no",
+      "plain": "Does not sell or share your data.",
+      "quote": "Seu conteúdo não é usado para outros clientes.",
+      "sourceUrl": "https://knowledge.workspace.google.com/admin/generative-ai/generative-ai-in-google-workspace-privacy-hub?hl=pt-br"
     },
     "securityCertification": {
       "answer": "unknown",
@@ -94,12 +90,17 @@
     "ranAt": "2026-11-08",
     "checks": {
       "whoIsBehind": {
-        "result": "unknown",
-        "reason": "We couldn't find an address for Google.",
+        "result": "pass",
+        "reason": "Run by Google, a company at 1600 Amphitheatre Parkway, Mountain View, California 94043.",
         "evidence": [
           {
             "quote": "Sign me up to receive news, product updates, event information and special offers about Google Cloud (including Google Workspace) from Google.",
             "url": "https://workspace.google.com/contact/?source=gafb-home-globalnav-en",
+            "checkedAt": "2026-11-08"
+          },
+          {
+            "quote": "Google LLC, with offices at 1600 Amphitheatre Parkway, Mountain View, California 94043",
+            "url": "https://workspace.google.com/terms/2013/1/premier_terms/",
             "checkedAt": "2026-11-08"
           }
         ]
@@ -119,39 +120,24 @@
         "reason": "Has a full privacy policy that says what they do with your information.",
         "evidence": [
           {
-            "url": "https://knowledge.workspace.google.com/admin/generative-ai/generative-ai-in-google-workspace-privacy-hub",
+            "url": "https://knowledge.workspace.google.com/admin/generative-ai/generative-ai-in-google-workspace-privacy-hub?hl=pt-br",
             "checkedAt": "2026-11-08"
           }
         ]
       },
       "dataUse": {
-        "result": "unknown",
-        "reason": "The privacy policy isn't clear about whether it uses your information to make its AI better. A person needs to read it.",
+        "result": "pass",
+        "reason": "Only uses your information to make its AI better if you say yes. You can delete your information.",
         "evidence": [
           {
             "quote": "Workspace does not use customer data for training models without customer's prior permission or instruction.",
-            "url": "https://knowledge.workspace.google.com/admin/generative-ai/generative-ai-in-google-workspace-privacy-hub",
+            "url": "https://knowledge.workspace.google.com/admin/generative-ai/generative-ai-in-google-workspace-privacy-hub?hl=en",
             "checkedAt": "2026-11-08"
           },
           {
-            "quote": "Users can manually delete data within Workspace apps",
-            "url": "https://knowledge.workspace.google.com/admin/generative-ai/generative-ai-in-google-workspace-privacy-hub",
+            "quote": "Os usuários podem excluir dados manualmente nos apps do Workspace",
+            "url": "https://knowledge.workspace.google.com/admin/generative-ai/generative-ai-in-google-workspace-privacy-hub?hl=pt-br",
             "checkedAt": "2026-11-08"
-          },
-          {
-            "url": "https://knowledge.workspace.google.com/admin/generative-ai/generative-ai-in-google-workspace-privacy-hub",
-            "checkedAt": "2026-11-08",
-            "quote": "Model training and data usage\nDoes Google use my data (including prompts) to train generative AI models?"
-          },
-          {
-            "url": "https://knowledge.workspace.google.com/admin/generative-ai/generative-ai-in-google-workspace-privacy-hub",
-            "checkedAt": "2026-11-08",
-            "quote": "This commitment is outlined in the 'Training Restriction' section of the Google Workspace Service Specific Terms ."
-          },
-          {
-            "url": "https://knowledge.workspace.google.com/admin/generative-ai/generative-ai-in-google-workspace-privacy-hub",
-            "checkedAt": "2026-11-08",
-            "quote": "Where does the data used to train Google's foundational language models come from?"
           }
         ]
       },
@@ -160,7 +146,7 @@
         "reason": "We couldn't find which country your information is kept in.",
         "evidence": [
           {
-            "url": "https://knowledge.workspace.google.com/admin/generative-ai/generative-ai-in-google-workspace-privacy-hub",
+            "url": "https://knowledge.workspace.google.com/admin/generative-ai/generative-ai-in-google-workspace-privacy-hub?hl=pt-br",
             "checkedAt": "2026-11-08"
           }
         ]
@@ -197,7 +183,7 @@
       }
     },
     "redFlags": [],
-    "verdict": "held",
+    "verdict": "ready",
     "warnings": [
       "We couldn't find which country your information is kept in.",
       "We couldn't find the name of the person who runs this company."
@@ -207,8 +193,9 @@
   "sources": [
     "https://workspace.google.com/",
     "https://workspace.google.com/pricing.html?source=gafb-home-globalnav-en&hl=en&ga_region=noram&ga_country=us&ga_lang=en",
+    "https://knowledge.workspace.google.com/admin/generative-ai/generative-ai-in-google-workspace-privacy-hub?hl=pt-br",
     "https://workspace.google.com/contact/?source=gafb-home-globalnav-en",
-    "https://knowledge.workspace.google.com/admin/generative-ai/generative-ai-in-google-workspace-privacy-hub",
+    "https://knowledge.workspace.google.com/admin/generative-ai/generative-ai-in-google-workspace-privacy-hub?hl=en",
     "https://workspace.google.com/integrations/"
   ],
   "needsVerification": [

@@ -54,6 +54,14 @@
     {
       "product": "Teams",
       "type": "native"
+    },
+    {
+      "product": "Microsoft 365",
+      "type": "native"
+    },
+    {
+      "product": "Copilot Studio",
+      "type": "native"
     }
   ],
   "setupMinutes": "unknown",
@@ -63,15 +71,15 @@
   ],
   "privacyCard": {
     "trainsOnYourData": {
-      "answer": "unknown",
-      "plain": "We couldn't confirm whether it uses your data to train AI.",
-      "quote": null,
-      "sourceUrl": null
+      "answer": "no",
+      "plain": "Does not use your data to train AI.",
+      "quote": "Prompts and responses are not used to train the underlying large language models.",
+      "sourceUrl": "https://www.microsoft.com/en-us/copilot/pricing/business"
     },
     "canDeleteData": {
       "answer": "yes",
       "plain": "You can delete your data.",
-      "quote": "Do you have a question about Microsoft privacy? We explain how customers can export or delete personal data and more in the Privacy FAQs.",
+      "quote": "We explain how customers can export or delete personal data and more in the Privacy FAQs.",
       "sourceUrl": "https://www.microsoft.com/en-us/privacy?icid=DSM_Footer_Company_Privacy"
     },
     "whereStored": {
@@ -105,12 +113,17 @@
     "ranAt": "2026-11-08",
     "checks": {
       "whoIsBehind": {
-        "result": "unknown",
-        "reason": "We couldn't find an address for Microsoft.",
+        "result": "pass",
+        "reason": "Run by Microsoft, a company at One Microsoft Way, Redmond, Washington 98052.",
         "evidence": [
           {
             "quote": "Microsoft’s mission is to empower every person and every organization on the planet to achieve more.",
             "url": "https://www.microsoft.com/en-us/about",
+            "checkedAt": "2026-11-08"
+          },
+          {
+            "quote": "Microsoft Privacy, Microsoft Corporation, One Microsoft Way, Redmond, Washington 98052, USA.",
+            "url": "https://www.microsoft.com/en-us/privacy/privacystatement",
             "checkedAt": "2026-11-08"
           }
         ]
@@ -136,11 +149,16 @@
         ]
       },
       "dataUse": {
-        "result": "unknown",
-        "reason": "We couldn't find whether it uses your information to make its AI better.",
+        "result": "pass",
+        "reason": "Doesn't use your information to make its AI better. You can delete your information.",
         "evidence": [
           {
-            "quote": "Do you have a question about Microsoft privacy? We explain how customers can export or delete personal data and more in the Privacy FAQs.",
+            "quote": "Prompts and responses are not used to train the underlying large language models.",
+            "url": "https://www.microsoft.com/en-us/copilot/pricing/business",
+            "checkedAt": "2026-11-08"
+          },
+          {
+            "quote": "We explain how customers can export or delete personal data and more in the Privacy FAQs.",
             "url": "https://www.microsoft.com/en-us/privacy?icid=DSM_Footer_Company_Privacy",
             "checkedAt": "2026-11-08"
           }
@@ -188,7 +206,7 @@
       }
     },
     "redFlags": [],
-    "verdict": "held",
+    "verdict": "ready",
     "warnings": [
       "We couldn't find which country your information is kept in.",
       "We couldn't find the name of the person who runs this company."

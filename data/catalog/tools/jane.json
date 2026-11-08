@@ -109,12 +109,17 @@
     "ranAt": "2026-11-08",
     "checks": {
       "whoIsBehind": {
-        "result": "unknown",
-        "reason": "We couldn't find an address for Jane Software Inc.",
+        "result": "pass",
+        "reason": "Run by Jane Software Inc., a company at 500 - 138 13th St E..",
         "evidence": [
           {
             "quote": "© 2026 Jane Software Inc. All Rights Reserved.",
             "url": "https://jane.app/resources/blog/product-news/eprescribe-in-jane-coming-soon",
+            "checkedAt": "2026-11-08"
+          },
+          {
+            "quote": "500 - 138 13th St E.",
+            "url": "https://jane.app/legal/privacy-notice",
             "checkedAt": "2026-11-08"
           }
         ]
@@ -140,8 +145,8 @@
         ]
       },
       "dataUse": {
-        "result": "unknown",
-        "reason": "The privacy policy isn't clear about whether it uses your information to make its AI better. A person needs to read it.",
+        "result": "pass",
+        "reason": "Uses your information to make its AI better, but removes names first. You can delete your information.",
         "evidence": [
           {
             "quote": "Jane may use computer-generated algorithms to gather anonymous and aggregated information from Subscriber Data in order to assist in our continued development and improvement of the Services, and for the purpose of analysis or compiling statistical data.",
@@ -152,16 +157,6 @@
             "quote": "Patients have certain rights with respect to their Patient Data, which may include knowing what information your Subscriber clinic has about you, correcting any inaccurate Patient Data, obtaining a record of your Patient Data and, in certain circumstances, deleting or removing your Patient Data.",
             "url": "https://jane.app/legal/privacy-notice",
             "checkedAt": "2026-11-08"
-          },
-          {
-            "url": "https://jane.app/legal/privacy-notice",
-            "checkedAt": "2026-11-08",
-            "quote": "Please note that Google Workspace APIs are not used to develop, improve, or train generalized AI and/or Machine Learning models."
-          },
-          {
-            "url": "https://jane.app/legal/privacy-notice",
-            "checkedAt": "2026-11-08",
-            "quote": "Having our personnel sign strict confidentiality agreements in addition to completing periodic training to ensure they understand the confidential nature of the data we process, and only accessing your account when you request assistance from us."
           }
         ]
       },
@@ -207,7 +202,7 @@
       }
     },
     "redFlags": [],
-    "verdict": "held",
+    "verdict": "ready",
     "warnings": [
       "We couldn't find which country your information is kept in.",
       "We couldn't find the name of the person who runs this company.",
