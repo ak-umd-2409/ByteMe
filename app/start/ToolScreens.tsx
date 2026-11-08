@@ -105,7 +105,10 @@ export function WaysToFix({
   const byId = new Map(catalog.map((r) => [r.id, r]));
   const kit = recs.problems.flatMap((p) => p.options).find((o) => o.kind === "starter-kit");
   const problem = recs.problems[tab] ?? recs.problems[0];
-  const options = (problem?.options ?? []).filter((o) => o.kind !== "starter-kit");
+  // One card per tool: "Done for you" is often the same tool as "Quick fix", so show it once.
+  const options = (problem?.options ?? [])
+    .filter((o) => o.kind !== "starter-kit")
+    .filter((o, i, all) => all.findIndex((x) => x.kind !== "starter-kit" && x.choices[0]?.tool.id === o.choices[0]?.tool.id) === i);
   const problemFor = (c: ToolChoice) => recs.problems.find((p) => c.tool.useCases.includes(p.problem.useCase))?.problem.title;
   const worksWith = (c: ToolChoice) => Object.keys(c.tool.integrations).find((k) => biz.currentTools.some((x) => same(x, k)));
 
