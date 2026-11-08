@@ -67,7 +67,13 @@
       "quote": "© 2026 Tidio",
       "pageUrl": "https://www.tidio.com/contact-sales/?hs_track=navbar"
     },
-    "address": "unknown",
+    "address": {
+      "answer": "1301 Sansome Street",
+      "quote": "To make a CCPA request, you or an Authorized Agent (as indicated below) may email us here , or write us at Tidio LLC, 1301 Sansome Street (San Francisco, CA 94111 U.S.A.) (Attn: CCPA Request ).",
+      "pageUrl": "https://www.tidio.com/privacy-policy/",
+      "source": "person",
+      "foundBy": "Claude (drafted for Rishabh to check)"
+    },
     "leaderName": "unknown",
     "trainsOnYourData": {
       "answer": "opt-out",
@@ -78,16 +84,12 @@
     },
     "canDeleteData": {
       "answer": "yes",
-      "quote": "Right to erasure\nThis is also known as ‘the right to be forgotten’ and, in simple terms, enables you to request the deletion or removal of your personal data where there’s no compelling reason for us to keep using it.",
+      "quote": "This is also known as ‘the right to be forgotten’ and, in simple terms, enables you to request the deletion or removal of your personal data where there’s no compelling reason for us to keep using it.",
       "pageUrl": "https://www.tidio.com/privacy-policy/"
     },
     "whereStored": "unknown",
     "securityCertification": "unknown",
-    "policyAddress": {
-      "answer": "1301 Sansome Street, San Francisco, CA 94111, U.S.A.",
-      "quote": "Tidio LLC with registered office at 1301 Sansome Street (San Francisco, CA 94111 U.S.A.) and Tidio Poland Sp. z o.o. with its registered office in Szczecin, 81 Wojska Polskiego Street (70-481, Szczecin, Poland) are the joint controllers of your personal data processed in connection with use of our Services and other functionalities via this website (together referred to as “ Controller ” or “ Tidio ”, “we,” “us,” or “our” )",
-      "pageUrl": "https://www.tidio.com/privacy-policy/"
-    }
+    "policyAddress": "unknown"
   },
   "riskySentences": [
     "information about your online and status message changes on our Services, such as whether you are online;\nsales data, relating to you, including but not limited to business, financial and product information, and any information relating to your customer, including, but not limited to, order information, payment information, and account information;\nGoogle Workspace APIs are not used to develop, improve, or train generalized AI and/or ML models."

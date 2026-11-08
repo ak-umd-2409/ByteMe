@@ -107,7 +107,9 @@ describe("checkDataUse", () => {
   it("passes when you can switch learning off, with a plain warning", () => {
     const f = factsFixture({ riskySentences: [OPTOUT], ai: { trainsOnYourData: { answer: "opt-out", quote: OPTOUT } } });
     assert.equal(checkDataUse(f).result, "pass");
-    assert.match(trainingWarning(f)!, /^Turn this setting off after you sign up\./);
+    assert.match(trainingWarning(f)!, /^Ask them to stop this after you sign up\./);
+    // Some tools stop by email or through support, not a setting: never promise a setting.
+    assert.doesNotMatch(trainingWarning(f)!, /setting/i);
   });
   it("is unknown when names are removed but another sentence says it trains on recordings", () => {
     const other = "We use call recordings to train our models.";

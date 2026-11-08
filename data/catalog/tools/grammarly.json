@@ -2,7 +2,7 @@
   "id": "grammarly",
   "name": "Grammarly",
   "vendor": {
-    "company": "Superhuman Platform",
+    "company": "Superhuman Platform Inc.",
     "website": "https://www.grammarly.com",
     "domain": "grammarly.com"
   },
@@ -55,7 +55,7 @@
     "canDeleteData": {
       "answer": "yes",
       "plain": "You can delete your data.",
-      "quote": "Data rights. Depending on where you live, you may have rights under privacy laws to access, correct, or delete your personal data, as well as other rights, all as described below.",
+      "quote": "Depending on where you live, you may have rights under privacy laws to access, correct, or delete your personal data, as well as other rights, all as described below.",
       "sourceUrl": "https://superhuman.com/legal/privacy-policy"
     },
     "whereStored": {
@@ -84,22 +84,27 @@
     "outboundAiCalls": "unknown",
     "personalizedPricing": "unknown"
   },
-  "badge": "verified",
+  "badge": "listed",
   "safetyCheck": {
     "ranAt": "2026-11-08",
     "checks": {
       "whoIsBehind": {
         "result": "pass",
-        "reason": "Run by Superhuman Platform, a company at 2261 Market Street STE 85232, San Francisco, CA 94114.",
+        "reason": "Run by Superhuman Platform Inc., a company at 2261 Market Street STE 85232, San Francisco, CA 94114.",
         "evidence": [
           {
-            "quote": "2026 © Superhuman Platform",
-            "url": "https://www.grammarly.com/about",
+            "quote": "You may give notice to Superhuman at the following address: Superhuman Platform Inc., 2261 Market Street STE 85232, San Francisco, CA 94114, United States.",
+            "url": "https://www.grammarly.com/terms",
             "checkedAt": "2026-11-08"
           },
           {
             "quote": "You may give notice to Superhuman at the following address: Superhuman Platform Inc., 2261 Market Street STE 85232, San Francisco, CA 94114, United States.",
             "url": "https://www.grammarly.com/terms",
+            "checkedAt": "2026-11-08"
+          },
+          {
+            "quote": "In 2009, Max Lytvyn, Alex Shevchenko, and Dmytro Lider founded Grammarly with a simple goal: help people communicate more effectively.",
+            "url": "https://www.grammarly.com/about",
             "checkedAt": "2026-11-08"
           }
         ]
@@ -134,7 +139,7 @@
             "checkedAt": "2026-11-08"
           },
           {
-            "quote": "Data rights. Depending on where you live, you may have rights under privacy laws to access, correct, or delete your personal data, as well as other rights, all as described below.",
+            "quote": "Depending on where you live, you may have rights under privacy laws to access, correct, or delete your personal data, as well as other rights, all as described below.",
             "url": "https://superhuman.com/legal/privacy-policy",
             "checkedAt": "2026-11-08"
           }
@@ -186,15 +191,14 @@
     "warnings": [
       "We couldn't find which country your information is kept in.",
       "No price on the website. You have to talk to their sales team.",
-      "We couldn't find the name of the person who runs this company.",
-      "Turn this setting off after you sign up. This tool may use your customers' calls or messages to get better. You can stop this in its settings."
+      "Ask them to stop this after you sign up. This tool may use your customers' calls or messages to get better, and it says you can opt out. Its privacy policy says how."
     ]
   },
   "lastChecked": "2026-11-08",
   "sources": [
     "https://www.grammarly.com/",
     "https://www.grammarly.com/business/customer-support",
-    "https://www.grammarly.com/about",
+    "https://www.grammarly.com/terms",
     "https://support.grammarly.com/hc/en-us/articles/25555503115277-Product-Improvement-and-Training-Control",
     "https://superhuman.com/legal/privacy-policy"
   ],
@@ -210,7 +214,5 @@
     "rulesFlags.outboundAiCalls",
     "rulesFlags.personalizedPricing",
     "setupMode"
-  ],
-  "reviewedAt": "2026-11-08",
-  "reviewedBy": "Rishabh"
+  ]
 }

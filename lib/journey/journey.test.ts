@@ -133,6 +133,7 @@ describe("journey answer: what's holding the business back", () => {
     const s = await start(FREDERICK);
     // The tool choices follow the real catalog; pick QuickBooks when offered, else the first choice.
     const offeredTools = s.questions.find((q) => q.id === "tools")?.options?.map((o) => o.value) ?? [];
+    assert.ok(offeredTools.length > 0, "the tools question offers at least one product");
     const a = await answer(s.context, {
       problems: ["missed_inquiries"],
       call_recording: "no",

@@ -77,8 +77,12 @@ const ANSWERS_PASS: Record<string, string> = {
 };
 
 /** "We do not ... train AI models" with no escape ("unless", "except", "but", "however"): agrees with a "no" answer. */
+// The "not" must govern use/train directly ("we do not use", "is not used", "do not sell ... or use"),
+// and the sentence must have no escape, condition, second clause (;) or line break.
 const deniesTraining = (s: string) =>
-  /(\b(not|never)\b|n't\b)[^.]{0,100}\btrain\w*/i.test(s) && !/\b(unless|except|but|however)\b/i.test(s);
+  /\btrain\w*/i.test(s) &&
+  /\b(do(es)? not|don't|doesn't|never|will not|won't|may not|(is|are) not|isn't|aren't)\s+(use|used|process\w*|train\w*|sell\b[^;\n]{0,80}\bor use)\b/i.test(s) &&
+  !/[;\n]|\b(unless|except|but|however|if|before|opt\w*)\b/i.test(s);
 /** Staff "security training" is about people, not AI: set aside unless the sentence also talks about AI. */
 const aboutStaffTraining = (s: string) =>
   /\b(security|staff|employee|personnel|compliance|privacy) training\b/i.test(s) &&
@@ -129,7 +133,7 @@ export function trainingWarning(facts: SafetyFacts): string | null {
   if (trains.answer === "anonymized")
     return "This tool learns from how people use it. It may use your customers' calls or messages to get better, but it removes names and phone numbers first. Good to know: don't share card numbers or health details with it.";
   if (trains.answer === "opt-out")
-    return "Turn this setting off after you sign up. This tool may use your customers' calls or messages to get better. You can stop this in its settings.";
+    return "Ask them to stop this after you sign up. This tool may use your customers' calls or messages to get better, and it says you can opt out. Its privacy policy says how.";
   return null;
 }
 

@@ -106,12 +106,27 @@ describe("judge scenarios", () => {
           "We do not sell Customer Content, use it for advertising or marketing, or use it to train artificial intelligence models, and we do not permit our sub-processors to do so.",
           "Our AI sub-processors process Customer Content under zero data retention terms and may not use it to train their models.",
           "No AI Training : We do not use your data to train AI models.",
+          "We do not process Workspace API user data to develop, improve, or train generalized AI and/or ML models.",
         ],
       }),
     );
     assert.equal(report.checks.dataUse.result, "pass");
     assert.equal(report.verdict, "ready");
   });
+  for (const s of [
+    "We do not ask before we train on your data.",
+    "Data is not anonymized before training.",
+    "We won't stop using it to train our models.",
+    "If you do not opt out, we will use your content to train our AI models.",
+    "We do not sell your data; we use it to train our models.",
+    "We do not sell your data and we use it to train our models.",
+    "Customer data is not excluded from training datasets.",
+    "Content you don't delete may be used to train our models.",
+    "Not for resale\nWe use your calls to train our models.",
+  ])
+    it(`a sentence that says it does train still needs a person: "${s.slice(0, 40)}…"`, () => {
+      assert.equal(judge(factsFixture({ riskySentences: [s] })).checks.dataUse.result, "unknown");
+    });
   it("a 'we don't train' sentence with an escape still needs a person", () => {
     const report = judge(factsFixture({ riskySentences: ["We do not train AI models on your data unless you agree to it."] }));
     assert.equal(report.checks.dataUse.result, "unknown");

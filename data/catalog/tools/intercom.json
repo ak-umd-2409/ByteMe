@@ -118,15 +118,15 @@
     "checks": {
       "whoIsBehind": {
         "result": "pass",
-        "reason": "Run by Fin, a company at 55 2nd Street, 4th Fl., San Francisco, CA 94105, USA.",
+        "reason": "Run by Fin, a company at 124 St Stephen's Green, Dublin 2, DC02 C628.",
         "evidence": [
           {
-            "quote": "Fin is the Customer Agent company delivering perfect customer experiences – from support to sales to commerce.",
+            "quote": "The company is renamed from Intercom to Fin.",
             "url": "https://fin.ai/about",
             "checkedAt": "2026-11-08"
           },
           {
-            "quote": "When we refer to Intercom, we mean Intercom R&D Unlimited Company, a company registered in Ireland with offices at 124 St Stephen's Green, Dublin 2, DC02 C628; Intercom, Inc. a Delaware corporation with offices at 55 2nd Street, 4th Fl., San Francisco, CA 94105, USA; Intercom Software UK Limited, a private limited company registered in the United Kingdom (\" UK \") with offices at Level 9, the Warehouse 207-211 Old St, London, EC1V 9NR UK; Intercom Software Australia Pty Ltd, a company registered in Australia with offices at 285A Crown St. Surry Hills NSW 2010, Australia, 1st Floor, Sydney; Intercom R&D GmbH, a company registered in Germany with offices at Zimmerstraße 78 10117 Berlin, and Intercom's group companies (\" Intercom \", \" we \", \" us \", \" our \") 1 .",
+            "quote": "When we refer to Intercom, we mean Intercom R&D Unlimited Company, a company registered in Ireland with offices at 124 St Stephen's Green, Dublin 2, DC02 C628; Intercom, Inc. a Delaware corporation with offices at 55 2nd Street, 4th Fl., San Francisco, CA 94105, USA;",
             "url": "https://www.intercom.com/legal/privacy",
             "checkedAt": "2026-11-08"
           }
@@ -214,7 +214,7 @@
     "verdict": "ready",
     "warnings": [
       "We couldn't find the name of the person who runs this company.",
-      "Turn this setting off after you sign up. This tool may use your customers' calls or messages to get better. You can stop this in its settings."
+      "Ask them to stop this after you sign up. This tool may use your customers' calls or messages to get better, and it says you can opt out. Its privacy policy says how."
     ]
   },
   "lastChecked": "2026-11-08",

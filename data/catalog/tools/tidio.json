@@ -76,7 +76,7 @@
     "canDeleteData": {
       "answer": "yes",
       "plain": "You can delete your data.",
-      "quote": "Right to erasure\nThis is also known as ‘the right to be forgotten’ and, in simple terms, enables you to request the deletion or removal of your personal data where there’s no compelling reason for us to keep using it.",
+      "quote": "This is also known as ‘the right to be forgotten’ and, in simple terms, enables you to request the deletion or removal of your personal data where there’s no compelling reason for us to keep using it.",
       "sourceUrl": "https://www.tidio.com/privacy-policy/"
     },
     "whereStored": {
@@ -105,13 +105,13 @@
     "outboundAiCalls": "unknown",
     "personalizedPricing": "unknown"
   },
-  "badge": "verified",
+  "badge": "listed",
   "safetyCheck": {
     "ranAt": "2026-11-08",
     "checks": {
       "whoIsBehind": {
         "result": "pass",
-        "reason": "Run by Tidio, a company at 1301 Sansome Street, San Francisco, CA 94111, U.S.A..",
+        "reason": "Run by Tidio, a company at 1301 Sansome Street.",
         "evidence": [
           {
             "quote": "© 2026 Tidio",
@@ -119,7 +119,7 @@
             "checkedAt": "2026-11-08"
           },
           {
-            "quote": "Tidio LLC with registered office at 1301 Sansome Street (San Francisco, CA 94111 U.S.A.) and Tidio Poland Sp. z o.o. with its registered office in Szczecin, 81 Wojska Polskiego Street (70-481, Szczecin, Poland) are the joint controllers of your personal data processed in connection with use of our Services and other functionalities via this website (together referred to as “ Controller ” or “ Tidio ”, “we,” “us,” or “our” )",
+            "quote": "To make a CCPA request, you or an Authorized Agent (as indicated below) may email us here , or write us at Tidio LLC, 1301 Sansome Street (San Francisco, CA 94111 U.S.A.) (Attn: CCPA Request ).",
             "url": "https://www.tidio.com/privacy-policy/",
             "checkedAt": "2026-11-08"
           }
@@ -155,7 +155,7 @@
             "checkedAt": "2026-11-08"
           },
           {
-            "quote": "Right to erasure\nThis is also known as ‘the right to be forgotten’ and, in simple terms, enables you to request the deletion or removal of your personal data where there’s no compelling reason for us to keep using it.",
+            "quote": "This is also known as ‘the right to be forgotten’ and, in simple terms, enables you to request the deletion or removal of your personal data where there’s no compelling reason for us to keep using it.",
             "url": "https://www.tidio.com/privacy-policy/",
             "checkedAt": "2026-11-08"
           }
@@ -207,7 +207,7 @@
     "warnings": [
       "We couldn't find which country your information is kept in.",
       "We couldn't find the name of the person who runs this company.",
-      "Turn this setting off after you sign up. This tool may use your customers' calls or messages to get better. You can stop this in its settings."
+      "Ask them to stop this after you sign up. This tool may use your customers' calls or messages to get better, and it says you can opt out. Its privacy policy says how."
     ]
   },
   "lastChecked": "2026-11-08",
@@ -231,7 +231,5 @@
     "description",
     "setupMode",
     "languages"
-  ],
-  "reviewedAt": "2026-11-08",
-  "reviewedBy": "Rishabh"
+  ]
 }

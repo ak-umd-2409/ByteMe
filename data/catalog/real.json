@@ -1168,7 +1168,7 @@
       "redFlags": [],
       "verdict": "ready",
       "warnings": [
-        "Turn this setting off after you sign up. This tool may use your customers' calls or messages to get better. You can stop this in its settings."
+        "Ask them to stop this after you sign up. This tool may use your customers' calls or messages to get better, and it says you can opt out. Its privacy policy says how."
       ]
     },
     "lastChecked": "2026-11-08",
@@ -1200,7 +1200,7 @@
     "id": "grammarly",
     "name": "Grammarly",
     "vendor": {
-      "company": "Superhuman Platform",
+      "company": "Superhuman Platform Inc.",
       "website": "https://www.grammarly.com",
       "domain": "grammarly.com"
     },
@@ -1253,7 +1253,7 @@
       "canDeleteData": {
         "answer": "yes",
         "plain": "You can delete your data.",
-        "quote": "Data rights. Depending on where you live, you may have rights under privacy laws to access, correct, or delete your personal data, as well as other rights, all as described below.",
+        "quote": "Depending on where you live, you may have rights under privacy laws to access, correct, or delete your personal data, as well as other rights, all as described below.",
         "sourceUrl": "https://superhuman.com/legal/privacy-policy"
       },
       "whereStored": {
@@ -1282,22 +1282,27 @@
       "outboundAiCalls": "unknown",
       "personalizedPricing": "unknown"
     },
-    "badge": "verified",
+    "badge": "listed",
     "safetyCheck": {
       "ranAt": "2026-11-08",
       "checks": {
         "whoIsBehind": {
           "result": "pass",
-          "reason": "Run by Superhuman Platform, a company at 2261 Market Street STE 85232, San Francisco, CA 94114.",
+          "reason": "Run by Superhuman Platform Inc., a company at 2261 Market Street STE 85232, San Francisco, CA 94114.",
           "evidence": [
             {
-              "quote": "2026 © Superhuman Platform",
-              "url": "https://www.grammarly.com/about",
+              "quote": "You may give notice to Superhuman at the following address: Superhuman Platform Inc., 2261 Market Street STE 85232, San Francisco, CA 94114, United States.",
+              "url": "https://www.grammarly.com/terms",
               "checkedAt": "2026-11-08"
             },
             {
               "quote": "You may give notice to Superhuman at the following address: Superhuman Platform Inc., 2261 Market Street STE 85232, San Francisco, CA 94114, United States.",
               "url": "https://www.grammarly.com/terms",
+              "checkedAt": "2026-11-08"
+            },
+            {
+              "quote": "In 2009, Max Lytvyn, Alex Shevchenko, and Dmytro Lider founded Grammarly with a simple goal: help people communicate more effectively.",
+              "url": "https://www.grammarly.com/about",
               "checkedAt": "2026-11-08"
             }
           ]
@@ -1332,7 +1337,7 @@
               "checkedAt": "2026-11-08"
             },
             {
-              "quote": "Data rights. Depending on where you live, you may have rights under privacy laws to access, correct, or delete your personal data, as well as other rights, all as described below.",
+              "quote": "Depending on where you live, you may have rights under privacy laws to access, correct, or delete your personal data, as well as other rights, all as described below.",
               "url": "https://superhuman.com/legal/privacy-policy",
               "checkedAt": "2026-11-08"
             }
@@ -1384,15 +1389,14 @@
       "warnings": [
         "We couldn't find which country your information is kept in.",
         "No price on the website. You have to talk to their sales team.",
-        "We couldn't find the name of the person who runs this company.",
-        "Turn this setting off after you sign up. This tool may use your customers' calls or messages to get better. You can stop this in its settings."
+        "Ask them to stop this after you sign up. This tool may use your customers' calls or messages to get better, and it says you can opt out. Its privacy policy says how."
       ]
     },
     "lastChecked": "2026-11-08",
     "sources": [
       "https://www.grammarly.com/",
       "https://www.grammarly.com/business/customer-support",
-      "https://www.grammarly.com/about",
+      "https://www.grammarly.com/terms",
       "https://support.grammarly.com/hc/en-us/articles/25555503115277-Product-Improvement-and-Training-Control",
       "https://superhuman.com/legal/privacy-policy"
     ],
@@ -1408,9 +1412,7 @@
       "rulesFlags.outboundAiCalls",
       "rulesFlags.personalizedPricing",
       "setupMode"
-    ],
-    "reviewedAt": "2026-11-08",
-    "reviewedBy": "Rishabh"
+    ]
   },
   {
     "id": "intercom",
@@ -1532,15 +1534,15 @@
       "checks": {
         "whoIsBehind": {
           "result": "pass",
-          "reason": "Run by Fin, a company at 55 2nd Street, 4th Fl., San Francisco, CA 94105, USA.",
+          "reason": "Run by Fin, a company at 124 St Stephen's Green, Dublin 2, DC02 C628.",
           "evidence": [
             {
-              "quote": "Fin is the Customer Agent company delivering perfect customer experiences – from support to sales to commerce.",
+              "quote": "The company is renamed from Intercom to Fin.",
               "url": "https://fin.ai/about",
               "checkedAt": "2026-11-08"
             },
             {
-              "quote": "When we refer to Intercom, we mean Intercom R&D Unlimited Company, a company registered in Ireland with offices at 124 St Stephen's Green, Dublin 2, DC02 C628; Intercom, Inc. a Delaware corporation with offices at 55 2nd Street, 4th Fl., San Francisco, CA 94105, USA; Intercom Software UK Limited, a private limited company registered in the United Kingdom (\" UK \") with offices at Level 9, the Warehouse 207-211 Old St, London, EC1V 9NR UK; Intercom Software Australia Pty Ltd, a company registered in Australia with offices at 285A Crown St. Surry Hills NSW 2010, Australia, 1st Floor, Sydney; Intercom R&D GmbH, a company registered in Germany with offices at Zimmerstraße 78 10117 Berlin, and Intercom's group companies (\" Intercom \", \" we \", \" us \", \" our \") 1 .",
+              "quote": "When we refer to Intercom, we mean Intercom R&D Unlimited Company, a company registered in Ireland with offices at 124 St Stephen's Green, Dublin 2, DC02 C628; Intercom, Inc. a Delaware corporation with offices at 55 2nd Street, 4th Fl., San Francisco, CA 94105, USA;",
               "url": "https://www.intercom.com/legal/privacy",
               "checkedAt": "2026-11-08"
             }
@@ -1628,7 +1630,7 @@
       "verdict": "ready",
       "warnings": [
         "We couldn't find the name of the person who runs this company.",
-        "Turn this setting off after you sign up. This tool may use your customers' calls or messages to get better. You can stop this in its settings."
+        "Ask them to stop this after you sign up. This tool may use your customers' calls or messages to get better, and it says you can opt out. Its privacy policy says how."
       ]
     },
     "lastChecked": "2026-11-08",
@@ -2914,7 +2916,7 @@
       "canDeleteData": {
         "answer": "yes",
         "plain": "You can delete your data.",
-        "quote": "Right to erasure\nThis is also known as ‘the right to be forgotten’ and, in simple terms, enables you to request the deletion or removal of your personal data where there’s no compelling reason for us to keep using it.",
+        "quote": "This is also known as ‘the right to be forgotten’ and, in simple terms, enables you to request the deletion or removal of your personal data where there’s no compelling reason for us to keep using it.",
         "sourceUrl": "https://www.tidio.com/privacy-policy/"
       },
       "whereStored": {
@@ -2943,13 +2945,13 @@
       "outboundAiCalls": "unknown",
       "personalizedPricing": "unknown"
     },
-    "badge": "verified",
+    "badge": "listed",
     "safetyCheck": {
       "ranAt": "2026-11-08",
       "checks": {
         "whoIsBehind": {
           "result": "pass",
-          "reason": "Run by Tidio, a company at 1301 Sansome Street, San Francisco, CA 94111, U.S.A..",
+          "reason": "Run by Tidio, a company at 1301 Sansome Street.",
           "evidence": [
             {
               "quote": "© 2026 Tidio",
@@ -2957,7 +2959,7 @@
               "checkedAt": "2026-11-08"
             },
             {
-              "quote": "Tidio LLC with registered office at 1301 Sansome Street (San Francisco, CA 94111 U.S.A.) and Tidio Poland Sp. z o.o. with its registered office in Szczecin, 81 Wojska Polskiego Street (70-481, Szczecin, Poland) are the joint controllers of your personal data processed in connection with use of our Services and other functionalities via this website (together referred to as “ Controller ” or “ Tidio ”, “we,” “us,” or “our” )",
+              "quote": "To make a CCPA request, you or an Authorized Agent (as indicated below) may email us here , or write us at Tidio LLC, 1301 Sansome Street (San Francisco, CA 94111 U.S.A.) (Attn: CCPA Request ).",
               "url": "https://www.tidio.com/privacy-policy/",
               "checkedAt": "2026-11-08"
             }
@@ -2993,7 +2995,7 @@
               "checkedAt": "2026-11-08"
             },
             {
-              "quote": "Right to erasure\nThis is also known as ‘the right to be forgotten’ and, in simple terms, enables you to request the deletion or removal of your personal data where there’s no compelling reason for us to keep using it.",
+              "quote": "This is also known as ‘the right to be forgotten’ and, in simple terms, enables you to request the deletion or removal of your personal data where there’s no compelling reason for us to keep using it.",
               "url": "https://www.tidio.com/privacy-policy/",
               "checkedAt": "2026-11-08"
             }
@@ -3045,7 +3047,7 @@
       "warnings": [
         "We couldn't find which country your information is kept in.",
         "We couldn't find the name of the person who runs this company.",
-        "Turn this setting off after you sign up. This tool may use your customers' calls or messages to get better. You can stop this in its settings."
+        "Ask them to stop this after you sign up. This tool may use your customers' calls or messages to get better, and it says you can opt out. Its privacy policy says how."
       ]
     },
     "lastChecked": "2026-11-08",
@@ -3069,9 +3071,7 @@
       "description",
       "setupMode",
       "languages"
-    ],
-    "reviewedAt": "2026-11-08",
-    "reviewedBy": "Rishabh"
+    ]
   },
   {
     "id": "upfirst",
@@ -3503,7 +3503,7 @@
       "warnings": [
         "We couldn't find which country your information is kept in.",
         "We couldn't find the name of the person who runs this company.",
-        "Turn this setting off after you sign up. This tool may use your customers' calls or messages to get better. You can stop this in its settings.",
+        "Ask them to stop this after you sign up. This tool may use your customers' calls or messages to get better, and it says you can opt out. Its privacy policy says how.",
         "This tool handles payments or health information, but we found no proof that an outside company checked its security (like PCI or SOC 2)."
       ]
     },

@@ -197,7 +197,7 @@
     "warnings": [
       "We couldn't find which country your information is kept in.",
       "We couldn't find the name of the person who runs this company.",
-      "Turn this setting off after you sign up. This tool may use your customers' calls or messages to get better. You can stop this in its settings.",
+      "Ask them to stop this after you sign up. This tool may use your customers' calls or messages to get better, and it says you can opt out. Its privacy policy says how.",
       "This tool handles payments or health information, but we found no proof that an outside company checked its security (like PCI or SOC 2)."
     ]
   },
