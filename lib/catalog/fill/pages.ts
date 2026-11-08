@@ -15,6 +15,8 @@ import type { CardPageKind } from "./types.ts";
 type FoundKind = Exclude<CardPageKind, "home" | "privacy">;
 const SEARCH_ORDER: FoundKind[] = ["pricing", "features", "integrations", "help"];
 export const MAX_CARD_PAGES = 6;
+/** Guessed paths that turn out missing still cost a request, so requests have their own cap. */
+export const MAX_CARD_REQUESTS = 10;
 
 const KIND_PATTERNS: Record<FoundKind, RegExp> = {
   pricing: /\b(pricing|prices|plans)\b/i,
@@ -49,7 +51,8 @@ export const emptyCardPages = (value: PageFact): Record<CardPageKind, PageFact> 
 
 export async function findCardPages(url: string, deps: CollectDeps): Promise<Record<CardPageKind, PageFact>> {
   const fetchedAt = (deps.now ?? (() => new Date()))().toISOString().slice(0, 10);
-  let budget = MAX_CARD_PAGES;
+  let pagesLeft = MAX_CARD_PAGES;
+  let requestsLeft = MAX_CARD_REQUESTS;
   const fetchOpts = {
     fetchImpl: deps.fetchImpl,
     resolveHost: deps.resolveHost,
@@ -58,7 +61,7 @@ export async function findCardPages(url: string, deps: CollectDeps): Promise<Rec
     maxBytes: SAFETY_CONFIG.maxPageBytes,
   };
   const get = (target: string) => {
-    budget -= 1;
+    requestsLeft -= 1;
     return safeFetch(target, fetchOpts);
   };
   const toFact = (page: FetchedPage): FetchedPageFact => {
@@ -95,15 +98,17 @@ export async function findCardPages(url: string, deps: CollectDeps): Promise<Rec
   });
   const pages = emptyCardPages(null);
   pages.home = toFact(home);
+  pagesLeft -= 1;
   const used = new Set<string>([home.finalUrl]);
 
   const read = async (kind: FoundKind, target: string): Promise<"ok" | "missing" | string> => {
     if (!allowed(target)) return "robots";
-    if (budget <= 0) return "limit";
+    if (pagesLeft <= 0 || requestsLeft <= 0) return "limit";
     try {
       const page = await get(target);
       used.add(page.finalUrl);
       if (page.status < 400) {
+        pagesLeft -= 1;
         pages[kind] = toFact(page);
         return "ok";
       }

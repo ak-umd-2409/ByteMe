@@ -96,10 +96,24 @@ describe("fillCard: finding pages", () => {
     assert.equal((card.pages.features as FetchedPageFact).finalUrl, `${SITE}/features`);
   });
 
-  it("reads at most 6 pages", async () => {
+  it("reads at most 6 pages and sends at most 10 requests", async () => {
     const many = Array.from({ length: 20 }, (_, i) => `<a href="/pricing-${i}">Pricing ${i}</a>`).join("");
-    const { fake } = await fill(goodReply(), { [`${SITE}/`]: html(TEXT.home, many) });
-    assert.ok(fake.calls.filter((c) => !c.url.endsWith("/robots.txt")).length <= 6);
+    const everything = Object.fromEntries(
+      ["/features", "/product", "/integrations", "/apps", "/help", "/support", "/plans"].map((p) => [`${SITE}${p}`, html("page")]),
+    );
+    const { fake, card } = await fill(goodReply(), { ...everything, [`${SITE}/`]: html(TEXT.home, many) });
+    const read = Object.values(card.pages).filter((p) => p && !("error" in p)).length;
+    assert.ok(read <= 6);
+    assert.ok(fake.calls.filter((c) => !c.url.endsWith("/robots.txt")).length <= 10);
+  });
+
+  it("a guessed page that isn't there doesn't use up the page budget", async () => {
+    const { card } = await fill(goodReply(), {
+      [`${SITE}/`]: html(TEXT.home, '<a href="/pricing">Pricing</a>'),
+      [`${SITE}/product`]: new Error("unused") as never,
+      [`${SITE}/help`]: html(TEXT.support),
+    });
+    assert.equal((card.pages.help as FetchedPageFact).finalUrl, `${SITE}/help`);
   });
 
   it("respects robots.txt", async () => {
