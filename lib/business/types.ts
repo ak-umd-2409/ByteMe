@@ -95,6 +95,8 @@ export interface PlaceDetails {
   googleMapsUrl: string | null;
   businessStatus: string | null;
   reviews: SourceReview[];
+  /** Google only: how many reviews Google sent before we dropped any without text (for diagnosing "no reviews"). */
+  reviewsSent?: number;
   provider: "google_places" | "mock" | "public_snapshot";
 }
 
