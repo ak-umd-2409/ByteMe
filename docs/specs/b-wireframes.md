@@ -1,8 +1,8 @@
-# Wireframes and style board (v1)
+# Wireframes and style board
 
-Person B · Nov 7, 2026 · Status: style board and screens 1–4 approved by Rishabh; screens 5–8 to follow in the next PR.
+Person B · Nov 7, 2026 · Status: style board and screens 1–4 approved by Rishabh (PR #12); screens 5–8 added for review (this PR).
 
-- **Click-through page:** [`docs/wireframes/mainstreet-wireframes.html`](../wireframes/mainstreet-wireframes.html). Open it in a browser. It has a Website (16:10) / Phone switch and moves one screen at a time.
+- **Click-through page:** [`docs/wireframes/mainstreet-wireframes.html`](../wireframes/mainstreet-wireframes.html). Open it in a browser. It has a Website (16:10) / Phone switch and moves one screen at a time through all 8 screens.
 - **Shared link:** https://claude.ai/artifact/VW7qZhbEgwbftQPH5wH2Wg (private until shared from its Share menu).
 - **Who uses this:** whoever builds the real screens (problem 10). Copy the tokens below into `app/globals.css`; don't invent new colors.
 
@@ -65,5 +65,30 @@ No off-white "paper" background. Problems are never red.
 - "Might apply. Tell us." problems have a dashed outline and no money, and ask "Yes, it does" / "No". "Also noticed" is a plain to-do list. Main button: "Show me tools for these".
 - Website: the 3 problem cards side by side.
 
-### 5–8 (next PR)
-Ways to fix it · Tool detail · Compare · Admin discovery queue.
+### 5 · Ways to fix it
+- **Starter Kit first:** one card with 3 tools that fix all 3 problems (Ringwise $59, QuoteQuick $39, ReplyKind $25). The total ($123 a month) is shown against Mike's $200 budget, with one line on how the tools work together. Each tool is a row that opens its detail page.
+- **"Or fix one problem at a time":** problem tabs (Missed calls / Quotes / Reviews). Each option card has a label for its fix type: Quick fix · Lowest cost · Use what you have · Done for you. Each card also shows the Verified stamp, price, the "why this pick" line, fit chips, and Fit N of 100 with setup time.
+- **"Why not these?"** (collapsed): left-out tools with their badge and one reason, including the blocked scam.
+- **A dark compare bar** stays at the bottom once 2 tools are picked ("2 picked · Compare").
+- Only Verified tools that fit the budget. "Use what you have" shows on the Quotes tab (QuickBooks estimates).
+
+### 6 · Tool detail
+- **Top card:** big ✓ Verified stamp, name, price, maker, last checked date, one-line what it does. Main button: **Get help setting this up**. Then "Go to Ringwise" and "+ Compare".
+- **Why it fits Mike's business:** works with Square, how far under budget, setup time, Spanish.
+- **Rules for your business:** Maryland call-recording rule with an OK stamp and "Not legal advice. Ask your SBDC advisor."
+- **Why you can trust it** (who made it, website age, clear prices, a person reviewed it, re-checked every 90 days) and **What happens to your data** (the 5 privacy answers, with "Show where we read this" for the quotes).
+- **Price** table (small / medium / large, contract, "as of Nov 2026").
+- **Get help** rows: Maryland SBDC (the office serving Frederick County, free), SCORE mentor, and a local helper marked "coming soon".
+- Website: the top card, fit and rules on the left, trust, data, price and help on the right.
+
+### 7 · Compare
+- Up to 3 tools in a plain table: cost, works with your tools, setup, Spanish, Maryland call recording, trains AI on your data, contract, last checked. Rows that differ get a burgundy dot and a tint. "Best fit" tag on the top pick.
+- One "Our take" sentence built from the table, then "Pick X" buttons.
+- CallKeeper is a placeholder until the real catalog has a second Verified phone tool.
+
+### 8 · Admin: discovery queue
+- **Left:** what the queue is, **Run discovery now** (last run, runs every Sunday), where we look (directories, Square/QuickBooks/Jobber app stores, vendor applications, owner link checks), and catalog counts (Verified / waiting / Blocked).
+- **Right:** "Waiting for a person": cards with the Safety Check results (✓ passed, ! warnings) and **Approve / Block**. Approving turns the badge ✓ Verified.
+- **"Blocked automatically":** the scam (Squarre Voice AI) with a pink top and its red flags in plain words. It's never shown to owners, and owners who check its link see these reasons.
+- Demo moment: press Run discovery and 2 new tools appear. One is ready for review, and the scam is already blocked.
+- Reached from "For reviewers" on the landing page. "Owner view" goes back.

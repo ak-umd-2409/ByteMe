@@ -376,11 +376,48 @@ h1, h2, h3 { font-family: var(--display); font-weight: 400; line-height: 1.25; t
 @keyframes spin { to { transform:rotate(360deg); } }
 .done .ck { border:none; background:var(--ok-fg); position:relative; }
 .done .ck::after { content:"✓"; position:absolute; inset:0; display:grid; place-items:center; color:#fff; font-weight:700; font-size:15px; }
+/* ===== Screens 5-8 ===== */
+.kit { padding-top:0; }
+.kit .ptop { background:var(--card); margin:0 -20px 4px; padding:14px 20px; display:grid; gap:8px; border-radius:14px 14px 0 0; }
+.kitrow { display:grid; grid-template-columns:1fr auto; gap:0 8px; align-items:center; min-height:56px; padding:10px 14px; background:var(--white); border-radius:10px; color:var(--ink); text-decoration:none; border:1px solid var(--line); }
+.kitrow b { grid-column:1; } .kitrow span:not(.chev) { grid-column:1; font-size:14px; color:var(--text-2); } .kitrow .chev { grid-column:2; grid-row:1 / span 2; }
+.kitrow:hover { border-color:var(--ink); }
+.typetag { font-size:13px; font-weight:700; letter-spacing:.04em; color:var(--ink); }
+.leftout { list-style:none; padding:0; display:grid; gap:12px; }
+.leftout li { display:grid; gap:4px; justify-items:start; }
+.cmpbar { position:sticky; bottom:0; display:flex; align-items:center; justify-content:space-between; gap:12px; background:var(--ink); color:var(--white); border-radius:12px; padding:10px 10px 10px 16px; margin-top:4px; z-index:2; }
+.cmpbar .btn-primary { border-color:var(--white); box-shadow:3px 3px 0 var(--white); min-height:44px; }
+.ticks { list-style:none; margin:0; padding:0; display:grid; gap:10px; }
+.ticks li { padding-left:30px; position:relative; }
+.ticks li::before { content:"✓"; position:absolute; left:0; top:1px; width:22px; height:22px; border-radius:50%; background:var(--ok-fg); color:#fff; font-size:13px; font-weight:700; display:grid; place-items:center; }
+.ticks.plain li::before { content:"•"; background:none; color:var(--ink); font-size:20px; top:-4px; }
+.cmpwrap { overflow-x:auto; background:var(--card-inner); border-radius:14px; min-height:max-content; flex:none; }
+.cmp-t { width:100%; border-collapse:collapse; font-size:16px; min-width:330px; }
+.cmp-t th, .cmp-t td { text-align:left; padding:12px 12px; vertical-align:top; border-top:1px solid var(--line); }
+.cmp-t thead th { background:var(--card); border-top:0; vertical-align:bottom; }
+.cmp-t thead th b { display:block; font-family:var(--display); font-weight:400; font-size:19px; margin-top:6px; }
+.cmp-t tbody th { font-weight:600; width:38%; font-size:15px; }
+.cmp-t tr.diff th::after { content:" ●"; color:var(--accent); font-size:12px; }
+.cmp-t tr.diff td { background:#f1e3cf; }
+.pickme { display:inline-block; margin-top:6px; font-size:13px; font-weight:700; color:var(--on-accent); background:var(--accent); border-radius:4px; padding:1px 8px; }
+.checklist { list-style:none; margin:0; padding:0; display:grid; gap:8px; font-size:16px; }
+.checklist li { padding-left:28px; position:relative; }
+.checklist li::before { position:absolute; left:0; top:0; font-weight:700; width:20px; text-align:center; }
+.checklist .ok::before { content:"✓"; color:var(--ok-fg); }
+.checklist .warn::before { content:"!"; color:var(--warn-fg); }
+.checklist .bad::before { content:"⚠"; color:var(--bad-fg); }
+.qitem.blocked .k3-top { background:var(--bad-bg); }
+.qitem.done-ok .qacts, .qitem.done-block .qacts { display:none; }
+@media (prefers-reduced-motion: no-preference) { .qitem.new:not([hidden]) { animation: scr-in .4s ease-out; } }
+.desk #scr-5 .kit .dgrid, .desk #scr-5 .phone > .dgrid { grid-column:1 / -1; }
+.desk .kit .d3 { grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; }
+.desk #scr-7 .cmpwrap, .desk #scr-7 .why-pick { max-width:820px; }
+.desk .cmpbar { justify-self:end; width:min(460px,100%); }
 </style>
 
 <div class="wrap">
   <header class="board-head">
-    <div class="kicker">Team ByteMe · MainStreet AI · Problem 5 · v1: style board + click-through screens 1–4</div>
+    <div class="kicker">Team ByteMe · MainStreet AI · Problem 5 · v2: all 8 screens</div>
     <h1>Style board and screens</h1>
     <nav class="board-nav" aria-label="Jump to"><a href="#s-color">Style board</a><a href="#screens">Click-through screens</a></nav>
     <p>One look for every screen in the demo video. Built on the palette you picked: muted sage grey, warm cream beige and deep burgundy. Everything below is shown at real phone size (375px wide).</p>
@@ -583,7 +620,7 @@ h1, h2, h3 { font-family: var(--display); font-weight: 400; line-height: 1.25; t
 
   <section class="sheet" id="screens" aria-labelledby="s-screens">
     <header>
-      <h2 id="s-screens">Click-through: screens 1–4</h2>
+      <h2 id="s-screens">Click-through: all 8 screens</h2>
       <p>Mike's Heating &amp; Cooling, the video's golden path. Click the burgundy buttons to move through it like the real app, one screen at a time. Switch between Website (16:10) and Phone at the top. Tap rows, chips and "Why we think this" to open things.</p>
     </header>
     <div class="player-bar">
@@ -815,15 +852,274 @@ h1, h2, h3 { font-family: var(--display); font-weight: 400; line-height: 1.25; t
         </ul>
       </div>
 
+
+      <!-- ============ 5. WAYS TO FIX IT ============ -->
+      <div class="scr" id="scr-5" data-title="Ways to fix it">
+        <span class="scr-label">5 · Ways to fix it</span>
+        <div class="phone">
+          <div class="topbar"><span class="brand">MainStreet AI</span><a class="btn btn-link" href="#scr-1">Start over</a></div>
+          <div class="banner">Sample business for the demo. Nothing here is real.</div>
+          <div class="steps"><div class="bar"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></div><span>Step 4 of 4: Ways to fix it</span></div>
+          <h1 class="a-h1">Ways to fix it</h1>
+          <p class="a-small" style="margin:-6px 0 0;color:var(--ink)">Only ✓ Verified tools. Each one works with what you already use and fits your $200 a month.</p>
+
+          <article class="card kit">
+            <div class="ptop">
+              <span class="badge b-ok" style="justify-self:start">Starter Kit · fixes all 3</span>
+              <div class="card-top"><h2 class="a-h3">3 tools that work together</h2><div class="price">$123<small>/mo</small></div></div>
+              <span class="a-small">$77 under your budget · about 1½ hours to set up</span>
+            </div>
+            <div class="dgrid d3">
+              <a class="kitrow" href="#scr-6"><b>Ringwise Receptionist</b><span>Missed calls · $59 · works with Square</span><span class="chev" aria-hidden="true">›</span></a>
+              <a class="kitrow" href="#scr-6"><b>QuoteQuick</b><span>Quotes · $39 · works with QuickBooks</span><span class="chev" aria-hidden="true">›</span></a>
+              <a class="kitrow" href="#scr-6"><b>ReplyKind</b><span>Reviews · $25 · works with Google</span><span class="chev" aria-hidden="true">›</span></a>
+            </div>
+            <p class="why-pick" style="margin:0">Calls you miss get answered, quotes go out the same day, and reviews get replies. Each tool sends its work to the app you already use.</p>
+          </article>
+
+          <h2 class="a-h2" style="margin-top:8px">Or fix one problem at a time</h2>
+          <div class="badge-row" role="tablist" aria-label="Problem"><button class="chipsel" type="button" aria-pressed="true">✓ Missed calls</button><button class="chipsel" type="button" aria-pressed="false">Quotes</button><button class="chipsel" type="button" aria-pressed="false">Reviews</button></div>
+
+          <div class="dgrid d3">
+            <article class="k3">
+              <div class="k3-top"><span class="typetag">Quick fix · best fit</span><div class="card-top"><h3 class="a-h3">Ringwise Receptionist</h3><div class="price">$59<small>/mo</small></div></div><span class="badge b-ok" style="justify-self:start">✓ Verified</span></div>
+              <div class="k3-body">
+                <p class="why-pick" style="margin:0">Answers calls you miss on a job and texts you the details. Works with your Square.</p>
+                <div class="badge-row"><span class="chip">✓ Works with Square</span><span class="chip">✓ OK for Maryland call recording</span></div>
+                <span class="a-small">Fit 92 of 100 · setup about 30 min, yourself</span>
+                <div class="card-actions"><a class="btn btn-primary" href="#scr-6">See details</a><button class="btn btn-secondary cmp" type="button" aria-pressed="true">✓ Comparing</button></div>
+              </div>
+            </article>
+            <article class="k3">
+              <div class="k3-top"><span class="typetag">Lowest cost</span><div class="card-top"><h3 class="a-h3">CallKeeper</h3><div class="price">$35<small>/mo</small></div></div><span class="badge b-ok" style="justify-self:start">✓ Verified</span></div>
+              <div class="k3-body">
+                <p class="why-pick" style="margin:0">Answers missed calls and texts you a summary. Cheaper, but doesn't connect to Square.</p>
+                <div class="badge-row"><span class="chip">✓ OK for Maryland call recording</span></div>
+                <span class="a-small">Fit 78 of 100 · setup about 30 min, yourself</span>
+                <div class="card-actions"><a class="btn btn-primary" href="#scr-6">See details</a><button class="btn btn-secondary cmp" type="button" aria-pressed="true">✓ Comparing</button></div>
+              </div>
+            </article>
+            <article class="k3">
+              <div class="k3-top"><span class="typetag">Done for you</span><div class="card-top"><h3 class="a-h3">Ringwise + local help</h3><div class="price">$59<small>/mo</small></div></div><span class="badge b-ok" style="justify-self:start">✓ Verified</span></div>
+              <div class="k3-body">
+                <p class="why-pick" style="margin:0">Same tool, set up with a free advisor from the Maryland SBDC office that serves Frederick County.</p>
+                <span class="a-small">Advising is free · usually booked within a week</span>
+                <div class="card-actions"><a class="btn btn-secondary" href="#scr-6">Get help setting this up</a></div>
+              </div>
+            </article>
+          </div>
+
+          <details class="disc"><summary>Why not these? <span class="a-small">2 tools left out</span></summary>
+            <ul class="leftout">
+              <li><span class="badge b-bad">⚠ Blocked</span><b>Squarre Voice AI</b><span class="a-small">Copies Square's name, website is 2 months old, no company listed.</span></li>
+              <li><span class="badge b-grey">◷ Not yet reviewed</span><b>TextTide</b><span class="a-small">Waiting for a person to check it. We never recommend tools before that.</span></li>
+            </ul>
+          </details>
+
+          <div class="cmpbar"><span><b>2 picked</b> · Ringwise, CallKeeper</span><a class="btn btn-primary" href="#scr-7">Compare</a></div>
+        </div>
+        <ul class="scr-notes">
+          <li>The Starter Kit leads: one answer for all 3 problems, total cost against Mike's budget.</li>
+          <li>Each option says what kind of fix it is (Quick fix / Lowest cost / Use what you have / Done for you) in a label on top.</li>
+          <li>"Why not these?" shows what we hid and why, the scam included.</li>
+          <li>The compare bar stays at the bottom once 2 tools are picked.</li>
+          <li>"Use what you have" shows on the Quotes tab (QuickBooks can already send estimates). CallKeeper is a placeholder until the real catalog has a second phone tool.</li>
+        </ul>
+      </div>
+
+      <!-- ============ 6. TOOL DETAIL ============ -->
+      <div class="scr" id="scr-6" data-title="Tool detail">
+        <span class="scr-label">6 · Tool detail</span>
+        <div class="phone">
+          <div class="topbar"><a class="btn btn-link" href="#scr-5">‹ Ways to fix it</a><span class="brand">MainStreet AI</span></div>
+          <div class="banner">Sample business for the demo. Nothing here is real.</div>
+          <div class="dcol dL">
+            <article class="k3 hero-tool">
+              <div class="k3-top">
+                <span class="badge b-ok b-big" style="justify-self:start">✓ Verified</span>
+                <div class="card-top"><h1 class="a-h1" style="margin:0">Ringwise Receptionist</h1><div class="price">$59<small>/mo</small></div></div>
+                <span class="a-small">AI receptionist · by Ringwise Labs · last checked Nov 7, 2026</span>
+              </div>
+              <div class="k3-body">
+                <p style="margin:0">Answers calls you miss while you're on a job, takes the caller's details and texts them to you.</p>
+                <a class="btn btn-primary btn-block" href="#scr-6" data-help>Get help setting this up</a>
+                <div class="card-actions"><a class="btn btn-secondary" href="#scr-6">Go to Ringwise</a><a class="btn btn-secondary" href="#scr-7">+ Compare</a></div>
+              </div>
+            </article>
+
+            <article class="card">
+              <h2 class="a-h3">Why it fits Mike's business</h2>
+              <ul class="ticks">
+                <li><b>Works with your Square.</b> Built in, no extra app.</li>
+                <li><b>$141 under your budget.</b> Cancel any time from your account.</li>
+                <li><b>About 30 minutes to set up</b>, yourself, from your phone.</li>
+                <li><b>Speaks Spanish</b> too.</li>
+              </ul>
+            </article>
+
+            <article class="card">
+              <h2 class="a-h3">Rules for your business</h2>
+              <p style="margin:0"><span class="badge b-ok">✓ OK</span> Maryland says callers must be told when a call is recorded. Ringwise says so at the start of every call.</p>
+              <p class="a-small" style="margin:0">Not legal advice. Ask your SBDC advisor.</p>
+            </article>
+          </div>
+
+          <div class="dcol dR">
+            <article class="card">
+              <h2 class="a-h3">Why you can trust it</h2>
+              <ul class="ticks">
+                <li><b>A real company</b> with a street address and named founders.</li>
+                <li><b>Website over 3 years old.</b></li>
+                <li><b>Clear prices</b>, monthly, no contract.</li>
+                <li><b>A person reviewed it</b> on Nov 7, 2026. We check again every 90 days.</li>
+              </ul>
+            </article>
+
+            <article class="card">
+              <h2 class="a-h3">What happens to your data</h2>
+              <div class="privacy"><ul>
+                <li><span class="ico-ok">✓</span><span>Does not use your data to train AI.</span></li>
+                <li><span class="ico-ok">✓</span><span>You can delete your data at any time.</span></li>
+                <li><span class="ico-ok">✓</span><span>Stored in the US.</span></li>
+                <li><span class="ico-ok">✓</span><span>Does not sell your data.</span></li>
+                <li><span class="ico-q">?</span><span>We couldn't confirm a security certification.</span></li>
+              </ul></div>
+              <details class="disc"><summary>Show where we read this</summary><p class="a-small" style="color:var(--ink)"><q>We do not use customer content to train AI models.</q> ringwise.example/privacy</p></details>
+            </article>
+
+            <article class="card">
+              <h2 class="a-h3">Price</h2>
+              <dl class="facts" style="margin:0">
+                <div><dt>Small business</dt><dd class="num">$59/mo</dd></div>
+                <div><dt>Medium</dt><dd class="num">$119/mo</dd></div>
+                <div><dt>Large</dt><dd class="num">$249/mo</dd></div>
+                <div><dt>Contract</dt><dd>None, monthly</dd></div>
+              </dl>
+              <p class="a-small" style="margin:0">Prices as of Nov 2026.</p>
+            </article>
+
+            <article class="card helpcard" id="help-6">
+              <h2 class="a-h3">Get help setting this up</h2>
+              <a class="row" href="#scr-6"><span class="r-main"><b>Maryland SBDC</b><span>Office serving Frederick County · free advising</span></span><span class="chev" aria-hidden="true">›</span></a>
+              <a class="row" href="#scr-6"><span class="r-main"><b>SCORE mentor</b><span>Free one-on-one help, by video or in person</span></span><span class="chev" aria-hidden="true">›</span></a>
+              <a class="row" href="#scr-6"><span class="r-main"><b>Local helper</b><span>A vetted student or freelancer · coming soon</span></span><span class="chev" aria-hidden="true">›</span></a>
+            </article>
+          </div>
+        </div>
+        <ul class="scr-notes">
+          <li>Top card answers "what is it, is it safe, what does it cost" before any scrolling.</li>
+          <li>"Get help setting this up" is the main button, because that's the judges' "connect owners to humans" ask.</li>
+          <li>Trust has two parts: "Why you can trust it" (who made it) and "What happens to your data" (5 plain answers, with the quotes behind them).</li>
+          <li>The local helper is labelled "coming soon" so the live link matches the video.</li>
+        </ul>
+      </div>
+
+      <!-- ============ 7. COMPARE ============ -->
+      <div class="scr" id="scr-7" data-title="Compare">
+        <span class="scr-label">7 · Compare</span>
+        <div class="phone">
+          <div class="topbar"><a class="btn btn-link" href="#scr-5">‹ Ways to fix it</a><span class="brand">MainStreet AI</span></div>
+          <div class="banner">Sample business for the demo. Nothing here is real.</div>
+          <h1 class="a-h1">Compare for missed calls</h1>
+          <p class="a-small" style="margin:-6px 0 0;color:var(--ink)">Differences are marked. Both are ✓ Verified.</p>
+          <div class="cmpwrap">
+            <table class="cmp-t">
+              <thead>
+                <tr><th scope="col"><span class="sr">Question</span></th>
+                  <th scope="col"><span class="badge b-ok">✓ Verified</span><b>Ringwise Receptionist</b><span class="pickme">Best fit</span></th>
+                  <th scope="col"><span class="badge b-ok">✓ Verified</span><b>CallKeeper</b></th></tr>
+              </thead>
+              <tbody>
+                <tr class="diff"><th scope="row">Cost a month</th><td class="num">$59</td><td class="num">$35</td></tr>
+                <tr class="diff"><th scope="row">Works with your tools</th><td>Square, QuickBooks</td><td>Google only</td></tr>
+                <tr><th scope="row">Setup</th><td>About 30 min, yourself</td><td>About 30 min, yourself</td></tr>
+                <tr class="diff"><th scope="row">Speaks Spanish</th><td>Yes</td><td>No</td></tr>
+                <tr><th scope="row">OK for Maryland call recording</th><td>Yes, tells callers</td><td>Yes, tells callers</td></tr>
+                <tr><th scope="row">Trains AI on your data</th><td>No</td><td>No</td></tr>
+                <tr><th scope="row">Contract</th><td>None</td><td>None</td></tr>
+                <tr><th scope="row">Last checked</th><td>Nov 7, 2026</td><td>Nov 2, 2026</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="why-pick" style="margin:0"><b>Our take:</b> CallKeeper is $24 cheaper, but Ringwise sends callers straight into your Square customer list and answers in Spanish.</p>
+          <div class="card-actions"><a class="btn btn-primary" href="#scr-6">Pick Ringwise</a><a class="btn btn-secondary" href="#scr-7">Pick CallKeeper</a></div>
+        </div>
+        <ul class="scr-notes">
+          <li>A plain table with the same questions in the same order for every tool. Rows that differ get a mark so Mike sees what matters.</li>
+          <li>One sentence "Our take", built from the table, not made up.</li>
+          <li>CallKeeper is a placeholder; the sample catalog has only one Verified phone tool.</li>
+        </ul>
+      </div>
+
+      <!-- ============ 8. ADMIN QUEUE ============ -->
+      <div class="scr" id="scr-8" data-title="Admin: discovery queue">
+        <span class="scr-label">8 · Admin: discovery queue</span>
+        <div class="phone admin">
+          <div class="topbar"><span class="brand">MainStreet AI · Review</span><a class="btn btn-link" href="#scr-1">Owner view</a></div>
+          <div class="dcol dL">
+            <h1 class="a-h1">Tool review queue</h1>
+            <p style="margin:0">New tools are found every week. Each one gets the automatic Safety Check, then a person approves or blocks it. Only approved tools reach owners.</p>
+            <button class="btn btn-primary btn-block" type="button" id="run-disc">Run discovery now</button>
+            <p class="a-small" style="margin:0" id="disc-msg" aria-live="polite">Last run Sun Nov 1 · runs every Sunday</p>
+            <article class="card">
+              <h2 class="a-h3">Where we look</h2>
+              <ul class="ticks plain">
+                <li>AI tool directories</li>
+                <li>Square, QuickBooks and Jobber app stores</li>
+                <li>Vendors who apply to be listed</li>
+                <li>Links owners paste into "Check this tool"</li>
+              </ul>
+            </article>
+            <article class="card">
+              <h2 class="a-h3">Catalog today</h2>
+              <div class="badge-row"><span class="badge b-ok">✓ 3 Verified</span><span class="badge b-grey">◷ 2 waiting</span><span class="badge b-bad">⚠ 3 Blocked</span></div>
+            </article>
+          </div>
+
+          <div class="dcol dR" id="queue">
+            <h2 class="a-h2">Waiting for a person</h2>
+            <article class="k3 qitem new" hidden>
+              <div class="k3-top"><span class="typetag">New · found just now</span><div class="card-top"><h3 class="a-h3">BookNest</h3><span class="badge b-grey qstatus">◷ Ready for review</span></div><span class="a-small">Online booking · booknest.example · from the Square app store</span></div>
+              <div class="k3-body">
+                <ul class="checklist"><li class="ok">Company, address and founders found</li><li class="ok">Privacy policy: doesn't train AI on your data</li><li class="ok">Public prices, monthly</li><li class="warn">Website is less than a year old (Feb 2026)</li></ul>
+                <div class="card-actions qacts"><button class="btn btn-primary" type="button" data-act="ok">Approve</button><button class="btn btn-secondary" type="button" data-act="block">Block</button></div>
+              </div>
+            </article>
+            <article class="k3 qitem">
+              <div class="k3-top"><div class="card-top"><h3 class="a-h3">TextTide</h3><span class="badge b-grey qstatus">◷ Ready for review</span></div><span class="a-small">Customer messaging · texttide.example</span></div>
+              <div class="k3-body">
+                <ul class="checklist"><li class="ok">Company and address found</li><li class="ok">Public prices, monthly</li><li class="warn">Website is less than a year old (Dec 2025)</li></ul>
+                <div class="card-actions qacts"><button class="btn btn-primary" type="button" data-act="ok">Approve</button><button class="btn btn-secondary" type="button" data-act="block">Block</button></div>
+              </div>
+            </article>
+
+            <h2 class="a-h2" style="margin-top:8px">Blocked automatically</h2>
+            <article class="k3 qitem blocked new" hidden>
+              <div class="k3-top"><span class="typetag">New · found just now</span><div class="card-top"><h3 class="a-h3">Squarre Voice AI</h3><span class="badge b-bad">⚠ Blocked</span></div><span class="a-small">Says it's "the official Square phone assistant" · squarre-voice.example</span></div>
+              <div class="k3-body">
+                <span class="sub">Red flags</span>
+                <ul class="checklist"><li class="bad">Name and website copy Square ("squarre")</li><li class="bad">Website is 2 months old (Sept 2026)</li><li class="bad">No company, address or leaders listed</li><li class="bad">No pricing page</li></ul>
+                <span class="a-small">Never shown to owners. If an owner checks this link, they see these reasons.</span>
+              </div>
+            </article>
+          </div>
+        </div>
+        <ul class="scr-notes">
+          <li>For the video's discovery part: press "Run discovery now", 2 new tools appear. One is ready for a person, the scam is blocked with its red flags.</li>
+          <li>Approve and Block work in the prototype. Approved tools turn ✓ Verified.</li>
+          <li>Every reason is a plain sentence the Safety Check already writes (lib/safety).</li>
+        </ul>
+      </div>
+
     </div>
   </section>
 
   <section class="decide" aria-labelledby="s-decide">
-    <h2 id="s-decide">Feedback on screens 1–4</h2>
+    <h2 id="s-decide">Feedback on screens 5–8</h2>
     <ol>
-      <li>Does each screen do one clear job?</li>
-      <li>Any words that sound too techy or too long?</li>
-      <li>Anything you'd move, cut or add before I do screens 5–8?</li>
+      <li>Does "Ways to fix it" make the Starter Kit feel like the obvious pick?</li>
+      <li>On the tool page, can you tell in 5 seconds why it's safe?</li>
+      <li>Admin: press "Run discovery now". Does the scam's red-flag list read clearly?</li>
     </ol>
   </section>
 </div>
@@ -883,5 +1179,24 @@ document.querySelectorAll('.pickrow').forEach(function(b){b.addEventListener('cl
   });});
   var h=location.hash.slice(1), start=document.getElementById(h);
   go(start&&scrs.indexOf(start)>=0?scrs.indexOf(start):0);
+})();
+</script>
+<script>
+(function(){
+  var run=document.getElementById('run-disc'); if(run){ run.addEventListener('click',function(){
+    var m=document.getElementById('disc-msg'); run.disabled=true; m.textContent='Looking in 4 places and running the Safety Check…';
+    setTimeout(function(){ document.querySelectorAll('#queue .qitem.new').forEach(function(x){x.hidden=false;}); m.textContent='Found 2 new tools just now. 1 is ready for a person, 1 was blocked.'; run.disabled=false; },1600);
+  });}
+  document.querySelectorAll('.qacts button').forEach(function(b){b.addEventListener('click',function(){
+    var item=b.closest('.qitem'), st=item.querySelector('.qstatus');
+    if(b.dataset.act==='ok'){ st.className='badge b-ok qstatus'; st.textContent='✓ Verified'; item.classList.add('done-ok'); }
+    else { st.className='badge b-bad qstatus'; st.textContent='⚠ Blocked'; item.classList.add('done-block'); }
+  });});
+  document.querySelectorAll('.cmp').forEach(function(b){b.addEventListener('click',function(){
+    var on=b.getAttribute('aria-pressed')!=='true'; b.setAttribute('aria-pressed',on?'true':'false'); b.textContent=on?'✓ Comparing':'+ Compare';
+  });});
+  document.querySelectorAll('[data-help]').forEach(function(a){a.addEventListener('click',function(e){
+    e.preventDefault(); e.stopPropagation(); var h=document.getElementById('help-6'); if(h) h.scrollIntoView({behavior:'smooth',block:'nearest'});
+  },true);});
 })();
 </script>
