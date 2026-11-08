@@ -58,10 +58,10 @@
   ],
   "privacyCard": {
     "trainsOnYourData": {
-      "answer": "unknown",
-      "plain": "We couldn't confirm whether it uses your data to train AI.",
-      "quote": null,
-      "sourceUrl": null
+      "answer": "opt-out",
+      "plain": "Uses your data to improve its AI unless you turn it off.",
+      "quote": "AI features: How features like Genius Answering and Live Assist process data, and that we may use data to improve our AI models in the future. You can opt out anytime at info@workiz.com .",
+      "sourceUrl": "https://www.workiz.com/privacy-policy/"
     },
     "canDeleteData": {
       "answer": "yes",
@@ -136,9 +136,14 @@
         ]
       },
       "dataUse": {
-        "result": "unknown",
-        "reason": "We couldn't find whether it uses your information to make its AI better.",
+        "result": "pass",
+        "reason": "Uses your information to make its AI better, but you can turn this off. You can delete your information.",
         "evidence": [
+          {
+            "quote": "AI features: How features like Genius Answering and Live Assist process data, and that we may use data to improve our AI models in the future. You can opt out anytime at info@workiz.com .",
+            "url": "https://www.workiz.com/privacy-policy/",
+            "checkedAt": "2026-11-08"
+          },
           {
             "quote": "If you are a customer of a franchise location and want to exercise your privacy rights, such as a request to access or delete your information, please contact that location directly.",
             "url": "https://www.workiz.com/privacy-policy/",
@@ -188,10 +193,11 @@
       }
     },
     "redFlags": [],
-    "verdict": "held",
+    "verdict": "ready",
     "warnings": [
       "We couldn't find which country your information is kept in.",
       "We couldn't find the name of the person who runs this company.",
+      "Turn this setting off after you sign up. This tool may use your customers' calls or messages to get better. You can stop this in its settings.",
       "This tool handles payments or health information, but we found no proof that an outside company checked its security (like PCI or SOC 2)."
     ]
   },

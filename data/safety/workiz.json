@@ -73,7 +73,13 @@
       "pageUrl": "https://www.workiz.com/contact-us/"
     },
     "leaderName": "unknown",
-    "trainsOnYourData": "unknown",
+    "trainsOnYourData": {
+      "answer": "opt-out",
+      "quote": "AI features: How features like Genius Answering and Live Assist process data, and that we may use data to improve our AI models in the future. You can opt out anytime at info@workiz.com .",
+      "pageUrl": "https://www.workiz.com/privacy-policy/",
+      "source": "person",
+      "foundBy": "Claude (drafted for Rishabh to check)"
+    },
     "canDeleteData": {
       "answer": "yes",
       "quote": "If you are a customer of a franchise location and want to exercise your privacy rights, such as a request to access or delete your information, please contact that location directly.",
