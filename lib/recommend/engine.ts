@@ -7,9 +7,14 @@ import type {
   Recommendation,
   RecommendationResult,
   ToolChoice,
+  UseCase,
 } from "./types.ts";
+import { INDUSTRIES } from "../business/industry.ts";
+import type { IndustryKey } from "../business/types.ts";
+import { INDUSTRY_TOPICS } from "../advisor/knowledge.ts";
 
 const round = (value: number) => Math.round(value * 10) / 10;
+const money = (value: number) => Math.round(value * 100) / 100;
 const same = (a: string, b: string) =>
   a.trim().toLowerCase() === b.trim().toLowerCase();
 const isFood = (industry: string) =>
@@ -18,6 +23,63 @@ const has = (
   profile: BusinessProfile,
   item: BusinessProfile["dealBreakers"][number],
 ) => profile.dealBreakers.includes(item);
+
+const USE_CASE_LABELS: Record<UseCase, string> = {
+  "missed-calls": "Missed calls",
+  booking: "Online booking",
+  reviews: "Review follow-up",
+  marketing: "Marketing",
+  "customer-messaging": "Customer follow-up",
+  quotes: "Quotes and estimates",
+  bookkeeping: "Bookkeeping",
+  inventory: "Inventory",
+  "staff-scheduling": "Staff scheduling",
+  "website-seo": "Website search visibility",
+  "email-marketing": "Email follow-up",
+  "admin-paperwork": "Admin paperwork",
+};
+
+/** Adjacent jobs that make a useful workflow around one primary problem. */
+const PROBLEM_KIT_SUPPORT: Record<UseCase, UseCase[]> = {
+  "missed-calls": ["booking", "customer-messaging"],
+  booking: ["customer-messaging", "email-marketing"],
+  reviews: ["customer-messaging", "email-marketing"],
+  marketing: ["email-marketing", "website-seo"],
+  "customer-messaging": ["booking", "email-marketing"],
+  quotes: ["admin-paperwork", "customer-messaging"],
+  bookkeeping: ["admin-paperwork", "quotes"],
+  inventory: ["bookkeeping", "admin-paperwork"],
+  "staff-scheduling": ["admin-paperwork", "customer-messaging"],
+  "website-seo": ["marketing", "email-marketing"],
+  "email-marketing": ["marketing", "customer-messaging"],
+  "admin-paperwork": ["quotes", "bookkeeping"],
+};
+
+function industryKey(industry: string): IndustryKey | null {
+  const value = industry.trim().toLowerCase();
+  return (
+    Object.values(INDUSTRIES).find(
+      (item) => item.key === value || item.label.toLowerCase() === value,
+    )?.key ?? null
+  );
+}
+
+function roleProblem(useCase: UseCase, prefix: string): Problem {
+  return {
+    id: `${prefix}-${useCase}`,
+    useCase,
+    title: USE_CASE_LABELS[useCase],
+    evidence: "Starter Kit workflow role",
+  };
+}
+
+function distinctProblems(items: Problem[]): Problem[] {
+  return items.filter(
+    (problem, index) =>
+      items.findIndex((candidate) => candidate.useCase === problem.useCase) ===
+      index,
+  );
+}
 
 /** Safety status and owner rules are gates. A score can never override them. */
 export function exclusionReason(
@@ -176,7 +238,18 @@ function choice(
     `${tool.name} addresses ${problem.title.toLowerCase()}${matched ? ` and works with ${matched}` : ""}. ` +
     `${tool.monthlyPrice <= business.monthlyBudget ? "Its listed monthly cost fits your budget" : "Its listed monthly cost exceeds your budget"}; ` +
     `setup is estimated at ${tool.setupMinutes} minutes.`;
-  return { tool, score, why, badges, warnings };
+  return {
+    tool,
+    score,
+    fitFor: {
+      id: problem.id,
+      useCase: problem.useCase,
+      title: problem.title,
+    },
+    why,
+    badges,
+    warnings,
+  };
 }
 
 function sortedChoices(
@@ -196,12 +269,16 @@ function sortedChoices(
 }
 
 function makeKit(
-  problems: Problem[],
+  targets: Problem[],
   eligible: CatalogTool[],
   business: BusinessProfile,
+  options: {
+    primaryUseCase?: UseCase;
+    preferredIndustry?: IndustryKey;
+  } = {},
 ): ToolChoice[] {
-  const topProblems = problems.slice(0, 4);
-  if (topProblems.length < 2) return [];
+  const roles = distinctProblems(targets).slice(0, 6);
+  if (roles.length < 2 || business.monthlyBudget <= 0) return [];
   let best: ToolChoice[] = [];
   let bestValue = -Infinity;
   const search = (
@@ -210,12 +287,32 @@ function makeKit(
     ids: Set<string>,
     total: number,
   ) => {
-    if (index === topProblems.length) {
+    if (index === roles.length) {
       if (selected.length < 2) return;
+      if (
+        options.primaryUseCase &&
+        !selected.some((candidate) =>
+          candidate.tool.useCases.includes(options.primaryUseCase!),
+        )
+      )
+        return;
+      if (
+        options.preferredIndustry &&
+        !selected.some((candidate) =>
+          candidate.tool.industries.includes(options.preferredIndustry!),
+        )
+      )
+        return;
       const value =
         selected.reduce((sum, c) => sum + c.score.total, 0) +
         selected.length * 25 -
-        Math.max(0, total - business.monthlyBudget) * 3;
+        total / Math.max(20, business.monthlyBudget) +
+        selected.filter(
+          (candidate) =>
+            options.preferredIndustry &&
+            candidate.tool.industries.includes(options.preferredIndustry!),
+        ).length *
+          18;
       if (
         value > bestValue ||
         (value === bestValue &&
@@ -227,11 +324,28 @@ function makeKit(
       return;
     }
     search(index + 1, selected, ids, total);
+    if (selected.length >= 4) return;
     for (const candidate of sortedChoices(
       eligible,
-      topProblems[index],
+      roles[index],
       business,
-    ).slice(0, 8)) {
+    )
+      .sort(
+        (a, b) =>
+          Number(
+            Boolean(
+              options.preferredIndustry &&
+                b.tool.industries.includes(options.preferredIndustry!),
+            ),
+          ) -
+            Number(
+              Boolean(
+                options.preferredIndustry &&
+                  a.tool.industries.includes(options.preferredIndustry!),
+              ),
+            ) || b.score.total - a.score.total,
+      )
+      .slice(0, 5)) {
       if (
         ids.has(candidate.tool.id) ||
         total + candidate.tool.monthlyPrice > business.monthlyBudget
@@ -248,6 +362,56 @@ function makeKit(
   return best;
 }
 
+function makeIndustryKit(
+  problems: Problem[],
+  eligible: CatalogTool[],
+  business: BusinessProfile,
+): { label: string; choices: ToolChoice[] } | null {
+  const key = industryKey(business.industry);
+  if (!key || key === "other") return null;
+  const specific = eligible.filter((tool) => tool.industries.includes(key));
+  if (specific.length === 0) return null;
+
+  const industryRoles = [
+    ...problems,
+    ...specific.flatMap((tool) =>
+      tool.useCases.map((useCase) => roleProblem(useCase, `industry-${key}`)),
+    ),
+    ...INDUSTRY_TOPICS[key].map((useCase) =>
+      roleProblem(useCase, `industry-${key}`),
+    ),
+    ...INDUSTRY_TOPICS[key].flatMap((useCase) =>
+      PROBLEM_KIT_SUPPORT[useCase].map((support) =>
+        roleProblem(support, `industry-${key}`),
+      ),
+    ),
+  ];
+  const choices = makeKit(industryRoles, eligible, business, {
+    preferredIndustry: key,
+    primaryUseCase: problems[0]?.useCase,
+  });
+  if (choices.length < 2) return null;
+  return { label: INDUSTRIES[key].label, choices };
+}
+
+function makeProblemKit(
+  problem: Problem,
+  otherProblems: Problem[],
+  eligible: CatalogTool[],
+  business: BusinessProfile,
+): ToolChoice[] {
+  const roles = [
+    problem,
+    ...otherProblems,
+    ...PROBLEM_KIT_SUPPORT[problem.useCase].map((useCase) =>
+      roleProblem(useCase, `problem-${problem.id}`),
+    ),
+  ];
+  return makeKit(roles, eligible, business, {
+    primaryUseCase: problem.useCase,
+  });
+}
+
 export function recommend(
   business: BusinessProfile,
   problems: Problem[],
@@ -256,7 +420,26 @@ export function recommend(
   const eligible = catalog.filter(
     (tool) => exclusionReason(tool, business) === null,
   );
-  const kitChoices = makeKit(problems, eligible, business);
+  const industryKit = makeIndustryKit(problems, eligible, business);
+  const starterKits: Recommendation[] = industryKit
+    ? [
+        {
+          kind: "starter-kit",
+          title: `${industryKit.label} Starter Kit`,
+          description: `A coordinated bundle tailored to a ${industryKit.label.toLowerCase()} business.`,
+          choices: industryKit.choices,
+          monthlyPrice: money(
+            industryKit.choices.reduce(
+              (sum, candidate) => sum + candidate.tool.monthlyPrice,
+              0,
+            ),
+          ),
+          note: "Each tool has a separate account and price; confirm vendor terms before purchase.",
+          kitType: "industry",
+          kitFor: industryKit.label,
+        },
+      ]
+    : [];
   const rows = problems.map((problem) => {
     const candidates = sortedChoices(eligible, problem, business);
     const excluded: Exclusion[] = catalog
@@ -292,20 +475,27 @@ export function recommend(
         choices: [quick],
         monthlyPrice: quick.tool.monthlyPrice,
       });
-    if (
-      kitChoices.length >= 2 &&
-      kitChoices.some((c) => c.tool.useCases.includes(problem.useCase))
-    )
+    const problemKit = makeProblemKit(
+      problem,
+      problems.filter((candidate) => candidate.id !== problem.id),
+      eligible,
+      business,
+    );
+    if (problemKit.length >= 2)
       options.push({
         kind: "starter-kit",
-        title: "Starter Kit",
-        description: `A coordinated plan for ${kitChoices.length} of your problems.`,
-        choices: kitChoices,
-        monthlyPrice: kitChoices.reduce(
-          (sum, c) => sum + c.tool.monthlyPrice,
-          0,
+        title: `${problem.title} Starter Kit`,
+        description: `A coordinated bundle centered on ${problem.title.toLowerCase()}, plus the follow-up work around it.`,
+        choices: problemKit,
+        monthlyPrice: money(
+          problemKit.reduce(
+            (sum, candidate) => sum + candidate.tool.monthlyPrice,
+            0,
+          ),
         ),
-        note: "Total assumes listed monthly prices; confirm vendor terms before purchase.",
+        note: "Each tool has a separate account and price; confirm vendor terms before purchase.",
+        kitType: "problem",
+        kitFor: problem.title,
       });
     const cheapest = [...candidates].sort(
       (a, b) =>
@@ -355,8 +545,8 @@ export function recommend(
   });
   const comparison = [
     ...new Map(
-      rows
-        .flatMap((row) => row.options.flatMap((option) => option.choices))
+      [...starterKits, ...rows.flatMap((row) => row.options)]
+        .flatMap((option) => option.choices)
         .map((c) => [c.tool.id, c]),
     ).values(),
   ]
@@ -366,6 +556,7 @@ export function recommend(
     forBusiness: business.name,
     generatedAt: new Date().toISOString(),
     sampleData: catalog.some((t) => t.demoOnly),
+    starterKits,
     problems: rows,
     comparison,
   };

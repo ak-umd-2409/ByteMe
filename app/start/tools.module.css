@@ -10,14 +10,20 @@
 
 /* Fix-type label on top of an option card */
 .typetag { font-size: 13px; font-weight: 700; letter-spacing: 0.04em; color: var(--ink); }
+.fitScore { display: inline-flex; align-items: baseline; gap: 2px; width: fit-content; padding: 3px 9px; border: 1px solid color-mix(in srgb, var(--ok-fg) 40%, var(--line)); border-radius: 999px; background: var(--ok-bg); color: var(--ok-fg); font-size: 13px; font-weight: 650; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.fitScore b { font-size: 15px; }
+.fitScoreCompact { padding: 1px 7px; font-size: 12px; }
+.fitScoreCompact b { font-size: 13px; }
 
 /* Starter Kit */
+.kitStack { display: grid; gap: 14px; }
 .kitRows { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
 @media (max-width: 760px) { .kitRows { grid-template-columns: minmax(0, 1fr); } }
 .kitRow { display: grid; grid-template-columns: auto 1fr auto; gap: 0 10px; align-items: center; min-height: 64px; padding: 10px 14px; background: var(--card-inner); border: 1px solid var(--line); border-radius: 12px; color: var(--ink); text-align: left; font: inherit; cursor: pointer; width: 100%; }
 .kitRow:hover { border-color: var(--ink); }
 .kitRow .logo { grid-row: 1 / span 2; }
 .kitRow b { font-weight: 600; }
+.kitName { display: flex; align-items: center; justify-content: space-between; gap: 8px; min-width: 0; }
 .kitRow .meta { grid-column: 2; font-size: 14px; color: var(--text-2); }
 .kitRow .chev { grid-column: 3; grid-row: 1 / span 2; font-size: 20px; color: var(--text-2); }
 .whyPick { background: var(--card-inner); border-radius: 8px; padding: 10px 12px; font-size: 15px; }

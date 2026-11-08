@@ -1,3 +1,5 @@
+import type { IndustryKey } from "../business/types.ts";
+
 /** The 12 problem types from FEATURE_SPEC. Tools and problems both use these. */
 export const USE_CASES = [
   "missed-calls",
@@ -54,6 +56,8 @@ export interface CatalogTool {
   status: ToolStatus;
   reviewedAt?: string;
   useCases: UseCase[];
+  /** Industries the vendor is designed for. `any` means a general-purpose tool. */
+  industries: (IndustryKey | "any")[];
   monthlyPrice: number;
   pricingNote: string;
   integrations: Record<string, IntegrationKind>;
@@ -95,6 +99,8 @@ export interface FitScore {
 export interface ToolChoice {
   tool: CatalogTool;
   score: FitScore;
+  /** The job this score was calculated against, especially important inside a kit. */
+  fitFor: Pick<Problem, "id" | "useCase" | "title">;
   why: string;
   badges: string[];
   /** Setup conditions the owner must handle before enabling an optional feature. */
@@ -109,6 +115,9 @@ export interface Recommendation {
   monthlyPrice: number;
   note?: string;
   helpUrl?: string;
+  /** Starter Kits can be tailored to the business domain or centered on one problem. */
+  kitType?: "industry" | "problem";
+  kitFor?: string;
 }
 
 export interface Exclusion {
@@ -127,6 +136,8 @@ export interface RecommendationResult {
   forBusiness: string;
   generatedAt: string;
   sampleData: boolean;
+  /** Business-domain bundles live here because they are not tied to one problem row. */
+  starterKits: Recommendation[];
   problems: ProblemRecommendations[];
   comparison: ToolChoice[];
 }

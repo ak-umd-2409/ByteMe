@@ -36,6 +36,7 @@ const tool = (id: string, changes: Partial<CatalogTool> = {}): CatalogTool => ({
   status: "verified",
   reviewedAt: "2026-11-07",
   useCases: ["missed-calls"],
+  industries: ["any"],
   monthlyPrice: 49,
   pricingNote: "Example price",
   integrations: { Square: "native" },
@@ -144,6 +145,57 @@ test("shows distinct types when eligible and a combined kit within budget", () =
   assert.equal(kit.choices.length, 2);
   assert.ok(kit.monthlyPrice <= business.monthlyBudget);
   assert.equal(new Set(kit.choices.map((c) => c.tool.id)).size, 2);
+});
+
+test("builds an industry Starter Kit with a domain-specific tool", () => {
+  const result = recommend(
+    { ...business, industry: "Restaurant" },
+    [problems[0]],
+    [
+      tool("restaurant-messages", {
+        industries: ["restaurant"],
+        useCases: ["customer-messaging"],
+        monthlyPrice: 25,
+        category: "Restaurant messaging",
+      }),
+      tool("phone", { monthlyPrice: 50 }),
+      tool("booking", {
+        useCases: ["booking"],
+        monthlyPrice: 20,
+        category: "Booking",
+      }),
+    ],
+  );
+  const kit = result.starterKits.find((candidate) => candidate.kitType === "industry")!;
+  assert.equal(kit.title, "Restaurant Starter Kit");
+  assert.ok(kit.choices.some((candidate) => candidate.tool.id === "restaurant-messages"));
+  assert.ok(kit.choices.length >= 2 && kit.choices.length <= 4);
+  assert.ok(kit.monthlyPrice <= business.monthlyBudget);
+});
+
+test("builds a problem Starter Kit from complementary workflow roles", () => {
+  const result = recommend(business, [problems[0]], [
+    tool("phone", { monthlyPrice: 50 }),
+    tool("booking", {
+      useCases: ["booking"],
+      monthlyPrice: 20,
+      category: "Booking",
+    }),
+    tool("follow-up", {
+      useCases: ["customer-messaging"],
+      monthlyPrice: 15,
+      category: "Messaging",
+    }),
+  ]);
+  const kit = result.problems[0].options.find(
+    (candidate) => candidate.kind === "starter-kit" && candidate.kitType === "problem",
+  )!;
+  assert.equal(kit.title, "Missed calls Starter Kit");
+  assert.deepEqual(
+    new Set(kit.choices.map((candidate) => candidate.fitFor.useCase)),
+    new Set(["missed-calls", "booking", "customer-messaging"]),
+  );
+  assert.ok(kit.choices.every((candidate) => candidate.score.total > 0));
 });
 
 test("no eligible tools produces no invented recommendation", () => {

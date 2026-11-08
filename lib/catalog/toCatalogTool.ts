@@ -52,6 +52,7 @@ export function toCatalogTool(record: CatalogRecord): CatalogTool | null {
     status: record.badge,
     reviewedAt: record.reviewedAt,
     useCases: [...record.useCases],
+    industries: [...record.industries],
     monthlyPrice: price,
     pricingNote: `As of Nov 2026: ${record.pricing.small.note}`,
     integrations,
