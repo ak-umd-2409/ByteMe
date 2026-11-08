@@ -32,6 +32,24 @@ export function onVendorDomain(url: string, domain: string): boolean {
   return host === d || host.endsWith(`.${d}`);
 }
 
+/**
+ * Webflow's file servers. Many vendors build their site on Webflow, so the icon
+ * their own page declares lives there instead of on their domain. Allowed only
+ * for icons the vendor's page names itself, never for guessed URLs.
+ */
+export const SITE_BUILDER_HOSTS = ["cdn.prod.website-files.com", "assets.website-files.com", "uploads-ssl.webflow.com", "global-uploads.webflow.com"];
+
+/** True when a declared icon may be downloaded: the vendor's domain or its Webflow files. */
+export function allowedIconHost(url: string, domain: string): boolean {
+  if (onVendorDomain(url, domain)) return true;
+  try {
+    const u = new URL(url);
+    return u.protocol === "https:" && SITE_BUILDER_HOSTS.includes(u.hostname.toLowerCase());
+  } catch {
+    return false;
+  }
+}
+
 const attr = (tag: string, name: string) => {
   const m = tag.match(new RegExp(`\\s${name}\\s*=\\s*(?:"([^"]*)"|'([^']*)'|([^\\s>]+))`, "i"));
   return m ? (m[1] ?? m[2] ?? m[3] ?? "").trim() : null;
@@ -40,7 +58,7 @@ const decode = (s: string) => s.replace(/&amp;/g, "&").replace(/&#x2F;/gi, "/").
 
 /**
  * Icon URLs a page declares, best first, on the vendor's domain only:
- * apple-touch-icon, then SVG icons, then PNG icons (biggest first), then other
+ * (or its Webflow files): apple-touch-icon, then SVG icons, then PNG icons (biggest first), then other
  * icons, then /favicon.ico on the page's own host.
  */
 export function pickIconUrls(html: string, pageUrl: string, domain: string): string[] {
@@ -61,7 +79,7 @@ export function pickIconUrls(html: string, pageUrl: string, domain: string): str
     } catch {
       continue;
     }
-    if (!onVendorDomain(url, domain)) continue;
+    if (!allowedIconHost(url, domain)) continue;
     const type = (attr(tag, "type") ?? "").toLowerCase();
     const path = new URL(url).pathname.toLowerCase();
     const svg = type.includes("svg") || path.endsWith(".svg");

@@ -7,7 +7,7 @@
  * For each tool: fetch the vendor's home page with safeFetch (public hosts only,
  * timeouts, size cap), respect robots.txt, pick the best icon the page declares
  * (apple-touch-icon, then SVG/PNG icon, then /favicon.ico), download it from the
- * vendor's own domain only, and keep it if it is a real image at least 32px.
+ * vendor's own domain (or the Webflow file server its page points to), and keep it if it is a real image at least 32px.
  * Writes public/logos/<id>.<ext> and data/catalog/logos.json.
  * Never uses Google's favicon service, Clearbit or any other logo API.
  * A tool with no usable icon gets no entry, and the app shows a letter badge.
@@ -15,7 +15,7 @@
 import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { parseArgs } from "node:util";
 import type { CatalogRecord } from "../lib/catalog/types.ts";
-import { checkIcon, onVendorDomain, pickIconUrls, type LogoEntry } from "../lib/catalog/logos.ts";
+import { allowedIconHost, checkIcon, onVendorDomain, pickIconUrls, type LogoEntry } from "../lib/catalog/logos.ts";
 import { robotsAllows, safeFetch, type FetchLike } from "../lib/shared/safeFetch.ts";
 
 /** Hosts we never fetch from, whatever the catalog says (team rule: never scrape Google). */
@@ -80,7 +80,7 @@ for (const tool of tools) {
       if (!(await allowed(iconUrl))) continue;
       try {
         const icon = await get(iconUrl, 1_000_000);
-        if (icon.status !== 200 || !onVendorDomain(icon.finalUrl, domain)) continue;
+        if (icon.status !== 200 || !allowedIconHost(icon.finalUrl, domain)) continue;
         const ok = checkIcon(lastBytes);
         if (!ok) continue;
         for (const ext of ["png", "svg", "ico"]) rmSync(`public/logos/${tool.id}.${ext}`, { force: true });
