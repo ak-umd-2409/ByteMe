@@ -32,6 +32,7 @@ const kindIcon: Record<string, string> = {
   "quick-fix": "✦",
   "starter-kit": "▦",
   "lowest-cost": "$",
+  alternative: "◇",
   "done-for-you": "◉",
 };
 const kindClass: Record<string, string> = {
@@ -39,6 +40,7 @@ const kindClass: Record<string, string> = {
   "quick-fix": "blue",
   "starter-kit": "orange",
   "lowest-cost": "gray",
+  alternative: "blue",
   "done-for-you": "violet",
 };
 
