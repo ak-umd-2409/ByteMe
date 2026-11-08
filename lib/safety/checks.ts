@@ -83,10 +83,31 @@ const deniesTraining = (s: string) =>
   /\btrain\w*/i.test(s) &&
   /\b(do(es)? not|don't|doesn't|never|will not|won't|may not|(is|are) not|isn't|aren't)\s+(use|used|process\w*|train\w*|sell\b[^;\n]{0,80}\bor use)\b/i.test(s) &&
   !/[;\n]|\b(unless|except|but|however|if|before|opt\w*)\b/i.test(s);
+const AI_WORDS = /\b(models?|ai|artificial intelligence|machine learning|ml|algorithms?|llms?|gpt|generative|neural|fine-?tun\w*)\b/i;
 /** Staff "security training" is about people, not AI: set aside unless the sentence also talks about AI. */
 const aboutStaffTraining = (s: string) =>
-  /\b(security|staff|employee|personnel|compliance|privacy) training\b/i.test(s) &&
-  !/\b(models?|ai|artificial intelligence|machine learning|algorithms?)\b/i.test(s);
+  (/\b(security|staff|employee|personnel|compliance|privacy|periodic) training\b/i.test(s) ||
+    /\btrain(s|ed|ing)? (our |its )?([\w-]+ )?(staff|employees|team|agents|personnel)\b/i.test(s)) &&
+  !AI_WORDS.test(s);
+/** Words that tie a "training" line to AI or to your data. A line with none ("Group training", "Train") is a menu or a course. */
+const AI_OR_DATA = new RegExp(
+  `${AI_WORDS.source}|\\b(data|information|content|calls?|messages?|recordings?|conversations?|inputs?|prompts?|transcripts?)\\b`,
+  "i",
+);
+/** "Model training and data usage": a short line with no full stop and no one doing anything (no we/our/you/it). */
+const isHeading = (l: string) =>
+  l.split(/\s+/).length <= 6 && !/[.!:;]$/.test(l) && !/\b(we|our|us|you|your|it|its|they|their)\b/i.test(l);
+/**
+ * The lines of a risky sentence that could say AI learns from your data. Pages are split
+ * into sentences on . ! ?, so menus arrive as one long "sentence" with line breaks.
+ * Questions (an FAQ heading) aren't claims, and people's training isn't AI.
+ */
+const aiTrainingLines = (s: string) =>
+  s
+    .split("\n")
+    .map((l) => l.trim())
+    .filter((l) => SAFETY_CONFIG.riskyPatterns.some((p) => p.test(l)))
+    .filter((l) => AI_OR_DATA.test(l) && !l.endsWith("?") && !isHeading(l) && !aboutStaffTraining(l));
 
 export function checkDataUse(facts: SafetyFacts): SafetyCheckItem {
   const { trainsOnYourData: trains, canDeleteData: del } = facts.ai;
@@ -104,7 +125,9 @@ export function checkDataUse(facts: SafetyFacts): SafetyCheckItem {
     const quoteOk = trains.answer === "no" ? negationPattern.test(trains.quote) && !qualifierPattern.test(trains.quote) : true;
     const sameCase: Record<string, RegExp | undefined> = { anonymized: anonymizedPattern, "opt-in": consentPattern };
     const explained = (s: string) => (quoteOk && norm(s) === norm(trains.quote)) || Boolean(sameCase[trains.answer]?.test(s));
-    const others = facts.riskySentences.filter((s) => !explained(s) && !deniesTraining(s) && !aboutStaffTraining(s));
+    const others = facts.riskySentences.filter(
+      (s) => !explained(s) && aiTrainingLines(s).some((l) => !explained(l) && !deniesTraining(l)),
+    );
     if (others.length > 0) {
       const privacy = pageEvidence(facts.pages.privacy);
       const risky = privacy.length ? others.map((quote) => ({ ...privacy[0], quote })) : [];
