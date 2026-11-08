@@ -1,6 +1,6 @@
 # ByteMe — UMD AI for Small Business Hack-a-thon (Team 11)
 
-**Live demo:** https://byte-me-mu.vercel.app (no login). Every merge to `main` updates it; every PR gets its own preview link from Vercel.
+**Live demo:** https://byte-me-mu.vercel.app (no login). Every merge to `main` updates it; every PR gets its own preview link from Vercel. Live Google search, AI and `/admin` need the keys in Vercel (see `docs/DISCOVERY.md`, "Setup on Vercel").
 
 Start here: **[docs/HANDOFF_PROMPT.md](docs/HANDOFF_PROMPT.md)** — full context, the Claude Code setup prompt, and role prompts for Persons A, B and C.
 
