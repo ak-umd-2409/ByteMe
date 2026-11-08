@@ -1,0 +1,211 @@
+{
+  "id": "nexhealth",
+  "name": "NexHealth",
+  "vendor": {
+    "company": "NexHealth",
+    "website": "https://www.nexhealth.com",
+    "domain": "nexhealth.com"
+  },
+  "description": "One API to read and write patients, appointments, payments and more across 15+ dental and medical systems.",
+  "category": "Patient booking",
+  "useCases": [
+    "booking",
+    "customer-messaging"
+  ],
+  "industries": [
+    "health_clinic"
+  ],
+  "pricing": {
+    "asOf": "Nov 2026",
+    "small": {
+      "monthlyUsd": "unknown",
+      "note": ""
+    },
+    "medium": {
+      "monthlyUsd": "unknown",
+      "note": ""
+    },
+    "large": {
+      "monthlyUsd": "unknown",
+      "note": ""
+    },
+    "freeTier": true,
+    "contract": "unknown",
+    "cancellation": "unknown",
+    "pricingUrl": "https://synchronizer.nexhealth.com/?utm_source=nexhealth.com"
+  },
+  "worksWith": [
+    {
+      "product": "Open Dental",
+      "type": "native"
+    },
+    {
+      "product": "Dentrix",
+      "type": "native"
+    },
+    {
+      "product": "Eaglesoft",
+      "type": "native"
+    }
+  ],
+  "setupMinutes": "unknown",
+  "setupMode": "self_serve",
+  "languages": [
+    "English"
+  ],
+  "privacyCard": {
+    "trainsOnYourData": {
+      "answer": "yes",
+      "plain": "Uses your data to train its AI.",
+      "quote": "We may use Personal Information, non-personal, and aggregate information to evaluate and improve our products and services, and for our own internal statistical, design, operational purposes, for example to estimate our audience size, measure aggregate traffic patterns, and understand demographic, customer interest, purchasing, and other trends among our users, visitors, direct channel clients, partners, resellers, and customers.",
+      "sourceUrl": "https://www.nexhealth.com/legal/website-privacy"
+    },
+    "canDeleteData": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm whether you can delete your data.",
+      "quote": null,
+      "sourceUrl": null
+    },
+    "whereStored": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm where your data is stored.",
+      "quote": null,
+      "sourceUrl": null
+    },
+    "sharesOrSells": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm whether it sells or shares your data.",
+      "quote": null,
+      "sourceUrl": null
+    },
+    "securityCertification": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm a security certification.",
+      "quote": null,
+      "sourceUrl": null
+    }
+  },
+  "rulesFlags": {
+    "recordsCalls": "unknown",
+    "announcesRecording": "unknown",
+    "hipaaReady": true,
+    "outboundAiCalls": "unknown",
+    "personalizedPricing": "unknown"
+  },
+  "badge": "listed",
+  "safetyCheck": {
+    "ranAt": "2026-11-08",
+    "checks": {
+      "whoIsBehind": {
+        "result": "unknown",
+        "reason": "We couldn't find an address for NexHealth.",
+        "evidence": [
+          {
+            "quote": "NexHealth partners with technology companies, marketing agencies, consultants, and practice advisors who influence how healthcare practices buy software.",
+            "url": "https://www.nexhealth.com/about/partnerships",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "domainAge": {
+        "result": "pass",
+        "reason": "The website has been around since June 2014.",
+        "evidence": [
+          {
+            "url": "https://rdap.org/domain/nexhealth.com",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "privacyPolicy": {
+        "result": "pass",
+        "reason": "Has a full privacy policy that says what they do with your information.",
+        "evidence": [
+          {
+            "url": "https://www.nexhealth.com/legal/website-privacy",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "dataUse": {
+        "result": "fail",
+        "reason": "It may use your customers' information to make its AI better, and we found no way to stop it.",
+        "evidence": [
+          {
+            "quote": "We may use Personal Information, non-personal, and aggregate information to evaluate and improve our products and services, and for our own internal statistical, design, operational purposes, for example to estimate our audience size, measure aggregate traffic patterns, and understand demographic, customer interest, purchasing, and other trends among our users, visitors, direct channel clients, partners, resellers, and customers.",
+            "url": "https://www.nexhealth.com/legal/website-privacy",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "dataLocation": {
+        "result": "unknown",
+        "reason": "We couldn't find which country your information is kept in.",
+        "evidence": [
+          {
+            "url": "https://www.nexhealth.com/legal/website-privacy",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "pricingClarity": {
+        "result": "fail",
+        "reason": "No price on the website. You have to talk to their sales team.",
+        "evidence": [
+          {
+            "url": "https://synchronizer.nexhealth.com/?utm_source=nexhealth.com",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "securityBasics": {
+        "result": "pass",
+        "reason": "Your connection to this website is private (https). This tool handles payments or health information, but we found no proof that an outside company checked its security (like PCI or SOC 2).",
+        "evidence": [
+          {
+            "url": "https://www.nexhealth.com/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "redFlags": {
+        "result": "pass",
+        "reason": "No warning signs found. (We didn't check Google's list of unsafe websites.)",
+        "evidence": [
+          {
+            "url": "https://www.nexhealth.com/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      }
+    },
+    "redFlags": [],
+    "verdict": "held",
+    "warnings": [
+      "We couldn't find which country your information is kept in.",
+      "No price on the website. You have to talk to their sales team.",
+      "We couldn't find the name of the person who runs this company.",
+      "This tool handles payments or health information, but we found no proof that an outside company checked its security (like PCI or SOC 2)."
+    ]
+  },
+  "lastChecked": "2026-11-08",
+  "sources": [
+    "https://synchronizer.nexhealth.com/",
+    "https://www.nexhealth.com/",
+    "https://www.nexhealth.com/about/partnerships",
+    "https://www.nexhealth.com/legal/website-privacy"
+  ],
+  "needsVerification": [
+    "pricing.small.monthlyUsd",
+    "pricing.medium.monthlyUsd",
+    "pricing.large.monthlyUsd",
+    "pricing.contract",
+    "pricing.cancellation",
+    "setupMinutes",
+    "rulesFlags.recordsCalls",
+    "rulesFlags.announcesRecording",
+    "rulesFlags.outboundAiCalls",
+    "rulesFlags.personalizedPricing",
+    "languages"
+  ]
+}

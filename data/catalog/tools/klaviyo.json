@@ -1,0 +1,216 @@
+{
+  "id": "klaviyo",
+  "name": "Klaviyo",
+  "vendor": {
+    "company": "Klaviyo",
+    "website": "https://www.klaviyo.com",
+    "domain": "klaviyo.com"
+  },
+  "description": "Klaviyo is the autonomous B2C CRM and AI marketing platform that unifies customer data and automates email, SMS, RCS, WhatsApp, and mobile push to drive personalized, revenue-generating campaigns.",
+  "category": "Email marketing",
+  "useCases": [
+    "email-marketing",
+    "customer-messaging"
+  ],
+  "industries": [
+    "retail"
+  ],
+  "pricing": {
+    "asOf": "Nov 2026",
+    "small": {
+      "monthlyUsd": 20,
+      "note": "Email plan"
+    },
+    "medium": {
+      "monthlyUsd": 25,
+      "note": "Middle plan"
+    },
+    "large": {
+      "monthlyUsd": "unknown",
+      "note": ""
+    },
+    "freeTier": "unknown",
+    "contract": "unknown",
+    "cancellation": "unknown",
+    "pricingUrl": "https://www.klaviyo.com/pricing"
+  },
+  "worksWith": [
+    {
+      "product": "Shopify",
+      "type": "native"
+    },
+    {
+      "product": "Talon.One",
+      "type": "native"
+    },
+    {
+      "product": "OpenTable",
+      "type": "native"
+    },
+    {
+      "product": "Claude",
+      "type": "native"
+    }
+  ],
+  "setupMinutes": "unknown",
+  "setupMode": "self_serve",
+  "languages": [
+    "English"
+  ],
+  "privacyCard": {
+    "trainsOnYourData": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm whether it uses your data to train AI.",
+      "quote": null,
+      "sourceUrl": null
+    },
+    "canDeleteData": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm whether you can delete your data.",
+      "quote": null,
+      "sourceUrl": null
+    },
+    "whereStored": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm where your data is stored.",
+      "quote": null,
+      "sourceUrl": null
+    },
+    "sharesOrSells": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm whether it sells or shares your data.",
+      "quote": null,
+      "sourceUrl": null
+    },
+    "securityCertification": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm a security certification.",
+      "quote": null,
+      "sourceUrl": null
+    }
+  },
+  "rulesFlags": {
+    "recordsCalls": "unknown",
+    "announcesRecording": "unknown",
+    "hipaaReady": "unknown",
+    "outboundAiCalls": "unknown",
+    "personalizedPricing": "unknown"
+  },
+  "badge": "listed",
+  "safetyCheck": {
+    "ranAt": "2026-11-08",
+    "checks": {
+      "whoIsBehind": {
+        "result": "unknown",
+        "reason": "We couldn't find an address for Klaviyo.",
+        "evidence": [
+          {
+            "quote": "Copyright © 2026 Klaviyo. All rights reserved.",
+            "url": "https://www.klaviyo.com/about",
+            "checkedAt": "2026-11-08"
+          },
+          {
+            "quote": "—Andrew Bialecki, Klaviyo co-founder and CEO",
+            "url": "https://www.klaviyo.com/about",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "domainAge": {
+        "result": "pass",
+        "reason": "The website has been around since March 2012.",
+        "evidence": [
+          {
+            "url": "https://rdap.org/domain/klaviyo.com",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "privacyPolicy": {
+        "result": "pass",
+        "reason": "Has a full privacy policy that says what they do with your information.",
+        "evidence": [
+          {
+            "url": "https://www.klaviyo.com/legal",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "dataUse": {
+        "result": "unknown",
+        "reason": "We couldn't find whether it uses your information to make its AI better or whether you can delete your information.",
+        "evidence": [
+          {
+            "url": "https://www.klaviyo.com/legal",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "dataLocation": {
+        "result": "unknown",
+        "reason": "We couldn't find which country your information is kept in.",
+        "evidence": [
+          {
+            "url": "https://www.klaviyo.com/legal",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "pricingClarity": {
+        "result": "pass",
+        "reason": "Shows a clear monthly price.",
+        "evidence": [
+          {
+            "url": "https://www.klaviyo.com/pricing",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "securityBasics": {
+        "result": "pass",
+        "reason": "Your connection to this website is private (https).",
+        "evidence": [
+          {
+            "url": "https://www.klaviyo.com/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "redFlags": {
+        "result": "pass",
+        "reason": "No warning signs found. (We didn't check Google's list of unsafe websites.)",
+        "evidence": [
+          {
+            "url": "https://www.klaviyo.com/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      }
+    },
+    "redFlags": [],
+    "verdict": "held",
+    "warnings": [
+      "We couldn't find which country your information is kept in."
+    ]
+  },
+  "lastChecked": "2026-11-08",
+  "sources": [
+    "https://www.klaviyo.com/",
+    "https://www.klaviyo.com/pricing",
+    "https://www.klaviyo.com/about",
+    "https://marketplace.klaviyo.com/en-us/"
+  ],
+  "needsVerification": [
+    "pricing.large.monthlyUsd",
+    "pricing.freeTier",
+    "pricing.contract",
+    "pricing.cancellation",
+    "setupMinutes",
+    "rulesFlags.recordsCalls",
+    "rulesFlags.announcesRecording",
+    "rulesFlags.hipaaReady",
+    "rulesFlags.outboundAiCalls",
+    "rulesFlags.personalizedPricing",
+    "languages"
+  ]
+}

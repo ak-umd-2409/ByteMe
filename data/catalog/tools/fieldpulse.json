@@ -1,0 +1,228 @@
+{
+  "id": "fieldpulse",
+  "name": "FieldPulse",
+  "vendor": {
+    "company": "FieldPulse",
+    "website": "https://www.fieldpulse.com",
+    "domain": "fieldpulse.com"
+  },
+  "description": "FieldPulse partners with growing field service businesses to turn chaos into predictable growth with clear processes and tailored workflows.",
+  "category": "Field service software",
+  "useCases": [
+    "quotes",
+    "staff-scheduling"
+  ],
+  "industries": [
+    "hvac",
+    "plumbing",
+    "electrical",
+    "landscaping",
+    "cleaning"
+  ],
+  "pricing": {
+    "asOf": "Nov 2026",
+    "small": {
+      "monthlyUsd": "unknown",
+      "note": ""
+    },
+    "medium": {
+      "monthlyUsd": "unknown",
+      "note": ""
+    },
+    "large": {
+      "monthlyUsd": "unknown",
+      "note": ""
+    },
+    "freeTier": "unknown",
+    "contract": "unknown",
+    "cancellation": "unknown",
+    "pricingUrl": "https://www.fieldpulse.com/pricing"
+  },
+  "worksWith": [
+    {
+      "product": "QuickBooks Online",
+      "type": "native"
+    }
+  ],
+  "setupMinutes": "unknown",
+  "setupMode": "needs_help",
+  "languages": [
+    "English"
+  ],
+  "privacyCard": {
+    "trainsOnYourData": {
+      "answer": "no",
+      "plain": "Does not use your data to train AI.",
+      "quote": "We do not use the content of AI conversations, call recordings, transcripts or chat messages to train or fine-tune artificial intelligence models.",
+      "sourceUrl": "https://www.fieldpulse.com/privacy-policy"
+    },
+    "canDeleteData": {
+      "answer": "yes",
+      "plain": "You can delete your data.",
+      "quote": "12.3 California residents. If you are a California resident, you have the right to: (a) know what personal information we have collected about you, including the categories and specific pieces of information; (b) delete personal information we collected from you; (c) correct inaccurate personal information; (d) opt out of the sale or sharing of personal information (we do not sell personal information); and (e) not be discriminated against for exercising these rights.",
+      "sourceUrl": "https://www.fieldpulse.com/privacy-policy"
+    },
+    "whereStored": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm where your data is stored.",
+      "quote": null,
+      "sourceUrl": null
+    },
+    "sharesOrSells": {
+      "answer": "no",
+      "plain": "Does not sell or share your data.",
+      "quote": "We do not sell personal information.",
+      "sourceUrl": "https://www.fieldpulse.com/privacy-policy"
+    },
+    "securityCertification": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm a security certification.",
+      "quote": null,
+      "sourceUrl": null
+    }
+  },
+  "rulesFlags": {
+    "recordsCalls": "unknown",
+    "announcesRecording": "unknown",
+    "hipaaReady": "unknown",
+    "outboundAiCalls": false,
+    "personalizedPricing": "unknown"
+  },
+  "badge": "listed",
+  "safetyCheck": {
+    "ranAt": "2026-11-08",
+    "checks": {
+      "whoIsBehind": {
+        "result": "unknown",
+        "reason": "We couldn't find an address for FieldPulse.",
+        "evidence": [
+          {
+            "quote": "All Rights Reserved © FieldPulse (2026)",
+            "url": "https://landing.fieldpulse.com/state-of-the-back-office-report",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "domainAge": {
+        "result": "pass",
+        "reason": "The website has been around since September 2009.",
+        "evidence": [
+          {
+            "url": "https://rdap.org/domain/fieldpulse.com",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "privacyPolicy": {
+        "result": "pass",
+        "reason": "Has a full privacy policy that says what they do with your information.",
+        "evidence": [
+          {
+            "url": "https://www.fieldpulse.com/privacy-policy",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "dataUse": {
+        "result": "unknown",
+        "reason": "The privacy policy isn't clear about whether it uses your information to make its AI better. A person needs to read it.",
+        "evidence": [
+          {
+            "quote": "We do not use the content of AI conversations, call recordings, transcripts or chat messages to train or fine-tune artificial intelligence models.",
+            "url": "https://www.fieldpulse.com/privacy-policy",
+            "checkedAt": "2026-11-08"
+          },
+          {
+            "quote": "12.3 California residents. If you are a California resident, you have the right to: (a) know what personal information we have collected about you, including the categories and specific pieces of information; (b) delete personal information we collected from you; (c) correct inaccurate personal information; (d) opt out of the sale or sharing of personal information (we do not sell personal information); and (e) not be discriminated against for exercising these rights.",
+            "url": "https://www.fieldpulse.com/privacy-policy",
+            "checkedAt": "2026-11-08"
+          },
+          {
+            "url": "https://www.fieldpulse.com/privacy-policy",
+            "checkedAt": "2026-11-08",
+            "quote": "Our agreements with them do not permit them to use this information to train their models."
+          },
+          {
+            "url": "https://www.fieldpulse.com/privacy-policy",
+            "checkedAt": "2026-11-08",
+            "quote": "4.4 No model training."
+          },
+          {
+            "url": "https://www.fieldpulse.com/privacy-policy",
+            "checkedAt": "2026-11-08",
+            "quote": "We improve our AI features by updating their instructions and configurations, which may be informed by reviewing how they perform."
+          }
+        ]
+      },
+      "dataLocation": {
+        "result": "unknown",
+        "reason": "We couldn't find which country your information is kept in.",
+        "evidence": [
+          {
+            "url": "https://www.fieldpulse.com/privacy-policy",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "pricingClarity": {
+        "result": "fail",
+        "reason": "The website doesn't show a clear monthly price.",
+        "evidence": [
+          {
+            "url": "https://www.fieldpulse.com/pricing",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "securityBasics": {
+        "result": "pass",
+        "reason": "Your connection to this website is private (https). This tool handles payments or health information, but we found no proof that an outside company checked its security (like PCI or SOC 2).",
+        "evidence": [
+          {
+            "url": "https://www.fieldpulse.com/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "redFlags": {
+        "result": "pass",
+        "reason": "No warning signs found. (We didn't check Google's list of unsafe websites.)",
+        "evidence": [
+          {
+            "url": "https://www.fieldpulse.com/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      }
+    },
+    "redFlags": [],
+    "verdict": "held",
+    "warnings": [
+      "We couldn't find which country your information is kept in.",
+      "The website doesn't show a clear monthly price.",
+      "We couldn't find the name of the person who runs this company.",
+      "This tool handles payments or health information, but we found no proof that an outside company checked its security (like PCI or SOC 2)."
+    ]
+  },
+  "lastChecked": "2026-11-08",
+  "sources": [
+    "https://www.fieldpulse.com/",
+    "https://www.fieldpulse.com/privacy-policy",
+    "https://landing.fieldpulse.com/state-of-the-back-office-report",
+    "https://www.fieldpulse.com/company/partners/quickbooks"
+  ],
+  "needsVerification": [
+    "pricing.small.monthlyUsd",
+    "pricing.medium.monthlyUsd",
+    "pricing.large.monthlyUsd",
+    "pricing.freeTier",
+    "pricing.contract",
+    "pricing.cancellation",
+    "setupMinutes",
+    "rulesFlags.recordsCalls",
+    "rulesFlags.announcesRecording",
+    "rulesFlags.hipaaReady",
+    "rulesFlags.personalizedPricing",
+    "languages"
+  ]
+}

@@ -1,0 +1,219 @@
+{
+  "id": "booke",
+  "name": "Booke AI",
+  "vendor": {
+    "company": "Booke AI, Inc.",
+    "website": "https://booke.ai",
+    "domain": "booke.ai"
+  },
+  "description": "Connect Booke AI to your accounting workflow, automate bank feed categorization, match documents, and review exceptions before reconciliation.",
+  "category": "Bookkeeping",
+  "useCases": [
+    "bookkeeping"
+  ],
+  "industries": [
+    "any"
+  ],
+  "pricing": {
+    "asOf": "Nov 2026",
+    "small": {
+      "monthlyUsd": 129,
+      "note": "Cheapest paid plan"
+    },
+    "medium": {
+      "monthlyUsd": "unknown",
+      "note": ""
+    },
+    "large": {
+      "monthlyUsd": "unknown",
+      "note": ""
+    },
+    "freeTier": "unknown",
+    "contract": "monthly",
+    "cancellation": "unknown",
+    "pricingUrl": "https://booke.ai/pricing"
+  },
+  "worksWith": [
+    {
+      "product": "QuickBooks Online",
+      "type": "native"
+    },
+    {
+      "product": "Xero",
+      "type": "native"
+    },
+    {
+      "product": "Zoho Books",
+      "type": "native"
+    }
+  ],
+  "setupMinutes": "unknown",
+  "setupMode": "needs_help",
+  "languages": [
+    "English"
+  ],
+  "privacyCard": {
+    "trainsOnYourData": {
+      "answer": "yes",
+      "plain": "Uses your data to train its AI.",
+      "quote": "Your data is used exclusively to train YOUR AI Brain.",
+      "sourceUrl": "https://booke.ai/privacy-policy"
+    },
+    "canDeleteData": {
+      "answer": "yes",
+      "plain": "You can delete your data.",
+      "quote": "You can request immediate data deletion at any time:",
+      "sourceUrl": "https://booke.ai/privacy-policy"
+    },
+    "whereStored": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm where your data is stored.",
+      "quote": null,
+      "sourceUrl": null
+    },
+    "sharesOrSells": {
+      "answer": "no",
+      "plain": "Does not sell or share your data.",
+      "quote": "We may share your information with third parties that we use to provide and support our Site:",
+      "sourceUrl": "https://booke.ai/privacy-policy"
+    },
+    "securityCertification": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm a security certification.",
+      "quote": null,
+      "sourceUrl": null
+    }
+  },
+  "rulesFlags": {
+    "recordsCalls": "unknown",
+    "announcesRecording": "unknown",
+    "hipaaReady": "unknown",
+    "outboundAiCalls": "unknown",
+    "personalizedPricing": false
+  },
+  "badge": "listed",
+  "safetyCheck": {
+    "ranAt": "2026-11-08",
+    "checks": {
+      "whoIsBehind": {
+        "result": "pass",
+        "reason": "Run by Booke AI, Inc., a company at 919 North Market St. Wilmington, DE 19801, USA.",
+        "evidence": [
+          {
+            "quote": "Booke AI, Inc. 919 North Market St. Wilmington, DE 19801, USA",
+            "url": "https://booke.ai/client-query-tool",
+            "checkedAt": "2026-11-08"
+          },
+          {
+            "quote": "Booke AI, Inc. 919 North Market St. Wilmington, DE 19801, USA",
+            "url": "https://booke.ai/client-query-tool",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "domainAge": {
+        "result": "pass",
+        "reason": "The website has been around since January 2020.",
+        "evidence": [
+          {
+            "url": "https://rdap.org/domain/booke.ai",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "privacyPolicy": {
+        "result": "pass",
+        "reason": "Has a full privacy policy that says what they do with your information.",
+        "evidence": [
+          {
+            "url": "https://booke.ai/privacy-policy",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "dataUse": {
+        "result": "fail",
+        "reason": "It may use your customers' information to make its AI better, and we found no way to stop it.",
+        "evidence": [
+          {
+            "quote": "Your data is used exclusively to train YOUR AI Brain.",
+            "url": "https://booke.ai/privacy-policy",
+            "checkedAt": "2026-11-08"
+          },
+          {
+            "quote": "You can request immediate data deletion at any time:",
+            "url": "https://booke.ai/privacy-policy",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "dataLocation": {
+        "result": "unknown",
+        "reason": "We couldn't find which country your information is kept in.",
+        "evidence": [
+          {
+            "url": "https://booke.ai/privacy-policy",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "pricingClarity": {
+        "result": "pass",
+        "reason": "Shows a clear monthly price.",
+        "evidence": [
+          {
+            "url": "https://booke.ai/pricing",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "securityBasics": {
+        "result": "pass",
+        "reason": "Your connection to this website is private (https).",
+        "evidence": [
+          {
+            "url": "https://booke.ai/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "redFlags": {
+        "result": "pass",
+        "reason": "No warning signs found. (We didn't check Google's list of unsafe websites.)",
+        "evidence": [
+          {
+            "url": "https://booke.ai/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      }
+    },
+    "redFlags": [],
+    "verdict": "held",
+    "warnings": [
+      "We couldn't find which country your information is kept in.",
+      "We couldn't find the name of the person who runs this company."
+    ]
+  },
+  "lastChecked": "2026-11-08",
+  "sources": [
+    "https://booke.ai/",
+    "https://booke.ai/pricing",
+    "https://booke.ai/privacy-policy",
+    "https://booke.ai/client-query-tool",
+    "https://booke.ai/two-way-integrations"
+  ],
+  "needsVerification": [
+    "pricing.medium.monthlyUsd",
+    "pricing.large.monthlyUsd",
+    "pricing.freeTier",
+    "pricing.cancellation",
+    "setupMinutes",
+    "rulesFlags.recordsCalls",
+    "rulesFlags.announcesRecording",
+    "rulesFlags.hipaaReady",
+    "rulesFlags.outboundAiCalls",
+    "setupMode",
+    "languages"
+  ]
+}

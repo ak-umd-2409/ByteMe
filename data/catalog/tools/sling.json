@@ -1,0 +1,229 @@
+{
+  "id": "sling",
+  "name": "Sling",
+  "vendor": {
+    "company": "Sling, Inc.",
+    "website": "https://getsling.com",
+    "domain": "getsling.com"
+  },
+  "description": "Sling is the easiest way to schedule and communicate with your employees. For free!",
+  "category": "Staff scheduling",
+  "useCases": [
+    "staff-scheduling"
+  ],
+  "industries": [
+    "restaurant",
+    "cafe",
+    "retail"
+  ],
+  "pricing": {
+    "asOf": "Nov 2026",
+    "small": {
+      "monthlyUsd": 2,
+      "note": "Cheapest paid plan"
+    },
+    "medium": {
+      "monthlyUsd": 4,
+      "note": "Middle plan"
+    },
+    "large": {
+      "monthlyUsd": "unknown",
+      "note": ""
+    },
+    "freeTier": "unknown",
+    "contract": "monthly",
+    "cancellation": "unknown",
+    "pricingUrl": "https://getsling.com/pricing/"
+  },
+  "worksWith": [
+    {
+      "product": "Toast",
+      "type": "native"
+    },
+    {
+      "product": "Square",
+      "type": "native"
+    },
+    {
+      "product": "Harbortouch",
+      "type": "native"
+    },
+    {
+      "product": "POSiTouch",
+      "type": "native"
+    }
+  ],
+  "setupMinutes": "unknown",
+  "setupMode": "needs_help",
+  "languages": [
+    "English"
+  ],
+  "privacyCard": {
+    "trainsOnYourData": {
+      "answer": "yes",
+      "plain": "Uses your data to train its AI.",
+      "quote": "assessing the effectiveness of and improving our Services and Website.",
+      "sourceUrl": "https://getsling.com/privacy-statement/"
+    },
+    "canDeleteData": {
+      "answer": "yes",
+      "plain": "You can delete your data.",
+      "quote": "Sling has established an individual rights portal as well as other channels for the purposes of submitting the individual rights requests above, including the right of access and deletion.",
+      "sourceUrl": "https://getsling.com/privacy-statement/"
+    },
+    "whereStored": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm where your data is stored.",
+      "quote": null,
+      "sourceUrl": null
+    },
+    "sharesOrSells": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm whether it sells or shares your data.",
+      "quote": null,
+      "sourceUrl": null
+    },
+    "securityCertification": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm a security certification.",
+      "quote": null,
+      "sourceUrl": null
+    }
+  },
+  "rulesFlags": {
+    "recordsCalls": "unknown",
+    "announcesRecording": "unknown",
+    "hipaaReady": "unknown",
+    "outboundAiCalls": "unknown",
+    "personalizedPricing": "unknown"
+  },
+  "badge": "listed",
+  "safetyCheck": {
+    "ranAt": "2026-11-08",
+    "checks": {
+      "whoIsBehind": {
+        "result": "pass",
+        "reason": "Run by Sling, Inc., a company at 333 Summer St, Boston, MA 02210.",
+        "evidence": [
+          {
+            "quote": "© 2023 Sling, Inc. All rights reserved.",
+            "url": "https://getsling.com/about-us/",
+            "checkedAt": "2026-11-08"
+          },
+          {
+            "quote": "333 Summer St Boston, MA 02210",
+            "url": "https://getsling.com/about-us/",
+            "checkedAt": "2026-11-08"
+          },
+          {
+            "quote": "Sling was founded in Reykjavik, Iceland by our CEO – Helgi Hermannsson, back in 2015.",
+            "url": "https://getsling.com/about-us/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "domainAge": {
+        "result": "pass",
+        "reason": "The website has been around since July 2013.",
+        "evidence": [
+          {
+            "url": "https://rdap.org/domain/getsling.com",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "privacyPolicy": {
+        "result": "pass",
+        "reason": "Has a full privacy policy that says what they do with your information.",
+        "evidence": [
+          {
+            "url": "https://getsling.com/privacy-statement/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "dataUse": {
+        "result": "fail",
+        "reason": "It may use your customers' information to make its AI better, and we found no way to stop it.",
+        "evidence": [
+          {
+            "quote": "assessing the effectiveness of and improving our Services and Website.",
+            "url": "https://getsling.com/privacy-statement/",
+            "checkedAt": "2026-11-08"
+          },
+          {
+            "quote": "Sling has established an individual rights portal as well as other channels for the purposes of submitting the individual rights requests above, including the right of access and deletion.",
+            "url": "https://getsling.com/privacy-statement/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "dataLocation": {
+        "result": "unknown",
+        "reason": "We couldn't find which country your information is kept in.",
+        "evidence": [
+          {
+            "url": "https://getsling.com/privacy-statement/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "pricingClarity": {
+        "result": "pass",
+        "reason": "Shows a clear monthly price.",
+        "evidence": [
+          {
+            "url": "https://getsling.com/pricing/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "securityBasics": {
+        "result": "pass",
+        "reason": "Your connection to this website is private (https).",
+        "evidence": [
+          {
+            "url": "https://getsling.com/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "redFlags": {
+        "result": "pass",
+        "reason": "No warning signs found. (We didn't check Google's list of unsafe websites.)",
+        "evidence": [
+          {
+            "url": "https://getsling.com/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      }
+    },
+    "redFlags": [],
+    "verdict": "held",
+    "warnings": [
+      "We couldn't find which country your information is kept in."
+    ]
+  },
+  "lastChecked": "2026-11-08",
+  "sources": [
+    "https://getsling.com/",
+    "https://getsling.com/pricing/",
+    "https://getsling.com/about-us/",
+    "https://getsling.com/privacy-statement/",
+    "https://getsling.com/integrations/"
+  ],
+  "needsVerification": [
+    "pricing.large.monthlyUsd",
+    "pricing.freeTier",
+    "pricing.cancellation",
+    "setupMinutes",
+    "rulesFlags.recordsCalls",
+    "rulesFlags.announcesRecording",
+    "rulesFlags.hipaaReady",
+    "rulesFlags.outboundAiCalls",
+    "rulesFlags.personalizedPricing",
+    "setupMode",
+    "languages"
+  ]
+}

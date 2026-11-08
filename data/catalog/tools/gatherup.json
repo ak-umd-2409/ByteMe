@@ -1,0 +1,198 @@
+{
+  "id": "gatherup",
+  "name": "GatherUp",
+  "vendor": {
+    "company": "Insight Integrity Group",
+    "website": "https://gatherup.com",
+    "domain": "gatherup.com"
+  },
+  "description": "GatherUp brings reviews, listings, customer insights, and review protection together so you can spend less time managing feedback and more time building your business.",
+  "category": "Reviews",
+  "useCases": [
+    "reviews"
+  ],
+  "industries": [
+    "any"
+  ],
+  "pricing": {
+    "asOf": "Nov 2026",
+    "small": {
+      "monthlyUsd": "unknown",
+      "note": ""
+    },
+    "medium": {
+      "monthlyUsd": "unknown",
+      "note": ""
+    },
+    "large": {
+      "monthlyUsd": "unknown",
+      "note": ""
+    },
+    "freeTier": false,
+    "contract": "monthly",
+    "cancellation": "unknown",
+    "pricingUrl": "https://gatherup.com/pricing/"
+  },
+  "worksWith": [
+    {
+      "product": "Zapier",
+      "type": "zapier"
+    }
+  ],
+  "setupMinutes": "unknown",
+  "setupMode": "self_serve",
+  "languages": [
+    "English"
+  ],
+  "privacyCard": {
+    "trainsOnYourData": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm whether it uses your data to train AI.",
+      "quote": null,
+      "sourceUrl": null
+    },
+    "canDeleteData": {
+      "answer": "yes",
+      "plain": "You can delete your data.",
+      "quote": "In compliance with GDPR Article 37 GatherUp has a designated DPO available for inquiries from data subjects on issues relating to data protection practices, withdrawal of consent, the right to be forgotten, and related rights.",
+      "sourceUrl": "https://gatherup.com/your-privacy-rights/"
+    },
+    "whereStored": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm where your data is stored.",
+      "quote": null,
+      "sourceUrl": null
+    },
+    "sharesOrSells": {
+      "answer": "yes",
+      "plain": "May sell or share your data.",
+      "quote": "Businesses on GatherUp: We may share information from or about you (such as your age and gender), your submissions to the Service, your devices, and your use of the Service with businesses listed on GatherUp.",
+      "sourceUrl": "https://gatherup.com/your-privacy-rights/"
+    },
+    "securityCertification": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm a security certification.",
+      "quote": null,
+      "sourceUrl": null
+    }
+  },
+  "rulesFlags": {
+    "recordsCalls": "unknown",
+    "announcesRecording": "unknown",
+    "hipaaReady": true,
+    "outboundAiCalls": false,
+    "personalizedPricing": false
+  },
+  "badge": "listed",
+  "safetyCheck": {
+    "ranAt": "2026-11-08",
+    "checks": {
+      "whoIsBehind": {
+        "result": "unknown",
+        "reason": "We couldn't find an address for Insight Integrity Group.",
+        "evidence": [
+          {
+            "quote": "GatherUp is part of Insight Integrity Group, a company focused on trust technology and digital integrity.",
+            "url": "https://gatherup.com/about/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "domainAge": {
+        "result": "pass",
+        "reason": "The website has been around since March 2000.",
+        "evidence": [
+          {
+            "url": "https://rdap.org/domain/gatherup.com",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "privacyPolicy": {
+        "result": "pass",
+        "reason": "Has a full privacy policy that says what they do with your information.",
+        "evidence": [
+          {
+            "url": "https://gatherup.com/your-privacy-rights/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "dataUse": {
+        "result": "unknown",
+        "reason": "We couldn't find whether it uses your information to make its AI better.",
+        "evidence": [
+          {
+            "quote": "In compliance with GDPR Article 37 GatherUp has a designated DPO available for inquiries from data subjects on issues relating to data protection practices, withdrawal of consent, the right to be forgotten, and related rights.",
+            "url": "https://gatherup.com/your-privacy-rights/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "dataLocation": {
+        "result": "unknown",
+        "reason": "We couldn't find which country your information is kept in.",
+        "evidence": [
+          {
+            "url": "https://gatherup.com/your-privacy-rights/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "pricingClarity": {
+        "result": "pass",
+        "reason": "Shows a clear monthly price.",
+        "evidence": [
+          {
+            "url": "https://gatherup.com/pricing/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "securityBasics": {
+        "result": "pass",
+        "reason": "Your connection to this website is private (https).",
+        "evidence": [
+          {
+            "url": "https://gatherup.com/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "redFlags": {
+        "result": "pass",
+        "reason": "No warning signs found. (We didn't check Google's list of unsafe websites.)",
+        "evidence": [
+          {
+            "url": "https://gatherup.com/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      }
+    },
+    "redFlags": [],
+    "verdict": "held",
+    "warnings": [
+      "We couldn't find which country your information is kept in.",
+      "We couldn't find the name of the person who runs this company."
+    ]
+  },
+  "lastChecked": "2026-11-08",
+  "sources": [
+    "https://gatherup.com/",
+    "https://gatherup.com/pricing/",
+    "https://gatherup.com/solutions/integrations/",
+    "https://gatherup.com/your-privacy-rights/",
+    "https://gatherup.com/about/"
+  ],
+  "needsVerification": [
+    "pricing.small.monthlyUsd",
+    "pricing.medium.monthlyUsd",
+    "pricing.large.monthlyUsd",
+    "pricing.cancellation",
+    "setupMinutes",
+    "rulesFlags.recordsCalls",
+    "rulesFlags.announcesRecording",
+    "languages"
+  ]
+}

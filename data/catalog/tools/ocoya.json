@@ -1,0 +1,277 @@
+{
+  "id": "ocoya",
+  "name": "Ocoya",
+  "vendor": {
+    "company": "Ocoya",
+    "website": "https://www.ocoya.com",
+    "domain": "ocoya.com"
+  },
+  "description": "Your posts written, designed, scheduled and answered across every network, always in your brand’s voice.",
+  "category": "Social media",
+  "useCases": [
+    "marketing"
+  ],
+  "industries": [
+    "any"
+  ],
+  "pricing": {
+    "asOf": "Nov 2026",
+    "small": {
+      "monthlyUsd": 29,
+      "note": "Cheapest paid plan"
+    },
+    "medium": {
+      "monthlyUsd": 79,
+      "note": "Middle plan"
+    },
+    "large": {
+      "monthlyUsd": 199,
+      "note": "Top plan"
+    },
+    "freeTier": "unknown",
+    "contract": "monthly",
+    "cancellation": "unknown",
+    "pricingUrl": "https://www.ocoya.com/pricing"
+  },
+  "worksWith": [
+    {
+      "product": "Facebook",
+      "type": "native"
+    },
+    {
+      "product": "Instagram",
+      "type": "native"
+    },
+    {
+      "product": "X (Twitter)",
+      "type": "native"
+    },
+    {
+      "product": "LinkedIn",
+      "type": "native"
+    },
+    {
+      "product": "Pinterest",
+      "type": "native"
+    },
+    {
+      "product": "Bluesky",
+      "type": "native"
+    },
+    {
+      "product": "Threads",
+      "type": "native"
+    },
+    {
+      "product": "YouTube Shorts",
+      "type": "native"
+    },
+    {
+      "product": "Google Business",
+      "type": "native"
+    },
+    {
+      "product": "TikTok",
+      "type": "native"
+    },
+    {
+      "product": "Telegram",
+      "type": "native"
+    },
+    {
+      "product": "Slack",
+      "type": "native"
+    },
+    {
+      "product": "Discord",
+      "type": "native"
+    },
+    {
+      "product": "Mastodon",
+      "type": "native"
+    },
+    {
+      "product": "Dribbble",
+      "type": "native"
+    },
+    {
+      "product": "Tumblr",
+      "type": "native"
+    },
+    {
+      "product": "WordPress",
+      "type": "native"
+    },
+    {
+      "product": "DEV.to",
+      "type": "native"
+    },
+    {
+      "product": "Notion",
+      "type": "native"
+    }
+  ],
+  "setupMinutes": "unknown",
+  "setupMode": "needs_help",
+  "languages": [
+    "English",
+    "Español",
+    "Português",
+    "Deutsch",
+    "Français",
+    "Italiano",
+    "Polski",
+    "Lietuvių"
+  ],
+  "privacyCard": {
+    "trainsOnYourData": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm whether it uses your data to train AI.",
+      "quote": null,
+      "sourceUrl": null
+    },
+    "canDeleteData": {
+      "answer": "yes",
+      "plain": "You can delete your data.",
+      "quote": "If you wish to request the deletion of your personal data from our systems, you can refer to our Help Center.",
+      "sourceUrl": "https://www.ocoya.com/legal/privacy"
+    },
+    "whereStored": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm where your data is stored.",
+      "quote": null,
+      "sourceUrl": null
+    },
+    "sharesOrSells": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm whether it sells or shares your data.",
+      "quote": null,
+      "sourceUrl": null
+    },
+    "securityCertification": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm a security certification.",
+      "quote": null,
+      "sourceUrl": null
+    }
+  },
+  "rulesFlags": {
+    "recordsCalls": "unknown",
+    "announcesRecording": "unknown",
+    "hipaaReady": "unknown",
+    "outboundAiCalls": "unknown",
+    "personalizedPricing": "unknown"
+  },
+  "badge": "listed",
+  "safetyCheck": {
+    "ranAt": "2026-11-08",
+    "checks": {
+      "whoIsBehind": {
+        "result": "unknown",
+        "reason": "We couldn't find an About or Contact page that says who is behind this tool.",
+        "evidence": [
+          {
+            "quote": "UAB „Ocoya“, company code 305673313, VAT LT100013652516, Perkūnkiemio g. 19, Vilnius, Lithuania · support@ocoya.com",
+            "url": "https://www.ocoya.com/legal/privacy",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "domainAge": {
+        "result": "pass",
+        "reason": "The website has been around since July 2011.",
+        "evidence": [
+          {
+            "url": "https://rdap.org/domain/ocoya.com",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "privacyPolicy": {
+        "result": "pass",
+        "reason": "Has a full privacy policy that says what they do with your information.",
+        "evidence": [
+          {
+            "url": "https://www.ocoya.com/legal/privacy",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "dataUse": {
+        "result": "unknown",
+        "reason": "We couldn't find whether it uses your information to make its AI better.",
+        "evidence": [
+          {
+            "quote": "If you wish to request the deletion of your personal data from our systems, you can refer to our Help Center.",
+            "url": "https://www.ocoya.com/legal/privacy",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "dataLocation": {
+        "result": "unknown",
+        "reason": "We couldn't find which country your information is kept in.",
+        "evidence": [
+          {
+            "url": "https://www.ocoya.com/legal/privacy",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "pricingClarity": {
+        "result": "pass",
+        "reason": "Shows a clear monthly price.",
+        "evidence": [
+          {
+            "url": "https://www.ocoya.com/pricing",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "securityBasics": {
+        "result": "pass",
+        "reason": "Your connection to this website is private (https).",
+        "evidence": [
+          {
+            "url": "https://www.ocoya.com/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "redFlags": {
+        "result": "pass",
+        "reason": "No warning signs found. (We didn't check Google's list of unsafe websites.)",
+        "evidence": [
+          {
+            "url": "https://www.ocoya.com/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      }
+    },
+    "redFlags": [],
+    "verdict": "held",
+    "warnings": [
+      "We couldn't find which country your information is kept in.",
+      "We couldn't find the name of the person who runs this company."
+    ]
+  },
+  "lastChecked": "2026-11-08",
+  "sources": [
+    "https://www.ocoya.com/",
+    "https://www.ocoya.com/pricing",
+    "https://www.ocoya.com/legal/privacy",
+    "https://www.ocoya.com/integrations/facebook"
+  ],
+  "needsVerification": [
+    "pricing.freeTier",
+    "pricing.cancellation",
+    "setupMinutes",
+    "rulesFlags.recordsCalls",
+    "rulesFlags.announcesRecording",
+    "rulesFlags.hipaaReady",
+    "rulesFlags.outboundAiCalls",
+    "rulesFlags.personalizedPricing",
+    "setupMode"
+  ]
+}

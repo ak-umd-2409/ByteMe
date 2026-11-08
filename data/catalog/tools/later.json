@@ -1,0 +1,212 @@
+{
+  "id": "later",
+  "name": "Later",
+  "vendor": {
+    "company": "Later",
+    "website": "https://later.com",
+    "domain": "later.com"
+  },
+  "description": "Influencer marketing built for creators, trusted by brands, and designed for results.",
+  "category": "Social media",
+  "useCases": [
+    "marketing"
+  ],
+  "industries": [
+    "retail",
+    "salon",
+    "restaurant",
+    "cafe"
+  ],
+  "pricing": {
+    "asOf": "Nov 2026",
+    "small": {
+      "monthlyUsd": 18.75,
+      "note": "Cheapest paid plan"
+    },
+    "medium": {
+      "monthlyUsd": 37.5,
+      "note": "Middle plan"
+    },
+    "large": {
+      "monthlyUsd": 82.5,
+      "note": "Top plan"
+    },
+    "freeTier": "unknown",
+    "contract": "annual",
+    "cancellation": "unknown",
+    "pricingUrl": "https://later.com/pricing/"
+  },
+  "worksWith": [
+    {
+      "product": "Adobe",
+      "type": "native"
+    },
+    {
+      "product": "Bazaarvoice",
+      "type": "native"
+    },
+    {
+      "product": "Canva",
+      "type": "native"
+    }
+  ],
+  "setupMinutes": "unknown",
+  "setupMode": "self_serve",
+  "languages": [
+    "English"
+  ],
+  "privacyCard": {
+    "trainsOnYourData": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm whether it uses your data to train AI.",
+      "quote": null,
+      "sourceUrl": null
+    },
+    "canDeleteData": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm whether you can delete your data.",
+      "quote": null,
+      "sourceUrl": null
+    },
+    "whereStored": {
+      "answer": "USA",
+      "plain": "Your data is stored in USA.",
+      "quote": "We store personal information in the USA.",
+      "sourceUrl": "https://later.com/privacy/"
+    },
+    "sharesOrSells": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm whether it sells or shares your data.",
+      "quote": null,
+      "sourceUrl": null
+    },
+    "securityCertification": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm a security certification.",
+      "quote": null,
+      "sourceUrl": null
+    }
+  },
+  "rulesFlags": {
+    "recordsCalls": "unknown",
+    "announcesRecording": "unknown",
+    "hipaaReady": "unknown",
+    "outboundAiCalls": "unknown",
+    "personalizedPricing": "unknown"
+  },
+  "badge": "listed",
+  "safetyCheck": {
+    "ranAt": "2026-11-08",
+    "checks": {
+      "whoIsBehind": {
+        "result": "unknown",
+        "reason": "We couldn't find an address for Later.",
+        "evidence": [
+          {
+            "quote": "Hi, We're Later",
+            "url": "https://later.com/about/",
+            "checkedAt": "2026-11-08"
+          },
+          {
+            "quote": "Scott Sutton\nCEO, Later",
+            "url": "https://later.com/about/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "domainAge": {
+        "result": "pass",
+        "reason": "The website has been around since February 1997.",
+        "evidence": [
+          {
+            "url": "https://rdap.org/domain/later.com",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "privacyPolicy": {
+        "result": "pass",
+        "reason": "Has a full privacy policy that says what they do with your information.",
+        "evidence": [
+          {
+            "url": "https://later.com/privacy/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "dataUse": {
+        "result": "unknown",
+        "reason": "We couldn't find whether it uses your information to make its AI better or whether you can delete your information.",
+        "evidence": [
+          {
+            "url": "https://later.com/privacy/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "dataLocation": {
+        "result": "pass",
+        "reason": "Your information is kept in USA.",
+        "evidence": [
+          {
+            "quote": "We store personal information in the USA.",
+            "url": "https://later.com/privacy/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "pricingClarity": {
+        "result": "pass",
+        "reason": "Shows a clear monthly price.",
+        "evidence": [
+          {
+            "url": "https://later.com/pricing/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "securityBasics": {
+        "result": "pass",
+        "reason": "Your connection to this website is private (https).",
+        "evidence": [
+          {
+            "url": "https://later.com/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "redFlags": {
+        "result": "pass",
+        "reason": "No warning signs found. (We didn't check Google's list of unsafe websites.)",
+        "evidence": [
+          {
+            "url": "https://later.com/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      }
+    },
+    "redFlags": [],
+    "verdict": "held",
+    "warnings": []
+  },
+  "lastChecked": "2026-11-08",
+  "sources": [
+    "https://later.com/",
+    "https://later.com/pricing/",
+    "https://later.com/about/",
+    "https://later.com/privacy/",
+    "https://later.com/partners/"
+  ],
+  "needsVerification": [
+    "pricing.freeTier",
+    "pricing.cancellation",
+    "setupMinutes",
+    "rulesFlags.recordsCalls",
+    "rulesFlags.announcesRecording",
+    "rulesFlags.hipaaReady",
+    "rulesFlags.outboundAiCalls",
+    "rulesFlags.personalizedPricing",
+    "languages"
+  ]
+}

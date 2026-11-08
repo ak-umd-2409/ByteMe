@@ -1,0 +1,222 @@
+{
+  "id": "copy-ai",
+  "name": "Copy.ai",
+  "vendor": {
+    "company": "CopyAI, Inc",
+    "website": "https://www.copy.ai",
+    "domain": "copy.ai"
+  },
+  "description": "Power your go-to-market strategy with the Copy.ai GTM AI Platform, designed to streamline processes, unify data, and optimize performance across your entire revenue lifecycle.",
+  "category": "AI writing",
+  "useCases": [
+    "marketing",
+    "email-marketing"
+  ],
+  "industries": [
+    "any"
+  ],
+  "pricing": {
+    "asOf": "Nov 2026",
+    "small": {
+      "monthlyUsd": "unknown",
+      "note": ""
+    },
+    "medium": {
+      "monthlyUsd": 2000,
+      "note": "Middle plan"
+    },
+    "large": {
+      "monthlyUsd": 3000,
+      "note": "Top plan"
+    },
+    "freeTier": "unknown",
+    "contract": "monthly",
+    "cancellation": "unknown",
+    "pricingUrl": "https://www.copy.ai/prices"
+  },
+  "worksWith": [
+    {
+      "product": "Zapier",
+      "type": "zapier"
+    },
+    {
+      "product": "Slack",
+      "type": "native"
+    },
+    {
+      "product": "Microsoft Teams",
+      "type": "native"
+    },
+    {
+      "product": "Notion",
+      "type": "native"
+    },
+    {
+      "product": "Coda",
+      "type": "native"
+    }
+  ],
+  "setupMinutes": "unknown",
+  "setupMode": "self_serve",
+  "languages": [
+    "English"
+  ],
+  "privacyCard": {
+    "trainsOnYourData": {
+      "answer": "yes",
+      "plain": "Uses your data to train its AI.",
+      "quote": "To improve, upgrade or enhance our Services;",
+      "sourceUrl": "https://www.copy.ai/privacy-notice"
+    },
+    "canDeleteData": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm whether you can delete your data.",
+      "quote": null,
+      "sourceUrl": null
+    },
+    "whereStored": {
+      "answer": "United States and European Union",
+      "plain": "Your data is stored in United States and European Union.",
+      "quote": "We use cloud-based services to store and process data in the United States and European Union and will store data at additional sites, at our discretion, in accordance with applicable laws.",
+      "sourceUrl": "https://www.copy.ai/privacy-notice"
+    },
+    "sharesOrSells": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm whether it sells or shares your data.",
+      "quote": null,
+      "sourceUrl": null
+    },
+    "securityCertification": {
+      "answer": "SOC 2",
+      "plain": "Security checked by an outside company: SOC 2.",
+      "quote": "How Automated Workflows and SOC 2 Compliance Protect Your Data",
+      "sourceUrl": "https://www.copy.ai/privacy-notice"
+    }
+  },
+  "rulesFlags": {
+    "recordsCalls": "unknown",
+    "announcesRecording": "unknown",
+    "hipaaReady": "unknown",
+    "outboundAiCalls": "unknown",
+    "personalizedPricing": "unknown"
+  },
+  "badge": "listed",
+  "safetyCheck": {
+    "ranAt": "2026-11-08",
+    "checks": {
+      "whoIsBehind": {
+        "result": "pass",
+        "reason": "Run by CopyAI, Inc, a company at 1661 International Dr, Memphis, TN 38120, USA.",
+        "evidence": [
+          {
+            "quote": "© 2025 CopyAI, Inc",
+            "url": "https://www.copy.ai/",
+            "checkedAt": "2026-11-08"
+          },
+          {
+            "quote": "Contact us – Please contact us at: legal@copy.ai, or at our offices located at 1661 International Dr, Memphis, TN 38120, USA.",
+            "url": "https://www.copy.ai/privacy-notice",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "domainAge": {
+        "result": "pass",
+        "reason": "The website has been around since December 2017.",
+        "evidence": [
+          {
+            "url": "https://rdap.org/domain/copy.ai",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "privacyPolicy": {
+        "result": "pass",
+        "reason": "Has a full privacy policy that says what they do with your information.",
+        "evidence": [
+          {
+            "url": "https://www.copy.ai/privacy-notice",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "dataUse": {
+        "result": "fail",
+        "reason": "It may use your customers' information to make its AI better, and we found no way to stop it.",
+        "evidence": [
+          {
+            "quote": "To improve, upgrade or enhance our Services;",
+            "url": "https://www.copy.ai/privacy-notice",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "dataLocation": {
+        "result": "pass",
+        "reason": "Your information is kept in United States and European Union.",
+        "evidence": [
+          {
+            "quote": "We use cloud-based services to store and process data in the United States and European Union and will store data at additional sites, at our discretion, in accordance with applicable laws.",
+            "url": "https://www.copy.ai/privacy-notice",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "pricingClarity": {
+        "result": "pass",
+        "reason": "Shows a clear monthly price.",
+        "evidence": [
+          {
+            "url": "https://www.copy.ai/prices",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "securityBasics": {
+        "result": "pass",
+        "reason": "Your connection to this website is private (https).",
+        "evidence": [
+          {
+            "url": "https://www.copy.ai/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "redFlags": {
+        "result": "pass",
+        "reason": "No warning signs found. (We didn't check Google's list of unsafe websites.)",
+        "evidence": [
+          {
+            "url": "https://www.copy.ai/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      }
+    },
+    "redFlags": [],
+    "verdict": "held",
+    "warnings": [
+      "We couldn't find the name of the person who runs this company."
+    ]
+  },
+  "lastChecked": "2026-11-08",
+  "sources": [
+    "https://www.copy.ai/platform/how-it-works",
+    "https://www.copy.ai/prices",
+    "https://www.copy.ai/",
+    "https://www.copy.ai/privacy-notice",
+    "https://www.copy.ai/use-cases/gtm-systems-integrations"
+  ],
+  "needsVerification": [
+    "pricing.small.monthlyUsd",
+    "pricing.freeTier",
+    "pricing.cancellation",
+    "setupMinutes",
+    "rulesFlags.recordsCalls",
+    "rulesFlags.announcesRecording",
+    "rulesFlags.hipaaReady",
+    "rulesFlags.outboundAiCalls",
+    "rulesFlags.personalizedPricing",
+    "languages"
+  ]
+}

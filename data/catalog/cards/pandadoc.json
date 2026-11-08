@@ -1,0 +1,65 @@
+{
+  "input": {
+    "id": "pandadoc",
+    "name": "PandaDoc",
+    "url": "https://www.pandadoc.com",
+    "category": "Documents",
+    "useCases": [
+      "quotes",
+      "admin-paperwork"
+    ],
+    "industries": [
+      "any"
+    ],
+    "sensitive": false,
+    "batch": 2
+  },
+  "collectedAt": "2026-11-08",
+  "pages": {
+    "home": {
+      "error": "http_429"
+    },
+    "pricing": {
+      "error": "http_429"
+    },
+    "features": {
+      "error": "http_429"
+    },
+    "integrations": {
+      "error": "http_429"
+    },
+    "help": {
+      "error": "http_429"
+    },
+    "privacy": {
+      "error": "http_429"
+    }
+  },
+  "ai": {
+    "ran": false,
+    "description": "unknown",
+    "plans": {
+      "small": "unknown",
+      "medium": "unknown",
+      "large": "unknown"
+    },
+    "planNotes": {
+      "small": "",
+      "medium": "",
+      "large": ""
+    },
+    "freeTier": "unknown",
+    "contract": "unknown",
+    "cancellation": "unknown",
+    "worksWith": [],
+    "setupMinutes": "unknown",
+    "setupMode": "unknown",
+    "languages": "unknown",
+    "recordsCalls": "unknown",
+    "announcesRecording": "unknown",
+    "hipaaReady": "unknown",
+    "outboundAiCalls": "unknown",
+    "personalizedPricing": "unknown",
+    "sharesOrSells": "unknown"
+  }
+}

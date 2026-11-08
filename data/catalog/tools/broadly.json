@@ -1,0 +1,225 @@
+{
+  "id": "broadly",
+  "name": "Broadly",
+  "vendor": {
+    "company": "Broadly Inc.",
+    "website": "https://broadly.com",
+    "domain": "broadly.com"
+  },
+  "description": "AI employees that answer calls, get reviews, and rank you on Google.",
+  "category": "Reviews",
+  "useCases": [
+    "reviews",
+    "customer-messaging"
+  ],
+  "industries": [
+    "hvac",
+    "plumbing",
+    "electrical",
+    "landscaping",
+    "cleaning"
+  ],
+  "pricing": {
+    "asOf": "Nov 2026",
+    "small": {
+      "monthlyUsd": 199,
+      "note": "AI Voice plan"
+    },
+    "medium": {
+      "monthlyUsd": 299,
+      "note": "AI Front Desk plan"
+    },
+    "large": {
+      "monthlyUsd": 699,
+      "note": "24/7 AI Workforce plan"
+    },
+    "freeTier": "unknown",
+    "contract": "monthly",
+    "cancellation": "unknown",
+    "pricingUrl": "https://broadly.com/pricing-ai-workforce"
+  },
+  "worksWith": [
+    {
+      "product": "ServiceTitan",
+      "type": "native"
+    },
+    {
+      "product": "Jobber",
+      "type": "native"
+    },
+    {
+      "product": "Housecall Pro",
+      "type": "native"
+    },
+    {
+      "product": "Gingr",
+      "type": "native"
+    },
+    {
+      "product": "Google Business Profile",
+      "type": "native"
+    }
+  ],
+  "setupMinutes": "unknown",
+  "setupMode": "needs_help",
+  "languages": [
+    "English"
+  ],
+  "privacyCard": {
+    "trainsOnYourData": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm whether it uses your data to train AI.",
+      "quote": null,
+      "sourceUrl": null
+    },
+    "canDeleteData": {
+      "answer": "yes",
+      "plain": "You can delete your data.",
+      "quote": "If you are such a Consumer and would no longer like your information to be used by a Business or you would like to access, correct, or request deletion of your information, please contact the Business that you interact with directly.",
+      "sourceUrl": "https://broadly.com/privacy"
+    },
+    "whereStored": {
+      "answer": "United States",
+      "plain": "Your data is stored in United States.",
+      "quote": "By using our Service, you understand and acknowledge that your Personal Information will be transferred from your location to our facilities and servers in the United States.",
+      "sourceUrl": "https://broadly.com/privacy"
+    },
+    "sharesOrSells": {
+      "answer": "no",
+      "plain": "Does not sell or share your data.",
+      "quote": "Broadly does not sell your Personal Information.",
+      "sourceUrl": "https://broadly.com/privacy"
+    },
+    "securityCertification": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm a security certification.",
+      "quote": null,
+      "sourceUrl": null
+    }
+  },
+  "rulesFlags": {
+    "recordsCalls": "unknown",
+    "announcesRecording": "unknown",
+    "hipaaReady": "unknown",
+    "outboundAiCalls": "unknown",
+    "personalizedPricing": "unknown"
+  },
+  "badge": "listed",
+  "safetyCheck": {
+    "ranAt": "2026-11-08",
+    "checks": {
+      "whoIsBehind": {
+        "result": "pass",
+        "reason": "Run by Broadly Inc., a company at 951 Yamato Road, Suite 212, Boca Raton, FL 33431.",
+        "evidence": [
+          {
+            "quote": "Copyright Broadly Inc. All Rights Reserved.",
+            "url": "https://broadly.com/about",
+            "checkedAt": "2026-11-08"
+          },
+          {
+            "quote": "951 Yamato Road, Suite 212 Boca Raton, FL 33431",
+            "url": "https://broadly.com/privacy",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "domainAge": {
+        "result": "pass",
+        "reason": "The website has been around since January 2009.",
+        "evidence": [
+          {
+            "url": "https://rdap.org/domain/broadly.com",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "privacyPolicy": {
+        "result": "pass",
+        "reason": "Has a full privacy policy that says what they do with your information.",
+        "evidence": [
+          {
+            "url": "https://broadly.com/privacy",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "dataUse": {
+        "result": "unknown",
+        "reason": "We couldn't find whether it uses your information to make its AI better.",
+        "evidence": [
+          {
+            "quote": "If you are such a Consumer and would no longer like your information to be used by a Business or you would like to access, correct, or request deletion of your information, please contact the Business that you interact with directly.",
+            "url": "https://broadly.com/privacy",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "dataLocation": {
+        "result": "pass",
+        "reason": "Your information is kept in United States.",
+        "evidence": [
+          {
+            "quote": "By using our Service, you understand and acknowledge that your Personal Information will be transferred from your location to our facilities and servers in the United States.",
+            "url": "https://broadly.com/privacy",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "pricingClarity": {
+        "result": "pass",
+        "reason": "Shows a clear monthly price.",
+        "evidence": [
+          {
+            "url": "https://broadly.com/pricing-ai-workforce",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "securityBasics": {
+        "result": "pass",
+        "reason": "Your connection to this website is private (https).",
+        "evidence": [
+          {
+            "url": "https://broadly.com/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "redFlags": {
+        "result": "pass",
+        "reason": "No warning signs found. (We didn't check Google's list of unsafe websites.)",
+        "evidence": [
+          {
+            "url": "https://broadly.com/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      }
+    },
+    "redFlags": [],
+    "verdict": "held",
+    "warnings": [
+      "We couldn't find the name of the person who runs this company."
+    ]
+  },
+  "lastChecked": "2026-11-08",
+  "sources": [
+    "https://broadly.com/",
+    "https://broadly.com/pricing-ai-workforce",
+    "https://broadly.com/privacy",
+    "https://broadly.com/about"
+  ],
+  "needsVerification": [
+    "pricing.freeTier",
+    "pricing.cancellation",
+    "setupMinutes",
+    "rulesFlags.recordsCalls",
+    "rulesFlags.announcesRecording",
+    "rulesFlags.hipaaReady",
+    "rulesFlags.outboundAiCalls",
+    "rulesFlags.personalizedPricing",
+    "setupMode",
+    "languages"
+  ]
+}

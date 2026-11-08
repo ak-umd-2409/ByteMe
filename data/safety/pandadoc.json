@@ -1,0 +1,51 @@
+{
+  "input": {
+    "url": "https://www.pandadoc.com/",
+    "name": "PandaDoc",
+    "handlesSensitiveData": false
+  },
+  "collectedAt": "2026-11-08",
+  "pages": {
+    "home": {
+      "error": "http_429"
+    },
+    "about": {
+      "error": "http_429"
+    },
+    "contact": {
+      "error": "http_429"
+    },
+    "privacy": {
+      "error": "http_429"
+    },
+    "pricing": {
+      "error": "http_429"
+    },
+    "terms": {
+      "error": "http_429"
+    }
+  },
+  "domain": {
+    "name": "pandadoc.com",
+    "registeredAt": "2013-03-07",
+    "source": "rdap"
+  },
+  "https": false,
+  "downloadPrompt": false,
+  "ai": {
+    "ran": {
+      "about": false,
+      "privacy": false
+    },
+    "companyName": "unknown",
+    "address": "unknown",
+    "leaderName": "unknown",
+    "trainsOnYourData": "unknown",
+    "canDeleteData": "unknown",
+    "whereStored": "unknown",
+    "securityCertification": "unknown",
+    "policyAddress": "unknown"
+  },
+  "riskySentences": [],
+  "safeBrowsing": "not_run"
+}

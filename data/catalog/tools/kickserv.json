@@ -1,0 +1,226 @@
+{
+  "id": "kickserv",
+  "name": "Kickserv",
+  "vendor": {
+    "company": "Norman's Dojo, Inc.",
+    "website": "https://www.kickserv.com",
+    "domain": "kickserv.com"
+  },
+  "description": "Manage customers, schedule jobs and get paid.",
+  "category": "Field service software",
+  "useCases": [
+    "quotes",
+    "booking"
+  ],
+  "industries": [
+    "hvac",
+    "plumbing",
+    "electrical",
+    "landscaping",
+    "cleaning"
+  ],
+  "pricing": {
+    "asOf": "Nov 2026",
+    "small": {
+      "monthlyUsd": 60,
+      "note": "Cheapest paid plan"
+    },
+    "medium": {
+      "monthlyUsd": 119,
+      "note": "Middle plan"
+    },
+    "large": {
+      "monthlyUsd": 199,
+      "note": "Top plan"
+    },
+    "freeTier": "unknown",
+    "contract": "monthly",
+    "cancellation": "unknown",
+    "pricingUrl": "https://www.kickserv.com/pricing"
+  },
+  "worksWith": [
+    {
+      "product": "QuickBooks Online",
+      "type": "native"
+    },
+    {
+      "product": "Stripe",
+      "type": "native"
+    },
+    {
+      "product": "Mailchimp",
+      "type": "native"
+    },
+    {
+      "product": "Customer Lobby",
+      "type": "native"
+    }
+  ],
+  "setupMinutes": "unknown",
+  "setupMode": "needs_help",
+  "languages": [
+    "English"
+  ],
+  "privacyCard": {
+    "trainsOnYourData": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm whether it uses your data to train AI.",
+      "quote": null,
+      "sourceUrl": null
+    },
+    "canDeleteData": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm whether you can delete your data.",
+      "quote": null,
+      "sourceUrl": null
+    },
+    "whereStored": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm where your data is stored.",
+      "quote": null,
+      "sourceUrl": null
+    },
+    "sharesOrSells": {
+      "answer": "yes",
+      "plain": "May sell or share your data.",
+      "quote": "If you approve, we will share your information with our technology partners to deliver special offers and information regarding their products and services.",
+      "sourceUrl": "https://www.kickserv.com/privacy"
+    },
+    "securityCertification": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm a security certification.",
+      "quote": null,
+      "sourceUrl": null
+    }
+  },
+  "rulesFlags": {
+    "recordsCalls": "unknown",
+    "announcesRecording": "unknown",
+    "hipaaReady": "unknown",
+    "outboundAiCalls": "unknown",
+    "personalizedPricing": "unknown"
+  },
+  "badge": "listed",
+  "safetyCheck": {
+    "ranAt": "2026-11-08",
+    "checks": {
+      "whoIsBehind": {
+        "result": "pass",
+        "reason": "Run by Norman's Dojo, Inc., a company at 3601 Walnut St., Ste 400, Denver, CO 80205.",
+        "evidence": [
+          {
+            "quote": "Todd and Jonathan pooled their funds and, in honor of Norman, formed Norman's Dojo, Inc. to purchase Kickserv back from Gannett.",
+            "url": "https://www.kickserv.com/our-story",
+            "checkedAt": "2026-11-08"
+          },
+          {
+            "quote": "Address : 3601 Walnut St., Ste 400, Denver, CO 80205",
+            "url": "https://www.kickserv.com/contact",
+            "checkedAt": "2026-11-08"
+          },
+          {
+            "quote": "Todd Eccles, Kickserv’s founder came up with a solution over 25 years ago, and he offered it to field service businesses everywhere.",
+            "url": "https://www.kickserv.com/our-story",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "domainAge": {
+        "result": "pass",
+        "reason": "The website has been around since September 2011.",
+        "evidence": [
+          {
+            "url": "https://rdap.org/domain/kickserv.com",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "privacyPolicy": {
+        "result": "pass",
+        "reason": "Has a full privacy policy that says what they do with your information.",
+        "evidence": [
+          {
+            "url": "https://www.kickserv.com/privacy",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "dataUse": {
+        "result": "unknown",
+        "reason": "We couldn't find whether it uses your information to make its AI better or whether you can delete your information.",
+        "evidence": [
+          {
+            "url": "https://www.kickserv.com/privacy",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "dataLocation": {
+        "result": "unknown",
+        "reason": "We couldn't find which country your information is kept in.",
+        "evidence": [
+          {
+            "url": "https://www.kickserv.com/privacy",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "pricingClarity": {
+        "result": "pass",
+        "reason": "Shows a clear monthly price.",
+        "evidence": [
+          {
+            "url": "https://www.kickserv.com/pricing",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "securityBasics": {
+        "result": "pass",
+        "reason": "Your connection to this website is private (https). This tool handles payments or health information, but we found no proof that an outside company checked its security (like PCI or SOC 2).",
+        "evidence": [
+          {
+            "url": "https://www.kickserv.com/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "redFlags": {
+        "result": "pass",
+        "reason": "No warning signs found. (We didn't check Google's list of unsafe websites.)",
+        "evidence": [
+          {
+            "url": "https://www.kickserv.com/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      }
+    },
+    "redFlags": [],
+    "verdict": "held",
+    "warnings": [
+      "We couldn't find which country your information is kept in.",
+      "This tool handles payments or health information, but we found no proof that an outside company checked its security (like PCI or SOC 2)."
+    ]
+  },
+  "lastChecked": "2026-11-08",
+  "sources": [
+    "https://www.kickserv.com/",
+    "https://www.kickserv.com/pricing",
+    "https://www.kickserv.com/privacy",
+    "https://www.kickserv.com/our-story",
+    "https://www.kickserv.com/integrations/quickbooks-desktop"
+  ],
+  "needsVerification": [
+    "pricing.freeTier",
+    "pricing.cancellation",
+    "setupMinutes",
+    "rulesFlags.recordsCalls",
+    "rulesFlags.announcesRecording",
+    "rulesFlags.hipaaReady",
+    "rulesFlags.outboundAiCalls",
+    "rulesFlags.personalizedPricing",
+    "setupMode",
+    "languages"
+  ]
+}

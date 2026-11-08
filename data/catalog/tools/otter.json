@@ -1,0 +1,231 @@
+{
+  "id": "otter",
+  "name": "Otter.ai",
+  "vendor": {
+    "company": "Otter.ai Inc",
+    "website": "https://otter.ai",
+    "domain": "otter.ai"
+  },
+  "description": "Otter transcribes every meeting, turning it into searchable knowledge that powers your workflow.",
+  "category": "Meeting notes",
+  "useCases": [
+    "admin-paperwork"
+  ],
+  "industries": [
+    "any"
+  ],
+  "pricing": {
+    "asOf": "Nov 2026",
+    "small": {
+      "monthlyUsd": 8,
+      "note": "Cheapest paid plan"
+    },
+    "medium": {
+      "monthlyUsd": "unknown",
+      "note": ""
+    },
+    "large": {
+      "monthlyUsd": "unknown",
+      "note": ""
+    },
+    "freeTier": "unknown",
+    "contract": "unknown",
+    "cancellation": "unknown",
+    "pricingUrl": "https://otter.ai/pricing"
+  },
+  "worksWith": [
+    {
+      "product": "Slack",
+      "type": "native"
+    },
+    {
+      "product": "Zoom",
+      "type": "native"
+    },
+    {
+      "product": "Salesforce",
+      "type": "native"
+    },
+    {
+      "product": "Claude",
+      "type": "native"
+    },
+    {
+      "product": "Google Drive",
+      "type": "native"
+    },
+    {
+      "product": "HubSpot",
+      "type": "zapier"
+    },
+    {
+      "product": "Zapier",
+      "type": "native"
+    }
+  ],
+  "setupMinutes": "unknown",
+  "setupMode": "needs_help",
+  "languages": [
+    "English"
+  ],
+  "privacyCard": {
+    "trainsOnYourData": {
+      "answer": "yes",
+      "plain": "Uses your data to train its AI.",
+      "quote": "Improve and monitor the Services, including training our proprietary AI technology on de-identified audio recordings and on transcriptions (which may contain Personal Information)",
+      "sourceUrl": "https://otter.ai/privacy-policy"
+    },
+    "canDeleteData": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm whether you can delete your data.",
+      "quote": null,
+      "sourceUrl": null
+    },
+    "whereStored": {
+      "answer": "United States",
+      "plain": "Your data is stored in United States.",
+      "quote": "Cloud service providers who we rely on for compute and data storage, including Amazon Web Services, based in the United States.",
+      "sourceUrl": "https://otter.ai/privacy-policy"
+    },
+    "sharesOrSells": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm whether it sells or shares your data.",
+      "quote": null,
+      "sourceUrl": null
+    },
+    "securityCertification": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm a security certification.",
+      "quote": null,
+      "sourceUrl": null
+    }
+  },
+  "rulesFlags": {
+    "recordsCalls": "unknown",
+    "announcesRecording": "unknown",
+    "hipaaReady": "unknown",
+    "outboundAiCalls": "unknown",
+    "personalizedPricing": "unknown"
+  },
+  "badge": "listed",
+  "safetyCheck": {
+    "ranAt": "2026-11-08",
+    "checks": {
+      "whoIsBehind": {
+        "result": "pass",
+        "reason": "Run by Otter.ai Inc, a company at 800 W. El Camino Real, Suite 170, Mountain View, CA 94040.",
+        "evidence": [
+          {
+            "quote": "© 2026 Otter.ai Inc Privacy policy Terms of service Software service agreement JP Cookie settings Status",
+            "url": "https://otter.ai/careers",
+            "checkedAt": "2026-11-08"
+          },
+          {
+            "quote": "800 W. El Camino Real, Suite 170 Mountain View, CA 94040",
+            "url": "https://otter.ai/careers",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "domainAge": {
+        "result": "pass",
+        "reason": "The website has been around since December 2017.",
+        "evidence": [
+          {
+            "url": "https://rdap.org/domain/otter.ai",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "privacyPolicy": {
+        "result": "pass",
+        "reason": "Has a full privacy policy that says what they do with your information.",
+        "evidence": [
+          {
+            "url": "https://otter.ai/privacy-policy",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "dataUse": {
+        "result": "fail",
+        "reason": "It may use your customers' information to make its AI better, and we found no way to stop it.",
+        "evidence": [
+          {
+            "quote": "Improve and monitor the Services, including training our proprietary AI technology on de-identified audio recordings and on transcriptions (which may contain Personal Information)",
+            "url": "https://otter.ai/privacy-policy",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "dataLocation": {
+        "result": "pass",
+        "reason": "Your information is kept in United States.",
+        "evidence": [
+          {
+            "quote": "Cloud service providers who we rely on for compute and data storage, including Amazon Web Services, based in the United States.",
+            "url": "https://otter.ai/privacy-policy",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "pricingClarity": {
+        "result": "pass",
+        "reason": "Shows a clear monthly price.",
+        "evidence": [
+          {
+            "url": "https://otter.ai/pricing",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "securityBasics": {
+        "result": "pass",
+        "reason": "Your connection to this website is private (https).",
+        "evidence": [
+          {
+            "url": "https://otter.ai/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "redFlags": {
+        "result": "pass",
+        "reason": "No warning signs found. (We didn't check Google's list of unsafe websites.)",
+        "evidence": [
+          {
+            "url": "https://otter.ai/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      }
+    },
+    "redFlags": [],
+    "verdict": "held",
+    "warnings": [
+      "We couldn't find the name of the person who runs this company."
+    ]
+  },
+  "lastChecked": "2026-11-08",
+  "sources": [
+    "https://otter.ai/",
+    "https://otter.ai/pricing",
+    "https://otter.ai/careers",
+    "https://otter.ai/privacy-policy"
+  ],
+  "needsVerification": [
+    "pricing.medium.monthlyUsd",
+    "pricing.large.monthlyUsd",
+    "pricing.freeTier",
+    "pricing.contract",
+    "pricing.cancellation",
+    "setupMinutes",
+    "rulesFlags.recordsCalls",
+    "rulesFlags.announcesRecording",
+    "rulesFlags.hipaaReady",
+    "rulesFlags.outboundAiCalls",
+    "rulesFlags.personalizedPricing",
+    "setupMode",
+    "languages"
+  ]
+}

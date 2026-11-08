@@ -1,0 +1,204 @@
+{
+  "id": "acuity",
+  "name": "Acuity Scheduling",
+  "vendor": {
+    "company": "Squarespace",
+    "website": "https://acuityscheduling.com",
+    "domain": "acuityscheduling.com"
+  },
+  "description": "Book appointments, take payments, and automate the busywork, so you can deliver standout service every time.",
+  "category": "Booking",
+  "useCases": [
+    "booking"
+  ],
+  "industries": [
+    "professional_services",
+    "health_clinic",
+    "fitness"
+  ],
+  "pricing": {
+    "asOf": "Nov 2026",
+    "small": {
+      "monthlyUsd": 20,
+      "note": "Cheapest paid plan"
+    },
+    "medium": {
+      "monthlyUsd": 34,
+      "note": "Middle plan"
+    },
+    "large": {
+      "monthlyUsd": 69,
+      "note": "Top plan"
+    },
+    "freeTier": "unknown",
+    "contract": "monthly",
+    "cancellation": "cancel at any time",
+    "pricingUrl": "https://acuityscheduling.com/pricing?entry_point=acuity&btn=nav"
+  },
+  "worksWith": [
+    {
+      "product": "Zoom",
+      "type": "native"
+    },
+    {
+      "product": "QuickBooks",
+      "type": "native"
+    },
+    {
+      "product": "FreshBooks",
+      "type": "native"
+    },
+    {
+      "product": "Mailchimp",
+      "type": "native"
+    },
+    {
+      "product": "Google Calendar",
+      "type": "native"
+    },
+    {
+      "product": "Zapier",
+      "type": "native"
+    }
+  ],
+  "setupMinutes": "unknown",
+  "setupMode": "needs_help",
+  "languages": [
+    "English"
+  ],
+  "privacyCard": {
+    "trainsOnYourData": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm whether it uses your data to train AI.",
+      "quote": null,
+      "sourceUrl": null
+    },
+    "canDeleteData": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm whether you can delete your data.",
+      "quote": null,
+      "sourceUrl": null
+    },
+    "whereStored": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm where your data is stored.",
+      "quote": null,
+      "sourceUrl": null
+    },
+    "sharesOrSells": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm whether it sells or shares your data.",
+      "quote": null,
+      "sourceUrl": null
+    },
+    "securityCertification": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm a security certification.",
+      "quote": null,
+      "sourceUrl": null
+    }
+  },
+  "rulesFlags": {
+    "recordsCalls": "unknown",
+    "announcesRecording": "unknown",
+    "hipaaReady": "unknown",
+    "outboundAiCalls": "unknown",
+    "personalizedPricing": "unknown"
+  },
+  "badge": "listed",
+  "safetyCheck": {
+    "ranAt": "2026-11-08",
+    "checks": {
+      "whoIsBehind": {
+        "result": "unknown",
+        "reason": "We couldn't find an address for Squarespace.",
+        "evidence": [
+          {
+            "quote": "Acuity Scheduling is a Squarespace company",
+            "url": "https://acuityscheduling.com/about?nav-ref=navbar&dropdown-ref=resources",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "domainAge": {
+        "result": "pass",
+        "reason": "The website has been around since January 2007.",
+        "evidence": [
+          {
+            "url": "https://rdap.org/domain/acuityscheduling.com",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "privacyPolicy": {
+        "result": "unknown",
+        "reason": "We couldn't open the privacy policy.",
+        "evidence": []
+      },
+      "dataUse": {
+        "result": "unknown",
+        "reason": "We couldn't find whether it uses your information to make its AI better or whether you can delete your information.",
+        "evidence": []
+      },
+      "dataLocation": {
+        "result": "unknown",
+        "reason": "We couldn't find which country your information is kept in.",
+        "evidence": []
+      },
+      "pricingClarity": {
+        "result": "pass",
+        "reason": "Shows a clear monthly price.",
+        "evidence": [
+          {
+            "url": "https://acuityscheduling.com/pricing?entry_point=acuity&btn=nav",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "securityBasics": {
+        "result": "pass",
+        "reason": "Your connection to this website is private (https).",
+        "evidence": [
+          {
+            "url": "https://acuityscheduling.com/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "redFlags": {
+        "result": "pass",
+        "reason": "No warning signs found. (We didn't check Google's list of unsafe websites.)",
+        "evidence": [
+          {
+            "url": "https://acuityscheduling.com/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      }
+    },
+    "redFlags": [],
+    "verdict": "held",
+    "warnings": [
+      "We couldn't find which country your information is kept in.",
+      "We couldn't find the name of the person who runs this company."
+    ]
+  },
+  "lastChecked": "2026-11-08",
+  "sources": [
+    "https://acuityscheduling.com/",
+    "https://acuityscheduling.com/pricing?entry_point=acuity&btn=nav",
+    "https://acuityscheduling.com/about?nav-ref=navbar&dropdown-ref=resources",
+    "https://acuityscheduling.com/integrations"
+  ],
+  "needsVerification": [
+    "pricing.freeTier",
+    "setupMinutes",
+    "rulesFlags.recordsCalls",
+    "rulesFlags.announcesRecording",
+    "rulesFlags.hipaaReady",
+    "rulesFlags.outboundAiCalls",
+    "rulesFlags.personalizedPricing",
+    "setupMode",
+    "languages"
+  ]
+}

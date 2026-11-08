@@ -1,0 +1,232 @@
+{
+  "id": "dext",
+  "name": "Dext",
+  "vendor": {
+    "company": "Dext",
+    "website": "https://dext.com",
+    "domain": "dext.com"
+  },
+  "description": "With Dext, receipts, invoices, and expenses are automatically captured and categorised with over 99% accuracy, then synced straight to your accounting software.",
+  "category": "Receipts",
+  "useCases": [
+    "bookkeeping",
+    "admin-paperwork"
+  ],
+  "industries": [
+    "any"
+  ],
+  "pricing": {
+    "asOf": "Nov 2026",
+    "small": {
+      "monthlyUsd": "unknown",
+      "note": ""
+    },
+    "medium": {
+      "monthlyUsd": "unknown",
+      "note": ""
+    },
+    "large": {
+      "monthlyUsd": "unknown",
+      "note": ""
+    },
+    "freeTier": "unknown",
+    "contract": "annual",
+    "cancellation": "unknown",
+    "pricingUrl": "https://dext.com/us/partner/pricing"
+  },
+  "worksWith": [
+    {
+      "product": "Xero",
+      "type": "native"
+    },
+    {
+      "product": "QuickBooks",
+      "type": "native"
+    },
+    {
+      "product": "Sage",
+      "type": "native"
+    }
+  ],
+  "setupMinutes": "unknown",
+  "setupMode": "needs_help",
+  "languages": [
+    "English"
+  ],
+  "privacyCard": {
+    "trainsOnYourData": {
+      "answer": "no",
+      "plain": "Does not use your data to train AI.",
+      "quote": "This ensures that we do not allow any third-party generative AI tool providers which we use in our services to train their models using your data (including personal).",
+      "sourceUrl": "https://dext.com/us/privacy-policy"
+    },
+    "canDeleteData": {
+      "answer": "yes",
+      "plain": "You can delete your data.",
+      "quote": "In some circumstances you can ask us to delete your data: see",
+      "sourceUrl": "https://dext.com/us/privacy-policy"
+    },
+    "whereStored": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm where your data is stored.",
+      "quote": null,
+      "sourceUrl": null
+    },
+    "sharesOrSells": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm whether it sells or shares your data.",
+      "quote": null,
+      "sourceUrl": null
+    },
+    "securityCertification": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm a security certification.",
+      "quote": null,
+      "sourceUrl": null
+    }
+  },
+  "rulesFlags": {
+    "recordsCalls": "unknown",
+    "announcesRecording": "unknown",
+    "hipaaReady": "unknown",
+    "outboundAiCalls": "unknown",
+    "personalizedPricing": "unknown"
+  },
+  "badge": "listed",
+  "safetyCheck": {
+    "ranAt": "2026-11-08",
+    "checks": {
+      "whoIsBehind": {
+        "result": "unknown",
+        "reason": "We couldn't find an address for Dext.",
+        "evidence": [
+          {
+            "quote": "Dext © Copyright 2026",
+            "url": "https://dext.com/us/multiple-entities",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "domainAge": {
+        "result": "pass",
+        "reason": "The website has been around since March 2004.",
+        "evidence": [
+          {
+            "url": "https://rdap.org/domain/dext.com",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "privacyPolicy": {
+        "result": "pass",
+        "reason": "Has a full privacy policy that says what they do with your information.",
+        "evidence": [
+          {
+            "url": "https://dext.com/us/privacy-policy",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "dataUse": {
+        "result": "unknown",
+        "reason": "The privacy policy isn't clear about whether it uses your information to make its AI better. A person needs to read it.",
+        "evidence": [
+          {
+            "quote": "This ensures that we do not allow any third-party generative AI tool providers which we use in our services to train their models using your data (including personal).",
+            "url": "https://dext.com/us/privacy-policy",
+            "checkedAt": "2026-11-08"
+          },
+          {
+            "quote": "In some circumstances you can ask us to delete your data: see",
+            "url": "https://dext.com/us/privacy-policy",
+            "checkedAt": "2026-11-08"
+          },
+          {
+            "url": "https://dext.com/us/privacy-policy",
+            "checkedAt": "2026-11-08",
+            "quote": "Get my ROI estimate\nPricing\nPricing Pricing for practices Pricing for businesses\nResources\nResources Events & Webinars Customer stories Compare Dext\nLearning & Product New feature & product updates Help Centre Dext certification Dext training Affiliates What's new in Dext?"
+          },
+          {
+            "url": "https://dext.com/us/privacy-policy",
+            "checkedAt": "2026-11-08",
+            "quote": "This includes, but is not limited to, personal data you provide when you:\nsubscribe for our products or services;\napply for a demonstration of our products and services;\ncreate an account on our website;\nrequest marketing to be sent to you;\napply to attend or take part in a webinar, training session or event, whether in person or online;\nenter a competition, promotion or survey; or\ngive us feedback or contact us\nAutomated technologies or interactions."
+          },
+          {
+            "url": "https://dext.com/us/privacy-policy",
+            "checkedAt": "2026-11-08",
+            "quote": "We do not allow our third-party service providers to use your personal data for their own purposes and only permit them to process your personal data for specified purposes and in accordance with our instructions.This ensures that we do not allow any third-party generative AI tool providers which we use in our services to train their models using your data (including personal)."
+          }
+        ]
+      },
+      "dataLocation": {
+        "result": "unknown",
+        "reason": "We couldn't find which country your information is kept in.",
+        "evidence": [
+          {
+            "url": "https://dext.com/us/privacy-policy",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "pricingClarity": {
+        "result": "pass",
+        "reason": "Shows a clear monthly price.",
+        "evidence": [
+          {
+            "url": "https://dext.com/us/partner/pricing",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "securityBasics": {
+        "result": "pass",
+        "reason": "Your connection to this website is private (https).",
+        "evidence": [
+          {
+            "url": "https://dext.com/us",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "redFlags": {
+        "result": "pass",
+        "reason": "No warning signs found. (We didn't check Google's list of unsafe websites.)",
+        "evidence": [
+          {
+            "url": "https://dext.com/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      }
+    },
+    "redFlags": [],
+    "verdict": "held",
+    "warnings": [
+      "We couldn't find which country your information is kept in.",
+      "We couldn't find the name of the person who runs this company."
+    ]
+  },
+  "lastChecked": "2026-11-08",
+  "sources": [
+    "https://dext.com/us",
+    "https://dext.com/us/business/product/capture-receipts-and-invoices",
+    "https://dext.com/us/multiple-entities",
+    "https://dext.com/us/privacy-policy",
+    "https://dext.com/us/business/product/integrate-with-accounting-software"
+  ],
+  "needsVerification": [
+    "pricing.small.monthlyUsd",
+    "pricing.medium.monthlyUsd",
+    "pricing.large.monthlyUsd",
+    "pricing.freeTier",
+    "pricing.cancellation",
+    "setupMinutes",
+    "rulesFlags.recordsCalls",
+    "rulesFlags.announcesRecording",
+    "rulesFlags.hipaaReady",
+    "rulesFlags.outboundAiCalls",
+    "rulesFlags.personalizedPricing",
+    "setupMode",
+    "languages"
+  ]
+}

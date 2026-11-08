@@ -1,0 +1,236 @@
+{
+  "id": "jane",
+  "name": "Jane",
+  "vendor": {
+    "company": "Jane Software Inc.",
+    "website": "https://jane.app",
+    "domain": "jane.app"
+  },
+  "description": "Jane brings scheduling, charting, billing, payments, patient communication, and more into one connected system, helping you reduce admin, support your team, and focus on patient care.",
+  "category": "Practice management",
+  "useCases": [
+    "booking",
+    "admin-paperwork"
+  ],
+  "industries": [
+    "health_clinic"
+  ],
+  "pricing": {
+    "asOf": "Nov 2026",
+    "small": {
+      "monthlyUsd": 59,
+      "note": "Balance plan"
+    },
+    "medium": {
+      "monthlyUsd": 79,
+      "note": "Practice plan"
+    },
+    "large": {
+      "monthlyUsd": 99,
+      "note": "Thrive plan"
+    },
+    "freeTier": "unknown",
+    "contract": "monthly",
+    "cancellation": "unknown",
+    "pricingUrl": "https://jane.app/pricing"
+  },
+  "worksWith": [
+    {
+      "product": "Claim.MD",
+      "type": "native"
+    },
+    {
+      "product": "Wibbi",
+      "type": "native"
+    },
+    {
+      "product": "Documo",
+      "type": "native"
+    },
+    {
+      "product": "Mailchimp",
+      "type": "native"
+    },
+    {
+      "product": "Mango Voice",
+      "type": "native"
+    },
+    {
+      "product": "Cyberimpact",
+      "type": "native"
+    }
+  ],
+  "setupMinutes": "unknown",
+  "setupMode": "needs_help",
+  "languages": [
+    "English"
+  ],
+  "privacyCard": {
+    "trainsOnYourData": {
+      "answer": "anonymized",
+      "plain": "Uses your data to improve its AI, with names removed first.",
+      "quote": "Jane may use computer-generated algorithms to gather anonymous and aggregated information from Subscriber Data in order to assist in our continued development and improvement of the Services, and for the purpose of analysis or compiling statistical data.",
+      "sourceUrl": "https://jane.app/legal/privacy-notice"
+    },
+    "canDeleteData": {
+      "answer": "yes",
+      "plain": "You can delete your data.",
+      "quote": "Patients have certain rights with respect to their Patient Data, which may include knowing what information your Subscriber clinic has about you, correcting any inaccurate Patient Data, obtaining a record of your Patient Data and, in certain circumstances, deleting or removing your Patient Data.",
+      "sourceUrl": "https://jane.app/legal/privacy-notice"
+    },
+    "whereStored": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm where your data is stored.",
+      "quote": null,
+      "sourceUrl": null
+    },
+    "sharesOrSells": {
+      "answer": "no",
+      "plain": "Does not sell or share your data.",
+      "quote": "We do not sell or trade personal information, and we will only share your personal information with third parties in the ways that are described in this Privacy Notice.",
+      "sourceUrl": "https://jane.app/legal/privacy-notice"
+    },
+    "securityCertification": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm a security certification.",
+      "quote": null,
+      "sourceUrl": null
+    }
+  },
+  "rulesFlags": {
+    "recordsCalls": "unknown",
+    "announcesRecording": "unknown",
+    "hipaaReady": true,
+    "outboundAiCalls": "unknown",
+    "personalizedPricing": "unknown"
+  },
+  "badge": "listed",
+  "safetyCheck": {
+    "ranAt": "2026-11-08",
+    "checks": {
+      "whoIsBehind": {
+        "result": "unknown",
+        "reason": "We couldn't find an address for Jane Software Inc.",
+        "evidence": [
+          {
+            "quote": "© 2026 Jane Software Inc. All Rights Reserved.",
+            "url": "https://jane.app/resources/blog/product-news/eprescribe-in-jane-coming-soon",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "domainAge": {
+        "result": "pass",
+        "reason": "The website has been around since May 2018.",
+        "evidence": [
+          {
+            "url": "https://rdap.org/domain/jane.app",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "privacyPolicy": {
+        "result": "pass",
+        "reason": "Has a full privacy policy that says what they do with your information.",
+        "evidence": [
+          {
+            "url": "https://jane.app/legal/privacy-notice",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "dataUse": {
+        "result": "unknown",
+        "reason": "The privacy policy isn't clear about whether it uses your information to make its AI better. A person needs to read it.",
+        "evidence": [
+          {
+            "quote": "Jane may use computer-generated algorithms to gather anonymous and aggregated information from Subscriber Data in order to assist in our continued development and improvement of the Services, and for the purpose of analysis or compiling statistical data.",
+            "url": "https://jane.app/legal/privacy-notice",
+            "checkedAt": "2026-11-08"
+          },
+          {
+            "quote": "Patients have certain rights with respect to their Patient Data, which may include knowing what information your Subscriber clinic has about you, correcting any inaccurate Patient Data, obtaining a record of your Patient Data and, in certain circumstances, deleting or removing your Patient Data.",
+            "url": "https://jane.app/legal/privacy-notice",
+            "checkedAt": "2026-11-08"
+          },
+          {
+            "url": "https://jane.app/legal/privacy-notice",
+            "checkedAt": "2026-11-08",
+            "quote": "Please note that Google Workspace APIs are not used to develop, improve, or train generalized AI and/or Machine Learning models."
+          },
+          {
+            "url": "https://jane.app/legal/privacy-notice",
+            "checkedAt": "2026-11-08",
+            "quote": "Having our personnel sign strict confidentiality agreements in addition to completing periodic training to ensure they understand the confidential nature of the data we process, and only accessing your account when you request assistance from us."
+          }
+        ]
+      },
+      "dataLocation": {
+        "result": "unknown",
+        "reason": "We couldn't find which country your information is kept in.",
+        "evidence": [
+          {
+            "url": "https://jane.app/legal/privacy-notice",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "pricingClarity": {
+        "result": "pass",
+        "reason": "Shows a clear monthly price.",
+        "evidence": [
+          {
+            "url": "https://jane.app/pricing",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "securityBasics": {
+        "result": "pass",
+        "reason": "Your connection to this website is private (https). This tool handles payments or health information, but we found no proof that an outside company checked its security (like PCI or SOC 2).",
+        "evidence": [
+          {
+            "url": "https://jane.app/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "redFlags": {
+        "result": "pass",
+        "reason": "No warning signs found. (We didn't check Google's list of unsafe websites.)",
+        "evidence": [
+          {
+            "url": "https://jane.app/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      }
+    },
+    "redFlags": [],
+    "verdict": "held",
+    "warnings": [
+      "We couldn't find which country your information is kept in.",
+      "We couldn't find the name of the person who runs this company.",
+      "This tool learns from how people use it. It may use your customers' calls or messages to get better, but it removes names and phone numbers first. Good to know: don't share card numbers or health details with it.",
+      "This tool handles payments or health information, but we found no proof that an outside company checked its security (like PCI or SOC 2)."
+    ]
+  },
+  "lastChecked": "2026-11-08",
+  "sources": [
+    "https://jane.app/",
+    "https://jane.app/pricing",
+    "https://integrations.jane.app/",
+    "https://jane.app/legal/privacy-notice",
+    "https://jane.app/resources/blog/product-news/eprescribe-in-jane-coming-soon"
+  ],
+  "needsVerification": [
+    "pricing.freeTier",
+    "pricing.cancellation",
+    "setupMinutes",
+    "rulesFlags.recordsCalls",
+    "rulesFlags.announcesRecording",
+    "rulesFlags.outboundAiCalls",
+    "rulesFlags.personalizedPricing",
+    "setupMode"
+  ]
+}

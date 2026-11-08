@@ -1,0 +1,212 @@
+{
+  "id": "proposify",
+  "name": "Proposify",
+  "vendor": {
+    "company": "Proposify Inc.",
+    "website": "https://www.proposify.com",
+    "domain": "proposify.com"
+  },
+  "description": "Proposify gives your team the control and visibility to quickly create, track, and sign winning proposals while increasing your team's close rate.",
+  "category": "Proposals",
+  "useCases": [
+    "quotes",
+    "admin-paperwork"
+  ],
+  "industries": [
+    "professional_services"
+  ],
+  "pricing": {
+    "asOf": "Nov 2026",
+    "small": {
+      "monthlyUsd": 49,
+      "note": "Cheapest paid plan"
+    },
+    "medium": {
+      "monthlyUsd": "unknown",
+      "note": ""
+    },
+    "large": {
+      "monthlyUsd": 107,
+      "note": "Top plan"
+    },
+    "freeTier": "unknown",
+    "contract": "monthly",
+    "cancellation": "Cancel anytime",
+    "pricingUrl": "https://www.proposify.com/pricing"
+  },
+  "worksWith": [
+    {
+      "product": "Salesforce",
+      "type": "native"
+    },
+    {
+      "product": "Aspire",
+      "type": "native"
+    }
+  ],
+  "setupMinutes": "unknown",
+  "setupMode": "needs_help",
+  "languages": [
+    "English"
+  ],
+  "privacyCard": {
+    "trainsOnYourData": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm whether it uses your data to train AI.",
+      "quote": null,
+      "sourceUrl": null
+    },
+    "canDeleteData": {
+      "answer": "yes",
+      "plain": "You can delete your data.",
+      "quote": "In your account, you can review, update, delete, or correct your personal information on file with us at any time.",
+      "sourceUrl": "https://www.proposify.com/company/privacy"
+    },
+    "whereStored": {
+      "answer": "United States",
+      "plain": "Your data is stored in United States.",
+      "quote": "you will be transferring your personal information into the United States and you consent to that transfer.",
+      "sourceUrl": "https://www.proposify.com/company/privacy"
+    },
+    "sharesOrSells": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm whether it sells or shares your data.",
+      "quote": null,
+      "sourceUrl": null
+    },
+    "securityCertification": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm a security certification.",
+      "quote": null,
+      "sourceUrl": null
+    }
+  },
+  "rulesFlags": {
+    "recordsCalls": "unknown",
+    "announcesRecording": "unknown",
+    "hipaaReady": "unknown",
+    "outboundAiCalls": "unknown",
+    "personalizedPricing": "unknown"
+  },
+  "badge": "listed",
+  "safetyCheck": {
+    "ranAt": "2026-11-08",
+    "checks": {
+      "whoIsBehind": {
+        "result": "pass",
+        "reason": "Run by Proposify Inc., a company at PO Box 57 Main, Dartmouth, NS B2Y 3Y2.",
+        "evidence": [
+          {
+            "quote": "©2026 Proposify Inc. All rights reserved.",
+            "url": "https://www.proposify.com/company/about",
+            "checkedAt": "2026-11-08"
+          },
+          {
+            "quote": "Attn.: Proposify Inc. PO Box 57 Main Dartmouth, NS B2Y 3Y2.",
+            "url": "https://www.proposify.com/company/privacy",
+            "checkedAt": "2026-11-08"
+          },
+          {
+            "quote": "Co-founders Kyle Racki and Kevin Springer spent years toiling over proposals as employees, freelancers, sales reps, and agency owners.",
+            "url": "https://www.proposify.com/company/about",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "domainAge": {
+        "result": "pass",
+        "reason": "The website has been around since November 2012.",
+        "evidence": [
+          {
+            "url": "https://rdap.org/domain/proposify.com",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "privacyPolicy": {
+        "result": "pass",
+        "reason": "Has a full privacy policy that says what they do with your information.",
+        "evidence": [
+          {
+            "url": "https://www.proposify.com/company/privacy",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "dataUse": {
+        "result": "unknown",
+        "reason": "We couldn't find whether it uses your information to make its AI better.",
+        "evidence": [
+          {
+            "quote": "In your account, you can review, update, delete, or correct your personal information on file with us at any time.",
+            "url": "https://www.proposify.com/company/privacy",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "dataLocation": {
+        "result": "pass",
+        "reason": "Your information is kept in United States.",
+        "evidence": [
+          {
+            "quote": "you will be transferring your personal information into the United States and you consent to that transfer.",
+            "url": "https://www.proposify.com/company/privacy",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "pricingClarity": {
+        "result": "pass",
+        "reason": "Shows a clear monthly price.",
+        "evidence": [
+          {
+            "url": "https://www.proposify.com/customers/everline",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "securityBasics": {
+        "result": "pass",
+        "reason": "Your connection to this website is private (https).",
+        "evidence": [
+          {
+            "url": "https://www.proposify.com/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "redFlags": {
+        "result": "pass",
+        "reason": "No warning signs found. (We didn't check Google's list of unsafe websites.)",
+        "evidence": [
+          {
+            "url": "https://www.proposify.com/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      }
+    },
+    "redFlags": [],
+    "verdict": "held",
+    "warnings": []
+  },
+  "lastChecked": "2026-11-08",
+  "sources": [
+    "https://www.proposify.com/",
+    "https://www.proposify.com/pricing",
+    "https://www.proposify.com/company/about",
+    "https://www.proposify.com/company/privacy"
+  ],
+  "needsVerification": [
+    "pricing.medium.monthlyUsd",
+    "pricing.freeTier",
+    "setupMinutes",
+    "rulesFlags.recordsCalls",
+    "rulesFlags.announcesRecording",
+    "rulesFlags.hipaaReady",
+    "rulesFlags.outboundAiCalls",
+    "rulesFlags.personalizedPricing",
+    "setupMode",
+    "languages"
+  ]
+}

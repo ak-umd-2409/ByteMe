@@ -1,0 +1,216 @@
+{
+  "id": "freshdesk",
+  "name": "Freshdesk",
+  "vendor": {
+    "company": "Freshworks Inc.",
+    "website": "https://www.freshworks.com/freshdesk/",
+    "domain": "freshworks.com"
+  },
+  "description": "Freshdesk brings ready-to-use AI, people, and workflows together, with a guided path to AI adoption, so service improves from day one and becomes increasingly AI-powered over time.",
+  "category": "Customer support",
+  "useCases": [
+    "customer-messaging"
+  ],
+  "industries": [
+    "any"
+  ],
+  "pricing": {
+    "asOf": "Nov 2026",
+    "small": {
+      "monthlyUsd": "unknown",
+      "note": ""
+    },
+    "medium": {
+      "monthlyUsd": "unknown",
+      "note": ""
+    },
+    "large": {
+      "monthlyUsd": "unknown",
+      "note": ""
+    },
+    "freeTier": "unknown",
+    "contract": "annual",
+    "cancellation": "unknown",
+    "pricingUrl": "https://www.freshworks.com/freshdesk/pricing/"
+  },
+  "worksWith": [
+    {
+      "product": "Slack",
+      "type": "native"
+    },
+    {
+      "product": "Shopify",
+      "type": "native"
+    },
+    {
+      "product": "Playvox",
+      "type": "native"
+    }
+  ],
+  "setupMinutes": "unknown",
+  "setupMode": "needs_help",
+  "languages": [
+    "English"
+  ],
+  "privacyCard": {
+    "trainsOnYourData": {
+      "answer": "yes",
+      "plain": "Uses your data to train its AI.",
+      "quote": "we will process your Personal Data for certain data analytics purposes and in order to offer, deliver and improve our Services.",
+      "sourceUrl": "https://www.freshworks.com/privacy/"
+    },
+    "canDeleteData": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm whether you can delete your data.",
+      "quote": null,
+      "sourceUrl": null
+    },
+    "whereStored": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm where your data is stored.",
+      "quote": null,
+      "sourceUrl": null
+    },
+    "sharesOrSells": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm whether it sells or shares your data.",
+      "quote": null,
+      "sourceUrl": null
+    },
+    "securityCertification": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm a security certification.",
+      "quote": null,
+      "sourceUrl": null
+    }
+  },
+  "rulesFlags": {
+    "recordsCalls": "unknown",
+    "announcesRecording": "unknown",
+    "hipaaReady": "unknown",
+    "outboundAiCalls": "unknown",
+    "personalizedPricing": "unknown"
+  },
+  "badge": "listed",
+  "safetyCheck": {
+    "ranAt": "2026-11-08",
+    "checks": {
+      "whoIsBehind": {
+        "result": "pass",
+        "reason": "Run by Freshworks Inc., a company at 2950 S. Delaware Street, Suite 201, San Mateo, CA 94403.",
+        "evidence": [
+          {
+            "quote": "© 2026 Freshworks Inc. All Rights Reserved",
+            "url": "https://www.freshworks.com/company/about/",
+            "checkedAt": "2026-11-08"
+          },
+          {
+            "quote": "HQ: San Mateo, CA 2950 S. Delaware Street, Suite 201 San Mateo, CA 94403",
+            "url": "https://www.freshworks.com/contact/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "domainAge": {
+        "result": "pass",
+        "reason": "The website has been around since February 1998.",
+        "evidence": [
+          {
+            "url": "https://rdap.org/domain/freshworks.com",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "privacyPolicy": {
+        "result": "pass",
+        "reason": "Has a full privacy policy that says what they do with your information.",
+        "evidence": [
+          {
+            "url": "https://www.freshworks.com/privacy/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "dataUse": {
+        "result": "fail",
+        "reason": "It may use your customers' information to make its AI better, and we found no way to stop it.",
+        "evidence": [
+          {
+            "quote": "we will process your Personal Data for certain data analytics purposes and in order to offer, deliver and improve our Services.",
+            "url": "https://www.freshworks.com/privacy/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "dataLocation": {
+        "result": "unknown",
+        "reason": "We couldn't find which country your information is kept in.",
+        "evidence": [
+          {
+            "url": "https://www.freshworks.com/privacy/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "pricingClarity": {
+        "result": "pass",
+        "reason": "Shows a clear monthly price.",
+        "evidence": [
+          {
+            "url": "https://www.freshworks.com/freshdesk/pricing/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "securityBasics": {
+        "result": "pass",
+        "reason": "Your connection to this website is private (https).",
+        "evidence": [
+          {
+            "url": "https://www.freshworks.com/freshdesk/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "redFlags": {
+        "result": "pass",
+        "reason": "No warning signs found. (We didn't check Google's list of unsafe websites.)",
+        "evidence": [
+          {
+            "url": "https://www.freshworks.com/freshdesk/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      }
+    },
+    "redFlags": [],
+    "verdict": "held",
+    "warnings": [
+      "We couldn't find which country your information is kept in.",
+      "We couldn't find the name of the person who runs this company."
+    ]
+  },
+  "lastChecked": "2026-11-08",
+  "sources": [
+    "https://www.freshworks.com/freshdesk/",
+    "https://www.freshworks.com/freshdesk/pricing/",
+    "https://www.freshworks.com/company/about/",
+    "https://www.freshworks.com/privacy/",
+    "https://www.freshworks.com/freshdesk/integrations/"
+  ],
+  "needsVerification": [
+    "pricing.small.monthlyUsd",
+    "pricing.medium.monthlyUsd",
+    "pricing.large.monthlyUsd",
+    "pricing.freeTier",
+    "pricing.cancellation",
+    "setupMinutes",
+    "rulesFlags.recordsCalls",
+    "rulesFlags.announcesRecording",
+    "rulesFlags.hipaaReady",
+    "rulesFlags.outboundAiCalls",
+    "rulesFlags.personalizedPricing",
+    "setupMode",
+    "languages"
+  ]
+}

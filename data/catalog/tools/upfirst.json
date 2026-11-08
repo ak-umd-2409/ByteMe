@@ -1,0 +1,235 @@
+{
+  "id": "upfirst",
+  "name": "Upfirst",
+  "vendor": {
+    "company": "Upfirst, Inc.",
+    "website": "https://upfirst.ai",
+    "domain": "upfirst.ai"
+  },
+  "description": "Upfirst is the AI answering service that keeps your phone covered so you never miss a lead or leave a customer waiting.",
+  "category": "AI receptionist",
+  "useCases": [
+    "missed-calls"
+  ],
+  "industries": [
+    "hvac",
+    "plumbing",
+    "electrical",
+    "landscaping",
+    "cleaning",
+    "professional_services"
+  ],
+  "pricing": {
+    "asOf": "Nov 2026",
+    "small": {
+      "monthlyUsd": "unknown",
+      "note": ""
+    },
+    "medium": {
+      "monthlyUsd": 159.95,
+      "note": "Pro plan"
+    },
+    "large": {
+      "monthlyUsd": 299,
+      "note": "Scale plan"
+    },
+    "freeTier": "unknown",
+    "contract": "monthly",
+    "cancellation": "unknown",
+    "pricingUrl": "https://upfirst.ai/pricing"
+  },
+  "worksWith": [
+    {
+      "product": "Outlook",
+      "type": "native"
+    },
+    {
+      "product": "Clio",
+      "type": "native"
+    },
+    {
+      "product": "Calendly",
+      "type": "native"
+    },
+    {
+      "product": "Square",
+      "type": "native"
+    }
+  ],
+  "setupMinutes": "unknown",
+  "setupMode": "needs_help",
+  "languages": [
+    "English"
+  ],
+  "privacyCard": {
+    "trainsOnYourData": {
+      "answer": "no",
+      "plain": "Does not use your data to train AI.",
+      "quote": "We do not sell Customer Content, use it for advertising or marketing, or use it to train artificial intelligence models, and we do not permit our service providers to do so.",
+      "sourceUrl": "https://upfirst.ai/privacy-policy"
+    },
+    "canDeleteData": {
+      "answer": "yes",
+      "plain": "You can delete your data.",
+      "quote": "To request deletion of your Customer Content or account, email privacy@upfirst.ai.",
+      "sourceUrl": "https://upfirst.ai/privacy-policy"
+    },
+    "whereStored": {
+      "answer": "United States",
+      "plain": "Your data is stored in United States.",
+      "quote": "Upfirst stores Customer Content in the United States.",
+      "sourceUrl": "https://upfirst.ai/privacy-policy"
+    },
+    "sharesOrSells": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm whether it sells or shares your data.",
+      "quote": null,
+      "sourceUrl": null
+    },
+    "securityCertification": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm a security certification.",
+      "quote": null,
+      "sourceUrl": null
+    }
+  },
+  "rulesFlags": {
+    "recordsCalls": "unknown",
+    "announcesRecording": "unknown",
+    "hipaaReady": "unknown",
+    "outboundAiCalls": "unknown",
+    "personalizedPricing": "unknown"
+  },
+  "badge": "listed",
+  "safetyCheck": {
+    "ranAt": "2026-11-08",
+    "checks": {
+      "whoIsBehind": {
+        "result": "pass",
+        "reason": "Run by Upfirst, Inc., a company at 3250 NE 1st Ave Unit 305 Miami, FL 33137.",
+        "evidence": [
+          {
+            "quote": "© Copyright 2026 Upfirst, Inc.",
+            "url": "https://upfirst.ai/about",
+            "checkedAt": "2026-11-08"
+          },
+          {
+            "quote": "3250 NE 1st Ave Unit 305 Miami, FL 33137",
+            "url": "https://upfirst.ai/about",
+            "checkedAt": "2026-11-08"
+          },
+          {
+            "quote": "Gene Sigalov Co-founder",
+            "url": "https://upfirst.ai/about",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "domainAge": {
+        "result": "pass",
+        "reason": "The website has been around since June 2024.",
+        "evidence": [
+          {
+            "url": "https://rdap.org/domain/upfirst.ai",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "privacyPolicy": {
+        "result": "pass",
+        "reason": "Has a full privacy policy that says what they do with your information.",
+        "evidence": [
+          {
+            "url": "https://upfirst.ai/privacy-policy",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "dataUse": {
+        "result": "unknown",
+        "reason": "The privacy policy isn't clear about whether it uses your information to make its AI better. A person needs to read it.",
+        "evidence": [
+          {
+            "quote": "We do not sell Customer Content, use it for advertising or marketing, or use it to train artificial intelligence models, and we do not permit our service providers to do so.",
+            "url": "https://upfirst.ai/privacy-policy",
+            "checkedAt": "2026-11-08"
+          },
+          {
+            "quote": "To request deletion of your Customer Content or account, email privacy@upfirst.ai.",
+            "url": "https://upfirst.ai/privacy-policy",
+            "checkedAt": "2026-11-08"
+          },
+          {
+            "url": "https://upfirst.ai/privacy-policy",
+            "checkedAt": "2026-11-08",
+            "quote": "Our AI sub-processors process Customer Content under zero data retention terms and may not use it to train their models."
+          }
+        ]
+      },
+      "dataLocation": {
+        "result": "pass",
+        "reason": "Your information is kept in United States.",
+        "evidence": [
+          {
+            "quote": "Upfirst stores Customer Content in the United States.",
+            "url": "https://upfirst.ai/privacy-policy",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "pricingClarity": {
+        "result": "pass",
+        "reason": "Shows a clear monthly price.",
+        "evidence": [
+          {
+            "url": "https://upfirst.ai/pricing",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "securityBasics": {
+        "result": "pass",
+        "reason": "Your connection to this website is private (https).",
+        "evidence": [
+          {
+            "url": "https://upfirst.ai/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "redFlags": {
+        "result": "pass",
+        "reason": "No warning signs found. (We didn't check Google's list of unsafe websites.)",
+        "evidence": [
+          {
+            "url": "https://upfirst.ai/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      }
+    },
+    "redFlags": [],
+    "verdict": "held",
+    "warnings": []
+  },
+  "lastChecked": "2026-11-08",
+  "sources": [
+    "https://upfirst.ai/",
+    "https://upfirst.ai/pricing",
+    "https://upfirst.ai/about",
+    "https://upfirst.ai/privacy-policy"
+  ],
+  "needsVerification": [
+    "pricing.small.monthlyUsd",
+    "pricing.freeTier",
+    "pricing.cancellation",
+    "setupMinutes",
+    "rulesFlags.recordsCalls",
+    "rulesFlags.announcesRecording",
+    "rulesFlags.hipaaReady",
+    "rulesFlags.outboundAiCalls",
+    "rulesFlags.personalizedPricing",
+    "setupMode",
+    "languages"
+  ]
+}
