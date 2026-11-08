@@ -14,6 +14,20 @@ const UNKNOWN_SETUP_MINUTES = 120;
 const orTrue = (v: boolean | "unknown") => v === "unknown" ? true : v;
 const orFalse = (v: boolean | "unknown") => v === "unknown" ? false : v;
 
+/**
+ * Tools that answer, make or route phone calls. Only these can record calls or
+ * make AI calls, so only these get the worst-case answer when we don't know.
+ * A writing or email tool with an unknown call-recording answer isn't a risk.
+ */
+const isPhoneTool = (r: CatalogRecord) =>
+  r.useCases.includes("missed-calls") || /phone|call|receptionist|voice/i.test(r.category);
+
+/** Tools that set prices. Only these can personalize prices. */
+const isPricingTool = (r: CatalogRecord) => /pric/i.test(r.category);
+
+/** The safe guess when unknown: worst case if the risk can apply to this kind of tool, else no. */
+const ifApplies = (applies: boolean, v: boolean | "unknown") => (applies ? orTrue(v) : orFalse(v));
+
 export function toCatalogTool(record: CatalogRecord): CatalogTool | null {
   const price = record.pricing.small.monthlyUsd;
   if (price === "unknown") return null;
@@ -26,7 +40,8 @@ export function toCatalogTool(record: CatalogRecord): CatalogTool | null {
 
   const f = record.rulesFlags;
   const minutes = record.setupMinutes === "unknown" ? UNKNOWN_SETUP_MINUTES : record.setupMinutes;
-  const outbound = orTrue(f.outboundAiCalls);
+  const phone = isPhoneTool(record);
+  const outbound = ifApplies(phone, f.outboundAiCalls);
 
   return {
     id: record.id,
@@ -46,14 +61,14 @@ export function toCatalogTool(record: CatalogRecord): CatalogTool | null {
     reviewCount: record.reviews?.count,
     languages: [...record.languages],
     flags: {
-      recordsCalls: orTrue(f.recordsCalls),
+      recordsCalls: ifApplies(phone, f.recordsCalls),
       announcesRecording: orFalse(f.announcesRecording),
       outboundAICalls: outbound,
       // No record field proves a tool handles call consent, so never claim it.
       requiresOutboundConsent: false,
       hipaaReady: orFalse(f.hipaaReady),
       baaAvailable: f.hipaaReady === true,
-      personalizesPrices: orTrue(f.personalizedPricing),
+      personalizesPrices: ifApplies(isPricingTool(record), f.personalizedPricing),
       dataDeletion: record.privacyCard.canDeleteData.answer === "yes",
       requiresContract: record.pricing.contract !== "monthly",
     },
