@@ -5,7 +5,8 @@ import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 import real from "../../data/catalog/real.json" with { type: "json" };
 import sample from "../../data/catalog/sample.json" with { type: "json" };
-import { USE_CASES } from "../recommend/types.ts";
+import { recommend } from "../recommend/engine.ts";
+import { USE_CASES, type BusinessProfile, type Problem, type UseCase } from "../recommend/types.ts";
 import { getVerifiedTools, loadCatalog } from "./index.ts";
 import type { CatalogRecord } from "./types.ts";
 
@@ -46,4 +47,37 @@ describe("coverage", () => {
     assert.ok(getVerifiedTools({ industry: "restaurant" }).length >= 3);
     assert.ok(getVerifiedTools({ industry: "restaurant", useCase: "missed-calls" }).length >= 1);
   });
+});
+
+/**
+ * Being in the catalog isn't enough: the owner rules (Maryland call recording,
+ * AI calls, food pricing) must not throw out tools that never touch a phone.
+ */
+describe("what a Maryland owner actually gets", () => {
+  const catalog = getVerifiedTools();
+  const owner = (industry: string): BusinessProfile => ({
+    name: "Test business",
+    industry,
+    state: "MD",
+    county: "Frederick",
+    monthlyBudget: 100,
+    currentTools: [],
+    needsHelp: false,
+    dealBreakers: [],
+    handlesHealthData: false,
+    handlesLargeCustomerList: false,
+    hasOutboundCallConsent: false,
+  });
+  const problem = (useCase: UseCase): Problem => ({ id: useCase, title: useCase, evidence: "test", useCase });
+  const shown = (industry: string, useCase: UseCase) =>
+    recommend(owner(industry), [problem(useCase)], catalog).problems[0].options.length;
+
+  for (const [industry, useCase] of [
+    ["HVAC", "admin-paperwork"],
+    ["HVAC", "quotes"],
+    ["Restaurant", "customer-messaging"],
+    ["Salon", "email-marketing"],
+    ["Retail shop", "marketing"],
+  ] as [string, UseCase][])
+    it(`${industry} · ${useCase}: at least one tool`, () => assert.ok(shown(industry, useCase) >= 1));
 });
