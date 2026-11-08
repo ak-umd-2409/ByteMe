@@ -4,7 +4,7 @@
  * Owner journey, built from the approved wireframes v1 (docs/specs/b-wireframes.md):
  *   1 Landing → 2 Find your business → (Reading) → 3 Check what we found → 4 What's costing you → Ways to fix it
  * Data: /api/business/search, /api/journey/start, /api/journey/answer, /api/recommend (Part 4).
- * Screens 5–8 aren't designed yet; "Ways to fix it" is a plain list in the same style until they are.
+ * Ways to fix it, Tool detail and Compare live in ToolScreens.tsx; the admin queue is at /admin.
  */
 import { useEffect, useRef, useState } from "react";
 import {
@@ -19,7 +19,9 @@ import {
 } from "@/lib/client/parts23.ts";
 import type { BusinessMatch } from "@/lib/business/types.ts";
 import type { RecommendationResult } from "@/lib/recommend/types.ts";
+import type { CatalogRecord } from "@/lib/catalog/types.ts";
 import s from "./start.module.css";
+import { Compare, ToolDetail, WaysToFix, type Biz } from "./ToolScreens.tsx";
 
 export interface LookupEntry {
   name: string;
@@ -29,7 +31,7 @@ export interface LookupEntry {
   sample: boolean;
 }
 
-type Screen = "landing" | "find" | "loading" | "check" | "problems" | "tools";
+type Screen = "landing" | "find" | "loading" | "check" | "problems" | "tools" | "tool" | "compare";
 type Answers = Record<string, Answer>;
 
 const usd = (n: number) => `$${Math.round(n).toLocaleString("en-US")}`;
@@ -103,7 +105,7 @@ function ChoiceQuestion({ q, value, onChange }: { q: JourneyQuestion; value: Ans
   );
 }
 
-export function Journey({ lookup }: { lookup: LookupEntry[] }) {
+export function Journey({ lookup, catalog }: { lookup: LookupEntry[]; catalog: CatalogRecord[] }) {
   const [screen, setScreen] = useState<Screen>("landing");
   const [error, setError] = useState<string | null>(null);
   const top = useRef<HTMLDivElement>(null);
@@ -138,6 +140,9 @@ export function Journey({ lookup }: { lookup: LookupEntry[] }) {
 
   // Tools
   const [recs, setRecs] = useState<RecommendationResult | null>(null);
+  const [toolId, setToolId] = useState<string | null>(null);
+  const [picks, setPicks] = useState<string[]>([]);
+  const [cameFrom, setCameFrom] = useState<Screen>("tools");
 
   // Landing link check
   const [toolUrl, setToolUrl] = useState("");
@@ -162,6 +167,8 @@ export function Journey({ lookup }: { lookup: LookupEntry[] }) {
     setPicked(null);
     setManual(false);
     setRecs(null);
+    setPicks([]);
+    setToolId(null);
     setNumbers({});
     go("landing");
   };
@@ -310,6 +317,11 @@ export function Journey({ lookup }: { lookup: LookupEntry[] }) {
           <button type="button" className={s.brand} onClick={startOver}>
             MainStreet AI
           </button>
+          {screen === "landing" && (
+            <a className={s.linkInk} href="/admin">
+              For reviewers
+            </a>
+          )}
           {screen !== "landing" && (
             <button type="button" className={s.linkInk} onClick={screen === "loading" ? () => { abort.current?.abort(); go("find"); } : startOver}>
               {screen === "loading" ? "Cancel" : "Start over"}
@@ -329,65 +341,102 @@ export function Journey({ lookup }: { lookup: LookupEntry[] }) {
   );
 
   // ---------- 1 · Landing ----------
-  if (screen === "landing")
+  if (screen === "landing") {
+    const counts = { verified: lookup.filter((e) => e.status === "verified").length, blocked: lookup.filter((e) => e.status === "blocked").length };
     return frame(
       <>
-        <div className={s.cols}>
-          <div className={s.col} style={{ paddingTop: 24 }}>
+        <section className={s.heroGrid}>
+          <div className={s.col} style={{ gap: 18 }}>
             <span className={cx(s.badge, s.ok)}>✓ Every tool checked by a person</span>
             <h1 className={s.hero}>AI tools you can trust, picked for your business.</h1>
-            <p>Most AI searches give you 50 tools and no way to tell which are safe. We show you the few that are checked, work with what you already use, and come with someone to help set them up.</p>
-            <button type="button" className={cx(s.btn, s.primary, s.wide)} onClick={() => go("find")}>
-              Find my AI tools
-            </button>
+            <p className={s.lead}>Most AI searches give you 50 tools and no way to tell which are safe. We show you the few that are checked, work with what you already use, and come with someone to help set them up.</p>
+            <div className={s.row} style={{ gap: 16 }}>
+              <button type="button" className={cx(s.btn, s.primary, s.wide)} onClick={() => go("find")}>
+                Find my AI tools
+              </button>
+              <a className={s.link} href="#how-we-check">How we check tools</a>
+            </div>
             <span className={s.small}>Free · about 3 minutes · no sign-up</span>
+            <div className={s.stats}>
+              <div><b className={s.num}>{counts.verified}</b><span>tools checked and approved</span></div>
+              <div><b className={s.num}>{counts.blocked}</b><span>scams blocked</span></div>
+              <div><b className={s.num}>8</b><span>safety checks on every tool</span></div>
+            </div>
           </div>
-          <div className={s.col}>
+
+          <div className={s.preview} aria-label="Example of what you'll see">
+            <span className={s.previewTag}>Example result</span>
             <div className={s.card}>
               <div className={s.cardTop}>
-                <h2 className={s.h2}>How it works</h2>
+                <span className={cx(s.badge, s.ok, s.seal)}>✓ Verified</span>
+                <div className={s.cardHead}>
+                  <div className={s.previewName}><span className={s.previewLogo} aria-hidden="true">Rw</span><h2 className={s.h3}>Ringwise Receptionist</h2></div>
+                  <span className={s.price}>$59<small>/mo</small></span>
+                </div>
               </div>
-              <ol className={s.howto}>
-                <li>
-                  <b>Type your business name.</b> We read your listings, website and reviews.
-                </li>
-                <li>
-                  <b>See what's costing you.</b> Missed calls, slow quotes, with the proof.
-                </li>
-                <li>
-                  <b>Pick a fix.</b> Only checked tools, plus local help to set it up.
-                </li>
-              </ol>
+              <p className={s.small} style={{ color: "var(--ink)" }}>Answers calls you miss on a job and texts you the details.</p>
+              <ul className={s.previewTicks}>
+                <li>Works with your Square</li>
+                <li>Doesn't use your data to train AI</li>
+                <li>Tells callers they're recorded, as Maryland requires</li>
+              </ul>
             </div>
-            <div className={s.card} style={{ gap: 8 }}>
-              <div className={s.cardTop}>
-                <h2 className={s.h3}>Saw an AI tool in an ad?</h2>
-              </div>
-              <p className={s.small} style={{ color: "var(--ink)" }}>
-                Paste the link and we'll tell you if a person has checked it.
-              </p>
-              <div className={s.field}>
-                <label htmlFor="tool-link" className={s.sr}>
-                  Tool link
-                </label>
-                <input id="tool-link" className={s.input} placeholder="https://" value={toolUrl} onChange={(e) => { setToolUrl(e.target.value); setToolResult(null); }} />
-              </div>
+            <div className={s.previewBlocked}>
+              <span className={cx(s.badge, s.bad)}>⚠ Blocked</span>
+              <span><b>Squarre Voice AI</b> copies Square's name and its website is 2 months old. We'd never show it to you.</span>
+            </div>
+          </div>
+        </section>
+
+        <section className={s.band}>
+          <h2 className={s.h2}>How it works</h2>
+          <ol className={s.stepsRow}>
+            <li><span className={s.stepNum}>1</span><b>Type your business name.</b><span>We read your Google listing, website and reviews, so you don't fill in a long form.</span></li>
+            <li><span className={s.stepNum}>2</span><b>See what's costing you.</b><span>Missed calls, slow quotes, unanswered reviews. Each one comes with the proof.</span></li>
+            <li><span className={s.stepNum}>3</span><b>Pick a fix and get help.</b><span>Only checked tools that fit your budget, plus a free local advisor to set it up.</span></li>
+          </ol>
+        </section>
+
+        <section className={s.band} id="how-we-check">
+          <h2 className={s.h2}>What we check before a tool reaches you</h2>
+          <div className={s.checkGrid}>
+            <div><b>Who's behind it</b><span>A real company, a street address and named people.</span></div>
+            <div><b>How long it's been around</b><span>New websites are riskier, so we look at the website's age.</span></div>
+            <div><b>What happens to your data</b><span>Does it train AI on it? Can you delete it? Where is it kept?</span></div>
+            <div><b>Clear prices</b><span>A public price and the freedom to cancel any month.</span></div>
+          </div>
+          <p className={s.small}>Then a person reviews it. Tools that copy a brand name or have no privacy policy are blocked automatically.</p>
+        </section>
+
+        <section className={s.adBand}>
+          <div className={s.col} style={{ gap: 6 }}>
+            <h2 className={s.h2}>Saw an AI tool in an ad?</h2>
+            <p className={s.small} style={{ color: "var(--ink)" }}>Paste the link and we'll tell you if a person has checked it.</p>
+          </div>
+          <div className={s.col} style={{ gap: 10 }}>
+            <div className={s.adRow}>
+              <label htmlFor="tool-link" className={s.sr}>
+                Tool link
+              </label>
+              <input id="tool-link" className={s.input} placeholder="https://" value={toolUrl} onChange={(e) => { setToolUrl(e.target.value); setToolResult(null); }} />
               <button type="button" className={cx(s.btn, s.secondary)} onClick={checkTool} disabled={!toolUrl.trim()}>
                 Check this tool
               </button>
-              {toolResult && (
-                <p className={s.notice} aria-live="polite">
-                  {toolResult}
-                </p>
-              )}
             </div>
+            {toolResult && (
+              <p className={s.notice} aria-live="polite">
+                {toolResult}
+              </p>
+            )}
           </div>
-        </div>
+        </section>
+
         <p className={s.small} style={{ textAlign: "center" }}>
           With help from the Maryland SBDC network · Built by Team ByteMe, University of Maryland
         </p>
       </>,
     );
+  }
 
   // ---------- 2 · Find your business ----------
   if (screen === "find")
@@ -992,67 +1041,52 @@ export function Journey({ lookup }: { lookup: LookupEntry[] }) {
     );
   }
 
-  // ---------- Ways to fix it (until screens 5–8 are designed) ----------
+  // ---------- 5 · Ways to fix it · 6 · Tool detail · 7 · Compare ----------
+  const req = result?.recommendation.ready ? result.recommendation.request.business : null;
+  const biz: Biz | null = req ? { monthlyBudget: req.monthlyBudget, currentTools: req.currentTools, needsHelp: req.needsHelp } : null;
+  const choices = new Map((recs?.problems ?? []).flatMap((p) => p.options.flatMap((o) => o.choices)).map((c) => [c.tool.id, c] as const));
+  const togglePick = (id: string) => setPicks((prev) => (prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id].slice(-3)));
+  const openTool = (id: string) => { setCameFrom(screen === "tool" ? cameFrom : screen); setToolId(id); go("tool"); };
+  const openCompare = () => { setCameFrom(screen === "compare" ? cameFrom : screen); go("compare"); };
+  const backLink = (label: string, to: Screen) => (
+    <button type="button" className={s.link} style={{ justifySelf: "start", paddingLeft: 0 }} onClick={() => go(to)}>‹ {label}</button>
+  );
+
+  if (screen === "tool") {
+    const r = catalog.find((x) => x.id === toolId);
+    return frame(
+      <>
+        {backLink(cameFrom === "compare" ? "Back to compare" : "Ways to fix it", cameFrom === "compare" ? "compare" : "tools")}
+        {banner}
+        {r ? (
+          <ToolDetail r={r} choice={choices.get(r.id)} biz={biz} picked={picks.includes(r.id)} togglePick={() => togglePick(r.id)} openCompare={openCompare} canCompare={picks.length >= 2} />
+        ) : (
+          <p className={s.notice}>We couldn't find this tool in our catalog.</p>
+        )}
+      </>,
+    );
+  }
+
+  if (screen === "compare") {
+    const rs = picks.map((id) => catalog.find((x) => x.id === id)).filter((x): x is CatalogRecord => Boolean(x));
+    return frame(
+      <>
+        {backLink("Ways to fix it", "tools")}
+        {banner}
+        {rs.length >= 2 ? <Compare rs={rs} choices={choices} biz={biz} openTool={openTool} /> : <p className={s.notice}>Pick at least 2 tools with "+ Compare" to see them side by side.</p>}
+      </>,
+    );
+  }
+
   return frame(
     <>
       {banner}
       <Steps n={4} label="Ways to fix it" />
-      <h1 className={s.h1}>Ways to fix it</h1>
-      <p className={s.notice}>A simple list for now: the full design for this step is coming. Prices and statuses are from our sample catalog.</p>
-      {recs?.problems.map((p) => (
-        <section className={s.col} key={p.problem.id}>
-          <h2 className={s.h2}>{p.problem.title}</h2>
-          <div className={s.grid3}>
-            {p.options.map((opt) => (
-              <article className={s.card} key={opt.kind}>
-                <div className={s.cardTop}>
-                  <div className={s.cardHead}>
-                    <h3 className={s.h3}>{opt.title}</h3>
-                    <span className={s.price}>
-                      {usd(opt.monthlyPrice)}
-                      <small>/mo</small>
-                    </span>
-                  </div>
-                </div>
-                <p className={s.small} style={{ color: "var(--ink)" }}>
-                  {opt.description}
-                </p>
-                {opt.choices.map((c) => (
-                  <div key={c.tool.id} className={s.col} style={{ gap: 6 }}>
-                    <div className={s.row}>
-                      <b>{c.tool.name}</b>
-                      <span className={cx(s.badge, c.tool.status === "verified" ? cx(s.ok, s.seal) : c.tool.status === "blocked" ? s.bad : s.grey)}>
-                        {c.tool.status === "verified" ? "✓ Verified" : c.tool.status === "blocked" ? "⚠ Blocked" : "◷ Not yet reviewed"}
-                      </span>
-                    </div>
-                    <span className={s.small}>{c.why}</span>
-                    {c.badges.length > 0 && (
-                      <div className={s.row}>
-                        {c.badges.slice(0, 3).map((b) => (
-                          <span className={s.chip} key={b}>
-                            {b}
-                          </span>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                ))}
-                {opt.note && <span className={s.hint}>{opt.note}</span>}
-              </article>
-            ))}
-          </div>
-          {p.options.length === 0 && (
-            <p className={s.notice}>
-              {p.excluded.length
-                ? `None of the ${plural(p.excluded.length, "tool")} we know for this fits yet: ${p.excluded.slice(0, 2).map((x) => `${x.toolName} (${x.reason.replace(/\.$/, "").toLowerCase()})`).join("; ")}.`
-                : "We don't have a checked tool for this yet. The first step above still works without one."}
-            </p>
-          )}
-        </section>
-      ))}
-      <button type="button" className={cx(s.btn, s.secondary)} style={{ justifySelf: "start" }} onClick={() => go("problems")}>
-        Back to what's costing you
-      </button>
+      {recs && biz ? (
+        <WaysToFix recs={recs} biz={biz} catalog={catalog} picks={picks} togglePick={togglePick} openTool={openTool} openCompare={openCompare} back={() => go("problems")} />
+      ) : (
+        <p className={s.notice}>We need a little more about your business before we can suggest tools.</p>
+      )}
     </>,
   );
 }
