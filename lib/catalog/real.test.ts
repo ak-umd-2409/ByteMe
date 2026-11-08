@@ -7,6 +7,7 @@ import real from "../../data/catalog/real.json" with { type: "json" };
 import sample from "../../data/catalog/sample.json" with { type: "json" };
 import { recommend } from "../recommend/engine.ts";
 import { USE_CASES, type BusinessProfile, type Problem, type UseCase } from "../recommend/types.ts";
+import { catalogFor } from "./fit.ts";
 import { getVerifiedTools, loadCatalog } from "./index.ts";
 import type { CatalogRecord } from "./types.ts";
 
@@ -54,7 +55,6 @@ describe("coverage", () => {
  * AI calls, food pricing) must not throw out tools that never touch a phone.
  */
 describe("what a Maryland owner actually gets", () => {
-  const catalog = getVerifiedTools();
   const owner = (industry: string): BusinessProfile => ({
     name: "Test business",
     industry,
@@ -70,14 +70,31 @@ describe("what a Maryland owner actually gets", () => {
   });
   const problem = (useCase: UseCase): Problem => ({ id: useCase, title: useCase, evidence: "test", useCase });
   const shown = (industry: string, useCase: UseCase) =>
-    recommend(owner(industry), [problem(useCase)], catalog).problems[0].options.length;
+    recommend(owner(industry), [problem(useCase)], catalogFor(loadCatalog(), industry)).problems[0].options.length;
 
   for (const [industry, useCase] of [
     ["HVAC", "admin-paperwork"],
-    ["HVAC", "quotes"],
+    ["HVAC", "marketing"],
     ["Restaurant", "customer-messaging"],
     ["Salon", "email-marketing"],
     ["Retail shop", "marketing"],
   ] as [string, UseCase][])
     it(`${industry} · ${useCase}: at least one tool`, () => assert.ok(shown(industry, useCase) >= 1));
+
+  // Named gap: Proposify is listed for professional services only and Workiz has no
+  // confirmed price. When a quotes tool for trades is approved, take this off.
+  it("HVAC · quotes: a named gap (no approved quotes tool for trades yet)", () =>
+    assert.equal(shown("HVAC", "quotes"), 0, "HVAC quotes now has a tool: update this test"));
+});
+
+describe("only tools made for the owner's type of business", () => {
+  it("never offers Proposify (professional services only) to a restaurant", () => {
+    const ids = catalogFor(loadCatalog(), "Restaurant").map((t) => t.id);
+    assert.ok(!ids.includes("proposify"));
+    assert.ok(ids.includes("notion"), "any-business tools still show");
+  });
+
+  it("still offers Proposify to professional services", () => {
+    assert.ok(catalogFor(loadCatalog(), "Professional services").some((t) => t.id === "proposify"));
+  });
 });

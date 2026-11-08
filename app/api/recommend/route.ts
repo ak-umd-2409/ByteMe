@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { demoBusiness } from "../../../data/mock/recommendations.ts";
 import { loadLiveCatalog } from "../../../lib/discovery/index.ts";
-import { toCatalogTool } from "../../../lib/catalog/toCatalogTool.ts";
+import { catalogFor } from "../../../lib/catalog/fit.ts";
 import { recommend } from "../../../lib/recommend/engine.ts";
 import { USE_CASES } from "../../../lib/recommend/types.ts";
 import type { BusinessProfile, Problem } from "../../../lib/recommend/types.ts";
@@ -83,9 +83,8 @@ export async function POST(request: NextRequest) {
   // Our safety-checked catalog (data/catalog). The engine's gates only recommend
   // Verified tools; tools without a confirmed price are left out entirely.
   // Includes tools approved through the discovery queue (lib/discovery).
-  const catalog = (await loadLiveCatalog())
-    .map(toCatalogTool)
-    .filter((t): t is NonNullable<typeof t> => t !== null);
+  // Only tools made for any business or for this type of business.
+  const catalog = catalogFor(await loadLiveCatalog(), business.industry);
   return NextResponse.json(recommend(business, problems, catalog), {
     headers: { "Cache-Control": "no-store" },
   });
