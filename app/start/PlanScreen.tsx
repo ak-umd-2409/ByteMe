@@ -98,13 +98,14 @@ export function PlanScreen({
           {plan.totals.monthly > 0 && ` · ${usd(plan.totals.monthly)} ${language === "es" ? "al mes" : "a month"}${plan.totals.unknownPrices ? language === "es" ? " más precios no publicados" : " plus prices that aren't public" : ""}`}
           {plan.totals.setupMinutes > 0 && ` · ${language === "es" ? `unos ${plan.totals.setupMinutes} minutos de configuración` : `about ${hours(plan.totals.setupMinutes)} of setup`}`}
         </span>
+        {plan.notes.some((note) => note.includes("sample tool")) && <span className={s.banner}>{language === "es" ? "Plan de demostración: incluye una herramienta ficticia que no se puede comprar." : "Demo plan: includes a fictional sample tool that cannot be purchased."}</span>}
       </header>
 
       {toolProblems.length > 0 && (
         <section className={cx(s.card, s.noPrint)}>
           <div className={s.cardTop}>
             <h2 className={s.h3}>{language === "es" ? "Elige una solución para cada problema" : "Pick one fix for each problem"}</h2>
-            <span className={s.small}>{language === "es" ? "Las mejores opciones primero. Solo herramientas verificadas." : "Best fit first. Only ✓ Verified tools."}</span>
+            <span className={s.small}>{language === "es" ? "Las mejores opciones primero. Las herramientas ficticias están marcadas." : "Best fit first. Fictional sample tools are labeled."}</span>
           </div>
           {toolProblems.map((o) => (
             <div className={s.checkRow} key={o.problemKey}>

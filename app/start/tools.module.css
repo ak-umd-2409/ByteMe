@@ -1,8 +1,4 @@
-/*
- * Screens 5–8 (Ways to fix it, Tool detail, Compare, Admin queue).
- * Same tokens as start.module.css; these rules only add what those screens need.
- * Source: docs/specs/b-wireframes.md.
- */
+/* Tool, comparison, and admin surfaces. Tokens come from start.module.css. */
 
 /* Tool logo placeholder: colored initials until the catalog has vendor logos */
 .tname { display: flex; align-items: center; gap: 10px; min-width: 0; }
@@ -72,3 +68,17 @@
 @media (prefers-reduced-motion: no-preference) { .appear { animation: appear 0.4s ease-out; } }
 @keyframes appear { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
 .sampleTag { border-color: var(--warn-fg); color: var(--warn-fg); background: var(--warn-bg); font-weight: 600; }
+
+/* Clear, distinct ways forward and polished decision details. */
+.approachCard { align-content: start; }
+.approachCard .approachAction { margin-top: auto; }
+.typetag { color: var(--accent); text-transform: uppercase; letter-spacing: .1em; font-size: 11px; }
+.kitRow, .helpRow { border-radius: 11px; }
+.kitRow:hover, .helpRow:hover { border-color: var(--accent); background: var(--ok-bg); }
+.whyPick { background: #eef6e9; border-radius: 10px; }
+.cmpbar { border-radius: 14px; box-shadow: 0 12px 30px #15332f35; }
+.cmpbar .cmpGo { box-shadow: none; border-color: transparent; }
+.cmpwrap { border: 1px solid var(--line); background: #fff; border-radius: 15px; }
+.cmpT thead th { background: #eaf3e7; }
+.cmpT tr.diff td { background: #f3f8ee; }
+.pickme { border-radius: 999px; padding: 3px 9px; }

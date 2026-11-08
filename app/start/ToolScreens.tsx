@@ -8,7 +8,7 @@
  */
 import { useState } from "react";
 import type { CatalogRecord } from "@/lib/catalog/types.ts";
-import type { BusinessProfile, Recommendation, RecommendationResult, ToolChoice } from "@/lib/recommend/types.ts";
+import type { BusinessProfile, Recommendation, RecommendationResult, ToolChoice, UseCase } from "@/lib/recommend/types.ts";
 import s from "./start.module.css";
 import t from "./tools.module.css";
 
@@ -72,6 +72,21 @@ const KIND_LABEL: Record<Recommendation["kind"], string> = {
   "done-for-you": "Done for you",
 };
 
+const FREE_ACTIONS: Record<UseCase, { title: string; step: string }> = {
+  "missed-calls": { title: "Make every missed call visible", step: "Set a same-day callback rule and write down who returns each unanswered call." },
+  booking: { title: "Make booking easier today", step: "Put a clear booking instruction on your website and business listing, then test it on a phone." },
+  reviews: { title: "Ask at the right moment", step: "Give your team one short review request to send after a successful job." },
+  marketing: { title: "Reuse your best message", step: "Pick one customer question and turn your answer into a simple post or email." },
+  "customer-messaging": { title: "Answer the common questions", step: "Write short replies for your three most frequent customer messages." },
+  quotes: { title: "Standardize your next quote", step: "Build a one-page quote outline with scope, price, timing, and follow-up date." },
+  bookkeeping: { title: "Give receipts one home", step: "Set one weekly time to collect receipts and check unpaid invoices." },
+  inventory: { title: "Spot shortages sooner", step: "List your fastest-moving items and set a simple reorder trigger for each." },
+  "staff-scheduling": { title: "Make the next schedule clearer", step: "Publish shifts in one place and ask staff to confirm any changes there." },
+  "website-seo": { title: "Fix the basics first", step: "Check your hours, services, and contact details across your site and public listings." },
+  "email-marketing": { title: "Reconnect with past customers", step: "Draft one useful follow-up message and send it only to people who agreed to hear from you." },
+  "admin-paperwork": { title: "Simplify one repeat task", step: "Choose the form you fill out most and make a reusable checklist or template." },
+};
+
 /** The first plain reason a tool was blocked or held, for "Why not these?". */
 export function blockReason(r: CatalogRecord): string {
   if (r.safetyCheck.redFlags.length) return r.safetyCheck.redFlags[0];
@@ -111,7 +126,12 @@ export function WaysToFix({
   const byId = new Map(catalog.map((r) => [r.id, r]));
   const kit = recs.problems.flatMap((p) => p.options).find((o) => o.kind === "starter-kit");
   const problem = recs.problems[tab] ?? recs.problems[0];
-  const options = (problem?.options ?? []).filter((o) => o.kind !== "starter-kit");
+  const seenOptions = new Set<string>();
+  const options = (problem?.options ?? [])
+    .filter((o) => o.kind !== "starter-kit" && o.choices.length > 0)
+    .filter((o) => { const id = o.choices[0].tool.id; if (seenOptions.has(id)) return false; seenOptions.add(id); return true; })
+    .slice(0, 3);
+  const freeAction = problem ? FREE_ACTIONS[problem.problem.useCase] : null;
   const problemFor = (c: ToolChoice) => recs.problems.find((p) => c.tool.useCases.includes(p.problem.useCase))?.problem.title;
   const worksWith = (c: ToolChoice) => Object.keys(c.tool.integrations).find((k) => biz.currentTools.some((x) => same(x, k)));
 
@@ -132,11 +152,11 @@ export function WaysToFix({
       <h1 className={s.title}>Ways to fix it</h1>
       {recs.problems.some((p) => p.options.some((o) => o.choices.some((c) => byId.get(c.tool.id)?.sample))) && (
         <p className={s.banner}>
-          These are <b>sample tools for the demo</b>: the companies are made up. Real tools are being checked now, and only ones that pass our Safety Check and a person's review will appear here.
+          <b>Demo note:</b> Fictional tools are labeled as samples. Real tools appear in recommendations only after safety checks and human review.
         </p>
       )}
       <p className={s.small} style={{ color: "var(--ink)", marginTop: -8 }}>
-        You sign up with each company yourself: MainStreet AI doesn't connect to your accounts. Only ✓ Verified tools. Each one fits {biz.budgetAssumed ? `${usd(biz.monthlyBudget)} a month, the budget we assumed because you skipped that question,` : `your ${usd(biz.monthlyBudget)} a month`} and works with what you already use where it can.
+        Compare a free action, a tool that fits {biz.budgetAssumed ? `the ${usd(biz.monthlyBudget)} monthly budget we assumed` : `your ${usd(biz.monthlyBudget)} monthly budget`}, and free local advice. You choose what to use.
       </p>
 
       {kit && (
@@ -168,7 +188,7 @@ export function WaysToFix({
         </article>
       )}
 
-      <h2 className={s.h2} style={{ marginTop: 8 }}>{kit ? "Or fix one problem at a time" : "Fix one problem at a time"}</h2>
+      <h2 className={s.h2} style={{ marginTop: 8 }}>{kit ? "Or fix one problem at a time" : "Pick a way forward"}</h2>
       {recs.problems.length > 1 && (
         <div className={s.row} role="group" aria-label="Problem">
           {recs.problems.map((p, i) => (
@@ -179,8 +199,17 @@ export function WaysToFix({
         </div>
       )}
 
-      {options.length > 0 ? (
-        <div className={s.grid3} style={options.length === 1 ? { maxWidth: 560 } : undefined}>
+      {problem && (
+        <p className={s.small}>For <b>{problem.problem.title}</b>, start small and choose the support you need.</p>
+      )}
+      <div className={s.grid3}>
+        {freeAction && <article className={cx(s.card, t.approachCard)}>
+          <div className={s.cardTop}><span className={t.typetag}>Start for free</span><div className={s.cardHead}><h3 className={s.h3}>{freeAction.title}</h3><span className={s.price}>$0</span></div></div>
+          <p>{freeAction.step}</p><p className={s.small}>Try this before buying anything. It also gives you a baseline to see whether a tool helps.</p>
+          <button type="button" className={cx(s.btn, s.secondary, t.approachAction)} onClick={back}>See the evidence and first step</button>
+        </article>}
+        {options.length > 0 ? (
+          <>
           {options.map((o) => {
             const c = o.choices[0];
             const r = byId.get(c.tool.id);
@@ -216,19 +245,23 @@ export function WaysToFix({
               </article>
             );
           })}
-        </div>
-      ) : (
-        <article className={s.card} style={{ maxWidth: 760 }}>
+          </>
+        ) : (
+        <article className={s.card}>
           <div className={s.cardTop}>
             <span className={t.typetag}>No checked tool yet</span>
             <h3 className={s.h3}>We won't suggest a tool we haven't checked</h3>
           </div>
           <p>None of the tools we know for &ldquo;{problem?.problem.title}&rdquo; has passed our safety check yet. The first step on the previous screen works without a tool, and a free advisor can help you choose one.</p>
-          <div className={t.actions}>
-            <a className={cx(s.btn, s.primary)} href={biz.help?.url ?? SBDC_URL} target="_blank" rel="noreferrer">Get free help from the Maryland SBDC</a>
-          </div>
         </article>
-      )}
+        )}
+        <article className={cx(s.card, t.approachCard)}>
+          <div className={s.cardTop}><span className={t.typetag}>Get local help</span><h3 className={s.h3}>Talk it through with a free advisor</h3></div>
+          <p>A Maryland SBDC advisor can help you choose a practical first move and plan the setup around your business.</p>
+          <span className={s.small}>Best when you want another person to review the tradeoffs with you.</span>
+          <a className={cx(s.btn, s.secondary, t.approachAction)} href={biz.help?.url ?? SBDC_URL} target="_blank" rel="noreferrer">Find your local advisor ↗</a>
+        </article>
+      </div>
 
       {left.size > 0 && (
         <details className={s.disc}>

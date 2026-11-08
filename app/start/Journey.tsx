@@ -5,7 +5,7 @@
  *   Landing → 1 Find (search, tap your business) → Reading → 2 Check what we found
  *   → 3 A few questions (one at a time) → 4 What's holding you back → 5 Ways to fix it (· Tool detail · Compare)
  * Data: /api/business/search, /api/journey/start, /api/journey/answer, /api/recommend (Part 4).
- * Style: docs/specs/b-wireframes.md. Ways to fix it, Tool detail and Compare live in ToolScreens.tsx.
+ * Ways to fix it, Tool detail and Compare live in ToolScreens.tsx.
  */
 import { useEffect, useRef, useState } from "react";
 import {
@@ -143,7 +143,7 @@ function OptionList({ q, value, onPick }: { q: JourneyQuestion; value: Answer | 
   );
 }
 
-export function Journey({ lookup, catalog, watchCount = 0 }: { lookup: LookupEntry[]; catalog: CatalogRecord[]; watchCount?: number }) {
+export function Journey({ lookup, catalog }: { lookup: LookupEntry[]; catalog: CatalogRecord[] }) {
   const [screen, setScreen] = useState<Screen>("landing");
   const [error, setError] = useState<string | null>(null);
   const top = useRef<HTMLDivElement>(null);
@@ -196,6 +196,7 @@ export function Journey({ lookup, catalog, watchCount = 0 }: { lookup: LookupEnt
   const [toolUrl, setToolUrl] = useState("");
   const [toolResult, setToolResult] = useState<{ text: string; tone: "ok" | "bad" | "info"; toolId?: string } | null>(null);
   const [toolChecking, setToolChecking] = useState(false);
+  const [previewTab, setPreviewTab] = useState<"discover" | "compare" | "adopt">("discover");
 
   useEffect(() => {
     top.current?.scrollIntoView({ block: "start" });
@@ -402,16 +403,15 @@ export function Journey({ lookup, catalog, watchCount = 0 }: { lookup: LookupEnt
       <header className={s.topbar}>
         <div className={s.topbarInner}>
           <button type="button" className={s.brand} onClick={startOver}>
-            MainStreet AI
+            <span className={s.brandMark} aria-hidden="true">m<span>✳</span></span>
+            <span>MainStreet<span className={s.brandAccent}>AI</span></span>
           </button>
           {screen === "landing" ? (
-            <span className={s.row} style={{ gap: 18 }}>
+            <span className={s.headerNav}>
               <a className={s.linkInk} href="/tools">
                 Browse tools
               </a>
-              <a className={s.linkInk} href="/admin">
-                For reviewers
-              </a>
+              <button type="button" className={s.headerCta} onClick={() => go("find")}>Get started <span aria-hidden="true">↗</span></button>
             </span>
           ) : (
             <button
@@ -431,76 +431,66 @@ export function Journey({ lookup, catalog, watchCount = 0 }: { lookup: LookupEnt
           )}
         </div>
       </header>
-      <main className={cx(s.page, opts.narrow && s.narrow)} key={screen === "ask" ? `ask-${qIndex}` : screen}>
-        {children}
+      <main className={cx(s.page, opts.narrow && s.stagePage)} key={screen === "ask" ? `ask-${qIndex}` : screen}>
+        {opts.narrow ? (
+          <div className={s.stageLayout}>
+            <div className={s.stageContent}>{children}</div>
+            <aside className={s.stageAside} aria-label="How this works">
+              <span className={s.asideEyebrow}>YOUR DECISION WORKSPACE</span>
+              <div className={s.asideIcon} aria-hidden="true">✳</div>
+              <h2 className={s.h2}>{screen === "find" ? "Start with what is already public." : screen === "check" ? "You stay in control." : screen === "ask" ? "Just the questions that matter." : "A clearer next move."}</h2>
+              <p>{screen === "find" ? "Enter a business name and we'll gather available public details. You can correct anything before we use it." : screen === "check" ? "Review each detail and edit it before we look for opportunities. Unchecked information is labeled." : screen === "ask" ? "Your answers shape what appears next: which problems matter, what you can spend, and how much setup help you want." : "Every recommendation leads to a practical plan."}</p>
+              {screen === "find" && <button type="button" className={s.asideDemo} onClick={() => void read({ placeId: "public-frederick-heating-ac", label: "Frederick Heating & Air Conditioning" })}>Explore a saved Maryland example <span aria-hidden="true">↗</span></button>}
+              <div className={s.asideFooter}><span aria-hidden="true">◈</span> Public data first · Your answers stay editable</div>
+            </aside>
+          </div>
+        ) : children}
       </main>
     </div>
   );
 
   // ---------- 1 · Landing ----------
   if (screen === "landing") {
-    // Only real tools count. Sample (made-up) tools never inflate the numbers.
-    const real = lookup.filter((e) => !e.sample);
-    const counts = { verified: real.filter((e) => e.status === "verified").length, blocked: real.filter((e) => e.status === "blocked").length };
     return frame(
       <>
         <section className={s.heroGrid}>
-          <div className={s.col} style={{ gap: 18 }}>
-            <span className={cx(s.badge, s.ok)}>✓ Every tool checked by a person</span>
-            <h1 className={s.hero}>AI tools you can trust, picked for your business.</h1>
-            <p className={s.lead}>Most AI searches give you 50 tools and no way to tell which are safe. We show you the few that are checked, work with what you already use, and come with someone to help set them up.</p>
-            <div className={s.row} style={{ gap: 16 }}>
-              <button type="button" className={cx(s.btn, s.primary, s.wide)} onClick={() => go("find")}>
-                Find my AI tools
-              </button>
-              <a className={s.link} href="/tools">Browse all checked tools</a>
+          <div className={s.heroCopy}>
+            <span className={s.heroEyebrow}><span className={s.liveDot} /> BUILT FOR MARYLAND SMALL BUSINESSES</span>
+            <h1 className={s.hero}>A better business starts with <em>one clear next move.</em></h1>
+            <p className={s.lead}>See where time or sales may be slipping away. Compare AI fixes you can trust. Leave with a practical plan to put one to work.</p>
+            <div className={s.heroActions}>
+              <button type="button" className={cx(s.btn, s.primary, s.heroButton)} onClick={() => go("find")}>Find my next move <span aria-hidden="true">↗</span></button>
+              <button type="button" className={s.heroDemo} onClick={() => void read({ placeId: "public-frederick-heating-ac", label: "Frederick Heating & Air Conditioning" })}>Explore a guided example <span aria-hidden="true">→</span></button>
             </div>
-            <span className={s.small}>Free · about 3 minutes · no sign-up</span>
-            <div className={s.stats}>
-              {counts.verified > 0 ? (
-                <div><b className={s.num}>{counts.verified}</b><span>real tools checked and approved</span></div>
-              ) : (
-                <div><b className={s.num}>{watchCount}</b><span>real AI tools on our watch list</span></div>
-              )}
-              {counts.blocked > 0 ? (
-                <div><b className={s.num}>{counts.blocked}</b><span>unsafe tools blocked</span></div>
-              ) : (
-                <div><b className={s.num}>0</b><span>tools recommended before a person checks them</span></div>
-              )}
-              <div><b className={s.num}>8</b><span>safety checks on every tool</span></div>
+            <p className={s.heroFine}>Free to explore <span>·</span> About 3 minutes <span>·</span> No sign-up</p>
+            <div className={s.heroProof}>
+              <span><b>01</b> Evidence behind each finding</span>
+              <span><b>02</b> Human review before recommendations</span>
+              <span><b>03</b> A 30-day action plan</span>
             </div>
           </div>
-
-          <div className={s.preview} aria-label="Example of what you'll see">
-            <span className={s.previewTag}>Example of a result · sample tools, not real products</span>
-            <div className={s.card}>
-              <div className={s.cardTop}>
-                <span className={cx(s.badge, s.ok, s.seal)}>✓ Verified</span>
-                <div className={s.cardHead}>
-                  <div className={s.previewName}><span className={s.previewLogo} aria-hidden="true">Rw</span><h2 className={s.h3}>Ringwise Receptionist</h2></div>
-                  <span className={s.price}>$59<small>/mo</small></span>
-                </div>
+          <div className={s.heroVisual} aria-label="Interactive product preview, illustrative only">
+            <div className={s.previewWindow}>
+              <div className={s.previewHeader}><span className={s.windowDots} aria-hidden="true"><i/><i/><i/></span><span>YOUR DECISION WORKSPACE</span><span className={s.previewSpark} aria-hidden="true">✳</span></div>
+              <div className={s.previewTabs} role="group" aria-label="Preview stage">
+                {(["discover", "compare", "adopt"] as const).map((tab, i) => <button key={tab} type="button" aria-pressed={previewTab === tab} onClick={() => setPreviewTab(tab)}><span>0{i + 1}</span> {tab[0].toUpperCase() + tab.slice(1)}</button>)}
               </div>
-              <p className={s.small} style={{ color: "var(--ink)" }}>Answers calls you miss on a job and texts you the details.</p>
-              <ul className={s.previewTicks}>
-                <li>Works with your Square</li>
-                <li>Doesn't use your data to train AI</li>
-                <li>Tells callers they're recorded, as Maryland requires</li>
-              </ul>
+              <div className={s.previewBody} aria-live="polite">
+                {previewTab === "discover" && <><span className={s.previewKicker}>DISCOVER THE OPPORTUNITY</span><h2>What could be holding you back?</h2><p>Findings are ranked by what they may mean for your business, with the source behind each one.</p><div className={s.previewIssue}><span className={s.previewIssueIcon} aria-hidden="true">↗</span><div><b>Missed calls while you&apos;re on a job</b><span>A possible lost lead · see the evidence</span></div><span className={s.issueArrow} aria-hidden="true">→</span></div><div className={s.previewMeta}><span>● Public sources</span><span>● You confirm the details</span></div></>}
+                {previewTab === "compare" && <><span className={s.previewKicker}>COMPARE YOUR OPTIONS</span><h2>Choose the fix that fits.</h2><p>Compare price, setup time, safety, and the tools you already use.</p><div className={s.previewCompare}><div><span>THE APPROACH</span><b>Use what you have</b><small>Start with an existing feature</small></div><div><span>THE APPROACH</span><b>Try a checked tool</b><small>See the fit and safety details</small></div></div><div className={s.previewMeta}><span>● Plain-language tradeoffs</span><span>● Human review</span></div></>}
+                {previewTab === "adopt" && <><span className={s.previewKicker}>TURN IT INTO ACTION</span><h2>A plan you can actually use.</h2><p>Leave with a 30-day checklist, ready-to-use words, and a local place to ask for help.</p><div className={s.previewPlan}><span>WEEK 01</span><b>Make one small change</b><span>WEEK 02</span><b>Set up and test</b><span>WEEK 04</span><b>Check what improved</b></div><div className={s.previewMeta}><span>● Take it at your pace</span><span>● Share with an advisor</span></div></>}
+              </div>
             </div>
-            <div className={s.previewBlocked}>
-              <span className={cx(s.badge, s.bad)}>⚠ Blocked</span>
-              <span><b>Squarre Voice AI</b> copies Square's name and its website is 2 months old. We'd never show it to you.</span>
-            </div>
+            <span className={s.previewCaption}>Product preview · illustrative content</span>
           </div>
         </section>
 
         <section className={s.band}>
-          <h2 className={s.h2}>How it works</h2>
+          <div className={s.sectionHead}><span className={s.sectionKicker}>THE PATH FORWARD</span><h2>From “where do I start?” to “I&apos;ve got this.”</h2><p>Three clear steps, built around the decisions a business owner actually has to make.</p></div>
           <ol className={s.stepsRow}>
-            <li><span className={s.stepNum}>1</span><b>Type your business name.</b><span>We read your Google listing, website and reviews, so you don't fill in a long form.</span></li>
-            <li><span className={s.stepNum}>2</span><b>See what's costing you.</b><span>Missed calls, slow quotes, unanswered reviews. Each one comes with the proof.</span></li>
-            <li><span className={s.stepNum}>3</span><b>Pick a fix and get help.</b><span>Only checked tools that fit your budget, plus a free local advisor to set it up.</span></li>
+            <li><span className={s.stepNum}>01</span><b>Discover what matters.</b><span>Start with your public business details, then correct anything we missed.</span></li>
+            <li><span className={s.stepNum}>02</span><b>Compare your options.</b><span>See several ways to fix each problem, the costs, and what makes each one fit.</span></li>
+            <li><span className={s.stepNum}>03</span><b>Put one to work.</b><span>Follow a 30-day plan, with ready-to-use templates and local support.</span></li>
           </ol>
         </section>
 
@@ -547,7 +537,7 @@ export function Journey({ lookup, catalog, watchCount = 0 }: { lookup: LookupEnt
         </section>
 
         <p className={s.small} style={{ textAlign: "center" }}>
-          With help from the Maryland SBDC network · Built by Team ByteMe, University of Maryland
+          Free support available through the Maryland SBDC network · Built by Team ByteMe, University of Maryland
         </p>
       </>,
     );

@@ -46,7 +46,9 @@ export function Catalog({ records, industries }: { records: CatalogRecord[]; ind
     })
     .sort((a, b) => Number(b.badge === "verified") - Number(a.badge === "verified") || a.name.localeCompare(b.name));
 
-  const verified = shown.filter((r) => r.badge === "verified").length;
+  const verified = shown.filter((r) => r.badge === "verified" && !r.sample).length;
+  const sampleVerified = shown.filter((r) => r.badge === "verified" && r.sample).length;
+  const waiting = shown.filter((r) => r.badge !== "verified").length;
   const filtered = Boolean(q || useCase || industry || worksWith || maxPrice !== null || verifiedOnly);
   const clear = () => {
     setQ("");
@@ -62,12 +64,12 @@ export function Catalog({ records, industries }: { records: CatalogRecord[]; ind
       <header className={s.intro}>
         <h1 className={s.title}>Browse AI tools</h1>
         <p className={s.lead}>
-          Every tool we know about for small businesses, with its Safety Check. We only ever recommend <b>✓ Verified</b> tools: they passed the automatic checks and a person
-          reviewed them.
+          Browse tools and their Safety Checks. Real tools appear in recommendations only after automatic checks and a person&apos;s review.
         </p>
         <span className={s.small}>
-          {verified} verified · {shown.length - verified} waiting for a person · {blocked.length} hidden
+          {verified} real verified · {sampleVerified} verified examples · {waiting} waiting for a person · {blocked.length} hidden
         </span>
+        {sampleVerified > 0 && <p className={s.banner}>Demo catalog: sample tools are fictional and cannot be purchased. Each sample is clearly labeled.</p>}
       </header>
 
       <section className={c.filters} aria-label="Filter tools">
