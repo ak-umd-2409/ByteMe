@@ -5,35 +5,36 @@ import type { IndustryKey } from "../business/types.ts";
 import { recommend } from "../recommend/engine.ts";
 import type { UseCase } from "../recommend/types.ts";
 import { validRecord } from "./fixtures.ts";
-import { getTool, getVerifiedTools, loadCatalog } from "./index.ts";
+import { getTool, getVerifiedTools, loadCatalog, loadTestCatalog } from "./index.ts";
 import { validateCatalog } from "./validate.ts";
 
 const byBadge = (badge: string) => loadCatalog().filter((r) => r.badge === badge);
+const test = loadTestCatalog();
 
 describe("catalog data", () => {
   it("passes the data checker", () => {
     assert.deepEqual(validateCatalog(loadCatalog()), []);
   });
 
-  it("has 3 verified, 2 listed and 3 blocked sample tools", () => {
-    assert.equal(loadCatalog().length, 8);
-    assert.equal(byBadge("verified").length, 3);
-    assert.equal(byBadge("listed").length, 2);
-    assert.equal(byBadge("blocked").length, 3);
+  it("the test-only catalog has 3 verified, 2 listed and 3 blocked made-up tools", () => {
+    assert.deepEqual(validateCatalog(test), []);
+    assert.equal(test.length, 8);
+    for (const [badge, n] of [["verified", 3], ["listed", 2], ["blocked", 3]] as const)
+      assert.equal(test.filter((r) => r.badge === badge).length, n);
   });
 });
 
 describe("getVerifiedTools", () => {
   it("returns only verified tools", () => {
-    const tools = getVerifiedTools();
+    const tools = getVerifiedTools({}, test);
     assert.equal(tools.length, 3);
     assert.ok(tools.every((t) => t.status === "verified"));
   });
 
   it("filters by problem type and by works-with, ignoring case", () => {
-    assert.equal(getVerifiedTools({ useCase: "missed-calls" }).length, 1);
-    assert.ok(getVerifiedTools({ worksWith: "quickbooks" }).some((t) => t.useCases.includes("quotes")));
-    assert.deepEqual(getVerifiedTools({ useCase: "inventory" }), []);
+    assert.equal(getVerifiedTools({ useCase: "missed-calls" }, test).length, 1);
+    assert.ok(getVerifiedTools({ worksWith: "QUICKBOOKS" }, test).some((t) => t.useCases.includes("quotes")));
+    assert.deepEqual(getVerifiedTools({ useCase: "inventory" }, test), []);
   });
 
   it("never returns a verified tool that has no review date", () => {
@@ -55,13 +56,19 @@ describe("getVerifiedTools", () => {
     assert.equal(getVerifiedTools()[0].name, original);
   });
 
-  it("works in the recommendation engine for Mike's missed calls", () => {
+  it("works in the recommendation engine for Mike's missed calls (made-up tools)", () => {
     const result = recommend(
       demoBusiness,
       [{ id: "p1", useCase: "missed-calls", title: "Missed calls", evidence: "Sample" }],
-      getVerifiedTools(),
+      getVerifiedTools({}, test),
     );
     assert.ok(result.problems[0].options.length > 0);
+  });
+
+  it("gives a restaurant with missed calls a real, approved tool (the demo story)", () => {
+    const tools = getVerifiedTools({ industry: "restaurant", useCase: "missed-calls" });
+    assert.ok(tools.length >= 1, "no approved real tool for restaurant missed calls");
+    assert.ok(tools.every((t) => t.status === "verified"));
   });
 });
 

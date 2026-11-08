@@ -1,5 +1,486 @@
 [
   {
+    "id": "birdeye",
+    "name": "Birdeye",
+    "vendor": {
+      "company": "Birdeye Inc",
+      "website": "https://birdeye.com",
+      "domain": "birdeye.com"
+    },
+    "description": "AI Coworkers employ AI agents to execute the jobs in Marketing, Ops and CX.",
+    "category": "Reviews",
+    "useCases": [
+      "reviews",
+      "customer-messaging"
+    ],
+    "industries": [
+      "any"
+    ],
+    "pricing": {
+      "asOf": "Nov 2026",
+      "small": {
+        "monthlyUsd": "unknown",
+        "note": ""
+      },
+      "medium": {
+        "monthlyUsd": "unknown",
+        "note": ""
+      },
+      "large": {
+        "monthlyUsd": "unknown",
+        "note": ""
+      },
+      "freeTier": "unknown",
+      "contract": "unknown",
+      "cancellation": "unknown",
+      "pricingUrl": "https://birdeye.com/pricing/"
+    },
+    "worksWith": [
+      {
+        "product": "Acuity Scheduling",
+        "type": "native"
+      },
+      {
+        "product": "QuickBooks Online",
+        "type": "native"
+      },
+      {
+        "product": "Zoho CRM",
+        "type": "native"
+      },
+      {
+        "product": "Netsuite",
+        "type": "native"
+      }
+    ],
+    "setupMinutes": "unknown",
+    "setupMode": "needs_help",
+    "languages": [
+      "English"
+    ],
+    "privacyCard": {
+      "trainsOnYourData": {
+        "answer": "anonymized",
+        "plain": "Uses your data to improve its AI, with names removed first.",
+        "quote": "We do create aggregated and anonymized datasets for analytics and product improvement purposes as detailed in our Terms, but we ensure such data does not identify any Clients, Partners or end users or any Client confidential information.",
+        "sourceUrl": "https://birdeye.com/ai-policy/"
+      },
+      "canDeleteData": {
+        "answer": "yes",
+        "plain": "You can delete your data.",
+        "quote": "If you delete your account, your Data will no longer be stored in our servers.",
+        "sourceUrl": "https://birdeye.com/privacy/"
+      },
+      "whereStored": {
+        "answer": "United States",
+        "plain": "Your data is stored in United States.",
+        "quote": "We collect, store and process your personally identifiable information on servers located in the United States.",
+        "sourceUrl": "https://birdeye.com/privacy/"
+      },
+      "sharesOrSells": {
+        "answer": "unknown",
+        "plain": "We couldn't confirm whether it sells or shares your data.",
+        "quote": null,
+        "sourceUrl": null
+      },
+      "securityCertification": {
+        "answer": "unknown",
+        "plain": "We couldn't confirm a security certification.",
+        "quote": null,
+        "sourceUrl": null
+      }
+    },
+    "rulesFlags": {
+      "recordsCalls": "unknown",
+      "announcesRecording": "unknown",
+      "hipaaReady": "unknown",
+      "outboundAiCalls": "unknown",
+      "personalizedPricing": "unknown"
+    },
+    "badge": "verified",
+    "safetyCheck": {
+      "ranAt": "2026-11-08",
+      "checks": {
+        "whoIsBehind": {
+          "result": "pass",
+          "reason": "Run by Birdeye Inc, a company at 2479 E Bayshore Rd, Suite 188, Palo Alto, CA 94303.",
+          "evidence": [
+            {
+              "quote": "© 2026 Birdeye Inc Facebook icon",
+              "url": "https://birdeye.com/aboutus/",
+              "checkedAt": "2026-11-08"
+            },
+            {
+              "quote": "2479 E Bayshore Rd, Suite 188, Palo Alto, CA 94303",
+              "url": "https://birdeye.com/aboutus/",
+              "checkedAt": "2026-11-08"
+            }
+          ]
+        },
+        "domainAge": {
+          "result": "pass",
+          "reason": "The website has been around since September 1998.",
+          "evidence": [
+            {
+              "url": "https://rdap.org/domain/birdeye.com",
+              "checkedAt": "2026-11-08"
+            }
+          ]
+        },
+        "privacyPolicy": {
+          "result": "pass",
+          "reason": "Has a full privacy policy that says what they do with your information.",
+          "evidence": [
+            {
+              "url": "https://birdeye.com/privacy/",
+              "checkedAt": "2026-11-08"
+            }
+          ]
+        },
+        "dataUse": {
+          "result": "pass",
+          "reason": "Uses your information to make its AI better, but removes names first. You can delete your information.",
+          "evidence": [
+            {
+              "quote": "We do create aggregated and anonymized datasets for analytics and product improvement purposes as detailed in our Terms, but we ensure such data does not identify any Clients, Partners or end users or any Client confidential information.",
+              "url": "https://birdeye.com/ai-policy/",
+              "checkedAt": "2026-11-08"
+            },
+            {
+              "quote": "If you delete your account, your Data will no longer be stored in our servers.",
+              "url": "https://birdeye.com/privacy/",
+              "checkedAt": "2026-11-08"
+            }
+          ]
+        },
+        "dataLocation": {
+          "result": "pass",
+          "reason": "Your information is kept in United States.",
+          "evidence": [
+            {
+              "quote": "We collect, store and process your personally identifiable information on servers located in the United States.",
+              "url": "https://birdeye.com/privacy/",
+              "checkedAt": "2026-11-08"
+            }
+          ]
+        },
+        "pricingClarity": {
+          "result": "fail",
+          "reason": "The website doesn't show a clear monthly price.",
+          "evidence": [
+            {
+              "url": "https://birdeye.com/pricing/",
+              "checkedAt": "2026-11-08"
+            }
+          ]
+        },
+        "securityBasics": {
+          "result": "pass",
+          "reason": "Your connection to this website is private (https).",
+          "evidence": [
+            {
+              "url": "https://birdeye.com/",
+              "checkedAt": "2026-11-08"
+            }
+          ]
+        },
+        "redFlags": {
+          "result": "pass",
+          "reason": "No warning signs found. (We didn't check Google's list of unsafe websites.)",
+          "evidence": [
+            {
+              "url": "https://birdeye.com/",
+              "checkedAt": "2026-11-08"
+            }
+          ]
+        }
+      },
+      "redFlags": [],
+      "verdict": "ready",
+      "warnings": [
+        "The website doesn't show a clear monthly price.",
+        "We couldn't find the name of the person who runs this company.",
+        "This tool learns from how people use it. It may use your customers' calls or messages to get better, but it removes names and phone numbers first. Good to know: don't share card numbers or health details with it."
+      ]
+    },
+    "lastChecked": "2026-11-08",
+    "sources": [
+      "https://birdeye.com/",
+      "https://birdeye.com/aboutus/",
+      "https://birdeye.com/ai-policy/",
+      "https://birdeye.com/privacy/",
+      "https://birdeye.com/integration/"
+    ],
+    "needsVerification": [
+      "pricing.small.monthlyUsd",
+      "pricing.medium.monthlyUsd",
+      "pricing.large.monthlyUsd",
+      "pricing.freeTier",
+      "pricing.contract",
+      "pricing.cancellation",
+      "setupMinutes",
+      "rulesFlags.recordsCalls",
+      "rulesFlags.announcesRecording",
+      "rulesFlags.hipaaReady",
+      "rulesFlags.outboundAiCalls",
+      "rulesFlags.personalizedPricing",
+      "setupMode",
+      "languages"
+    ],
+    "reviewedAt": "2026-11-08",
+    "reviewedBy": "Rishabh"
+  },
+  {
+    "id": "brevo",
+    "name": "Brevo",
+    "vendor": {
+      "company": "Brevo",
+      "website": "https://www.brevo.com",
+      "domain": "brevo.com"
+    },
+    "description": "One AI-powered customer platform for all your marketing and sales needs.",
+    "category": "Email marketing",
+    "useCases": [
+      "email-marketing",
+      "customer-messaging"
+    ],
+    "industries": [
+      "any"
+    ],
+    "pricing": {
+      "asOf": "Nov 2026",
+      "small": {
+        "monthlyUsd": "unknown",
+        "note": ""
+      },
+      "medium": {
+        "monthlyUsd": "unknown",
+        "note": ""
+      },
+      "large": {
+        "monthlyUsd": "unknown",
+        "note": ""
+      },
+      "freeTier": "unknown",
+      "contract": "monthly",
+      "cancellation": "unknown",
+      "pricingUrl": "https://www.brevo.com/pricing/"
+    },
+    "worksWith": [
+      {
+        "product": "Shopify",
+        "type": "zapier"
+      },
+      {
+        "product": "WordPress",
+        "type": "zapier"
+      },
+      {
+        "product": "HubSpot",
+        "type": "native"
+      },
+      {
+        "product": "Pipedrive",
+        "type": "native"
+      },
+      {
+        "product": "Gmail",
+        "type": "native"
+      },
+      {
+        "product": "Google Sheets",
+        "type": "native"
+      },
+      {
+        "product": "Google Analytics",
+        "type": "native"
+      },
+      {
+        "product": "Mailchimp",
+        "type": "native"
+      }
+    ],
+    "setupMinutes": "unknown",
+    "setupMode": "needs_help",
+    "languages": [
+      "English"
+    ],
+    "privacyCard": {
+      "trainsOnYourData": {
+        "answer": "anonymized",
+        "plain": "Uses your data to improve its AI, with names removed first.",
+        "quote": "Creating statistics/ business indicators based on anonymized or aggregated data about the use of our services to improve them.",
+        "sourceUrl": "https://www.brevo.com/legal/privacypolicy/"
+      },
+      "canDeleteData": {
+        "answer": "yes",
+        "plain": "You can delete your data.",
+        "quote": "Brevo will act for these other processing as a data processor and our Customers are acting as data controllers and are the sole entities that can ensure the proper exercise of your rights described in Section 8 (11 for the US) of this Policy (deletion, access, limitation etc.).",
+        "sourceUrl": "https://www.brevo.com/legal/privacypolicy/"
+      },
+      "whereStored": {
+        "answer": "unknown",
+        "plain": "We couldn't confirm where your data is stored.",
+        "quote": null,
+        "sourceUrl": null
+      },
+      "sharesOrSells": {
+        "answer": "unknown",
+        "plain": "We couldn't confirm whether it sells or shares your data.",
+        "quote": null,
+        "sourceUrl": null
+      },
+      "securityCertification": {
+        "answer": "unknown",
+        "plain": "We couldn't confirm a security certification.",
+        "quote": null,
+        "sourceUrl": null
+      }
+    },
+    "rulesFlags": {
+      "recordsCalls": "unknown",
+      "announcesRecording": "unknown",
+      "hipaaReady": "unknown",
+      "outboundAiCalls": "unknown",
+      "personalizedPricing": "unknown"
+    },
+    "badge": "verified",
+    "safetyCheck": {
+      "ranAt": "2026-11-08",
+      "checks": {
+        "whoIsBehind": {
+          "result": "pass",
+          "reason": "Run by Brevo, a company at 17 rue Salneuve, 75017 Paris, France.",
+          "evidence": [
+            {
+              "quote": "© Brevo 2026. All rights reserved",
+              "url": "https://www.brevo.com/company/about/",
+              "checkedAt": "2026-11-08"
+            },
+            {
+              "quote": "The parent company of the Brevo group,a French société par actions simplifiée , whose registered office is located at 17 rue Salneuve, 75017 Paris, France, registered in the Paris Trade and Companies Register under number 498 019 298.",
+              "url": "https://www.brevo.com/legal/privacypolicy/",
+              "checkedAt": "2026-11-08"
+            },
+            {
+              "quote": "Founded in 2012 by Armand Thiberge in India and France, Brevo’s mission is to build the most approachable customer platform to deliver sustainable growth to all businesses and non-profit organizations by fostering more human and personalized connections.",
+              "url": "https://www.brevo.com/company/about/",
+              "checkedAt": "2026-11-08"
+            }
+          ]
+        },
+        "domainAge": {
+          "result": "pass",
+          "reason": "The website has been around since September 1999.",
+          "evidence": [
+            {
+              "url": "https://rdap.org/domain/brevo.com",
+              "checkedAt": "2026-11-08"
+            }
+          ]
+        },
+        "privacyPolicy": {
+          "result": "pass",
+          "reason": "Has a full privacy policy that says what they do with your information.",
+          "evidence": [
+            {
+              "url": "https://www.brevo.com/legal/privacypolicy/",
+              "checkedAt": "2026-11-08"
+            }
+          ]
+        },
+        "dataUse": {
+          "result": "pass",
+          "reason": "Uses your information to make its AI better, but removes names first. You can delete your information.",
+          "evidence": [
+            {
+              "quote": "Creating statistics/ business indicators based on anonymized or aggregated data about the use of our services to improve them.",
+              "url": "https://www.brevo.com/legal/privacypolicy/",
+              "checkedAt": "2026-11-08"
+            },
+            {
+              "quote": "Brevo will act for these other processing as a data processor and our Customers are acting as data controllers and are the sole entities that can ensure the proper exercise of your rights described in Section 8 (11 for the US) of this Policy (deletion, access, limitation etc.).",
+              "url": "https://www.brevo.com/legal/privacypolicy/",
+              "checkedAt": "2026-11-08"
+            }
+          ]
+        },
+        "dataLocation": {
+          "result": "unknown",
+          "reason": "We couldn't find which country your information is kept in.",
+          "evidence": [
+            {
+              "url": "https://www.brevo.com/legal/privacypolicy/",
+              "checkedAt": "2026-11-08"
+            }
+          ]
+        },
+        "pricingClarity": {
+          "result": "fail",
+          "reason": "No price on the website. You have to talk to their sales team.",
+          "evidence": [
+            {
+              "url": "https://www.brevo.com/pricing/",
+              "checkedAt": "2026-11-08"
+            }
+          ]
+        },
+        "securityBasics": {
+          "result": "pass",
+          "reason": "Your connection to this website is private (https).",
+          "evidence": [
+            {
+              "url": "https://www.brevo.com/",
+              "checkedAt": "2026-11-08"
+            }
+          ]
+        },
+        "redFlags": {
+          "result": "pass",
+          "reason": "No warning signs found. (We didn't check Google's list of unsafe websites.)",
+          "evidence": [
+            {
+              "url": "https://www.brevo.com/",
+              "checkedAt": "2026-11-08"
+            }
+          ]
+        }
+      },
+      "redFlags": [],
+      "verdict": "ready",
+      "warnings": [
+        "We couldn't find which country your information is kept in.",
+        "No price on the website. You have to talk to their sales team.",
+        "This tool learns from how people use it. It may use your customers' calls or messages to get better, but it removes names and phone numbers first. Good to know: don't share card numbers or health details with it."
+      ]
+    },
+    "lastChecked": "2026-11-08",
+    "sources": [
+      "https://www.brevo.com/",
+      "https://www.brevo.com/pricing/",
+      "https://www.brevo.com/company/about/",
+      "https://www.brevo.com/legal/privacypolicy/",
+      "https://www.brevo.com/integrations/"
+    ],
+    "needsVerification": [
+      "pricing.small.monthlyUsd",
+      "pricing.medium.monthlyUsd",
+      "pricing.large.monthlyUsd",
+      "pricing.freeTier",
+      "pricing.cancellation",
+      "setupMinutes",
+      "rulesFlags.recordsCalls",
+      "rulesFlags.announcesRecording",
+      "rulesFlags.hipaaReady",
+      "rulesFlags.outboundAiCalls",
+      "rulesFlags.personalizedPricing",
+      "setupMode",
+      "languages"
+    ],
+    "reviewedAt": "2026-11-08",
+    "reviewedBy": "Rishabh"
+  },
+  {
     "id": "calendly",
     "name": "Calendly",
     "vendor": {
@@ -238,6 +719,242 @@
       "rulesFlags.hipaaReady",
       "rulesFlags.personalizedPricing",
       "setupMode"
+    ],
+    "reviewedAt": "2026-11-08",
+    "reviewedBy": "Rishabh"
+  },
+  {
+    "id": "chatbase",
+    "name": "Chatbase",
+    "vendor": {
+      "company": "Chatbase Inc.",
+      "website": "https://www.chatbase.co",
+      "domain": "chatbase.co"
+    },
+    "description": "Website chat.",
+    "category": "Website chat",
+    "useCases": [
+      "customer-messaging"
+    ],
+    "industries": [
+      "any"
+    ],
+    "pricing": {
+      "asOf": "Nov 2026",
+      "small": {
+        "monthlyUsd": 32,
+        "note": "Cheapest paid plan"
+      },
+      "medium": {
+        "monthlyUsd": 120,
+        "note": "Middle plan"
+      },
+      "large": {
+        "monthlyUsd": 400,
+        "note": "Top plan"
+      },
+      "freeTier": "unknown",
+      "contract": "annual",
+      "cancellation": "unknown",
+      "pricingUrl": "https://www.chatbase.co/pricing"
+    },
+    "worksWith": [
+      {
+        "product": "Slack",
+        "type": "native"
+      },
+      {
+        "product": "Shopify",
+        "type": "native"
+      },
+      {
+        "product": "Stripe",
+        "type": "native"
+      },
+      {
+        "product": "Zendesk",
+        "type": "native"
+      },
+      {
+        "product": "Intercom",
+        "type": "native"
+      },
+      {
+        "product": "WhatsApp",
+        "type": "native"
+      },
+      {
+        "product": "Instagram",
+        "type": "native"
+      }
+    ],
+    "setupMinutes": "unknown",
+    "setupMode": "needs_help",
+    "languages": [
+      "English"
+    ],
+    "privacyCard": {
+      "trainsOnYourData": {
+        "answer": "no",
+        "plain": "Does not use your data to train AI.",
+        "quote": "No AI Training : We do not use your data to train AI models.",
+        "sourceUrl": "https://www.chatbase.co/legal/privacy"
+      },
+      "canDeleteData": {
+        "answer": "yes",
+        "plain": "You can delete your data.",
+        "quote": "All personal data that Chatbase controls may be deleted upon verified request from Data Subjects or their authorized agents.",
+        "sourceUrl": "https://www.chatbase.co/legal/privacy"
+      },
+      "whereStored": {
+        "answer": "United States",
+        "plain": "Your data is stored in United States.",
+        "quote": "Your personal data is stored by Chatbase on its servers, and on the servers of the cloud-based database management services Chatbase engages, located in the United States.",
+        "sourceUrl": "https://www.chatbase.co/legal/privacy"
+      },
+      "sharesOrSells": {
+        "answer": "no",
+        "plain": "Does not sell or share your data.",
+        "quote": "We do not sell personal information to anyone and only share it with third parties who are facilitating the delivery of our services.",
+        "sourceUrl": "https://www.chatbase.co/legal/privacy"
+      },
+      "securityCertification": {
+        "answer": "SOC 2",
+        "plain": "Security checked by an outside company: SOC 2.",
+        "quote": "Compliance : We are GDPR and SOC 2 compliant.",
+        "sourceUrl": "https://www.chatbase.co/legal/privacy"
+      }
+    },
+    "rulesFlags": {
+      "recordsCalls": "unknown",
+      "announcesRecording": "unknown",
+      "hipaaReady": true,
+      "outboundAiCalls": "unknown",
+      "personalizedPricing": "unknown"
+    },
+    "badge": "verified",
+    "safetyCheck": {
+      "ranAt": "2026-11-08",
+      "checks": {
+        "whoIsBehind": {
+          "result": "pass",
+          "reason": "Run by Chatbase Inc., a company at 2261 Market Street STE 85690, San Francisco CA 94114.",
+          "evidence": [
+            {
+              "quote": "© 2026 Chatbase Inc.",
+              "url": "https://www.chatbase.co/llm-info",
+              "checkedAt": "2026-11-08"
+            },
+            {
+              "quote": "Chatbase Inc. 2261 Market Street STE 85690, San Francisco CA 94114 privacy@chatbase.co",
+              "url": "https://www.chatbase.co/legal/privacy",
+              "checkedAt": "2026-11-08"
+            },
+            {
+              "quote": "Chatbase was founded by Yasser Elsaid, who is also CEO.",
+              "url": "https://www.chatbase.co/llm-info",
+              "checkedAt": "2026-11-08"
+            }
+          ]
+        },
+        "domainAge": {
+          "result": "unknown",
+          "reason": "We couldn't find when the website started.",
+          "evidence": []
+        },
+        "privacyPolicy": {
+          "result": "pass",
+          "reason": "Has a full privacy policy that says what they do with your information.",
+          "evidence": [
+            {
+              "url": "https://www.chatbase.co/legal/privacy",
+              "checkedAt": "2026-11-08"
+            }
+          ]
+        },
+        "dataUse": {
+          "result": "pass",
+          "reason": "Doesn't use your information to make its AI better. You can delete your information.",
+          "evidence": [
+            {
+              "quote": "No AI Training : We do not use your data to train AI models.",
+              "url": "https://www.chatbase.co/legal/privacy",
+              "checkedAt": "2026-11-08"
+            },
+            {
+              "quote": "All personal data that Chatbase controls may be deleted upon verified request from Data Subjects or their authorized agents.",
+              "url": "https://www.chatbase.co/legal/privacy",
+              "checkedAt": "2026-11-08"
+            }
+          ]
+        },
+        "dataLocation": {
+          "result": "pass",
+          "reason": "Your information is kept in United States.",
+          "evidence": [
+            {
+              "quote": "Your personal data is stored by Chatbase on its servers, and on the servers of the cloud-based database management services Chatbase engages, located in the United States.",
+              "url": "https://www.chatbase.co/legal/privacy",
+              "checkedAt": "2026-11-08"
+            }
+          ]
+        },
+        "pricingClarity": {
+          "result": "pass",
+          "reason": "Shows a clear monthly price.",
+          "evidence": [
+            {
+              "url": "https://www.chatbase.co/pricing",
+              "checkedAt": "2026-11-08"
+            }
+          ]
+        },
+        "securityBasics": {
+          "result": "pass",
+          "reason": "Your connection to this website is private (https).",
+          "evidence": [
+            {
+              "url": "https://www.chatbase.co/",
+              "checkedAt": "2026-11-08"
+            }
+          ]
+        },
+        "redFlags": {
+          "result": "pass",
+          "reason": "No warning signs found. (We didn't check Google's list of unsafe websites.)",
+          "evidence": [
+            {
+              "url": "https://www.chatbase.co/",
+              "checkedAt": "2026-11-08"
+            }
+          ]
+        }
+      },
+      "redFlags": [],
+      "verdict": "ready",
+      "warnings": [
+        "We couldn't find when the website started."
+      ]
+    },
+    "lastChecked": "2026-11-08",
+    "sources": [
+      "https://www.chatbase.co/pricing",
+      "https://www.chatbase.co/legal/privacy",
+      "https://www.chatbase.co/llm-info",
+      "https://www.chatbase.co/integrations/slack",
+      "https://www.chatbase.co/industry/tech"
+    ],
+    "needsVerification": [
+      "pricing.freeTier",
+      "pricing.cancellation",
+      "setupMinutes",
+      "rulesFlags.recordsCalls",
+      "rulesFlags.announcesRecording",
+      "rulesFlags.outboundAiCalls",
+      "rulesFlags.personalizedPricing",
+      "description",
+      "setupMode",
+      "languages"
     ],
     "reviewedAt": "2026-11-08",
     "reviewedBy": "Rishabh"
@@ -715,6 +1432,467 @@
       "description",
       "setupMode",
       "languages"
+    ],
+    "reviewedAt": "2026-11-08",
+    "reviewedBy": "Rishabh"
+  },
+  {
+    "id": "upfirst",
+    "name": "Upfirst",
+    "vendor": {
+      "company": "Upfirst, Inc.",
+      "website": "https://upfirst.ai",
+      "domain": "upfirst.ai"
+    },
+    "description": "Upfirst is the AI answering service that keeps your phone covered so you never miss a lead or leave a customer waiting.",
+    "category": "AI receptionist",
+    "useCases": [
+      "missed-calls"
+    ],
+    "industries": [
+      "hvac",
+      "plumbing",
+      "electrical",
+      "landscaping",
+      "cleaning",
+      "professional_services"
+    ],
+    "pricing": {
+      "asOf": "Nov 2026",
+      "small": {
+        "monthlyUsd": "unknown",
+        "note": ""
+      },
+      "medium": {
+        "monthlyUsd": 159.95,
+        "note": "Pro plan"
+      },
+      "large": {
+        "monthlyUsd": 299,
+        "note": "Scale plan"
+      },
+      "freeTier": "unknown",
+      "contract": "monthly",
+      "cancellation": "unknown",
+      "pricingUrl": "https://upfirst.ai/pricing"
+    },
+    "worksWith": [
+      {
+        "product": "Outlook",
+        "type": "native"
+      },
+      {
+        "product": "Clio",
+        "type": "native"
+      },
+      {
+        "product": "Calendly",
+        "type": "native"
+      },
+      {
+        "product": "Square",
+        "type": "native"
+      }
+    ],
+    "setupMinutes": "unknown",
+    "setupMode": "needs_help",
+    "languages": [
+      "English"
+    ],
+    "privacyCard": {
+      "trainsOnYourData": {
+        "answer": "no",
+        "plain": "Does not use your data to train AI.",
+        "quote": "We do not sell Customer Content, use it for advertising or marketing, or use it to train artificial intelligence models, and we do not permit our service providers to do so.",
+        "sourceUrl": "https://upfirst.ai/privacy-policy"
+      },
+      "canDeleteData": {
+        "answer": "yes",
+        "plain": "You can delete your data.",
+        "quote": "To request deletion of your Customer Content or account, email privacy@upfirst.ai.",
+        "sourceUrl": "https://upfirst.ai/privacy-policy"
+      },
+      "whereStored": {
+        "answer": "United States",
+        "plain": "Your data is stored in United States.",
+        "quote": "Upfirst stores Customer Content in the United States.",
+        "sourceUrl": "https://upfirst.ai/privacy-policy"
+      },
+      "sharesOrSells": {
+        "answer": "unknown",
+        "plain": "We couldn't confirm whether it sells or shares your data.",
+        "quote": null,
+        "sourceUrl": null
+      },
+      "securityCertification": {
+        "answer": "unknown",
+        "plain": "We couldn't confirm a security certification.",
+        "quote": null,
+        "sourceUrl": null
+      }
+    },
+    "rulesFlags": {
+      "recordsCalls": "unknown",
+      "announcesRecording": "unknown",
+      "hipaaReady": "unknown",
+      "outboundAiCalls": "unknown",
+      "personalizedPricing": "unknown"
+    },
+    "badge": "verified",
+    "safetyCheck": {
+      "ranAt": "2026-11-08",
+      "checks": {
+        "whoIsBehind": {
+          "result": "pass",
+          "reason": "Run by Upfirst, Inc., a company at 3250 NE 1st Ave Unit 305 Miami, FL 33137.",
+          "evidence": [
+            {
+              "quote": "© Copyright 2026 Upfirst, Inc.",
+              "url": "https://upfirst.ai/about",
+              "checkedAt": "2026-11-08"
+            },
+            {
+              "quote": "3250 NE 1st Ave Unit 305 Miami, FL 33137",
+              "url": "https://upfirst.ai/about",
+              "checkedAt": "2026-11-08"
+            },
+            {
+              "quote": "Gene Sigalov Co-founder",
+              "url": "https://upfirst.ai/about",
+              "checkedAt": "2026-11-08"
+            }
+          ]
+        },
+        "domainAge": {
+          "result": "pass",
+          "reason": "The website has been around since June 2024.",
+          "evidence": [
+            {
+              "url": "https://rdap.org/domain/upfirst.ai",
+              "checkedAt": "2026-11-08"
+            }
+          ]
+        },
+        "privacyPolicy": {
+          "result": "pass",
+          "reason": "Has a full privacy policy that says what they do with your information.",
+          "evidence": [
+            {
+              "url": "https://upfirst.ai/privacy-policy",
+              "checkedAt": "2026-11-08"
+            }
+          ]
+        },
+        "dataUse": {
+          "result": "pass",
+          "reason": "Doesn't use your information to make its AI better. You can delete your information.",
+          "evidence": [
+            {
+              "quote": "We do not sell Customer Content, use it for advertising or marketing, or use it to train artificial intelligence models, and we do not permit our service providers to do so.",
+              "url": "https://upfirst.ai/privacy-policy",
+              "checkedAt": "2026-11-08"
+            },
+            {
+              "quote": "To request deletion of your Customer Content or account, email privacy@upfirst.ai.",
+              "url": "https://upfirst.ai/privacy-policy",
+              "checkedAt": "2026-11-08"
+            }
+          ]
+        },
+        "dataLocation": {
+          "result": "pass",
+          "reason": "Your information is kept in United States.",
+          "evidence": [
+            {
+              "quote": "Upfirst stores Customer Content in the United States.",
+              "url": "https://upfirst.ai/privacy-policy",
+              "checkedAt": "2026-11-08"
+            }
+          ]
+        },
+        "pricingClarity": {
+          "result": "pass",
+          "reason": "Shows a clear monthly price.",
+          "evidence": [
+            {
+              "url": "https://upfirst.ai/pricing",
+              "checkedAt": "2026-11-08"
+            }
+          ]
+        },
+        "securityBasics": {
+          "result": "pass",
+          "reason": "Your connection to this website is private (https).",
+          "evidence": [
+            {
+              "url": "https://upfirst.ai/",
+              "checkedAt": "2026-11-08"
+            }
+          ]
+        },
+        "redFlags": {
+          "result": "pass",
+          "reason": "No warning signs found. (We didn't check Google's list of unsafe websites.)",
+          "evidence": [
+            {
+              "url": "https://upfirst.ai/",
+              "checkedAt": "2026-11-08"
+            }
+          ]
+        }
+      },
+      "redFlags": [],
+      "verdict": "ready",
+      "warnings": []
+    },
+    "lastChecked": "2026-11-08",
+    "sources": [
+      "https://upfirst.ai/",
+      "https://upfirst.ai/pricing",
+      "https://upfirst.ai/about",
+      "https://upfirst.ai/privacy-policy"
+    ],
+    "needsVerification": [
+      "pricing.small.monthlyUsd",
+      "pricing.freeTier",
+      "pricing.cancellation",
+      "setupMinutes",
+      "rulesFlags.recordsCalls",
+      "rulesFlags.announcesRecording",
+      "rulesFlags.hipaaReady",
+      "rulesFlags.outboundAiCalls",
+      "rulesFlags.personalizedPricing",
+      "setupMode",
+      "languages"
+    ],
+    "reviewedAt": "2026-11-08",
+    "reviewedBy": "Rishabh"
+  },
+  {
+    "id": "workiz",
+    "name": "Workiz",
+    "vendor": {
+      "company": "Workiz Inc.",
+      "website": "https://www.workiz.com",
+      "domain": "workiz.com"
+    },
+    "description": "Your team handles the work. Workiz handles the calls, fills the board, sends the invoices, and collects the payments. AI and communication, built in at every step.",
+    "category": "Field service software",
+    "useCases": [
+      "quotes",
+      "missed-calls",
+      "booking"
+    ],
+    "industries": [
+      "hvac",
+      "plumbing",
+      "electrical",
+      "landscaping",
+      "cleaning"
+    ],
+    "pricing": {
+      "asOf": "Nov 2026",
+      "small": {
+        "monthlyUsd": "unknown",
+        "note": ""
+      },
+      "medium": {
+        "monthlyUsd": "unknown",
+        "note": ""
+      },
+      "large": {
+        "monthlyUsd": "unknown",
+        "note": ""
+      },
+      "freeTier": "unknown",
+      "contract": "unknown",
+      "cancellation": "unknown",
+      "pricingUrl": "https://www.workiz.com/pricing-plans/"
+    },
+    "worksWith": [
+      {
+        "product": "QuickBooks",
+        "type": "native"
+      },
+      {
+        "product": "Zapier",
+        "type": "zapier"
+      }
+    ],
+    "setupMinutes": "unknown",
+    "setupMode": "needs_help",
+    "languages": [
+      "English",
+      "Spanish",
+      "French"
+    ],
+    "privacyCard": {
+      "trainsOnYourData": {
+        "answer": "opt-out",
+        "plain": "Uses your data to improve its AI unless you turn it off.",
+        "quote": "AI features: How features like Genius Answering and Live Assist process data, and that we may use data to improve our AI models in the future. You can opt out anytime at info@workiz.com .",
+        "sourceUrl": "https://www.workiz.com/privacy-policy/"
+      },
+      "canDeleteData": {
+        "answer": "yes",
+        "plain": "You can delete your data.",
+        "quote": "If you are a customer of a franchise location and want to exercise your privacy rights, such as a request to access or delete your information, please contact that location directly.",
+        "sourceUrl": "https://www.workiz.com/privacy-policy/"
+      },
+      "whereStored": {
+        "answer": "unknown",
+        "plain": "We couldn't confirm where your data is stored.",
+        "quote": null,
+        "sourceUrl": null
+      },
+      "sharesOrSells": {
+        "answer": "yes",
+        "plain": "May sell or share your data.",
+        "quote": "Workiz shares a Franchisee’s account information with its Franchisor only after the Franchisee authorizes the link to the Franchisor’s account and the Franchisor accepts it.",
+        "sourceUrl": "https://www.workiz.com/privacy-policy/"
+      },
+      "securityCertification": {
+        "answer": "unknown",
+        "plain": "We couldn't confirm a security certification.",
+        "quote": null,
+        "sourceUrl": null
+      }
+    },
+    "rulesFlags": {
+      "recordsCalls": "unknown",
+      "announcesRecording": "unknown",
+      "hipaaReady": "unknown",
+      "outboundAiCalls": "unknown",
+      "personalizedPricing": "unknown"
+    },
+    "badge": "verified",
+    "safetyCheck": {
+      "ranAt": "2026-11-08",
+      "checks": {
+        "whoIsBehind": {
+          "result": "pass",
+          "reason": "Run by Workiz Inc., a company at 9444 Balboa Ave #150, San Diego, CA 92123.",
+          "evidence": [
+            {
+              "quote": "©2026 Workiz Inc.",
+              "url": "https://www.workiz.com/about-us/",
+              "checkedAt": "2026-11-08"
+            },
+            {
+              "quote": "9444 Balboa Ave #150 San Diego, CA 92123",
+              "url": "https://www.workiz.com/contact-us/",
+              "checkedAt": "2026-11-08"
+            }
+          ]
+        },
+        "domainAge": {
+          "result": "pass",
+          "reason": "The website has been around since December 2017.",
+          "evidence": [
+            {
+              "url": "https://rdap.org/domain/workiz.com",
+              "checkedAt": "2026-11-08"
+            }
+          ]
+        },
+        "privacyPolicy": {
+          "result": "pass",
+          "reason": "Has a full privacy policy that says what they do with your information.",
+          "evidence": [
+            {
+              "url": "https://www.workiz.com/privacy-policy/",
+              "checkedAt": "2026-11-08"
+            }
+          ]
+        },
+        "dataUse": {
+          "result": "pass",
+          "reason": "Uses your information to make its AI better, but you can turn this off. You can delete your information.",
+          "evidence": [
+            {
+              "quote": "AI features: How features like Genius Answering and Live Assist process data, and that we may use data to improve our AI models in the future. You can opt out anytime at info@workiz.com .",
+              "url": "https://www.workiz.com/privacy-policy/",
+              "checkedAt": "2026-11-08"
+            },
+            {
+              "quote": "If you are a customer of a franchise location and want to exercise your privacy rights, such as a request to access or delete your information, please contact that location directly.",
+              "url": "https://www.workiz.com/privacy-policy/",
+              "checkedAt": "2026-11-08"
+            }
+          ]
+        },
+        "dataLocation": {
+          "result": "unknown",
+          "reason": "We couldn't find which country your information is kept in.",
+          "evidence": [
+            {
+              "url": "https://www.workiz.com/privacy-policy/",
+              "checkedAt": "2026-11-08"
+            }
+          ]
+        },
+        "pricingClarity": {
+          "result": "pass",
+          "reason": "Shows a clear monthly price.",
+          "evidence": [
+            {
+              "url": "https://www.workiz.com/pricing-plans/",
+              "checkedAt": "2026-11-08"
+            }
+          ]
+        },
+        "securityBasics": {
+          "result": "pass",
+          "reason": "Your connection to this website is private (https). This tool handles payments or health information, but we found no proof that an outside company checked its security (like PCI or SOC 2).",
+          "evidence": [
+            {
+              "url": "https://www.workiz.com/",
+              "checkedAt": "2026-11-08"
+            }
+          ]
+        },
+        "redFlags": {
+          "result": "pass",
+          "reason": "No warning signs found. (We didn't check Google's list of unsafe websites.)",
+          "evidence": [
+            {
+              "url": "https://www.workiz.com/",
+              "checkedAt": "2026-11-08"
+            }
+          ]
+        }
+      },
+      "redFlags": [],
+      "verdict": "ready",
+      "warnings": [
+        "We couldn't find which country your information is kept in.",
+        "We couldn't find the name of the person who runs this company.",
+        "Turn this setting off after you sign up. This tool may use your customers' calls or messages to get better. You can stop this in its settings.",
+        "This tool handles payments or health information, but we found no proof that an outside company checked its security (like PCI or SOC 2)."
+      ]
+    },
+    "lastChecked": "2026-11-08",
+    "sources": [
+      "https://www.workiz.com/",
+      "https://www.workiz.com/pricing-plans/",
+      "https://www.workiz.com/privacy-policy/",
+      "https://www.workiz.com/about-us/",
+      "https://www.workiz.com/integrations/quickbooks/"
+    ],
+    "needsVerification": [
+      "pricing.small.monthlyUsd",
+      "pricing.medium.monthlyUsd",
+      "pricing.large.monthlyUsd",
+      "pricing.freeTier",
+      "pricing.contract",
+      "pricing.cancellation",
+      "setupMinutes",
+      "rulesFlags.recordsCalls",
+      "rulesFlags.announcesRecording",
+      "rulesFlags.hipaaReady",
+      "rulesFlags.outboundAiCalls",
+      "rulesFlags.personalizedPricing",
+      "setupMode"
     ],
     "reviewedAt": "2026-11-08",
     "reviewedBy": "Rishabh"
