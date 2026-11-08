@@ -140,8 +140,28 @@ What still breaks trust or the flow:
 | 1: honest search, sample labels, clear fixes, "Your plan" | Done, tested | #21 |
 | 2: AI cache that survives restarts, dollar cap, live-services panel, "what we couldn't check", edge-case tests | Done, tested | #22 |
 | 3: live end-to-end on a real Maryland business | Waiting for keys (§5) | — |
+| Part 5 (setup and handoff): 30-day plan, ready-to-use words, send to SBDC advisor, email, free money and help | Done, tested (§8) | #23 |
 
 **AI model choice.**
 - **Owner flow:** stays on `openai/gpt-4o-mini`. It's a non-reasoning model, its JSON is reliable within the 900-token replies these tasks use, and it costs $0.15/$0.60 per million tokens.
 - **Catalog and Safety Check:** use `anthropic/claude-haiku-5.5` (`OPENROUTER_STRONG_MODEL`). Rishabh measured it at about $0.002 per tool; it needs the larger reply limits the catalog code already sets.
 - **Spending:** every call's actual cost (OpenRouter's `usage.cost`) is added up. AI stops at `LLM_BUDGET_USD` (default $20). Answers are saved for a week in Upstash, so the same page is never paid for twice.
+
+---
+
+## 8. Part 5: setup and handoff (FEATURE_SPEC §5)
+
+| # | Feature | Status | Where |
+| --- | --- | --- | --- |
+| 5.1 | 30-day setup plan | Done. Free fixes in week 1, then one tool at a time, each checked two weeks after setup; whatever doesn't fit goes under "After day 30". | `lib/plan/plan.ts` (`schedule`), `app/plan/parts.tsx` (`Weeks`) |
+| 5.2 | Pre-written words | Done. Phone greeting, after-hours message, answers to common questions and 3 review replies, each with a Copy button. Built only from facts we hold; anything only the owner knows is a [blank]. The greeting announces recording only when a chosen tool records calls (Maryland two-party consent). | `lib/plan/content.ts` |
+| 5.3 | Get help | Done. SBDC office for the county plus SCORE. The "vetted helper" listing isn't built: there are no vetted helpers to list yet. | `lib/plan/plan.ts` |
+| 5.4 | Send my plan to my SBDC advisor | Done. A read-only link at `/plan/<id>`, saved in Upstash for 30 days and hidden from search engines. Without Upstash, the link carries the plan after "#" (never sent to a server log) and opens at `/plan/view`. Either way the server rebuilds the plan from the signed journey context, so an edited link can't show a different plan or an unreviewed tool. The advisor view adds "Worth talking through": sample tools, prices that aren't public, call recording, open decisions and problems we couldn't confirm. | `lib/api/plan.ts`, `lib/plan/share.ts`, `app/plan/` |
+| 5.5 | Print / email my plan | Done. Print or save as PDF; "Email the plan to myself" opens the mail app with a short text version (and the saved link, when there is one). | `lib/plan/plan.ts` (`planText`) |
+| 5.6 | Spanish toggle | Not started. Needs every screen's text in one place first; best done with Rishabh since most of it is his screens. | — |
+| 5.7 | Free money and help | Done, with 4 links (SBDC classes, SBA Lender Match, Maryland funding programs, Frederick County OED). Each was found on an official page or document, and says where. Other counties get the statewide links only until someone checks theirs. | `data/resources/maryland.json` |
+| 5.8 | Day-7 / day-30 check-ins | Not started (16-week plan). Needs a way to reach the owner later (email sign-up), which we don't collect. | — |
+
+**Tested:** 8 new unit tests (`lib/plan/part5.test.ts`: weeks, links per county, ready words, saved and "#" links, storage failure, edited links). A browser run on desktop and phone covered the whole flow from search to plan: copy, email links, a saved link through a local stand-in for Upstash, the advisor opening it, a missing link, the "#" fallback and a broken link.
+
+**Not yet tested live:** saved links on Vercel need Upstash (the same `KV_REST_API_URL` / `KV_REST_API_TOKEN` as the review queue). Until it's added, the site uses the long "#" links.
