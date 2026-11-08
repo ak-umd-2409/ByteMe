@@ -74,7 +74,7 @@ Same shape as the Safety Check collector:
 
 ## 4. The stronger model and the budget
 
-- New setting `OPENROUTER_STRONG_MODEL` in `lib/shared/config.ts`, used only by the card-filler and the Safety Check when run from the catalog scripts. Everything else keeps the cheap default.
+- New setting `OPENROUTER_STRONG_MODEL`, read by the catalog scripts (not in Kushal's `lib/shared/config.ts`), used only by the card-filler and the Safety Check when run from the catalog scripts. Everything else keeps the cheap default.
 - The first build step tries 2–3 candidate models on the same 3 real tools and picks one by accuracy and cost. The choice and the measured cost go in the PR.
 - **Estimate (not measured):** about $5–10 for all 80 tools. Hard limits: a call cap per run (`CATALOG_MAX_CALLS`, default 600), plus the cache, so a re-run of unchanged pages costs nothing. The script prints calls used at the end.
 
