@@ -1,0 +1,42 @@
+{
+  "checked": "2026-11-07",
+  "note": "Only links seen on official pages or in official documents. Each one says where we found it. Programs change: always check eligibility on the page itself.",
+  "resources": [
+    {
+      "id": "sbdc-training",
+      "name": "Maryland SBDC workshops",
+      "kind": "training",
+      "detail": "Free and low-cost classes, many online, including marketing, money and using AI.",
+      "url": "https://www.marylandsbdc.org/training",
+      "counties": "all",
+      "foundVia": "Maryland SBDC presentation (marylandsbdc.org)"
+    },
+    {
+      "id": "sba-lender-match",
+      "name": "SBA Lender Match",
+      "kind": "money",
+      "detail": "Answer a few questions and SBA-approved lenders contact you. SBA backs the loans; it doesn't lend directly.",
+      "url": "https://www.sba.gov/lendermatch",
+      "counties": "all",
+      "foundVia": "SBA \"Funding 101\" guide"
+    },
+    {
+      "id": "md-funding",
+      "name": "Maryland business funding programs",
+      "kind": "money",
+      "detail": "The state's list of loans, grants and tax credits for Maryland businesses.",
+      "url": "https://business.maryland.gov/resources/funding-programs",
+      "counties": "all",
+      "foundVia": "Maryland Business Express (business.maryland.gov)"
+    },
+    {
+      "id": "frederick-oed",
+      "name": "Frederick County small business help",
+      "kind": "local",
+      "detail": "Frederick County Office of Economic Development: free market research, mentoring and local programs.",
+      "url": "https://discoverfrederickmd.com/199/Small-Business",
+      "counties": ["Frederick"],
+      "foundVia": "Frederick County Office of Economic Development (discoverfrederickmd.com)"
+    }
+  ]
+}

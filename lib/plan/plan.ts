@@ -1,5 +1,5 @@
 /**
- * "Your plan": step 8 of the owner journey (spec §5.1, 5.2, 5.5).
+ * "Your plan": step 8 of the owner journey (spec §5.1 30-day plan, 5.3 help, 5.5 print/email, 5.7 free money).
  *
  * Built only from facts we already hold: the owner's opportunities, the chosen
  * tools' catalog cards and the owner's own answers. Deterministic, no AI, no
@@ -8,6 +8,7 @@
 import type { CatalogRecord } from "../catalog/types.ts";
 import type { JourneyAnswerResponse, Opportunity } from "../journey/types.ts";
 import type { ProblemKey } from "../problems/types.ts";
+import resources from "../../data/resources/maryland.json" with { type: "json" };
 
 export interface PlanStep {
   id: string;
@@ -18,6 +19,8 @@ export interface PlanStep {
   link: { label: string; url: string } | null;
   /** A rule the step comes from, e.g. Maryland call recording. */
   why: string | null;
+  /** Which week of the 30-day plan: 1–4, or 5 = after day 30. */
+  week: number;
 }
 
 export interface PlanSection {
@@ -30,11 +33,35 @@ export interface PlanSection {
   steps: PlanStep[];
 }
 
+export interface PlanWeek {
+  week: number;
+  /** "Week 1 · days 1–7", "After day 30" */
+  label: string;
+  /** Known minutes only; steps without a time aren't counted. */
+  minutes: number;
+  steps: { sectionId: string; stepId: string; title: string; minutes: number | null; tool: string | null }[];
+}
+
+export interface Resource {
+  id: string;
+  name: string;
+  kind: "money" | "training" | "local";
+  detail: string;
+  url: string;
+  /** Where we found the link, so anyone can check it. */
+  foundVia: string;
+}
+
 export interface Plan {
   business: string;
   sections: PlanSection[];
+  /** The same steps by week, for the 30-day view (spec §5.1). */
+  weeks: PlanWeek[];
   totals: { monthly: number; setupMinutes: number; unknownPrices: number };
   help: { name: string; detail: string; url: string; phone: string | null }[];
+  /** Free money and training (spec §5.7). Real links only, checked on `resourcesChecked`. */
+  resources: Resource[];
+  resourcesChecked: string;
   notes: string[];
 }
 
@@ -71,8 +98,8 @@ function freeSection(o: Opportunity): PlanSection {
     problem: o.headline,
     tool: null,
     steps: [
-      { id: `${o.problemKey}-do`, title: "Do this", detail: o.fix.nextStep, minutes: null, link: null, why: null },
-      ...unique.map((l, i) => ({ id: `${o.problemKey}-l${i}`, title: `Update ${l.label.replace(/^Your website$/, "your website")}`, detail: "Sign in to this listing and change the details to match.", minutes: 10, link: { label: `Open ${l.label}`, url: l.url }, why: null })),
+      { id: `${o.problemKey}-do`, title: "Do this", detail: o.fix.nextStep, minutes: null, link: null, why: null, week: 1 },
+      ...unique.map((l, i) => ({ id: `${o.problemKey}-l${i}`, title: `Update ${l.label.replace(/^Your website$/, "your website")}`, detail: "Sign in to this listing and change the details to match.", minutes: 10, link: { label: `Open ${l.label}`, url: l.url }, why: null, week: 1 })),
     ],
   };
 }
@@ -93,6 +120,7 @@ function toolSection(o: Opportunity, r: CatalogRecord, currentTools: string[]): 
     minutes: 10,
     link: r.sample ? null : r.pricing.pricingUrl ? { label: "Prices", url: r.pricing.pricingUrl } : site,
     why: null,
+    week: 1,
   });
 
   // 2 · Connect it to what the owner already uses (the vendor's connection, not ours).
@@ -107,6 +135,7 @@ function toolSection(o: Opportunity, r: CatalogRecord, currentTools: string[]): 
       minutes: 15,
       link: null,
       why: null,
+      week: 1,
     });
 
   // 3 · Rules that apply to this tool.
@@ -121,6 +150,7 @@ function toolSection(o: Opportunity, r: CatalogRecord, currentTools: string[]): 
       minutes: 5,
       link: { label: "Maryland law", url: RECORDING_LAW },
       why: "Maryland requires everyone on a call to agree to recording. Not legal advice: ask your SBDC advisor.",
+      week: 1,
     });
   if (r.rulesFlags.outboundAiCalls === true)
     steps.push({
@@ -130,6 +160,7 @@ function toolSection(o: Opportunity, r: CatalogRecord, currentTools: string[]): 
       minutes: null,
       link: null,
       why: "FCC ruling, Feb 2024.",
+      week: 1,
     });
 
   // 4 · Set it up.
@@ -143,6 +174,7 @@ function toolSection(o: Opportunity, r: CatalogRecord, currentTools: string[]): 
     minutes: r.setupMinutes === "unknown" ? null : r.setupMinutes,
     link: null,
     why: null,
+    week: 1,
   });
 
   // 5 · Check it worked, against the owner's own number when we have one.
@@ -154,6 +186,7 @@ function toolSection(o: Opportunity, r: CatalogRecord, currentTools: string[]): 
     minutes: 10,
     link: null,
     why: null,
+    week: 1,
   });
 
   return {
@@ -164,6 +197,43 @@ function toolSection(o: Opportunity, r: CatalogRecord, currentTools: string[]): 
     tool: { id: r.id, name: r.name, sample: Boolean(r.sample) },
     steps,
   };
+}
+
+const WEEK_LABEL = ["", "Week 1 · days 1–7", "Week 2 · days 8–14", "Week 3 · days 15–21", "Week 4 · days 22–30", "After day 30"];
+
+/**
+ * Spread the work over 30 days (spec §5.1): free fixes in week 1, then one tool at a
+ * time, two weeks apart, each checked two weeks after it's set up. Tools that don't fit
+ * in 30 days, and their checks, land in "After day 30" rather than crowding a week.
+ */
+function schedule(sections: PlanSection[]): PlanWeek[] {
+  const hasFree = sections.some((s) => !s.tool);
+  let toolIndex = 0;
+  for (const sec of sections) {
+    if (!sec.tool) {
+      for (const st of sec.steps) st.week = 1;
+      continue;
+    }
+    const start = (hasFree ? 2 : 1) + 2 * toolIndex++;
+    for (const st of sec.steps) st.week = Math.min(5, st.id.endsWith("-check") ? start + 2 : start);
+  }
+  const weeks: PlanWeek[] = [];
+  for (let w = 1; w <= 5; w++) {
+    const steps = sections.flatMap((sec) =>
+      sec.steps.filter((st) => st.week === w).map((st) => ({ sectionId: sec.id, stepId: st.id, title: st.title, minutes: st.minutes, tool: sec.tool?.name ?? null })),
+    );
+    if (steps.length || w <= 4) weeks.push({ week: w, label: WEEK_LABEL[w]!, minutes: steps.reduce((n, st) => n + (st.minutes ?? 0), 0), steps });
+  }
+  // Drop empty weeks at the end of the 30 days (nothing to do yet is not a week to show).
+  while (weeks.length && !weeks[weeks.length - 1]!.steps.length) weeks.pop();
+  return weeks;
+}
+
+/** Free money and training for this county (spec §5.7). Statewide ones first. */
+export function resourcesFor(county: string | null): Resource[] {
+  return resources.resources
+    .filter((r) => r.counties === "all" || (county !== null && (r.counties as string[]).some((c) => same(c, county))))
+    .map(({ id, name, kind, detail, url, foundVia }) => ({ id, name, kind: kind as Resource["kind"], detail, url, foundVia }));
 }
 
 export function buildPlan(input: PlanInput): Plan {
@@ -185,7 +255,7 @@ export function buildPlan(input: PlanInput): Plan {
         summary: "Decide later",
         problem: o.headline,
         tool: null,
-        steps: [{ id: `${o.problemKey}-first`, title: "Start without a tool", detail: o.fix.nextStep, minutes: null, link: null, why: null }],
+        steps: [{ id: `${o.problemKey}-first`, title: "Start without a tool", detail: o.fix.nextStep, minutes: null, link: null, why: null, week: 1 }],
       });
       continue;
     }
@@ -205,15 +275,36 @@ export function buildPlan(input: PlanInput): Plan {
       : { name: "Maryland SBDC", detail: "Free advising for Maryland small businesses.", url: SBDC, phone: null },
     { name: "SCORE mentor", detail: "Free one-on-one help from an experienced business owner.", url: SCORE, phone: null },
   ];
+  const weeks = schedule(sections);
   return {
     business: answer.business.name,
     sections,
+    weeks,
     totals: {
       monthly: prices.reduce<number>((n, p) => n + (p === "unknown" ? 0 : p), 0),
       setupMinutes: tools.reduce((n, r) => n + (r.setupMinutes === "unknown" ? 0 : r.setupMinutes), 0),
       unknownPrices: prices.filter((p) => p === "unknown").length,
     },
     help,
+    resources: resourcesFor(answer.localHelp?.county ?? null),
+    resourcesChecked: resources.checked,
     notes,
   };
+}
+
+/**
+ * The plan as short plain text, for an email body (spec §5.5). Mail apps cut long
+ * mailto links, so this lists the weeks and steps only, plus a link to the full plan.
+ */
+export function planText(plan: Plan, link: string | null): string {
+  const lines = [`My MainStreet AI plan for ${plan.business}`, ""];
+  for (const w of plan.weeks) {
+    lines.push(`${w.label}${w.minutes ? ` (about ${w.minutes} min)` : ""}`);
+    for (const st of w.steps) lines.push(`- ${st.tool ? `${st.tool}: ` : ""}${st.title}`);
+    lines.push("");
+  }
+  if (plan.totals.monthly > 0) lines.push(`Tools: ${usd(plan.totals.monthly)} a month${plan.totals.unknownPrices ? " plus prices that aren't public" : ""}.`);
+  lines.push(`Free help: ${plan.help.map((h) => `${h.name}${h.phone ? ` (${h.phone})` : ""}`).join(", ")}.`);
+  if (link) lines.push("", `Full plan: ${link}`);
+  return lines.join("\n");
 }
