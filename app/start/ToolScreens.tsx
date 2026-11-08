@@ -7,6 +7,7 @@
  * from our safety-checked catalog (data/catalog), so every claim has a source.
  */
 import { useState } from "react";
+import { leftOutReason } from "@/lib/catalog/fit.ts";
 import type { CatalogRecord } from "@/lib/catalog/types.ts";
 import type { BusinessProfile, Recommendation, RecommendationResult, ToolChoice } from "@/lib/recommend/types.ts";
 import s from "./start.module.css";
@@ -119,7 +120,7 @@ export function WaysToFix({
   const left = new Map<string, { name: string; badge: CatalogRecord["badge"]; reason: string }>();
   for (const x of problem?.excluded ?? []) {
     const r = byId.get(x.toolId);
-    left.set(x.toolId, { name: x.toolName, badge: r?.badge ?? "listed", reason: r ? blockReason(r) : x.reason });
+    left.set(x.toolId, { name: x.toolName, badge: r?.badge ?? "listed", reason: leftOutReason(r, x.reason) });
   }
   for (const r of catalog)
     if (r.badge === "blocked" && problem && r.useCases.includes(problem.problem.useCase) && !left.has(r.id))
