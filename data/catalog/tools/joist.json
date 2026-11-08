@@ -93,12 +93,17 @@
     "ranAt": "2026-11-08",
     "checks": {
       "whoIsBehind": {
-        "result": "unknown",
-        "reason": "We couldn't find an address for Joist, Inc.",
+        "result": "pass",
+        "reason": "Run by Joist, Inc., a company at 300-490 Adelaide St. W, Toronto, ON M5V 1T2.",
         "evidence": [
           {
             "quote": "© 2026 Joist, Inc. All rights reserved.",
             "url": "https://www.joist.com/about-us/",
+            "checkedAt": "2026-11-08"
+          },
+          {
+            "quote": "Toronto Address: 300-490 Adelaide St. W, Toronto, ON M5V 1T2",
+            "url": "https://www.joist.com/privacy-policy/",
             "checkedAt": "2026-11-08"
           }
         ]

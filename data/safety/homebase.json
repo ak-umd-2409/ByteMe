@@ -67,7 +67,13 @@
       "quote": "© 2026 Pioneer Works, Inc. All Rights Reserved.",
       "pageUrl": "https://www.joinhomebase.com/hiring-and-onboarding"
     },
-    "address": "unknown",
+    "address": {
+      "answer": "835 Howard St, Floor 2",
+      "quote": "835 Howard St, Floor 2",
+      "pageUrl": "https://www.joinhomebase.com/privacy",
+      "source": "person",
+      "foundBy": "Claude (drafted for Rishabh to check)"
+    },
     "leaderName": "unknown",
     "trainsOnYourData": {
       "answer": "yes",

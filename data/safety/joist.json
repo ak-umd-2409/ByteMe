@@ -67,7 +67,13 @@
       "quote": "© 2026 Joist, Inc. All rights reserved.",
       "pageUrl": "https://www.joist.com/about-us/"
     },
-    "address": "unknown",
+    "address": {
+      "answer": "300-490 Adelaide St. W, Toronto, ON M5V 1T2",
+      "quote": "Toronto Address: 300-490 Adelaide St. W, Toronto, ON M5V 1T2",
+      "pageUrl": "https://www.joist.com/privacy-policy/",
+      "source": "person",
+      "foundBy": "Claude (drafted for Rishabh to check)"
+    },
     "leaderName": "unknown",
     "trainsOnYourData": "unknown",
     "canDeleteData": "unknown",

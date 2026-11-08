@@ -59,10 +59,10 @@
   ],
   "privacyCard": {
     "trainsOnYourData": {
-      "answer": "unknown",
-      "plain": "We couldn't confirm whether it uses your data to train AI.",
-      "quote": null,
-      "sourceUrl": null
+      "answer": "anonymized",
+      "plain": "Uses your data to improve its AI, with names removed first.",
+      "quote": "We do create aggregated and anonymized datasets for analytics and product improvement purposes as detailed in our Terms, but we ensure such data does not identify any Clients, Partners or end users or any Client confidential information.",
+      "sourceUrl": "https://birdeye.com/ai-policy/"
     },
     "canDeleteData": {
       "answer": "yes",
@@ -101,11 +101,16 @@
     "ranAt": "2026-11-08",
     "checks": {
       "whoIsBehind": {
-        "result": "unknown",
-        "reason": "We couldn't find an address for Birdeye Inc.",
+        "result": "pass",
+        "reason": "Run by Birdeye Inc, a company at 2479 E Bayshore Rd, Suite 188, Palo Alto, CA 94303.",
         "evidence": [
           {
             "quote": "© 2026 Birdeye Inc Facebook icon",
+            "url": "https://birdeye.com/aboutus/",
+            "checkedAt": "2026-11-08"
+          },
+          {
+            "quote": "2479 E Bayshore Rd, Suite 188, Palo Alto, CA 94303",
             "url": "https://birdeye.com/aboutus/",
             "checkedAt": "2026-11-08"
           },
@@ -138,12 +143,22 @@
       },
       "dataUse": {
         "result": "unknown",
-        "reason": "We couldn't find whether it uses your information to make its AI better.",
+        "reason": "The privacy policy isn't clear about whether it uses your information to make its AI better. A person needs to read it.",
         "evidence": [
+          {
+            "quote": "We do create aggregated and anonymized datasets for analytics and product improvement purposes as detailed in our Terms, but we ensure such data does not identify any Clients, Partners or end users or any Client confidential information.",
+            "url": "https://birdeye.com/ai-policy/",
+            "checkedAt": "2026-11-08"
+          },
           {
             "quote": "If you wish to cancel your account or request that we no longer use your information to provide you the Services, you may delete your account (this will be done by Birdeye’s customer care team).",
             "url": "https://birdeye.com/privacy/",
             "checkedAt": "2026-11-08"
+          },
+          {
+            "url": "https://birdeye.com/privacy/",
+            "checkedAt": "2026-11-08",
+            "quote": "All personnel with access to Customer Data are subject to confidentiality obligations and undergo background checks and security training, and access is governed by role-based access controls and logged for audit purposes."
           }
         ]
       },
@@ -192,13 +207,15 @@
     "redFlags": [],
     "verdict": "held",
     "warnings": [
-      "The website doesn't show a clear monthly price."
+      "The website doesn't show a clear monthly price.",
+      "This tool learns from how people use it. It may use your customers' calls or messages to get better, but it removes names and phone numbers first. Good to know: don't share card numbers or health details with it."
     ]
   },
   "lastChecked": "2026-11-08",
   "sources": [
     "https://birdeye.com/",
     "https://birdeye.com/aboutus/",
+    "https://birdeye.com/ai-policy/",
     "https://birdeye.com/privacy/",
     "https://birdeye.com/integration/"
   ],

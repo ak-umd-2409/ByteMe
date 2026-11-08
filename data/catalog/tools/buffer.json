@@ -29,7 +29,7 @@
       "note": ""
     },
     "freeTier": "unknown",
-    "contract": "monthly",
+    "contract": "unknown",
     "cancellation": "unknown",
     "pricingUrl": "https://buffer.com/pricing?cta=bufferSite-globalNav-pricing-pricing-1"
   },
@@ -39,52 +39,16 @@
       "type": "native"
     },
     {
-      "product": "Claude",
-      "type": "native"
-    },
-    {
       "product": "ChatGPT",
       "type": "native"
     },
     {
-      "product": "Facebook",
-      "type": "native"
-    },
-    {
-      "product": "Instagram",
-      "type": "native"
-    },
-    {
-      "product": "TikTok",
-      "type": "native"
-    },
-    {
-      "product": "LinkedIn",
-      "type": "native"
-    },
-    {
-      "product": "Threads",
-      "type": "native"
-    },
-    {
-      "product": "Bluesky",
-      "type": "native"
-    },
-    {
-      "product": "Pinterest",
-      "type": "native"
-    },
-    {
-      "product": "Mastodon",
-      "type": "native"
-    },
-    {
-      "product": "Substack",
+      "product": "Claude",
       "type": "native"
     }
   ],
   "setupMinutes": "unknown",
-  "setupMode": "needs_help",
+  "setupMode": "self_serve",
   "languages": [
     "English"
   ],
@@ -132,12 +96,17 @@
     "ranAt": "2026-11-08",
     "checks": {
       "whoIsBehind": {
-        "result": "unknown",
-        "reason": "We couldn't find an address for Buffer.",
+        "result": "pass",
+        "reason": "Run by Buffer, a company at 2443 Fillmore Street #380-7163.",
         "evidence": [
           {
             "quote": "We’re Buffer 👋",
             "url": "https://buffer.com/about",
+            "checkedAt": "2026-11-08"
+          },
+          {
+            "quote": "2443 Fillmore Street #380-7163",
+            "url": "https://buffer.com/legal",
             "checkedAt": "2026-11-08"
           },
           {
@@ -227,13 +196,14 @@
   "lastChecked": "2026-11-08",
   "sources": [
     "https://buffer.com/pricing?cta=bufferSite-globalNav-pricing-pricing-1",
-    "https://buffer.com/about",
     "https://buffer.com/integrations/canva?cta=bufferSite-globalNav-tools-canva-1",
+    "https://buffer.com/about",
     "https://buffer.com/"
   ],
   "needsVerification": [
     "pricing.large.monthlyUsd",
     "pricing.freeTier",
+    "pricing.contract",
     "pricing.cancellation",
     "setupMinutes",
     "rulesFlags.recordsCalls",
@@ -242,7 +212,6 @@
     "rulesFlags.outboundAiCalls",
     "rulesFlags.personalizedPricing",
     "description",
-    "setupMode",
     "languages"
   ]
 }

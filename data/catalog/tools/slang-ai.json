@@ -74,10 +74,10 @@
       "sourceUrl": "https://www.slang.ai/privacy-policy"
     },
     "canDeleteData": {
-      "answer": "unknown",
-      "plain": "We couldn't confirm whether you can delete your data.",
-      "quote": null,
-      "sourceUrl": null
+      "answer": "yes",
+      "plain": "You can delete your data.",
+      "quote": "You have the right to request that we delete the Personal Data that we have collected about you.",
+      "sourceUrl": "https://www.slang.ai/privacy-policy"
     },
     "whereStored": {
       "answer": "unknown",
@@ -110,12 +110,17 @@
     "ranAt": "2026-11-08",
     "checks": {
       "whoIsBehind": {
-        "result": "unknown",
-        "reason": "We couldn't find an address for Slang AI.",
+        "result": "pass",
+        "reason": "Run by Slang AI, a company at 85 Broad St., Flr 17, New York, NY 10004.",
         "evidence": [
           {
             "quote": "Copyright © 2026 Slang AI",
             "url": "https://www.slang.ai/about",
+            "checkedAt": "2026-11-08"
+          },
+          {
+            "quote": "Slang AI, 85 Broad St., Flr 17, New York, NY 10004",
+            "url": "https://www.slang.ai/privacy-policy",
             "checkedAt": "2026-11-08"
           },
           {
@@ -146,11 +151,16 @@
         ]
       },
       "dataUse": {
-        "result": "unknown",
-        "reason": "We couldn't find whether you can delete your information.",
+        "result": "pass",
+        "reason": "Uses your information to make its AI better, but removes names first. You can delete your information.",
         "evidence": [
           {
             "quote": "We may use such aggregated, de-identified or anonymized data and share it with third parties for our lawful business purposes, including to analyze, build and improve the Services and promote our business, provided that we will not share such data in a manner that could identify you.",
+            "url": "https://www.slang.ai/privacy-policy",
+            "checkedAt": "2026-11-08"
+          },
+          {
+            "quote": "You have the right to request that we delete the Personal Data that we have collected about you.",
             "url": "https://www.slang.ai/privacy-policy",
             "checkedAt": "2026-11-08"
           }
@@ -198,7 +208,7 @@
       }
     },
     "redFlags": [],
-    "verdict": "held",
+    "verdict": "ready",
     "warnings": [
       "We couldn't find which country your information is kept in.",
       "This tool learns from how people use it. It may use your customers' calls or messages to get better, but it removes names and phone numbers first. Good to know: don't share card numbers or health details with it."

@@ -68,10 +68,10 @@
   ],
   "privacyCard": {
     "trainsOnYourData": {
-      "answer": "unknown",
-      "plain": "We couldn't confirm whether it uses your data to train AI.",
-      "quote": null,
-      "sourceUrl": null
+      "answer": "opt-out",
+      "plain": "Uses your data to improve its AI unless you turn it off.",
+      "quote": "Customers may opt-out of improvement training via support.",
+      "sourceUrl": "https://www.tidio.com/terms/"
     },
     "canDeleteData": {
       "answer": "yes",
@@ -146,9 +146,14 @@
         ]
       },
       "dataUse": {
-        "result": "unknown",
-        "reason": "We couldn't find whether it uses your information to make its AI better.",
+        "result": "pass",
+        "reason": "Uses your information to make its AI better, but you can turn this off. You can delete your information.",
         "evidence": [
+          {
+            "quote": "Customers may opt-out of improvement training via support.",
+            "url": "https://www.tidio.com/terms/",
+            "checkedAt": "2026-11-08"
+          },
           {
             "quote": "Right to erasure\nThis is also known as ‘the right to be forgotten’ and, in simple terms, enables you to request the deletion or removal of your personal data where there’s no compelling reason for us to keep using it.",
             "url": "https://www.tidio.com/privacy-policy/",
@@ -198,16 +203,18 @@
       }
     },
     "redFlags": [],
-    "verdict": "held",
+    "verdict": "ready",
     "warnings": [
       "We couldn't find which country your information is kept in.",
-      "We couldn't find the name of the person who runs this company."
+      "We couldn't find the name of the person who runs this company.",
+      "Turn this setting off after you sign up. This tool may use your customers' calls or messages to get better. You can stop this in its settings."
     ]
   },
   "lastChecked": "2026-11-08",
   "sources": [
     "https://www.tidio.com/pricing/",
     "https://www.tidio.com/contact-sales/?hs_track=navbar",
+    "https://www.tidio.com/terms/",
     "https://www.tidio.com/privacy-policy/",
     "https://www.tidio.com/integrations/"
   ],

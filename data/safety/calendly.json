@@ -67,14 +67,32 @@
       "quote": "These statistics are based on research conducted by Calendly LLC.",
       "pageUrl": "https://calendly.com/about"
     },
-    "address": "unknown",
+    "address": {
+      "answer": "115 E Main St., Ste A1B",
+      "quote": "115 E Main St., Ste A1B",
+      "pageUrl": "https://calendly.com/legal/privacy-notice",
+      "source": "person",
+      "foundBy": "Claude (drafted for Rishabh to check)"
+    },
     "leaderName": {
       "answer": "Tope Awotona",
       "quote": "Tope Awotona founded Calendly in 2013 through sheer grit, perseverance, and the complete and utter emptying of his personal savings accounts.",
       "pageUrl": "https://calendly.com/about"
     },
-    "trainsOnYourData": "unknown",
-    "canDeleteData": "unknown",
+    "trainsOnYourData": {
+      "answer": "no",
+      "quote": "Calendly does not sell customer data or use it to train AI models.",
+      "pageUrl": "https://calendly.com/help/ai-at-calendly",
+      "source": "person",
+      "foundBy": "Claude (drafted for Rishabh to check)"
+    },
+    "canDeleteData": {
+      "answer": "yes",
+      "quote": "If you do not wish to receive any service-related emails from us, you have the option to delete your account.",
+      "pageUrl": "https://calendly.com/legal/privacy-notice",
+      "source": "person",
+      "foundBy": "Claude (drafted for Rishabh to check)"
+    },
     "whereStored": "unknown",
     "securityCertification": "unknown",
     "policyAddress": "unknown"

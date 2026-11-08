@@ -119,12 +119,17 @@
     "ranAt": "2026-11-08",
     "checks": {
       "whoIsBehind": {
-        "result": "unknown",
-        "reason": "We couldn't find an address for NiceJob Inc.",
+        "result": "pass",
+        "reason": "Run by NiceJob Inc., a company at 509 Commissioners Rd. W., Unit 434 London, ON, N6J 1Y5.",
         "evidence": [
           {
             "quote": "© 2026 NiceJob Inc. · All rights reserved",
             "url": "https://get.nicejob.com/our-reviews",
+            "checkedAt": "2026-11-08"
+          },
+          {
+            "quote": "By e-mail: support@nicejob.com By regular mail: NiceJob (Paystone Inc.) 509 Commissioners Rd. W., Unit 434 London, ON, N6J 1Y5",
+            "url": "https://get.nicejob.com/terms",
             "checkedAt": "2026-11-08"
           }
         ]

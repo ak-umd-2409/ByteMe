@@ -116,12 +116,17 @@
     "ranAt": "2026-11-08",
     "checks": {
       "whoIsBehind": {
-        "result": "unknown",
-        "reason": "We couldn't find an address for Pioneer Works, Inc.",
+        "result": "pass",
+        "reason": "Run by Pioneer Works, Inc., a company at 835 Howard St, Floor 2.",
         "evidence": [
           {
             "quote": "© 2026 Pioneer Works, Inc. All Rights Reserved.",
             "url": "https://www.joinhomebase.com/hiring-and-onboarding",
+            "checkedAt": "2026-11-08"
+          },
+          {
+            "quote": "835 Howard St, Floor 2",
+            "url": "https://www.joinhomebase.com/privacy",
             "checkedAt": "2026-11-08"
           }
         ]

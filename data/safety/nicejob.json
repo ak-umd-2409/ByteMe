@@ -62,7 +62,13 @@
       "quote": "© 2026 NiceJob Inc. · All rights reserved",
       "pageUrl": "https://get.nicejob.com/our-reviews"
     },
-    "address": "unknown",
+    "address": {
+      "answer": "509 Commissioners Rd. W., Unit 434 London, ON, N6J 1Y5",
+      "quote": "By e-mail: support@nicejob.com By regular mail: NiceJob (Paystone Inc.) 509 Commissioners Rd. W., Unit 434 London, ON, N6J 1Y5",
+      "pageUrl": "https://get.nicejob.com/terms",
+      "source": "person",
+      "foundBy": "Claude (drafted for Rishabh to check)"
+    },
     "leaderName": "unknown",
     "trainsOnYourData": "unknown",
     "canDeleteData": "unknown",

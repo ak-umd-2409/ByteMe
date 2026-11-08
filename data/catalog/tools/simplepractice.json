@@ -42,10 +42,10 @@
   ],
   "privacyCard": {
     "trainsOnYourData": {
-      "answer": "unknown",
-      "plain": "We couldn't confirm whether it uses your data to train AI.",
-      "quote": null,
-      "sourceUrl": null
+      "answer": "anonymized",
+      "plain": "Uses your data to improve its AI, with names removed first.",
+      "quote": "We strongly believe that trained practitioners are at the center of clinical care, and we’d like to reassure you that only de-identified data from transcripts will be used as a way to continue to improve the SimplePractice Note Taker feature.",
+      "sourceUrl": "https://www.simplepractice.com/blog/ai-in-therapy/"
     },
     "canDeleteData": {
       "answer": "unknown",
@@ -75,7 +75,7 @@
   "rulesFlags": {
     "recordsCalls": "unknown",
     "announcesRecording": "unknown",
-    "hipaaReady": "unknown",
+    "hipaaReady": true,
     "outboundAiCalls": "unknown",
     "personalizedPricing": "unknown"
   },
@@ -116,10 +116,11 @@
       },
       "dataUse": {
         "result": "unknown",
-        "reason": "We couldn't find whether it uses your information to make its AI better or whether you can delete your information.",
+        "reason": "We couldn't find whether you can delete your information.",
         "evidence": [
           {
-            "url": "https://www.simplepractice.com/privacy/",
+            "quote": "We strongly believe that trained practitioners are at the center of clinical care, and we’d like to reassure you that only de-identified data from transcripts will be used as a way to continue to improve the SimplePractice Note Taker feature.",
+            "url": "https://www.simplepractice.com/blog/ai-in-therapy/",
             "checkedAt": "2026-11-08"
           }
         ]
@@ -170,6 +171,7 @@
     "warnings": [
       "We couldn't find which country your information is kept in.",
       "We couldn't find the name of the person who runs this company.",
+      "This tool learns from how people use it. It may use your customers' calls or messages to get better, but it removes names and phone numbers first. Good to know: don't share card numbers or health details with it.",
       "This tool handles payments or health information, but we found no proof that an outside company checked its security (like PCI or SOC 2)."
     ]
   },
@@ -177,7 +179,8 @@
   "sources": [
     "https://www.simplepractice.com/",
     "https://www.simplepractice.com/pricing/",
-    "https://www.simplepractice.com/about-us/"
+    "https://www.simplepractice.com/about-us/",
+    "https://www.simplepractice.com/blog/ai-in-therapy/"
   ],
   "needsVerification": [
     "pricing.freeTier",
@@ -185,7 +188,6 @@
     "setupMinutes",
     "rulesFlags.recordsCalls",
     "rulesFlags.announcesRecording",
-    "rulesFlags.hipaaReady",
     "rulesFlags.outboundAiCalls",
     "rulesFlags.personalizedPricing",
     "setupMode",

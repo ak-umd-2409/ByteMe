@@ -69,7 +69,13 @@
     },
     "address": "unknown",
     "leaderName": "unknown",
-    "trainsOnYourData": "unknown",
+    "trainsOnYourData": {
+      "answer": "opt-out",
+      "quote": "Customers may opt-out of improvement training via support.",
+      "pageUrl": "https://www.tidio.com/terms/",
+      "source": "person",
+      "foundBy": "Claude (drafted for Rishabh to check)"
+    },
     "canDeleteData": {
       "answer": "yes",
       "quote": "Right to erasure\nThis is also known as ‘the right to be forgotten’ and, in simple terms, enables you to request the deletion or removal of your personal data where there’s no compelling reason for us to keep using it.",

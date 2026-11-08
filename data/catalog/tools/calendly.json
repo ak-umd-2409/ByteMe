@@ -74,16 +74,16 @@
   ],
   "privacyCard": {
     "trainsOnYourData": {
-      "answer": "unknown",
-      "plain": "We couldn't confirm whether it uses your data to train AI.",
-      "quote": null,
-      "sourceUrl": null
+      "answer": "no",
+      "plain": "Does not use your data to train AI.",
+      "quote": "Calendly does not sell customer data or use it to train AI models.",
+      "sourceUrl": "https://calendly.com/help/ai-at-calendly"
     },
     "canDeleteData": {
-      "answer": "unknown",
-      "plain": "We couldn't confirm whether you can delete your data.",
-      "quote": null,
-      "sourceUrl": null
+      "answer": "yes",
+      "plain": "You can delete your data.",
+      "quote": "If you do not wish to receive any service-related emails from us, you have the option to delete your account.",
+      "sourceUrl": "https://calendly.com/legal/privacy-notice"
     },
     "whereStored": {
       "answer": "unknown",
@@ -116,12 +116,17 @@
     "ranAt": "2026-11-08",
     "checks": {
       "whoIsBehind": {
-        "result": "unknown",
-        "reason": "We couldn't find an address for Calendly LLC.",
+        "result": "pass",
+        "reason": "Run by Calendly LLC, a company at 115 E Main St., Ste A1B.",
         "evidence": [
           {
             "quote": "These statistics are based on research conducted by Calendly LLC.",
             "url": "https://calendly.com/about",
+            "checkedAt": "2026-11-08"
+          },
+          {
+            "quote": "115 E Main St., Ste A1B",
+            "url": "https://calendly.com/legal/privacy-notice",
             "checkedAt": "2026-11-08"
           },
           {
@@ -152,10 +157,16 @@
         ]
       },
       "dataUse": {
-        "result": "unknown",
-        "reason": "We couldn't find whether it uses your information to make its AI better or whether you can delete your information.",
+        "result": "pass",
+        "reason": "Doesn't use your information to make its AI better. You can delete your information.",
         "evidence": [
           {
+            "quote": "Calendly does not sell customer data or use it to train AI models.",
+            "url": "https://calendly.com/help/ai-at-calendly",
+            "checkedAt": "2026-11-08"
+          },
+          {
+            "quote": "If you do not wish to receive any service-related emails from us, you have the option to delete your account.",
             "url": "https://calendly.com/legal/privacy-notice",
             "checkedAt": "2026-11-08"
           }
@@ -203,7 +214,7 @@
       }
     },
     "redFlags": [],
-    "verdict": "held",
+    "verdict": "ready",
     "warnings": [
       "We couldn't find which country your information is kept in."
     ]
@@ -213,6 +224,8 @@
     "https://calendly.com/",
     "https://calendly.com/pricing",
     "https://calendly.com/about",
+    "https://calendly.com/help/ai-at-calendly",
+    "https://calendly.com/legal/privacy-notice",
     "https://calendly.com/integration"
   ],
   "needsVerification": [

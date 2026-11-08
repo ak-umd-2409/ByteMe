@@ -85,11 +85,16 @@
     "ranAt": "2026-11-08",
     "checks": {
       "whoIsBehind": {
-        "result": "unknown",
-        "reason": "We couldn't find an address for Weave Communications, Inc.",
+        "result": "pass",
+        "reason": "Run by Weave Communications, Inc., a company at 1331 W Powell Way.",
         "evidence": [
           {
             "quote": "© 2026 Weave Communications, Inc.",
+            "url": "https://www.getweave.com/about/",
+            "checkedAt": "2026-11-08"
+          },
+          {
+            "quote": "1331 W Powell Way",
             "url": "https://www.getweave.com/about/",
             "checkedAt": "2026-11-08"
           }
