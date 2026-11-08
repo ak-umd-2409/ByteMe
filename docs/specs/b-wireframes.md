@@ -35,6 +35,7 @@ No off-white "paper" background. Problems are never red.
 - **Buttons:** hard shadow. 3px ink border, 4px ink offset shadow, 52px tall. They lift on hover and press in when tapped. Burgundy fill = the one main action per screen; white fill = second actions. Disabled buttons lose the shadow.
 - **Text boxes:** soft. Light fill, no outline, 14px corners, dark bottom edge (`#5E4F3B`), 52px tall. Typed text is burgundy, the empty-box example is grey, and the focus ring is burgundy. Error = pink fill, red bottom edge, message underneath.
 - **Badges:** stamp. 2px outline in the badge color, square corners, a symbol plus a word. ✓ Verified gets a double line like a seal. Fact chips ("✓ Works with Square", "From Google") have a dashed outline. Tap-to-pick chips have the button shadow and press in, turning burgundy when picked.
+- **Tool logos:** every tool name has its logo on the left: 40px rounded square, or 56px on the tool page. The wireframes use colored initials as placeholders. The real app should show the vendor's logo, which means the catalog needs a logo field.
 - **Cards:** two-part. A sage top with the name, badge and price, then a light body with the details. No outline, no shadow, 14px corners.
 - **Page frame:** sage top bar ("MainStreet AI" · Start over), sample-data banner, step line "Step N of 4: …", page title, then content. Phone = one column. Website = two columns, max 1040px wide.
 - **Motion:** screens slide in over about 0.3s. The only other motion is the button press. All of it is off when the phone or computer asks for reduced motion.
