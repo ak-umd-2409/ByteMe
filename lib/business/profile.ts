@@ -72,7 +72,8 @@ export function buildProfile(input: BuildProfileInput): OnboardingProfile {
   const placeSource: FactSource =
     details?.provider === "mock" ? "mock_places" : details?.provider === "public_snapshot" ? "public_listings" : "google_places";
   const fromGoogle =
-    details?.provider === "mock" ? "Sample Google listing (mock)" : details?.provider === "public_snapshot" ? "Public listings (BBB, Birdeye, Yelp)" : "Google Business Profile";
+    details?.provider === "mock" ? "Sample Google listing (mock)" : details?.provider === "public_snapshot" ? "Public listings" : "Google Business Profile";
+  const onlyPasted = reviews.bySource.owner_pasted > 0 && reviews.reviewCount === reviews.bySource.owner_pasted;
 
   const name = details ? fact(details.name, placeSource, "high", fromGoogle) : fact(manual?.name, "owner", "high", "You told us");
 
@@ -169,8 +170,8 @@ export function buildProfile(input: BuildProfileInput): OnboardingProfile {
       email,
       website: websiteFact,
       hours,
-      rating: details?.rating != null ? fact(details.rating, placeSource, "high", fromGoogle) : fact<number>(reviews.averageRating, "review_analysis", "low", "Average of the reviews you pasted"),
-      reviewCount: details?.reviewCount != null ? fact(details.reviewCount, placeSource, "high", fromGoogle) : fact<number>(reviews.reviewCount || null, "review_analysis", "low", "Reviews you pasted"),
+      rating: details?.rating != null ? fact(details.rating, placeSource, "high", fromGoogle) : fact<number>(reviews.averageRating, "review_analysis", "low", onlyPasted ? "Average of the reviews you pasted" : "Average of the reviews we read (not a published rating)"),
+      reviewCount: details?.reviewCount != null ? fact(details.reviewCount, placeSource, "high", fromGoogle) : fact<number>(reviews.reviewCount || null, "review_analysis", "low", onlyPasted ? "Reviews you pasted" : "Reviews we read"),
       placeId: details?.placeId ?? null,
       googleMapsUrl: details?.googleMapsUrl ?? null,
     },

@@ -15,9 +15,11 @@ import type { RecommendationInputResult } from "../problems/toRecommendation.ts"
 import type { DiscoveryResult, ImpactEstimate, ProblemKey } from "../problems/types.ts";
 import type { PaybackResult } from "../problems/payback.ts";
 import type { RulesReport } from "../rules/maryland.ts";
+import type { Answer, JourneyAnswerResponse, JourneyQuestion, JourneyStartResponse, Opportunity } from "../journey/types.ts";
 
 export type { OnboardingAnalysis, OnboardingProfile, DiscoveryResult, ImpactEstimate, ProblemKey, RecommendationInputResult, RulesReport, PaybackResult };
 export type ProblemCard = DiscoveryResult["problems"][number];
+export type { Answer, JourneyAnswerResponse, JourneyQuestion, JourneyStartResponse, Opportunity };
 
 export interface ApiErrorBody {
   error: { code: string; message: string; details?: string[] };
@@ -97,6 +99,28 @@ export const api = {
 };
 
 /** Formatting helpers shared by the starter components. */
+/**
+ * The simple owner journey (docs/JOURNEY_API.md). Keep `context` from the last response and send it back.
+ *
+ *   const { matches } = await api.search("frederick heating");
+ *   let step = await journey.start(matches[0].placeId);             // what we learned + questions
+ *   let result = await journey.answer(step.context, { budget: "up_to_100" });
+ *   result = await journey.answer(result.context, { "impact.average_job_value": 400 });  // follow-ups
+ *   if (result.recommendation.ready) await fetch("/api/recommend", { method: "POST", body: JSON.stringify(result.recommendation.request) });
+ */
+export const journey = {
+  start: (placeId: string, pastedReviews?: string, signal?: AbortSignal) =>
+    call<JourneyStartResponse>("/api/journey/start", { json: { placeId, ...(pastedReviews ? { pastedReviews } : {}) } }, signal),
+  answer: (context: string, answers: Record<string, Answer>, signal?: AbortSignal) =>
+    call<JourneyAnswerResponse>("/api/journey/answer", { json: { context, answers } }, signal),
+  /** Whether a question should be shown, given the answers so far (handles `showIf`). */
+  visible: (question: JourneyQuestion, answers: Record<string, Answer>) => {
+    if (!question.showIf) return true;
+    const a = answers[question.showIf.questionId];
+    return Array.isArray(a) && a.some((x) => question.showIf!.includesAny.includes(x));
+  },
+};
+
 export const fmt = {
   usd: (n: number) => n.toLocaleString("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 }),
   percent: (share: number) => `${Math.round(share * 100)}%`,
