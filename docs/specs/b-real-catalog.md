@@ -76,7 +76,17 @@ Same shape as the Safety Check collector:
 
 - New setting `OPENROUTER_STRONG_MODEL`, read by the catalog scripts (not in Kushal's `lib/shared/config.ts`), used only by the card-filler and the Safety Check when run from the catalog scripts. Everything else keeps the cheap default.
 - The first build step tries 2–3 candidate models on the same 3 real tools and picks one by accuracy and cost. The choice and the measured cost go in the PR.
-- **Estimate (not measured):** about $5–10 for all 80 tools. Hard limits: a call cap per run (`CATALOG_MAX_CALLS`, default 600), plus the cache, so a re-run of unchanged pages costs nothing. The script prints calls used at the end.
+- **Chosen (Nov 7, measured):** `anthropic/claude-haiku-5.5`. Tried on Rosie, Smith.ai and QuickBooks:
+
+  | Model | Card answers kept (of 48) | Integrations found | Notes |
+  | --- | --- | --- | --- |
+  | `openai/gpt-4o-mini` (old default) | 8 | 2 | Rosie's prices missed |
+  | `anthropic/claude-haiku-5.5` | 19 | 9 | every kept answer correct on reading the quotes; cheapest per word |
+  | `google/gemini-3.7-flash` | 5 | 4 | too slow: 2 of 3 tools hit the AI client's 20-second limit |
+
+  Haiku and Gemini think before answering, so reply limits were raised (card 8,000, Safety Check 4,000) or their replies were cut off.
+  Measured: about $0.002 per tool (Goodcall: 3 AI calls, $0.0013), so **about $0.20 for 80 tools**. The whole model trial cost $0.17.
+- **Earlier estimate (not measured):** about $5–10 for all 80 tools. Hard limits: a call cap per run (`CATALOG_MAX_CALLS`, default 600), plus the cache, so a re-run of unchanged pages costs nothing. The script prints calls used at the end.
 
 ## 5. Facts a person found (`data/catalog/found/<id>.json`)
 
