@@ -1,0 +1,213 @@
+{
+  "id": "nicejob",
+  "name": "NiceJob",
+  "vendor": {
+    "company": "NiceJob Inc.",
+    "website": "https://nicejob.com",
+    "domain": "nicejob.com"
+  },
+  "description": "NiceJob automates everything your business needs to get found by new customers, recommended by past ones, and chosen over competitors.",
+  "category": "Reviews",
+  "useCases": [
+    "reviews",
+    "marketing"
+  ],
+  "industries": [
+    "hvac",
+    "plumbing",
+    "electrical",
+    "landscaping",
+    "cleaning",
+    "auto_repair"
+  ],
+  "pricing": {
+    "asOf": "Nov 2026",
+    "small": {
+      "monthlyUsd": 95,
+      "note": "Starter plan"
+    },
+    "medium": {
+      "monthlyUsd": 135,
+      "note": "Pro plan"
+    },
+    "large": {
+      "monthlyUsd": "unknown",
+      "note": ""
+    },
+    "freeTier": "unknown",
+    "contract": "monthly",
+    "cancellation": "Cancel anytime",
+    "pricingUrl": "https://get.nicejob.com/pricing"
+  },
+  "worksWith": [
+    {
+      "product": "Jobber",
+      "type": "native"
+    },
+    {
+      "product": "ServiceTitan",
+      "type": "native"
+    },
+    {
+      "product": "HouseCall Pro",
+      "type": "native"
+    },
+    {
+      "product": "QuickBooks",
+      "type": "native"
+    },
+    {
+      "product": "Clio",
+      "type": "native"
+    },
+    {
+      "product": "CompanyCam",
+      "type": "native"
+    },
+    {
+      "product": "Dripjobs",
+      "type": "native"
+    }
+  ],
+  "setupMinutes": "unknown",
+  "setupMode": "needs_help",
+  "languages": [
+    "English",
+    "Français"
+  ],
+  "privacyCard": {
+    "trainsOnYourData": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm whether it uses your data to train AI.",
+      "quote": null,
+      "sourceUrl": null
+    },
+    "canDeleteData": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm whether you can delete your data.",
+      "quote": null,
+      "sourceUrl": null
+    },
+    "whereStored": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm where your data is stored.",
+      "quote": null,
+      "sourceUrl": null
+    },
+    "sharesOrSells": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm whether it sells or shares your data.",
+      "quote": null,
+      "sourceUrl": null
+    },
+    "securityCertification": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm a security certification.",
+      "quote": null,
+      "sourceUrl": null
+    }
+  },
+  "rulesFlags": {
+    "recordsCalls": "unknown",
+    "announcesRecording": "unknown",
+    "hipaaReady": "unknown",
+    "outboundAiCalls": false,
+    "personalizedPricing": "unknown"
+  },
+  "badge": "listed",
+  "safetyCheck": {
+    "ranAt": "2026-11-08",
+    "checks": {
+      "whoIsBehind": {
+        "result": "unknown",
+        "reason": "We couldn't find an address for NiceJob Inc.",
+        "evidence": [
+          {
+            "quote": "© 2026 NiceJob Inc. · All rights reserved",
+            "url": "https://get.nicejob.com/our-reviews",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "domainAge": {
+        "result": "pass",
+        "reason": "The website has been around since February 2001.",
+        "evidence": [
+          {
+            "url": "https://rdap.org/domain/nicejob.com",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "privacyPolicy": {
+        "result": "unknown",
+        "reason": "We couldn't open the privacy policy.",
+        "evidence": []
+      },
+      "dataUse": {
+        "result": "unknown",
+        "reason": "We couldn't find whether it uses your information to make its AI better or whether you can delete your information.",
+        "evidence": []
+      },
+      "dataLocation": {
+        "result": "unknown",
+        "reason": "We couldn't find which country your information is kept in.",
+        "evidence": []
+      },
+      "pricingClarity": {
+        "result": "pass",
+        "reason": "Shows a clear monthly price.",
+        "evidence": [
+          {
+            "url": "https://get.nicejob.com/pricing",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "securityBasics": {
+        "result": "pass",
+        "reason": "Your connection to this website is private (https).",
+        "evidence": [
+          {
+            "url": "https://get.nicejob.com/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "redFlags": {
+        "result": "pass",
+        "reason": "No warning signs found. (We didn't check Google's list of unsafe websites.)",
+        "evidence": [
+          {
+            "url": "https://nicejob.com/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      }
+    },
+    "redFlags": [],
+    "verdict": "held",
+    "warnings": [
+      "We couldn't find which country your information is kept in.",
+      "We couldn't find the name of the person who runs this company."
+    ]
+  },
+  "lastChecked": "2026-11-08",
+  "sources": [
+    "https://get.nicejob.com/",
+    "https://get.nicejob.com/pricing",
+    "https://help.nicejob.com/en/",
+    "https://get.nicejob.com/product/ai-leads",
+    "https://get.nicejob.com/our-reviews",
+    "https://partners.nicejob.com/integrations"
+  ],
+  "needsVerification": [
+    "pricing.large.monthlyUsd",
+    "pricing.freeTier",
+    "setupMinutes",
+    "rulesFlags.recordsCalls",
+    "rulesFlags.announcesRecording",
+    "rulesFlags.hipaaReady",
+    "rulesFlags.personalizedPricing"
+  ]
+}

@@ -1,0 +1,228 @@
+{
+  "id": "slang-ai",
+  "name": "Slang.ai",
+  "vendor": {
+    "company": "Slang AI",
+    "website": "https://www.slang.ai",
+    "domain": "slang.ai"
+  },
+  "description": "Answer every inbound call, instantly respond to guest inquiries, and automatically manage reservations – 24/7.",
+  "category": "AI receptionist",
+  "useCases": [
+    "missed-calls",
+    "booking"
+  ],
+  "industries": [
+    "restaurant",
+    "cafe"
+  ],
+  "pricing": {
+    "asOf": "Nov 2026",
+    "small": {
+      "monthlyUsd": 399,
+      "note": "Cheapest paid plan"
+    },
+    "medium": {
+      "monthlyUsd": 599,
+      "note": "Middle plan"
+    },
+    "large": {
+      "monthlyUsd": "unknown",
+      "note": ""
+    },
+    "freeTier": "unknown",
+    "contract": "unknown",
+    "cancellation": "unknown",
+    "pricingUrl": "https://www.slang.ai/pricing"
+  },
+  "worksWith": [
+    {
+      "product": "OpenTable",
+      "type": "native"
+    },
+    {
+      "product": "Tripleseat",
+      "type": "native"
+    },
+    {
+      "product": "SevenRooms",
+      "type": "native"
+    },
+    {
+      "product": "Perfect Venue",
+      "type": "native"
+    },
+    {
+      "product": "Yelp",
+      "type": "native"
+    },
+    {
+      "product": "Resy",
+      "type": "native"
+    }
+  ],
+  "setupMinutes": "unknown",
+  "setupMode": "needs_help",
+  "languages": [
+    "Spanish"
+  ],
+  "privacyCard": {
+    "trainsOnYourData": {
+      "answer": "anonymized",
+      "plain": "Uses your data to improve its AI, with names removed first.",
+      "quote": "We may use such aggregated, de-identified or anonymized data and share it with third parties for our lawful business purposes, including to analyze, build and improve the Services and promote our business, provided that we will not share such data in a manner that could identify you.",
+      "sourceUrl": "https://www.slang.ai/privacy-policy"
+    },
+    "canDeleteData": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm whether you can delete your data.",
+      "quote": null,
+      "sourceUrl": null
+    },
+    "whereStored": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm where your data is stored.",
+      "quote": null,
+      "sourceUrl": null
+    },
+    "sharesOrSells": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm whether it sells or shares your data.",
+      "quote": null,
+      "sourceUrl": null
+    },
+    "securityCertification": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm a security certification.",
+      "quote": null,
+      "sourceUrl": null
+    }
+  },
+  "rulesFlags": {
+    "recordsCalls": "unknown",
+    "announcesRecording": "unknown",
+    "hipaaReady": "unknown",
+    "outboundAiCalls": "unknown",
+    "personalizedPricing": "unknown"
+  },
+  "badge": "listed",
+  "safetyCheck": {
+    "ranAt": "2026-11-08",
+    "checks": {
+      "whoIsBehind": {
+        "result": "unknown",
+        "reason": "We couldn't find an address for Slang AI.",
+        "evidence": [
+          {
+            "quote": "Copyright © 2026 Slang AI",
+            "url": "https://www.slang.ai/about",
+            "checkedAt": "2026-11-08"
+          },
+          {
+            "quote": "Alex Sambvani, our founder and CEO, has always been driven by two lifelong passions: food and technology.",
+            "url": "https://www.slang.ai/about",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "domainAge": {
+        "result": "pass",
+        "reason": "The website has been around since February 2021.",
+        "evidence": [
+          {
+            "url": "https://rdap.org/domain/slang.ai",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "privacyPolicy": {
+        "result": "pass",
+        "reason": "Has a full privacy policy that says what they do with your information.",
+        "evidence": [
+          {
+            "url": "https://www.slang.ai/privacy-policy",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "dataUse": {
+        "result": "unknown",
+        "reason": "We couldn't find whether you can delete your information.",
+        "evidence": [
+          {
+            "quote": "We may use such aggregated, de-identified or anonymized data and share it with third parties for our lawful business purposes, including to analyze, build and improve the Services and promote our business, provided that we will not share such data in a manner that could identify you.",
+            "url": "https://www.slang.ai/privacy-policy",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "dataLocation": {
+        "result": "unknown",
+        "reason": "We couldn't find which country your information is kept in.",
+        "evidence": [
+          {
+            "url": "https://www.slang.ai/privacy-policy",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "pricingClarity": {
+        "result": "pass",
+        "reason": "Shows a clear monthly price.",
+        "evidence": [
+          {
+            "url": "https://www.slang.ai/pricing",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "securityBasics": {
+        "result": "pass",
+        "reason": "Your connection to this website is private (https).",
+        "evidence": [
+          {
+            "url": "https://www.slang.ai/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "redFlags": {
+        "result": "pass",
+        "reason": "No warning signs found. (We didn't check Google's list of unsafe websites.)",
+        "evidence": [
+          {
+            "url": "https://www.slang.ai/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      }
+    },
+    "redFlags": [],
+    "verdict": "held",
+    "warnings": [
+      "We couldn't find which country your information is kept in.",
+      "This tool learns from how people use it. It may use your customers' calls or messages to get better, but it removes names and phone numbers first. Good to know: don't share card numbers or health details with it."
+    ]
+  },
+  "lastChecked": "2026-11-08",
+  "sources": [
+    "https://www.slang.ai/product",
+    "https://www.slang.ai/pricing",
+    "https://www.slang.ai/about",
+    "https://www.slang.ai/privacy-policy",
+    "https://www.slang.ai/integrations"
+  ],
+  "needsVerification": [
+    "pricing.large.monthlyUsd",
+    "pricing.freeTier",
+    "pricing.contract",
+    "pricing.cancellation",
+    "setupMinutes",
+    "rulesFlags.recordsCalls",
+    "rulesFlags.announcesRecording",
+    "rulesFlags.hipaaReady",
+    "rulesFlags.outboundAiCalls",
+    "rulesFlags.personalizedPricing",
+    "setupMode"
+  ]
+}

@@ -1,0 +1,224 @@
+{
+  "id": "homebase",
+  "name": "Homebase",
+  "vendor": {
+    "company": "Pioneer Works, Inc.",
+    "website": "https://joinhomebase.com",
+    "domain": "joinhomebase.com"
+  },
+  "description": "Homebase is the everything app for small businesses with hourly teams.",
+  "category": "Staff scheduling",
+  "useCases": [
+    "staff-scheduling"
+  ],
+  "industries": [
+    "any"
+  ],
+  "pricing": {
+    "asOf": "Nov 2026",
+    "small": {
+      "monthlyUsd": 30,
+      "note": "Cheapest paid plan"
+    },
+    "medium": {
+      "monthlyUsd": 70,
+      "note": "Plus plan"
+    },
+    "large": {
+      "monthlyUsd": 120,
+      "note": "All-in-One plan"
+    },
+    "freeTier": true,
+    "contract": "unknown",
+    "cancellation": "Change plan or cancel anytime",
+    "pricingUrl": "https://www.joinhomebase.com/pricing"
+  },
+  "worksWith": [
+    {
+      "product": "Square",
+      "type": "native"
+    },
+    {
+      "product": "Toast",
+      "type": "native"
+    },
+    {
+      "product": "Clover",
+      "type": "native"
+    },
+    {
+      "product": "Shopify",
+      "type": "native"
+    },
+    {
+      "product": "ADP",
+      "type": "native"
+    },
+    {
+      "product": "Gusto",
+      "type": "native"
+    },
+    {
+      "product": "QuickBooks",
+      "type": "native"
+    },
+    {
+      "product": "Paychex",
+      "type": "native"
+    }
+  ],
+  "setupMinutes": 5,
+  "setupMode": "self_serve",
+  "languages": [
+    "English"
+  ],
+  "privacyCard": {
+    "trainsOnYourData": {
+      "answer": "yes",
+      "plain": "Uses your data to train its AI.",
+      "quote": "AI model training. We may use data submitted through the Services to train, test, and improve our AI models.",
+      "sourceUrl": "https://www.joinhomebase.com/privacy"
+    },
+    "canDeleteData": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm whether you can delete your data.",
+      "quote": null,
+      "sourceUrl": null
+    },
+    "whereStored": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm where your data is stored.",
+      "quote": null,
+      "sourceUrl": null
+    },
+    "sharesOrSells": {
+      "answer": "no",
+      "plain": "Does not sell or share your data.",
+      "quote": "Other than as stated in this Privacy Policy, Pioneer Works does not disclose or sell any of your personal information to third parties without your consent.",
+      "sourceUrl": "https://www.joinhomebase.com/privacy"
+    },
+    "securityCertification": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm a security certification.",
+      "quote": null,
+      "sourceUrl": null
+    }
+  },
+  "rulesFlags": {
+    "recordsCalls": false,
+    "announcesRecording": "unknown",
+    "hipaaReady": "unknown",
+    "outboundAiCalls": "unknown",
+    "personalizedPricing": "unknown"
+  },
+  "badge": "listed",
+  "safetyCheck": {
+    "ranAt": "2026-11-08",
+    "checks": {
+      "whoIsBehind": {
+        "result": "unknown",
+        "reason": "We couldn't find an address for Pioneer Works, Inc.",
+        "evidence": [
+          {
+            "quote": "© 2026 Pioneer Works, Inc. All Rights Reserved.",
+            "url": "https://www.joinhomebase.com/hiring-and-onboarding",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "domainAge": {
+        "result": "pass",
+        "reason": "The website has been around since April 2013.",
+        "evidence": [
+          {
+            "url": "https://rdap.org/domain/joinhomebase.com",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "privacyPolicy": {
+        "result": "pass",
+        "reason": "Has a full privacy policy that says what they do with your information.",
+        "evidence": [
+          {
+            "url": "https://www.joinhomebase.com/privacy",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "dataUse": {
+        "result": "fail",
+        "reason": "It may use your customers' information to make its AI better, and we found no way to stop it.",
+        "evidence": [
+          {
+            "quote": "AI model training. We may use data submitted through the Services to train, test, and improve our AI models.",
+            "url": "https://www.joinhomebase.com/privacy",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "dataLocation": {
+        "result": "unknown",
+        "reason": "We couldn't find which country your information is kept in.",
+        "evidence": [
+          {
+            "url": "https://www.joinhomebase.com/privacy",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "pricingClarity": {
+        "result": "pass",
+        "reason": "Shows a clear monthly price.",
+        "evidence": [
+          {
+            "url": "https://www.joinhomebase.com/pricing",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "securityBasics": {
+        "result": "pass",
+        "reason": "Your connection to this website is private (https).",
+        "evidence": [
+          {
+            "url": "https://www.joinhomebase.com/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "redFlags": {
+        "result": "pass",
+        "reason": "No warning signs found. (We didn't check Google's list of unsafe websites.)",
+        "evidence": [
+          {
+            "url": "https://joinhomebase.com/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      }
+    },
+    "redFlags": [],
+    "verdict": "held",
+    "warnings": [
+      "We couldn't find which country your information is kept in.",
+      "We couldn't find the name of the person who runs this company."
+    ]
+  },
+  "lastChecked": "2026-11-08",
+  "sources": [
+    "https://www.joinhomebase.com/",
+    "https://www.joinhomebase.com/pricing",
+    "https://www.joinhomebase.com/integrations",
+    "https://www.joinhomebase.com/privacy",
+    "https://www.joinhomebase.com/hiring-and-onboarding"
+  ],
+  "needsVerification": [
+    "pricing.contract",
+    "rulesFlags.announcesRecording",
+    "rulesFlags.hipaaReady",
+    "rulesFlags.outboundAiCalls",
+    "rulesFlags.personalizedPricing",
+    "languages"
+  ]
+}

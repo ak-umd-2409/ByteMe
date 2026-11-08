@@ -1,0 +1,228 @@
+{
+  "id": "tidio",
+  "name": "Tidio",
+  "vendor": {
+    "company": "Tidio",
+    "website": "https://www.tidio.com",
+    "domain": "tidio.com"
+  },
+  "description": "Website chat.",
+  "category": "Website chat",
+  "useCases": [
+    "customer-messaging"
+  ],
+  "industries": [
+    "retail",
+    "restaurant",
+    "professional_services"
+  ],
+  "pricing": {
+    "asOf": "Nov 2026",
+    "small": {
+      "monthlyUsd": 24.17,
+      "note": "Starter plan"
+    },
+    "medium": {
+      "monthlyUsd": 49.17,
+      "note": "Growth plan"
+    },
+    "large": {
+      "monthlyUsd": 300,
+      "note": "Top plan"
+    },
+    "freeTier": "unknown",
+    "contract": "unknown",
+    "cancellation": "unknown",
+    "pricingUrl": "https://www.tidio.com/pricing/"
+  },
+  "worksWith": [
+    {
+      "product": "Shopify",
+      "type": "native"
+    },
+    {
+      "product": "Zendesk",
+      "type": "native"
+    },
+    {
+      "product": "Salesforce",
+      "type": "native"
+    },
+    {
+      "product": "WordPress",
+      "type": "native"
+    },
+    {
+      "product": "WhatsApp",
+      "type": "native"
+    },
+    {
+      "product": "ActiveCampaign",
+      "type": "native"
+    }
+  ],
+  "setupMinutes": "unknown",
+  "setupMode": "needs_help",
+  "languages": [
+    "English"
+  ],
+  "privacyCard": {
+    "trainsOnYourData": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm whether it uses your data to train AI.",
+      "quote": null,
+      "sourceUrl": null
+    },
+    "canDeleteData": {
+      "answer": "yes",
+      "plain": "You can delete your data.",
+      "quote": "Right to erasure\nThis is also known as ‘the right to be forgotten’ and, in simple terms, enables you to request the deletion or removal of your personal data where there’s no compelling reason for us to keep using it.",
+      "sourceUrl": "https://www.tidio.com/privacy-policy/"
+    },
+    "whereStored": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm where your data is stored.",
+      "quote": null,
+      "sourceUrl": null
+    },
+    "sharesOrSells": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm whether it sells or shares your data.",
+      "quote": null,
+      "sourceUrl": null
+    },
+    "securityCertification": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm a security certification.",
+      "quote": null,
+      "sourceUrl": null
+    }
+  },
+  "rulesFlags": {
+    "recordsCalls": "unknown",
+    "announcesRecording": "unknown",
+    "hipaaReady": "unknown",
+    "outboundAiCalls": "unknown",
+    "personalizedPricing": "unknown"
+  },
+  "badge": "listed",
+  "safetyCheck": {
+    "ranAt": "2026-11-08",
+    "checks": {
+      "whoIsBehind": {
+        "result": "pass",
+        "reason": "Run by Tidio, a company at 1301 Sansome Street, San Francisco, CA 94111, U.S.A..",
+        "evidence": [
+          {
+            "quote": "© 2026 Tidio",
+            "url": "https://www.tidio.com/contact-sales/?hs_track=navbar",
+            "checkedAt": "2026-11-08"
+          },
+          {
+            "quote": "Tidio LLC with registered office at 1301 Sansome Street (San Francisco, CA 94111 U.S.A.) and Tidio Poland Sp. z o.o. with its registered office in Szczecin, 81 Wojska Polskiego Street (70-481, Szczecin, Poland) are the joint controllers of your personal data processed in connection with use of our Services and other functionalities via this website (together referred to as “ Controller ” or “ Tidio ”, “we,” “us,” or “our” )",
+            "url": "https://www.tidio.com/privacy-policy/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "domainAge": {
+        "result": "pass",
+        "reason": "The website has been around since May 2005.",
+        "evidence": [
+          {
+            "url": "https://rdap.org/domain/tidio.com",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "privacyPolicy": {
+        "result": "pass",
+        "reason": "Has a full privacy policy that says what they do with your information.",
+        "evidence": [
+          {
+            "url": "https://www.tidio.com/privacy-policy/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "dataUse": {
+        "result": "unknown",
+        "reason": "We couldn't find whether it uses your information to make its AI better.",
+        "evidence": [
+          {
+            "quote": "Right to erasure\nThis is also known as ‘the right to be forgotten’ and, in simple terms, enables you to request the deletion or removal of your personal data where there’s no compelling reason for us to keep using it.",
+            "url": "https://www.tidio.com/privacy-policy/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "dataLocation": {
+        "result": "unknown",
+        "reason": "We couldn't find which country your information is kept in.",
+        "evidence": [
+          {
+            "url": "https://www.tidio.com/privacy-policy/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "pricingClarity": {
+        "result": "pass",
+        "reason": "Shows a clear monthly price.",
+        "evidence": [
+          {
+            "url": "https://www.tidio.com/pricing/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "securityBasics": {
+        "result": "pass",
+        "reason": "Your connection to this website is private (https).",
+        "evidence": [
+          {
+            "url": "https://www.tidio.com/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "redFlags": {
+        "result": "pass",
+        "reason": "No warning signs found. (We didn't check Google's list of unsafe websites.)",
+        "evidence": [
+          {
+            "url": "https://www.tidio.com/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      }
+    },
+    "redFlags": [],
+    "verdict": "held",
+    "warnings": [
+      "We couldn't find which country your information is kept in.",
+      "We couldn't find the name of the person who runs this company."
+    ]
+  },
+  "lastChecked": "2026-11-08",
+  "sources": [
+    "https://www.tidio.com/pricing/",
+    "https://www.tidio.com/contact-sales/?hs_track=navbar",
+    "https://www.tidio.com/privacy-policy/",
+    "https://www.tidio.com/integrations/"
+  ],
+  "needsVerification": [
+    "pricing.freeTier",
+    "pricing.contract",
+    "pricing.cancellation",
+    "setupMinutes",
+    "rulesFlags.recordsCalls",
+    "rulesFlags.announcesRecording",
+    "rulesFlags.hipaaReady",
+    "rulesFlags.outboundAiCalls",
+    "rulesFlags.personalizedPricing",
+    "description",
+    "setupMode",
+    "languages"
+  ]
+}

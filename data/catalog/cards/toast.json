@@ -1,0 +1,68 @@
+{
+  "input": {
+    "id": "toast",
+    "name": "Toast IQ",
+    "url": "https://pos.toasttab.com",
+    "category": "Restaurant POS",
+    "useCases": [
+      "inventory",
+      "marketing",
+      "staff-scheduling"
+    ],
+    "industries": [
+      "restaurant",
+      "cafe"
+    ],
+    "existingProduct": "Toast",
+    "sensitive": true,
+    "batch": 1
+  },
+  "collectedAt": "2026-11-08",
+  "pages": {
+    "home": {
+      "error": "http_403"
+    },
+    "pricing": {
+      "error": "http_403"
+    },
+    "features": {
+      "error": "http_403"
+    },
+    "integrations": {
+      "error": "http_403"
+    },
+    "help": {
+      "error": "http_403"
+    },
+    "privacy": {
+      "error": "http_403"
+    }
+  },
+  "ai": {
+    "ran": false,
+    "description": "unknown",
+    "plans": {
+      "small": "unknown",
+      "medium": "unknown",
+      "large": "unknown"
+    },
+    "planNotes": {
+      "small": "",
+      "medium": "",
+      "large": ""
+    },
+    "freeTier": "unknown",
+    "contract": "unknown",
+    "cancellation": "unknown",
+    "worksWith": [],
+    "setupMinutes": "unknown",
+    "setupMode": "unknown",
+    "languages": "unknown",
+    "recordsCalls": "unknown",
+    "announcesRecording": "unknown",
+    "hipaaReady": "unknown",
+    "outboundAiCalls": "unknown",
+    "personalizedPricing": "unknown",
+    "sharesOrSells": "unknown"
+  }
+}

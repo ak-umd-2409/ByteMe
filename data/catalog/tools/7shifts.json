@@ -1,0 +1,244 @@
+{
+  "id": "7shifts",
+  "name": "7shifts",
+  "vendor": {
+    "company": "7shifts",
+    "website": "https://www.7shifts.com",
+    "domain": "7shifts.com"
+  },
+  "description": "7shifts acts as the hub for the workflows behind your team, keeping key tasks connected in one place.",
+  "category": "Staff scheduling",
+  "useCases": [
+    "staff-scheduling"
+  ],
+  "industries": [
+    "restaurant",
+    "cafe"
+  ],
+  "pricing": {
+    "asOf": "Nov 2026",
+    "small": {
+      "monthlyUsd": "unknown",
+      "note": ""
+    },
+    "medium": {
+      "monthlyUsd": "unknown",
+      "note": ""
+    },
+    "large": {
+      "monthlyUsd": "unknown",
+      "note": ""
+    },
+    "freeTier": "unknown",
+    "contract": "unknown",
+    "cancellation": "unknown",
+    "pricingUrl": "https://www.7shifts.com/pricing/"
+  },
+  "worksWith": [],
+  "setupMinutes": "unknown",
+  "setupMode": "self_serve",
+  "languages": [
+    "English"
+  ],
+  "privacyCard": {
+    "trainsOnYourData": {
+      "answer": "anonymized",
+      "plain": "Uses your data to improve its AI, with names removed first.",
+      "quote": "We may also use Customer Data on an aggregated and non-identifiable basis to improve and enhance our product and service offerings.",
+      "sourceUrl": "https://www.7shifts.com/privacy-policy/"
+    },
+    "canDeleteData": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm whether you can delete your data.",
+      "quote": null,
+      "sourceUrl": null
+    },
+    "whereStored": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm where your data is stored.",
+      "quote": null,
+      "sourceUrl": null
+    },
+    "sharesOrSells": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm whether it sells or shares your data.",
+      "quote": null,
+      "sourceUrl": null
+    },
+    "securityCertification": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm a security certification.",
+      "quote": null,
+      "sourceUrl": null
+    }
+  },
+  "rulesFlags": {
+    "recordsCalls": "unknown",
+    "announcesRecording": "unknown",
+    "hipaaReady": "unknown",
+    "outboundAiCalls": "unknown",
+    "personalizedPricing": "unknown"
+  },
+  "badge": "listed",
+  "safetyCheck": {
+    "ranAt": "2026-11-08",
+    "checks": {
+      "whoIsBehind": {
+        "result": "unknown",
+        "reason": "We couldn't find an address for 7shifts.",
+        "evidence": [
+          {
+            "quote": "7shifts © 2026",
+            "url": "https://www.7shifts.com/blog/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "domainAge": {
+        "result": "pass",
+        "reason": "The website has been around since September 2005.",
+        "evidence": [
+          {
+            "url": "https://rdap.org/domain/7shifts.com",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "privacyPolicy": {
+        "result": "pass",
+        "reason": "Has a full privacy policy that says what they do with your information.",
+        "evidence": [
+          {
+            "url": "https://www.7shifts.com/privacy-policy/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "dataUse": {
+        "result": "unknown",
+        "reason": "The privacy policy isn't clear about whether it uses your information to make its AI better. A person needs to read it.",
+        "evidence": [
+          {
+            "quote": "We may also use Customer Data on an aggregated and non-identifiable basis to improve and enhance our product and service offerings.",
+            "url": "https://www.7shifts.com/privacy-policy/",
+            "checkedAt": "2026-11-08"
+          },
+          {
+            "url": "https://www.7shifts.com/privacy-policy/",
+            "checkedAt": "2026-11-08",
+            "quote": "Platform Hire\nHiring\nDocument Storage\nOnboarding\nTrain\nAI Course Builder\nMicrolearning\nDistribution\nSchedule\nScheduling\nTime Clocking\nLabor Compliance\nPay\nPayroll\nOn-Demand Pay\nTip Management\nRetain\nTeam Performance\nCommunications\nManager Log Book\nManage your team's journey in one place\nHire\nFind and onboard new hires faster."
+          },
+          {
+            "url": "https://www.7shifts.com/privacy-policy/",
+            "checkedAt": "2026-11-08",
+            "quote": "Train\nBuild consistent skills across roles."
+          },
+          {
+            "url": "https://www.7shifts.com/privacy-policy/",
+            "checkedAt": "2026-11-08",
+            "quote": "Hiring →\nDocument Storage →\nOnboarding →\nAI Course Builder →\nMicrolearning →\nDistribution →\nScheduling →\nTime Clocking →\nLabor Compliance →\nPayroll →\nOn-Demand Pay →\nTip Management →\nTeam Performance →\nCommunications →\nManager Log Book →\nPricing\nBuilt for Bakeries\nPlan early shifts, labor, and team coverage with confidence\nBars & Breweries\nManage late-night shifts, tips, and labor compliance\nCafes & Coffee Shops\nKeep small, fast-moving teams running smoothly\nCatering\nCoordinate event-based shifts and on-the-go teams\nJuice Bars\nSchedule lean teams and manage tips without extra admin\nPizzerias\nCoordinate dine-in, delivery, and kitchen teams in one place\nPubs\nManage weekend rushes, rotating teams, and compliance\nFull Service\nManage FOH and BOH schedules with less back-and-forth\nQuick Service\nKeep high-turnover teams scheduled, trained, and ready\nFranchises\nStandardize team operations across every location\nMulti-Locations\nManage every restaurant location like you're standing in it\nIntegrations\nResources Templates and Tools\nDownloadable and interactive tools to help run your restaurant efficiently\nFood Runner\nSign up for our monthly (unboring) newsletter\nRestaurant Data\nFacts and figures on industry standards\nCustomer Stories\nGet to know the restaurants we work with\nPodcast\nRestaurant management tips from industry insiders\nBlog\nRead about trends, challenges and solutions\nSupport\nYour knowledge base for everything 7shifts\nAcademy\nGain certification with our free online courses\nData Study What Restaurant Employees Want\nLearn More\nGet started, it's free!"
+          },
+          {
+            "url": "https://www.7shifts.com/privacy-policy/",
+            "checkedAt": "2026-11-08",
+            "quote": "Login\nHire\nHiring\nDocument Storage\nOnboarding\nTrain\nAI Course Builder\nMicrolearning\nDistribution\nSchedule\nScheduling\nTime Clocking\nLabor Compliance\nPay\nPayroll\nOn-Demand Pay\nTip Management\nRetain\nTeam Performance\nCommunications\nManager Log Book\nManage your team's journey in one place\nHire\nFind and onboard new hires faster."
+          },
+          {
+            "url": "https://www.7shifts.com/privacy-policy/",
+            "checkedAt": "2026-11-08",
+            "quote": "Train\nBuild consistent skills across roles."
+          },
+          {
+            "url": "https://www.7shifts.com/privacy-policy/",
+            "checkedAt": "2026-11-08",
+            "quote": "Hiring →\nDocument Storage →\nOnboarding →\nAI Course Builder →\nMicrolearning →\nDistribution →\nScheduling →\nTime Clocking →\nLabor Compliance →\nPayroll →\nOn-Demand Pay →\nTip Management →\nTeam Performance →\nCommunications →\nManager Log Book →\nBakeries\nPlan early shifts, labor, and team coverage with confidence\nBars & Breweries\nManage late-night shifts, tips, and labor compliance\nCafes & Coffee Shops\nKeep small, fast-moving teams running smoothly\nCatering\nCoordinate event-based shifts and on-the-go teams\nJuice Bars\nSchedule lean teams and manage tips without extra admin\nPizzerias\nCoordinate dine-in, delivery, and kitchen teams in one place\nPubs\nManage weekend rushes, rotating teams, and compliance\nFull Service\nManage FOH and BOH schedules with less back-and-forth\nQuick Service\nKeep high-turnover teams scheduled, trained, and ready\nFranchises\nStandardize team operations across every location\nMulti-Locations\nManage every restaurant location like you're standing in it\nTemplates and Tools\nDownloadable and interactive tools to help run your restaurant efficiently\nFood Runner\nSign up for our monthly (unboring) newsletter\nRestaurant Data\nFacts and figures on industry standards\nCustomer Stories\nGet to know the restaurants we work with\nPodcast\nRestaurant management tips from industry insiders\nBlog\nRead about trends, challenges and solutions\nSupport\nYour knowledge base for everything 7shifts\nAcademy\nGain certification with our free online courses\nData Study What Restaurant Employees Want\nLearn More\nPrivacy Policy and Privacy Notice\nEnglish Français Español\nJump to:\nPrivacy Policy\nPrivacy Notice\n7shifts Privacy Policy\nINTRODUCTION:\n7shifts Employee Scheduling Software Inc."
+          },
+          {
+            "url": "https://www.7shifts.com/privacy-policy/",
+            "checkedAt": "2026-11-08",
+            "quote": "The primary purpose of the call recording is to train our customer-service staff and to improve the quality of the services and products we provide."
+          },
+          {
+            "url": "https://www.7shifts.com/privacy-policy/",
+            "checkedAt": "2026-11-08",
+            "quote": "We collect this personal information to provide access to the 7shifts services, and for our own purposes (including but not limited to training, product improvement, and data analytics purposes) through our website, product, customer service, and marketing activities."
+          },
+          {
+            "url": "https://www.7shifts.com/privacy-policy/",
+            "checkedAt": "2026-11-08",
+            "quote": "Go to Home g h\nGo to Product g p\nGo to Pricing g m\nGo to Built For g b\nGo to Integrations g i\nGo to Resources g r\nRestaurant HR Platform\nProducts\nRestaurant Scheduling\nMobile Scheduling\nTeam Communication\nManager Log Book\nTime Clocking\nTeam Engagement\nTask Management\nLabor Compliance\nOperations Overview\nDocument Storage\nPerformance Management\nEmployee Onboarding\nEmployee Training\nHiring\nPayroll\nTip Management\nTip Pooling\nCompany\nAbout Us\nCustomers\nCompare\nCareers\nBecome A Partner\nAffiliates\nMedia Kit\nLegal\nPricing\nSitemap\nContact Sales\nResources\nBlog\nResource Center\nRestaurant Guides\nRestaurant Data\nRestaurant Podcast\nAcademy\nTemplates\nLabor Savings\nIntegrations\nLabor Cost Calculator\nROI Calculator\nBuilt For\nQuick Service\nFull Service\nCafes & Coffee Shops\nBars & Breweries\nPizzerias\nJuice Bars\nPubs\nBakeries\nCatering\nFranchises\nSupport\nHelp Center\nPartner API\nContact Customer Support\nCustomer Stories\nJamba Juice\ngusto!"
+          }
+        ]
+      },
+      "dataLocation": {
+        "result": "unknown",
+        "reason": "We couldn't find which country your information is kept in.",
+        "evidence": [
+          {
+            "url": "https://www.7shifts.com/privacy-policy/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "pricingClarity": {
+        "result": "fail",
+        "reason": "No price on the website. You have to talk to their sales team.",
+        "evidence": [
+          {
+            "url": "https://www.7shifts.com/pricing/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "securityBasics": {
+        "result": "pass",
+        "reason": "Your connection to this website is private (https).",
+        "evidence": [
+          {
+            "url": "https://www.7shifts.com/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "redFlags": {
+        "result": "pass",
+        "reason": "No warning signs found. (We didn't check Google's list of unsafe websites.)",
+        "evidence": [
+          {
+            "url": "https://www.7shifts.com/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      }
+    },
+    "redFlags": [],
+    "verdict": "held",
+    "warnings": [
+      "We couldn't find which country your information is kept in.",
+      "No price on the website. You have to talk to their sales team.",
+      "We couldn't find the name of the person who runs this company.",
+      "This tool learns from how people use it. It may use your customers' calls or messages to get better, but it removes names and phone numbers first. Good to know: don't share card numbers or health details with it."
+    ]
+  },
+  "lastChecked": "2026-11-08",
+  "sources": [
+    "https://www.7shifts.com/",
+    "https://www.7shifts.com/blog/",
+    "https://www.7shifts.com/privacy-policy/"
+  ],
+  "needsVerification": [
+    "pricing.small.monthlyUsd",
+    "pricing.medium.monthlyUsd",
+    "pricing.large.monthlyUsd",
+    "pricing.freeTier",
+    "pricing.contract",
+    "pricing.cancellation",
+    "setupMinutes",
+    "rulesFlags.recordsCalls",
+    "rulesFlags.announcesRecording",
+    "rulesFlags.hipaaReady",
+    "rulesFlags.outboundAiCalls",
+    "rulesFlags.personalizedPricing",
+    "languages"
+  ]
+}

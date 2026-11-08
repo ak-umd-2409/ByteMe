@@ -1,0 +1,241 @@
+{
+  "id": "jotform",
+  "name": "Jotform AI",
+  "vendor": {
+    "company": "Jotform Inc.",
+    "website": "https://www.jotform.com",
+    "domain": "jotform.com"
+  },
+  "description": "Go from busywork to less work with powerful forms that use conditional logic, accept payments, generate reports, and automate workflows.",
+  "category": "Forms",
+  "useCases": [
+    "admin-paperwork",
+    "booking"
+  ],
+  "industries": [
+    "any"
+  ],
+  "pricing": {
+    "asOf": "Nov 2026",
+    "small": {
+      "monthlyUsd": "unknown",
+      "note": ""
+    },
+    "medium": {
+      "monthlyUsd": "unknown",
+      "note": ""
+    },
+    "large": {
+      "monthlyUsd": "unknown",
+      "note": ""
+    },
+    "freeTier": true,
+    "contract": "unknown",
+    "cancellation": "cancel your subscription within 30 days of payment",
+    "pricingUrl": "https://www.jotform.com/pricing/"
+  },
+  "worksWith": [
+    {
+      "product": "Google Sheets",
+      "type": "native"
+    },
+    {
+      "product": "Mailchimp",
+      "type": "native"
+    },
+    {
+      "product": "Salesforce",
+      "type": "native"
+    },
+    {
+      "product": "Slack",
+      "type": "native"
+    },
+    {
+      "product": "Stripe",
+      "type": "native"
+    },
+    {
+      "product": "PayPal",
+      "type": "native"
+    },
+    {
+      "product": "Microsoft Excel",
+      "type": "native"
+    },
+    {
+      "product": "Claude",
+      "type": "native"
+    }
+  ],
+  "setupMinutes": "unknown",
+  "setupMode": "needs_help",
+  "languages": [
+    "English"
+  ],
+  "privacyCard": {
+    "trainsOnYourData": {
+      "answer": "yes",
+      "plain": "Uses your data to train its AI.",
+      "quote": "We use your information, including certain form data, for the following limited purposes :",
+      "sourceUrl": "https://www.jotform.com/privacy/"
+    },
+    "canDeleteData": {
+      "answer": "yes",
+      "plain": "You can delete your data.",
+      "quote": "Requests to Delete, Amend or Withdraw Consent – Non-EEA, UK or Australian Residents",
+      "sourceUrl": "https://www.jotform.com/privacy/"
+    },
+    "whereStored": {
+      "answer": "unknown",
+      "plain": "We couldn't confirm where your data is stored.",
+      "quote": null,
+      "sourceUrl": null
+    },
+    "sharesOrSells": {
+      "answer": "no",
+      "plain": "Does not sell or share your data.",
+      "quote": "We don’t sell Customers’ form data, nor do we make it available to third parties without the Customer’s permission.",
+      "sourceUrl": "https://www.jotform.com/privacy/"
+    },
+    "securityCertification": {
+      "answer": "PCI DSS Level 1 Compliant Service Provider",
+      "plain": "Security checked by an outside company: PCI DSS Level 1 Compliant Service Provider.",
+      "quote": "Jotform Inc. is certified as a PCI DSS Level 1 Compliant Service Provider, and we perform annual audits to ensure that our handling of your credit card information aligns with industry guidelines.",
+      "sourceUrl": "https://www.jotform.com/privacy/"
+    }
+  },
+  "rulesFlags": {
+    "recordsCalls": "unknown",
+    "announcesRecording": "unknown",
+    "hipaaReady": true,
+    "outboundAiCalls": "unknown",
+    "personalizedPricing": "unknown"
+  },
+  "badge": "listed",
+  "safetyCheck": {
+    "ranAt": "2026-11-08",
+    "checks": {
+      "whoIsBehind": {
+        "result": "pass",
+        "reason": "Run by Jotform Inc., a company at 4 Embarcadero Center, Suite 780, San Francisco CA 94111.",
+        "evidence": [
+          {
+            "quote": "© 2026 Jotform Inc. The name \"Jotform\" and the Jotform logo are registered trademarks of Jotform Inc.",
+            "url": "https://www.jotform.com/ai/data-assistant/",
+            "checkedAt": "2026-11-08"
+          },
+          {
+            "quote": "4 Embarcadero Center, Suite 780, San Francisco CA 94111",
+            "url": "https://www.jotform.com/ai/data-assistant/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "domainAge": {
+        "result": "pass",
+        "reason": "The website has been around since November 2005.",
+        "evidence": [
+          {
+            "url": "https://rdap.org/domain/jotform.com",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "privacyPolicy": {
+        "result": "pass",
+        "reason": "Has a full privacy policy that says what they do with your information.",
+        "evidence": [
+          {
+            "url": "https://www.jotform.com/privacy/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "dataUse": {
+        "result": "fail",
+        "reason": "It may use your customers' information to make its AI better, and we found no way to stop it.",
+        "evidence": [
+          {
+            "quote": "We use your information, including certain form data, for the following limited purposes :",
+            "url": "https://www.jotform.com/privacy/",
+            "checkedAt": "2026-11-08"
+          },
+          {
+            "quote": "Requests to Delete, Amend or Withdraw Consent – Non-EEA, UK or Australian Residents",
+            "url": "https://www.jotform.com/privacy/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "dataLocation": {
+        "result": "unknown",
+        "reason": "We couldn't find which country your information is kept in.",
+        "evidence": [
+          {
+            "url": "https://www.jotform.com/privacy/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "pricingClarity": {
+        "result": "fail",
+        "reason": "No price on the website. You have to talk to their sales team.",
+        "evidence": [
+          {
+            "url": "https://www.jotform.com/pricing/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "securityBasics": {
+        "result": "pass",
+        "reason": "Your connection to this website is private (https).",
+        "evidence": [
+          {
+            "url": "https://www.jotform.com/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      },
+      "redFlags": {
+        "result": "pass",
+        "reason": "No warning signs found. (We didn't check Google's list of unsafe websites.)",
+        "evidence": [
+          {
+            "url": "https://www.jotform.com/",
+            "checkedAt": "2026-11-08"
+          }
+        ]
+      }
+    },
+    "redFlags": [],
+    "verdict": "held",
+    "warnings": [
+      "We couldn't find which country your information is kept in.",
+      "No price on the website. You have to talk to their sales team.",
+      "We couldn't find the name of the person who runs this company."
+    ]
+  },
+  "lastChecked": "2026-11-08",
+  "sources": [
+    "https://www.jotform.com/",
+    "https://www.jotform.com/pricing/",
+    "https://www.jotform.com/privacy/",
+    "https://www.jotform.com/ai/data-assistant/",
+    "https://www.jotform.com/integrations/"
+  ],
+  "needsVerification": [
+    "pricing.small.monthlyUsd",
+    "pricing.medium.monthlyUsd",
+    "pricing.large.monthlyUsd",
+    "pricing.contract",
+    "setupMinutes",
+    "rulesFlags.recordsCalls",
+    "rulesFlags.announcesRecording",
+    "rulesFlags.outboundAiCalls",
+    "rulesFlags.personalizedPricing",
+    "setupMode",
+    "languages"
+  ]
+}
