@@ -78,16 +78,16 @@
   ],
   "privacyCard": {
     "trainsOnYourData": {
-      "answer": "unknown",
-      "plain": "We couldn't confirm whether it uses your data to train AI.",
-      "quote": null,
-      "sourceUrl": null
+      "answer": "no",
+      "plain": "Does not use your data to train AI.",
+      "quote": "With Jasper, your data stays yours, and is never used for training purposes.",
+      "sourceUrl": "https://www.jasper.ai/enterprise"
     },
     "canDeleteData": {
-      "answer": "unknown",
-      "plain": "We couldn't confirm whether you can delete your data.",
-      "quote": null,
-      "sourceUrl": null
+      "answer": "yes",
+      "plain": "You can delete your data.",
+      "quote": "You have the right to ask Us to delete or remove Personal Data when there is no good reason for Us to continue processing it.",
+      "sourceUrl": "https://www.jasper.ai/legal/privacy"
     },
     "whereStored": {
       "answer": "unknown",
@@ -161,10 +161,16 @@
         ]
       },
       "dataUse": {
-        "result": "unknown",
-        "reason": "We couldn't find whether it uses your information to make its AI better or whether you can delete your information.",
+        "result": "pass",
+        "reason": "Doesn't use your information to make its AI better. You can delete your information.",
         "evidence": [
           {
+            "quote": "With Jasper, your data stays yours, and is never used for training purposes.",
+            "url": "https://www.jasper.ai/enterprise",
+            "checkedAt": "2026-11-08"
+          },
+          {
+            "quote": "You have the right to ask Us to delete or remove Personal Data when there is no good reason for Us to continue processing it.",
             "url": "https://www.jasper.ai/legal/privacy",
             "checkedAt": "2026-11-08"
           }
@@ -212,7 +218,7 @@
       }
     },
     "redFlags": [],
-    "verdict": "held",
+    "verdict": "ready",
     "warnings": [
       "We couldn't find which country your information is kept in."
     ]
@@ -222,6 +228,8 @@
     "https://www.jasper.ai/",
     "https://www.jasper.ai/pricing",
     "https://www.jasper.ai/company",
+    "https://www.jasper.ai/enterprise",
+    "https://www.jasper.ai/legal/privacy",
     "https://www.jasper.ai/integrations"
   ],
   "needsVerification": [

@@ -82,16 +82,16 @@
   ],
   "privacyCard": {
     "trainsOnYourData": {
-      "answer": "unknown",
-      "plain": "We couldn't confirm whether it uses your data to train AI.",
-      "quote": null,
-      "sourceUrl": null
+      "answer": "opt-in",
+      "plain": "Uses your data to train AI only if you agree.",
+      "quote": "Notion AI will not use your data to train our models unless you opt in to a request to share your data.",
+      "sourceUrl": "https://www.notion.com/pricing"
     },
     "canDeleteData": {
-      "answer": "unknown",
-      "plain": "We couldn't confirm whether you can delete your data.",
-      "quote": null,
-      "sourceUrl": null
+      "answer": "yes",
+      "plain": "You can delete your data.",
+      "quote": "Request Deletion of your information, subject to certain exceptions prescribed by law.",
+      "sourceUrl": "https://www.notion.com/trust/privacy-policy"
     },
     "whereStored": {
       "answer": "unknown",
@@ -124,12 +124,17 @@
     "ranAt": "2026-11-08",
     "checks": {
       "whoIsBehind": {
-        "result": "unknown",
-        "reason": "We couldn't find an address for Notion Labs, Inc.",
+        "result": "pass",
+        "reason": "Run by Notion Labs, Inc., a company at 685 Market St..",
         "evidence": [
           {
             "quote": "© 2026 Notion Labs, Inc.",
             "url": "https://www.notion.com/about",
+            "checkedAt": "2026-11-08"
+          },
+          {
+            "quote": "685 Market St.",
+            "url": "https://www.notion.com/trust/privacy-policy",
             "checkedAt": "2026-11-08"
           }
         ]
@@ -155,10 +160,16 @@
         ]
       },
       "dataUse": {
-        "result": "unknown",
-        "reason": "We couldn't find whether it uses your information to make its AI better or whether you can delete your information.",
+        "result": "pass",
+        "reason": "Only uses your information to make its AI better if you say yes. You can delete your information.",
         "evidence": [
           {
+            "quote": "Notion AI will not use your data to train our models unless you opt in to a request to share your data.",
+            "url": "https://www.notion.com/pricing",
+            "checkedAt": "2026-11-08"
+          },
+          {
+            "quote": "Request Deletion of your information, subject to certain exceptions prescribed by law.",
             "url": "https://www.notion.com/trust/privacy-policy",
             "checkedAt": "2026-11-08"
           }
@@ -206,7 +217,7 @@
       }
     },
     "redFlags": [],
-    "verdict": "held",
+    "verdict": "ready",
     "warnings": [
       "We couldn't find which country your information is kept in.",
       "We couldn't find the name of the person who runs this company."
@@ -217,6 +228,7 @@
     "https://www.notion.com/",
     "https://www.notion.com/pricing",
     "https://www.notion.com/about",
+    "https://www.notion.com/trust/privacy-policy",
     "https://www.notion.com/connections"
   ],
   "needsVerification": [

@@ -51,10 +51,10 @@
   ],
   "privacyCard": {
     "trainsOnYourData": {
-      "answer": "unknown",
-      "plain": "We couldn't confirm whether it uses your data to train AI.",
-      "quote": null,
-      "sourceUrl": null
+      "answer": "no",
+      "plain": "Does not use your data to train AI.",
+      "quote": "We do not use Customer Data, including but not limited to user inputs, activity, or any content provided through our platform, to train, refine, or improve our AI models.",
+      "sourceUrl": "https://www.proposify.com/company/terms-of-services"
     },
     "canDeleteData": {
       "answer": "yes",
@@ -134,9 +134,14 @@
         ]
       },
       "dataUse": {
-        "result": "unknown",
-        "reason": "We couldn't find whether it uses your information to make its AI better.",
+        "result": "pass",
+        "reason": "Doesn't use your information to make its AI better. You can delete your information.",
         "evidence": [
+          {
+            "quote": "We do not use Customer Data, including but not limited to user inputs, activity, or any content provided through our platform, to train, refine, or improve our AI models.",
+            "url": "https://www.proposify.com/company/terms-of-services",
+            "checkedAt": "2026-11-08"
+          },
           {
             "quote": "In your account, you can review, update, delete, or correct your personal information on file with us at any time.",
             "url": "https://www.proposify.com/company/privacy",
@@ -187,7 +192,7 @@
       }
     },
     "redFlags": [],
-    "verdict": "held",
+    "verdict": "ready",
     "warnings": []
   },
   "lastChecked": "2026-11-08",
@@ -195,6 +200,7 @@
     "https://www.proposify.com/",
     "https://www.proposify.com/pricing",
     "https://www.proposify.com/company/about",
+    "https://www.proposify.com/company/terms-of-services",
     "https://www.proposify.com/company/privacy"
   ],
   "needsVerification": [

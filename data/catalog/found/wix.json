@@ -1,0 +1,18 @@
+[
+  {
+    "field": "trainsOnYourData",
+    "answer": "yes",
+    "quote": "The data sources detailed above have been collected by Wix since its incorporation on an ongoing basis in order to provide, maintain and improve our services to our users, including by developing, improving, and training Wix’s software tools, including artificial intelligence and machine learning models.",
+    "url": "https://support.wix.com/en/article/wixs-generative-ai-policy",
+    "foundBy": "Claude (drafted for Rishabh to check)",
+    "foundAt": "2026-11-08"
+  },
+  {
+    "field": "canDeleteData",
+    "answer": "yes",
+    "quote": "Right to Delete Your Information: Upon your request, we will delete the personal information we have collected from you, subject to certain legally permissible exceptions.",
+    "url": "https://www.wix.com/about/privacy",
+    "foundBy": "Claude (drafted for Rishabh to check)",
+    "foundAt": "2026-11-08"
+  }
+]

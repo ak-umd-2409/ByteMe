@@ -1,0 +1,18 @@
+[
+  {
+    "field": "address",
+    "answer": "One Microsoft Way, Redmond, Washington 98052",
+    "quote": "Microsoft Privacy, Microsoft Corporation, One Microsoft Way, Redmond, Washington 98052, USA.",
+    "url": "https://www.microsoft.com/en-us/privacy/privacystatement",
+    "foundBy": "Claude (drafted for Rishabh to check)",
+    "foundAt": "2026-11-08"
+  },
+  {
+    "field": "trainsOnYourData",
+    "answer": "no",
+    "quote": "Prompts and responses are not used to train the underlying large language models.",
+    "url": "https://www.microsoft.com/en-us/copilot/pricing/business",
+    "foundBy": "Claude (drafted for Rishabh to check)",
+    "foundAt": "2026-11-08"
+  }
+]

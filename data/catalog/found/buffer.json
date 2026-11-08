@@ -6,5 +6,13 @@
     "url": "https://buffer.com/legal",
     "foundBy": "Claude (drafted for Rishabh to check)",
     "foundAt": "2026-11-08"
+  },
+  {
+    "field": "canDeleteData",
+    "answer": "yes",
+    "quote": "A user has the right to request that we delete all of their personal data by deleting their Buffer account.",
+    "url": "https://buffer.com/legal",
+    "foundBy": "Claude (drafted for Rishabh to check)",
+    "foundAt": "2026-11-08"
   }
 ]

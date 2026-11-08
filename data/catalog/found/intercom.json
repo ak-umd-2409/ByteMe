@@ -1,0 +1,18 @@
+[
+  {
+    "field": "trainsOnYourData",
+    "answer": "opt-out",
+    "quote": "Fin can use anonymized customer data for model fine-tuning, and you can opt out at any time, with data deleted within 30 days.",
+    "url": "https://www.intercom.com/security",
+    "foundBy": "Claude (drafted for Rishabh to check)",
+    "foundAt": "2026-11-08"
+  },
+  {
+    "field": "canDeleteData",
+    "answer": "yes",
+    "quote": "You can ask us to delete the Personal Information that we have collected from you.",
+    "url": "https://www.intercom.com/legal/privacy",
+    "foundBy": "Claude (drafted for Rishabh to check)",
+    "foundAt": "2026-11-08"
+  }
+]

@@ -75,16 +75,16 @@
   ],
   "privacyCard": {
     "trainsOnYourData": {
-      "answer": "unknown",
-      "plain": "We couldn't confirm whether it uses your data to train AI.",
-      "quote": null,
-      "sourceUrl": null
+      "answer": "opt-out",
+      "plain": "Uses your data to improve its AI unless you turn it off.",
+      "quote": "Fin can use anonymized customer data for model fine-tuning, and you can opt out at any time, with data deleted within 30 days.",
+      "sourceUrl": "https://www.intercom.com/security"
     },
     "canDeleteData": {
-      "answer": "unknown",
-      "plain": "We couldn't confirm whether you can delete your data.",
-      "quote": null,
-      "sourceUrl": null
+      "answer": "yes",
+      "plain": "You can delete your data.",
+      "quote": "You can ask us to delete the Personal Information that we have collected from you.",
+      "sourceUrl": "https://www.intercom.com/legal/privacy"
     },
     "whereStored": {
       "answer": "United States",
@@ -121,7 +121,7 @@
         "reason": "Run by Fin, a company at 55 2nd Street, 4th Fl., San Francisco, CA 94105, USA.",
         "evidence": [
           {
-            "quote": "The company is renamed from Intercom to Fin.",
+            "quote": "Fin is the Customer Agent company delivering perfect customer experiences – from support to sales to commerce.",
             "url": "https://fin.ai/about",
             "checkedAt": "2026-11-08"
           },
@@ -153,10 +153,16 @@
         ]
       },
       "dataUse": {
-        "result": "unknown",
-        "reason": "We couldn't find whether it uses your information to make its AI better or whether you can delete your information.",
+        "result": "pass",
+        "reason": "Uses your information to make its AI better, but you can turn this off. You can delete your information.",
         "evidence": [
           {
+            "quote": "Fin can use anonymized customer data for model fine-tuning, and you can opt out at any time, with data deleted within 30 days.",
+            "url": "https://www.intercom.com/security",
+            "checkedAt": "2026-11-08"
+          },
+          {
+            "quote": "You can ask us to delete the Personal Information that we have collected from you.",
             "url": "https://www.intercom.com/legal/privacy",
             "checkedAt": "2026-11-08"
           }
@@ -205,9 +211,10 @@
       }
     },
     "redFlags": [],
-    "verdict": "held",
+    "verdict": "ready",
     "warnings": [
-      "We couldn't find the name of the person who runs this company."
+      "We couldn't find the name of the person who runs this company.",
+      "Turn this setting off after you sign up. This tool may use your customers' calls or messages to get better. You can stop this in its settings."
     ]
   },
   "lastChecked": "2026-11-08",
@@ -216,6 +223,7 @@
     "https://www.intercom.com/pricing",
     "https://www.intercom.com/helpdesk/help-center",
     "https://fin.ai/about",
+    "https://www.intercom.com/security",
     "https://www.intercom.com/legal/privacy",
     "https://www.intercom.com/integrations"
   ],

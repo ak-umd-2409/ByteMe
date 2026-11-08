@@ -1,0 +1,18 @@
+[
+  {
+    "field": "address",
+    "answer": "800 Boylston Street, Suite 2475",
+    "quote": "800 Boylston Street, Suite 2475",
+    "url": "https://www.semrush.com/company/legal/privacy-policy/",
+    "foundBy": "Claude (drafted for Rishabh to check)",
+    "foundAt": "2026-11-08"
+  },
+  {
+    "field": "trainsOnYourData",
+    "answer": "no",
+    "quote": "Semrush does not train or develop its models, and does not allow its third-party providers to train or develop its models on User Input.",
+    "url": "https://www.semrush.com/company/legal/semrush-artificial-intelligence-services-terms/",
+    "foundBy": "Claude (drafted for Rishabh to check)",
+    "foundAt": "2026-11-08"
+  }
+]

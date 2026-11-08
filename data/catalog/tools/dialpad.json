@@ -72,10 +72,10 @@
   ],
   "privacyCard": {
     "trainsOnYourData": {
-      "answer": "unknown",
-      "plain": "We couldn't confirm whether it uses your data to train AI.",
-      "quote": null,
-      "sourceUrl": null
+      "answer": "opt-out",
+      "plain": "Uses your data to improve its AI unless you turn it off.",
+      "quote": "The AI Training section of Dialpad’s Privacy Policy explains in straightforward language how customer data processed through Dialpad’s AI products is used to improve the services—and how any customer, from a large company to an individual user, can opt out of this usage.",
+      "sourceUrl": "https://www.dialpad.com/blog/how-dialpadgpt-keeps-your-data-secure/"
     },
     "canDeleteData": {
       "answer": "yes",
@@ -114,12 +114,17 @@
     "ranAt": "2026-11-08",
     "checks": {
       "whoIsBehind": {
-        "result": "unknown",
-        "reason": "We couldn't find an address for Dialpad, Inc.",
+        "result": "pass",
+        "reason": "Run by Dialpad, Inc., a company at 2700 Camino Ramon, Suite 490.",
         "evidence": [
           {
             "quote": "© 2026 DIALPAD, INC.",
             "url": "https://www.dialpad.com/about-us/",
+            "checkedAt": "2026-11-08"
+          },
+          {
+            "quote": "2700 Camino Ramon, Suite 490",
+            "url": "https://www.dialpad.com/legal/",
             "checkedAt": "2026-11-08"
           },
           {
@@ -150,9 +155,14 @@
         ]
       },
       "dataUse": {
-        "result": "unknown",
-        "reason": "We couldn't find whether it uses your information to make its AI better.",
+        "result": "pass",
+        "reason": "Uses your information to make its AI better, but you can turn this off. You can delete your information.",
         "evidence": [
+          {
+            "quote": "The AI Training section of Dialpad’s Privacy Policy explains in straightforward language how customer data processed through Dialpad’s AI products is used to improve the services—and how any customer, from a large company to an individual user, can opt out of this usage.",
+            "url": "https://www.dialpad.com/blog/how-dialpadgpt-keeps-your-data-secure/",
+            "checkedAt": "2026-11-08"
+          },
           {
             "quote": "We’ll retain data until you choose to delete it.",
             "url": "https://www.dialpad.com/trust/",
@@ -203,14 +213,17 @@
       }
     },
     "redFlags": [],
-    "verdict": "held",
-    "warnings": []
+    "verdict": "ready",
+    "warnings": [
+      "Turn this setting off after you sign up. This tool may use your customers' calls or messages to get better. You can stop this in its settings."
+    ]
   },
   "lastChecked": "2026-11-08",
   "sources": [
     "https://www.dialpad.com/",
     "https://www.dialpad.com/pricing/",
     "https://www.dialpad.com/about-us/",
+    "https://www.dialpad.com/blog/how-dialpadgpt-keeps-your-data-secure/",
     "https://www.dialpad.com/trust/",
     "https://www.dialpad.com/ai-contact-center/",
     "https://ecosystem.dialpad.com/"

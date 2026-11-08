@@ -18,8 +18,8 @@
   "pricing": {
     "asOf": "Nov 2026",
     "small": {
-      "monthlyUsd": "unknown",
-      "note": ""
+      "monthlyUsd": 30,
+      "note": "Cheapest paid plan"
     },
     "medium": {
       "monthlyUsd": "unknown",
@@ -30,16 +30,11 @@
       "note": ""
     },
     "freeTier": "unknown",
-    "contract": "unknown",
+    "contract": "annual",
     "cancellation": "unknown",
     "pricingUrl": "https://www.grammarly.com/plans"
   },
-  "worksWith": [
-    {
-      "product": "Microsoft Teams",
-      "type": "native"
-    }
-  ],
+  "worksWith": [],
   "setupMinutes": "unknown",
   "setupMode": "needs_help",
   "languages": [
@@ -52,10 +47,10 @@
   ],
   "privacyCard": {
     "trainsOnYourData": {
-      "answer": "unknown",
-      "plain": "We couldn't confirm whether it uses your data to train AI.",
-      "quote": null,
-      "sourceUrl": null
+      "answer": "opt-out",
+      "plain": "Uses your data to improve its AI unless you turn it off.",
+      "quote": "The Product Improvement and Training control allows users of Grammarly Free, Premium, and single-user Pro accounts to opt out of allowing us to use their content, including content processed by Grammarly Go, to train our models and improve our product for everyone.",
+      "sourceUrl": "https://support.grammarly.com/hc/en-us/articles/25555503115277-Product-Improvement-and-Training-Control"
     },
     "canDeleteData": {
       "answer": "yes",
@@ -70,10 +65,10 @@
       "sourceUrl": null
     },
     "sharesOrSells": {
-      "answer": "yes",
-      "plain": "May sell or share your data.",
-      "quote": "These activities–disclosing unique IDs and disclosing data through Cookies–may constitute “targeted advertising”, “sharing”, or “selling” under certain privacy laws, and depending on where you live, we may require your consent or you may be able to opt out of such activities.",
-      "sourceUrl": "https://superhuman.com/legal/privacy-policy"
+      "answer": "unknown",
+      "plain": "We couldn't confirm whether it sells or shares your data.",
+      "quote": null,
+      "sourceUrl": null
     },
     "securityCertification": {
       "answer": "unknown",
@@ -94,12 +89,17 @@
     "ranAt": "2026-11-08",
     "checks": {
       "whoIsBehind": {
-        "result": "unknown",
-        "reason": "We couldn't find an address for Superhuman Platform.",
+        "result": "pass",
+        "reason": "Run by Superhuman Platform, a company at 2261 Market Street STE 85232, San Francisco, CA 94114.",
         "evidence": [
           {
             "quote": "2026 © Superhuman Platform",
             "url": "https://www.grammarly.com/about",
+            "checkedAt": "2026-11-08"
+          },
+          {
+            "quote": "You may give notice to Superhuman at the following address: Superhuman Platform Inc., 2261 Market Street STE 85232, San Francisco, CA 94114, United States.",
+            "url": "https://www.grammarly.com/terms",
             "checkedAt": "2026-11-08"
           }
         ]
@@ -125,9 +125,14 @@
         ]
       },
       "dataUse": {
-        "result": "unknown",
-        "reason": "We couldn't find whether it uses your information to make its AI better.",
+        "result": "pass",
+        "reason": "Uses your information to make its AI better, but you can turn this off. You can delete your information.",
         "evidence": [
+          {
+            "quote": "The Product Improvement and Training control allows users of Grammarly Free, Premium, and single-user Pro accounts to opt out of allowing us to use their content, including content processed by Grammarly Go, to train our models and improve our product for everyone.",
+            "url": "https://support.grammarly.com/hc/en-us/articles/25555503115277-Product-Improvement-and-Training-Control",
+            "checkedAt": "2026-11-08"
+          },
           {
             "quote": "Data rights. Depending on where you live, you may have rights under privacy laws to access, correct, or delete your personal data, as well as other rights, all as described below.",
             "url": "https://superhuman.com/legal/privacy-policy",
@@ -177,27 +182,26 @@
       }
     },
     "redFlags": [],
-    "verdict": "held",
+    "verdict": "ready",
     "warnings": [
       "We couldn't find which country your information is kept in.",
       "No price on the website. You have to talk to their sales team.",
-      "We couldn't find the name of the person who runs this company."
+      "We couldn't find the name of the person who runs this company.",
+      "Turn this setting off after you sign up. This tool may use your customers' calls or messages to get better. You can stop this in its settings."
     ]
   },
   "lastChecked": "2026-11-08",
   "sources": [
     "https://www.grammarly.com/",
     "https://www.grammarly.com/business/customer-support",
-    "https://superhuman.com/legal/privacy-policy",
     "https://www.grammarly.com/about",
-    "https://www.grammarly.com/features"
+    "https://support.grammarly.com/hc/en-us/articles/25555503115277-Product-Improvement-and-Training-Control",
+    "https://superhuman.com/legal/privacy-policy"
   ],
   "needsVerification": [
-    "pricing.small.monthlyUsd",
     "pricing.medium.monthlyUsd",
     "pricing.large.monthlyUsd",
     "pricing.freeTier",
-    "pricing.contract",
     "pricing.cancellation",
     "setupMinutes",
     "rulesFlags.recordsCalls",

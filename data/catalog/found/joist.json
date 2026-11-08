@@ -6,5 +6,13 @@
     "url": "https://www.joist.com/privacy-policy/",
     "foundBy": "Claude (drafted for Rishabh to check)",
     "foundAt": "2026-11-08"
+  },
+  {
+    "field": "canDeleteData",
+    "answer": "yes",
+    "quote": "To have your Personal Information permanently deleted from Joist systems, you must make an official request in writing by emailing [email protected] and include specific information that you would like permanently deleted from Joist systems.",
+    "url": "https://www.joist.com/privacy-policy/",
+    "foundBy": "Claude (drafted for Rishabh to check)",
+    "foundAt": "2026-11-08"
   }
 ]

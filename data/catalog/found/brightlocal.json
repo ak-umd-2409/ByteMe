@@ -1,0 +1,18 @@
+[
+  {
+    "field": "address",
+    "answer": "First Floor, Huntingdon House, 20-25 North Street, Brighton, BN1 1EB, UK",
+    "quote": "Address: First Floor, Huntingdon House, 20-25 North Street, Brighton, BN1 1EB, UK",
+    "url": "https://www.brightlocal.com/privacy-policy/",
+    "foundBy": "Claude (drafted for Rishabh to check)",
+    "foundAt": "2026-11-08"
+  },
+  {
+    "field": "canDeleteData",
+    "answer": "yes",
+    "quote": "Users can delete their account at any time.",
+    "url": "https://www.brightlocal.com/privacy-policy/",
+    "foundBy": "Claude (drafted for Rishabh to check)",
+    "foundAt": "2026-11-08"
+  }
+]

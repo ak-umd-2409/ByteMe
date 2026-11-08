@@ -1,0 +1,26 @@
+[
+  {
+    "field": "address",
+    "answer": "180 Sansome St, Suite 1800,",
+    "quote": "180 Sansome St, Suite 1800,",
+    "url": "https://www.gorgias.com/legal/privacy",
+    "foundBy": "Claude (drafted for Rishabh to check)",
+    "foundAt": "2026-11-08"
+  },
+  {
+    "field": "canDeleteData",
+    "answer": "yes",
+    "quote": "Regardless of where You reside, You may request that Gorgias delete personal information that we hold about You.",
+    "url": "https://www.gorgias.com/legal/privacy",
+    "foundBy": "Claude (drafted for Rishabh to check)",
+    "foundAt": "2026-11-08"
+  },
+  {
+    "field": "trainsOnYourData",
+    "answer": "yes",
+    "quote": "Customer acknowledges and agrees that Gorgias may, without providing any compensation to Customer or to any third party, use information gathered, collected, and/or generated in the course of providing the Services, including Customer Data, Feedback, Aggregate Data, Usage Data, and Output (as defined below), solely to build and improve our internal machine learning and other artificial intelligence models to the extent permitted by law and otherwise consistent with our obligations set forth in this Agreement.",
+    "url": "https://www.gorgias.com/legal/terms-of-service",
+    "foundBy": "Claude (drafted for Rishabh to check)",
+    "foundAt": "2026-11-08"
+  }
+]
