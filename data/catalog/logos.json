@@ -39,6 +39,11 @@
     "sourceUrl": "https://jane.app/apple-touch-icon.png",
     "fetchedAt": "2026-11-08T21:58:22.237Z"
   },
+  "jasper": {
+    "path": "/logos/jasper.png",
+    "sourceUrl": "https://cdn.prod.website-files.com/6807ee8d73c233fb82842313/681e121f9445a06741087852_Webclip.png",
+    "fetchedAt": "2026-11-08T22:22:04.604Z"
+  },
   "microsoft-copilot": {
     "path": "/logos/microsoft-copilot.ico",
     "sourceUrl": "https://www.microsoft.com/favicon.ico?v2",
@@ -58,6 +63,11 @@
     "path": "/logos/semrush.png",
     "sourceUrl": "https://www.semrush.com/__static__/apple-touch-icon.fe16ae843d17.png",
     "fetchedAt": "2026-11-08T21:58:23.829Z"
+  },
+  "slang-ai": {
+    "path": "/logos/slang-ai.png",
+    "sourceUrl": "https://cdn.prod.website-files.com/61aa7a8f9272d51e4f71a7c9/6877faf3ac31c8bacea6217a_SlangFavicon_256x256.png",
+    "fetchedAt": "2026-11-08T22:22:05.062Z"
   },
   "tidio": {
     "path": "/logos/tidio.png",

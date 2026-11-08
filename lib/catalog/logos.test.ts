@@ -3,7 +3,7 @@ import { existsSync } from "node:fs";
 import { test } from "node:test";
 import logos from "../../data/catalog/logos.json" with { type: "json" };
 import real from "../../data/catalog/real.json" with { type: "json" };
-import { checkIcon, onVendorDomain, pickIconUrls } from "./logos.ts";
+import { allowedIconHost, checkIcon, onVendorDomain, pickIconUrls } from "./logos.ts";
 
 const page = `<html><head>
   <link rel="icon" href="/favicon-16.png" type="image/png" sizes="16x16">
@@ -32,6 +32,16 @@ test("ignores icons on other domains", () => {
   assert.equal(onVendorDomain("https://cdn.vendor.com/x.png", "www.vendor.com"), true);
 });
 
+test("allows an icon the page declares on Webflow's file server, but never guesses one there", () => {
+  const html = `<link rel="apple-touch-icon" href="https://cdn.prod.website-files.com/abc/Webclip.png"><link rel="icon" href="https://evil-cdn.com/i.png">`;
+  assert.deepEqual(pickIconUrls(html, "https://www.vendor.com/", "vendor.com"), [
+    "https://cdn.prod.website-files.com/abc/Webclip.png",
+    "https://www.vendor.com/favicon.ico",
+  ]);
+  assert.equal(allowedIconHost("http://cdn.prod.website-files.com/x.png", "vendor.com"), false);
+  assert.equal(allowedIconHost("https://website-files.com.evil.io/x.png", "vendor.com"), false);
+});
+
 test("falls back to /favicon.ico when the page declares no icon", () => {
   assert.deepEqual(pickIconUrls("<html><head><title>Hi</title></head></html>", "https://vendor.com/about", "vendor.com"), [
     "https://vendor.com/favicon.ico",
@@ -55,11 +65,11 @@ test("keeps real icons and skips tiny or broken ones", () => {
   assert.equal(checkIcon(new TextEncoder().encode(svg.replace("<circle", "<script>alert(1)</script><circle"))), null);
 });
 
-test("every logo in the map exists, is for a real catalog tool, and came from that vendor's site", () => {
+test("every logo in the map exists, is for a real catalog tool, and came from that vendor's site (or its Webflow files)", () => {
   const byId = new Map((real as { id: string; vendor: { domain: string } }[]).map((t) => [t.id, t]));
   for (const [id, entry] of Object.entries(logos as Record<string, { path: string; sourceUrl: string }>)) {
     assert.ok(existsSync(`public${entry.path}`), `${id}: missing file public${entry.path}`);
     assert.ok(byId.has(id), `${id}: not in real.json`);
-    assert.ok(onVendorDomain(entry.sourceUrl, byId.get(id)!.vendor.domain), `${id}: logo not from the vendor's own domain`);
+    assert.ok(allowedIconHost(entry.sourceUrl, byId.get(id)!.vendor.domain), `${id}: logo not from the vendor's own site`);
   }
 });
