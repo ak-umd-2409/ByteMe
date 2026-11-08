@@ -3,6 +3,7 @@
 import type { CatalogRecord } from "@/lib/catalog/types.ts";
 import s from "../../start/start.module.css";
 import { blockReason, ToolDetail } from "../../start/ToolScreens.tsx";
+import { shortDate } from "../labels.ts";
 
 const cx = (...names: (string | false | null | undefined)[]) => names.filter(Boolean).join(" ");
 
@@ -18,11 +19,11 @@ export function ToolPage({ r }: { r: CatalogRecord }) {
       <>
         {back}
         <article className={s.card} style={{ maxWidth: 760 }}>
-          <div className={s.cardTop} style={{ background: "var(--bad-bg)" }}>
+          <div className={s.cardTop}>
             <span className={cx(s.badge, s.bad)}>⚠ Blocked</span>
             <h1 className={s.title}>We'd never recommend {r.name}</h1>
             <span className={s.small}>
-              {r.vendor.domain} · checked {r.lastChecked}
+              {r.vendor.domain} · checked {shortDate(r.lastChecked)}
             </span>
           </div>
           <p>It failed our Safety Check{r.reviewedBy ? `, and ${r.reviewedBy} reviewed it` : ""}. Here's what we found:</p>

@@ -95,7 +95,7 @@ function examples(catalog: CatalogRecord[], p: Preview | null): Example[] {
       key: "hvac",
       label: "HVAC",
       kind: "real",
-      problem: `${p.name}: ${p.fix.problem.toLowerCase()}. ${p.fix.proof}`,
+      problem: `${p.name}: ${p.fix.problem.toLowerCase()}.`,
       aiCan: GUIDES[p.fix.useCase].whatAiDoes,
       keepHuman: GUIDES[p.fix.useCase].keepHuman,
       tool: p.fix.tool,

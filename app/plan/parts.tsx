@@ -7,7 +7,7 @@ import type { ReadyText } from "@/lib/plan/content.ts";
 import type { Plan } from "@/lib/plan/plan.ts";
 import s from "../start/start.module.css";
 import t from "../start/tools.module.css";
-import { CopyButton } from "./Copy.tsx";
+import { ReadyTabs, ShowMore } from "./Disclose.tsx";
 
 const shortDate = (iso: string) => new Date(iso).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric", timeZone: "UTC" });
 
@@ -53,25 +53,39 @@ export function ReadyWords({ items, title = "Words ready to use" }: { items: Rea
         </h2>
         <span className={s.small}>Made from your business details. Fill in anything in [brackets] before you use it.</span>
       </div>
-      <div className={s.ready}>
-        {items.map((it) => (
-          <div key={it.id} className={s.readyItem}>
-            <div className={s.readyHead}>
-              <span className={s.optionText}>
-                <b>{it.title}</b>
-                <span>{it.use}</span>
-              </span>
-              <CopyButton text={it.text} />
-            </div>
-            <p className={s.readyText}>{it.text}</p>
-          </div>
-        ))}
-      </div>
+      <ReadyTabs items={items} />
     </section>
   );
 }
 
 export function FreeHelp({ plan }: { plan: Plan }) {
+  // The local advisor and the next most useful link first; the rest one tap away.
+  const rows = [
+    ...plan.help.map((h) => (
+      <a key={h.name} className={t.helpRow} href={h.url} target="_blank" rel="noreferrer">
+        <b>{h.name}</b>
+        <span>
+          {h.detail}
+          {h.phone ? ` · ${h.phone}` : ""}
+        </span>
+        <span className={t.chev} aria-hidden="true">
+          ›
+        </span>
+      </a>
+    )),
+    ...plan.resources.map((r) => (
+      <a key={r.id} className={t.helpRow} href={r.url} target="_blank" rel="noreferrer">
+        <b>
+          {r.name}
+          <span className={s.weekChip}>{r.kind === "money" ? "Money" : r.kind === "training" ? "Classes" : "Local"}</span>
+        </b>
+        <span>{r.detail}</span>
+        <span className={t.chev} aria-hidden="true">
+          ›
+        </span>
+      </a>
+    )),
+  ];
   return (
     <section className={s.card} aria-labelledby="help-h">
       <div className={s.cardTop}>
@@ -79,30 +93,8 @@ export function FreeHelp({ plan }: { plan: Plan }) {
           Free help, money and classes
         </h2>
       </div>
-      {plan.help.map((h) => (
-        <a key={h.name} className={t.helpRow} href={h.url} target="_blank" rel="noreferrer">
-          <b>{h.name}</b>
-          <span>
-            {h.detail}
-            {h.phone ? ` · ${h.phone}` : ""}
-          </span>
-          <span className={t.chev} aria-hidden="true">
-            ›
-          </span>
-        </a>
-      ))}
-      {plan.resources.map((r) => (
-        <a key={r.id} className={t.helpRow} href={r.url} target="_blank" rel="noreferrer">
-          <b>
-            {r.name}
-            <span className={s.weekChip}>{r.kind === "money" ? "Money" : r.kind === "training" ? "Classes" : "Local"}</span>
-          </b>
-          <span>{r.detail}</span>
-          <span className={t.chev} aria-hidden="true">
-            ›
-          </span>
-        </a>
-      ))}
+      {rows.slice(0, 2)}
+      {rows.length > 2 && <ShowMore label={`More free help, money and classes (${rows.length - 2})`}>{rows.slice(2)}</ShowMore>}
       <p className={s.hint}>
         Links checked {shortDate(plan.resourcesChecked)}. Programs change, so check you qualify on each page. We don't apply for anything for you.
       </p>

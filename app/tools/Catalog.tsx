@@ -11,7 +11,7 @@ import { USE_CASES, type UseCase } from "@/lib/recommend/types.ts";
 import s from "../start/start.module.css";
 import { blockReason, Logo, SafetyBadge } from "../start/ToolScreens.tsx";
 import c from "./catalog.module.css";
-import { USE_CASE_LABEL } from "./labels.ts";
+import { shortDate, USE_CASE_LABEL } from "./labels.ts";
 
 const cx = (...names: (string | false | null | undefined)[]) => names.filter(Boolean).join(" ");
 const PRICES = [25, 50, 100, 200];
@@ -147,7 +147,7 @@ export function Catalog({ records, industries }: { records: CatalogRecord[]; ind
                     <b>{r.name}</b>
                     <span>{r.category}</span>
                   </div>
-                  <span className={c.price}>{price !== null ? `$${price}` : "Price?"}
+                  <span className={c.price}>{price !== null ? `$${price}` : <small>Price on request</small>}
                     {price !== null && <small>/mo</small>}
                   </span>
                 </div>
@@ -169,7 +169,7 @@ export function Catalog({ records, industries }: { records: CatalogRecord[]; ind
                   ))}
                 </div>
                 <span className={c.more}>
-                  {r.badge === "verified" ? `Checked ${r.reviewedAt ?? r.lastChecked}` : "A person hasn't reviewed it yet. We don't recommend it until they do."}
+                  {r.badge === "verified" ? `Checked ${shortDate(r.reviewedAt ?? r.lastChecked)}` : "A person hasn't reviewed it yet. We don't recommend it until they do."}
                   <span aria-hidden="true"> ›</span>
                 </span>
               </a>

@@ -1,43 +1,43 @@
 /**
- * The MainStreet AI homepage. Research behind every section: docs/RESEARCH.md.
+ * The MainStreet AI homepage. Research behind every section: docs/RESEARCH.md; design
+ * direction: docs/AUDIT.md §10.
  *
  * Trust rules: no testimonials or customer logos (we have no customers yet); every quote is
  * word for word, dated and linked, from people who are not our customers; every figure names
  * its survey; illustrative examples are labelled; no security or certification claims.
  */
 import s from "../start/start.module.css";
+import { SiteFooter, SiteHeader } from "../ui/Site.tsx";
+import { SiteAdvisor } from "../ui/SiteAdvisor.tsx";
+import type { Figure, HomeData, Quote } from "./data.ts";
 import h from "./home.module.css";
-import type { Example, HomeData } from "./data.ts";
-import type { ToolCard } from "@/lib/advisor/types.ts";
+import { IndustryTabs } from "./IndustryTabs.tsx";
+import { ToolMini } from "./ToolMini.tsx";
 
-const usd = (n: number) => `$${Number.isInteger(n) ? n : n.toFixed(2)}`;
 const monthYear = (iso: string) => {
   const [y, m, d] = iso.split("-").map(Number);
   const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
   return d ? `${months[(m ?? 1) - 1]} ${d}, ${y}` : `${months[(m ?? 1) - 1]} ${y}`;
 };
 
-function Brand() {
-  return (
-    <a className={s.brand} href="/" style={{ textDecoration: "none" }} aria-label="MainStreet AI home">
-      MainStreet AI
-    </a>
-  );
-}
+/** Each owner worry: a survey figure, one owner's own words, and what we do about it. */
+const PAINS: { title: string; figure: string; quote: string; answer: string }[] = [
+  { title: "“Where do I even start?”", figure: "fed-finding-tools", quote: "sbcs-nobody-to-teach", answer: "We start from your business and give you one first step." },
+  { title: "“Is AI even for a business like mine?”", figure: "fed-not-applicable", quote: "bitar-lose", answer: "Every fix says what stays human, and when a free fix is enough." },
+  { title: "“Can I trust it?”", figure: "fed-accuracy", quote: "sbcs-confidential", answer: "Only tools a person has checked, with sources and what each does with your data." },
+];
 
 function NameForm({ id, cta = "Find AI opportunities for my business" }: { id: string; cta?: string }) {
   return (
     <form className={h.nameForm} action="/start" method="get" role="search" aria-label="Find your business">
-      <div className={h.fields}>
-        <label className={h.field}>
-          <span>Your business name</span>
-          <input id={`${id}-name`} name="q" required maxLength={120} placeholder="e.g. Frederick Heating" autoComplete="organization" />
-        </label>
-        <label className={`${h.field} ${h.town}`}>
-          <span>Town (optional)</span>
-          <input id={`${id}-town`} name="town" maxLength={80} placeholder="e.g. Frederick, MD" autoComplete="address-level2" />
-        </label>
-      </div>
+      <label className={h.field}>
+        <span className={s.sr}>Your business name</span>
+        <input id={`${id}-name`} name="q" required maxLength={120} placeholder="Your business name" autoComplete="organization" />
+      </label>
+      <label className={`${h.field} ${h.town}`}>
+        <span className={s.sr}>Town (optional)</span>
+        <input id={`${id}-town`} name="town" maxLength={80} placeholder="Town (optional)" autoComplete="address-level2" />
+      </label>
       <button type="submit" className={h.primary}>
         {cta} <span aria-hidden="true">→</span>
       </button>
@@ -45,303 +45,181 @@ function NameForm({ id, cta = "Find AI opportunities for my business" }: { id: s
   );
 }
 
-function ToolMini({ t }: { t: ToolCard }) {
+function PainCard({ title, f, q, answer }: { title: string; f: Figure | undefined; q: Quote | undefined; answer: string }) {
   return (
-    <div className={h.toolMini}>
-      <span className={h.toolLogo} aria-hidden="true">
-        {t.name.slice(0, 2).toUpperCase()}
-      </span>
-      <span className={h.toolText}>
-        <b>{t.name}</b>
-        <span>
-          {t.category} · {t.monthlyUsd === null ? "price not public" : `from ${usd(t.monthlyUsd)}/mo`}
-        </span>
-      </span>
-      <span className={h.verified}>✓ Checked</span>
-    </div>
-  );
-}
-
-function ExampleCard({ e }: { e: Example }) {
-  return (
-    <article className={h.example}>
-      <div className={h.exampleHead}>
-        <h3>{e.label}</h3>
-        <span className={e.kind === "real" ? h.tagReal : h.tagIllustrative}>{e.kind === "real" ? "Real finding · public data" : "Illustrative"}</span>
-      </div>
-      <dl className={h.exampleList}>
-        <dt>The problem</dt>
-        <dd>{e.problem}</dd>
-        <dt>What AI can do</dt>
-        <dd>{e.aiCan}</dd>
-        <dt>What stays human</dt>
-        <dd>{e.keepHuman}</dd>
-      </dl>
-      {e.tool ? (
-        <a className={h.exampleTool} href={`/tools/${e.tool.id}`}>
-          <ToolMini t={e.tool} />
+    <article className={h.pain}>
+      <h3>{title}</h3>
+      {f && (
+        <a className={h.stat} href={f.url} target="_blank" rel="noreferrer">
+          <b>{f.value}</b>
+          <span>{f.text}</span>
+          <small>
+            Research insight · {f.source}, {monthYear(f.date)} ↗
+          </small>
         </a>
-      ) : (
-        <p className={h.small}>{e.noTool}</p>
       )}
+      {q && (
+        <figure className={h.quote}>
+          <blockquote>“{q.quote}”</blockquote>
+          <figcaption>
+            <a href={q.url} target="_blank" rel="noreferrer">
+              {q.who}, {q.outlet}, {monthYear(q.date)} ↗
+            </a>
+          </figcaption>
+        </figure>
+      )}
+      <p className={h.answer}>
+        <span aria-hidden="true">→</span> {answer}
+      </p>
     </article>
   );
 }
 
 export function Home({ data }: { data: HomeData }) {
   const p = data.preview;
+  const fig = (id: string) => data.figures.find((x) => x.id === id);
+  const quo = (id: string) => data.quotes.find((x) => x.id === id);
   return (
     <div className={`${s.app} ${h.home}`}>
       <a className={h.skip} href="#main">
         Skip to content
       </a>
-      <header className={h.top}>
-        <div className={h.topInner}>
-          <Brand />
-          <nav className={h.nav} aria-label="Main">
-            <a href="#how">How it works</a>
-            <a href="#trust">Why trust it</a>
-            <a href="/tools">Checked tools</a>
-            <a href="/advisor">Ask the advisor</a>
-            <a className={h.navCta} href="/start">
-              Get started
-            </a>
-          </nav>
-        </div>
-      </header>
+      <SiteHeader current="home" />
 
       <main id="main">
-        {/* 1 · Hero */}
+        {/* Hero: what it is, one action, trust, and the real product */}
         <section className={h.hero} aria-labelledby="hero-title">
           <div className={h.heroCopy}>
             <span className={h.eyebrow}>For Maryland small businesses</span>
             <h1 id="hero-title" className={h.heroTitle}>
-              Find the AI that actually <em>fits your business.</em>
+              Find the AI that actually <em>fits</em> your business.
             </h1>
-            <p className={h.lead}>
-              Type your business name. We read your public listing, website and reviews, show you what&apos;s costing you time or customers, and match you only with tools a person
-              has checked. We&apos;ll also tell you when a free fix is enough.
-            </p>
+            <p className={h.lead}>We read your public listing, website and reviews, show what&apos;s costing you customers, and match you only with tools a person has checked.</p>
             <NameForm id="hero" />
             <p className={h.fine}>
-              Free · about 3 minutes · no sign-up · <a href="/start?example=1">or see a real example first</a>
+              Free · about 3 minutes · <a href="/start?example=1">See a real example</a>
             </p>
+            <ul className={h.trustRow} aria-label="Why you can trust it">
+              <li>
+                <b>{data.approved}</b>&nbsp;tools checked by a person
+              </li>
+              <li>Vendor prices, never guessed</li>
+              <li>No sign-up</li>
+            </ul>
           </div>
 
           {p && (
             <figure className={h.preview} aria-label={`A real result for ${p.name}, from saved public data`}>
-              <div className={h.previewTop}>
-                <span className={h.tagReal}>Real result · public data</span>
-                <span className={h.small}>saved {monthYear(p.capturedAt)}</span>
+              <div className={h.previewBar}>
+                <span className={h.dots} aria-hidden="true">
+                  <i />
+                  <i />
+                  <i />
+                </span>
+                <span>Your results</span>
+                <span className={h.tagReal}>Real · public data</span>
               </div>
-              <div className={h.previewBiz}>
-                <b>{p.name}</b>
-                <span>{p.subtitle}</span>
-              </div>
-              <div className={h.previewBlock}>
-                <span className={h.kicker}>What we read</span>
-                <ul className={h.learned}>
-                  {p.learned.map((l) => (
-                    <li key={l.text}>{l.text}</li>
-                  ))}
-                </ul>
-              </div>
-              <div className={h.previewBlock}>
+              <div className={h.previewBody}>
+                <div className={h.previewBiz}>
+                  <b>{p.name}</b>
+                  <span>{p.subtitle}</span>
+                </div>
                 <span className={h.kicker}>What&apos;s holding it back</span>
-                {p.problems.map((x) => (
+                {p.problems.map((x, k) => (
                   <div key={x.headline} className={h.problem}>
-                    <b>{x.headline}</b>
-                    <span className={h.status}>{x.status}</span>
-                    <span className={h.proof}>
-                      {x.proof}
-                      {x.source ? ` · ${x.source}` : ""}
+                    <span className={h.rank}>{k + 1}</span>
+                    <span className={h.problemText}>
+                      <b>{x.headline}</b>
+                      <span>{x.source ? `Proof: ${x.source}` : x.proof}</span>
                     </span>
+                    <span className={h.status}>{x.status}</span>
                   </div>
                 ))}
+                {p.fix && (
+                  <>
+                    <span className={h.kicker}>Checked fix</span>
+                    <ToolMini t={p.fix.tool} />
+                  </>
+                )}
               </div>
-              {p.fix && (
-                <div className={h.previewBlock}>
-                  <span className={h.kicker}>A checked fix for “{p.fix.problem.toLowerCase()}”</span>
-                  <ToolMini t={p.fix.tool} />
-                </div>
-              )}
-              <figcaption className={h.small}>This business isn&apos;t a customer. We saved its public details to show how a result looks.</figcaption>
+              <figcaption className={h.caption}>Saved {monthYear(p.capturedAt)} from public pages. This business isn&apos;t a customer.</figcaption>
             </figure>
           )}
         </section>
 
-        {/* 2 · The problem, in owners' words */}
-        <section className={h.section} aria-labelledby="problem-title">
+        {/* Pain points, from research */}
+        <section className={h.section} aria-labelledby="pain-title">
           <div className={h.sectionHead}>
-            <span className={h.eyebrow}>The problem</span>
-            <h2 id="problem-title" className={h.h2}>
-              Small businesses aren&apos;t short on AI. They&apos;re short on answers that fit.
-            </h2>
-            <p className={h.sub}>Owners told researchers the same things again and again: they don&apos;t know where to start, don&apos;t trust the answers, and don&apos;t want to lose the personal side of their business.</p>
-          </div>
-          <div className={h.figures}>
-            {data.figures.map((f) => (
-              <a key={f.id} className={h.figure} href={f.url} target="_blank" rel="noreferrer">
-                <b>{f.value}</b>
-                <span>{f.text}</span>
-                <small>
-                  {f.source}, {monthYear(f.date)} ↗
-                </small>
-              </a>
-            ))}
-          </div>
-          <div className={h.quotes}>
-            {data.quotes.map((q) => (
-              <figure key={q.id} className={h.quote}>
-                <span className={h.pain}>{q.pain}</span>
-                <blockquote>“{q.quote}”</blockquote>
-                <figcaption>
-                  <b>{q.who}</b>
-                  <span>{q.where}</span>
-                  <a href={q.url} target="_blank" rel="noreferrer">
-                    {q.outlet} · {monthYear(q.date)} · {q.type} ↗
-                  </a>
-                </figcaption>
-              </figure>
-            ))}
-          </div>
-          <p className={h.small}>
-            Quotes are word for word from published research and news, checked {monthYear(data.researchChecked)}. None of these people are MainStreet AI customers.
-          </p>
-        </section>
-
-        {/* 3 · How MainStreet AI helps */}
-        <section className={h.section} aria-labelledby="helps-title">
-          <div className={h.sectionHead}>
-            <span className={h.eyebrow}>How MainStreet AI helps</span>
-            <h2 id="helps-title" className={h.h2}>
-              We start with your business, not with AI.
+            <span className={h.eyebrow}>Why owners get stuck</span>
+            <h2 id="pain-title" className={h.h2}>
+              Owners aren&apos;t short on AI. They&apos;re short on answers that fit.
             </h2>
           </div>
-          <div className={h.pillars}>
-            <div className={h.pillar}>
-              <span className={h.num}>01</span>
-              <h3>Understand your business</h3>
-              <p>We read what&apos;s already public: your Google listing, up to 6 website pages, reviews and the software your site uses. No long form.</p>
-            </div>
-            <div className={h.pillar}>
-              <span className={h.num}>02</span>
-              <h3>Find what&apos;s costing you</h3>
-              <p>Missed calls, slow quotes, listings that disagree. Each problem shows its proof, and dollar figures use only numbers you give us.</p>
-            </div>
-            <div className={h.pillar}>
-              <span className={h.num}>03</span>
-              <h3>Tools a person has checked</h3>
-              <p>Only tools that passed our safety checks and a human review, with real prices, what they work with, and what they do with your data.</p>
-            </div>
-            <div className={h.pillar}>
-              <span className={h.num}>04</span>
-              <h3>A plan you can follow</h3>
-              <p>A 30-day plan with free fixes first, words ready to copy, and a link to send it to your free local SBDC advisor.</p>
-            </div>
+          <div className={h.pains}>
+            {PAINS.map((x) => (
+              <PainCard key={x.title} title={x.title} f={fig(x.figure)} q={quo(x.quote)} answer={x.answer} />
+            ))}
           </div>
+          <p className={h.small}>Quotes are word for word from published research and news, checked {monthYear(data.researchChecked)}. None of these people are our customers.</p>
         </section>
 
-        {/* 4 · How it works */}
+        {/* How it works */}
         <section id="how" className={h.section} aria-labelledby="how-title">
           <div className={h.sectionHead}>
             <span className={h.eyebrow}>How it works</span>
             <h2 id="how-title" className={h.h2}>
-              About three minutes, start to plan.
+              Three steps. About three minutes.
             </h2>
           </div>
           <ol className={h.steps}>
             <li>
-              <b>Find your business</b>
-              <span>Type the name. Not listed? Add it by hand.</span>
+              <span className={h.stepIcon} aria-hidden="true">
+                1
+              </span>
+              <b>Type your business name</b>
+              <span>We find your listing, website and reviews.</span>
             </li>
             <li>
+              <span className={h.stepIcon} aria-hidden="true">
+                2
+              </span>
               <b>Check what we found</b>
-              <span>Every detail shows where it came from. Fix anything that&apos;s wrong.</span>
+              <span>Every fact shows its source. Answer up to four quick questions.</span>
             </li>
             <li>
-              <b>Answer up to 4 questions</b>
-              <span>Only what we can&apos;t look up: budget, setup help, a yes or no on a few problems. Skip any of them.</span>
-            </li>
-            <li>
-              <b>Get problems, fixes and a plan</b>
-              <span>Then ask the advisor anything about your results.</span>
+              <span className={h.stepIcon} aria-hidden="true">
+                3
+              </span>
+              <b>Get your 30-day plan</b>
+              <span>Free fixes first, checked tools next, words ready to copy.</span>
             </li>
           </ol>
         </section>
 
-        {/* 5 · Trust and transparency */}
-        <section id="trust" className={h.section} aria-labelledby="trust-title">
-          <div className={h.sectionHead}>
-            <span className={h.eyebrow}>Trust and transparency</span>
-            <h2 id="trust-title" className={h.h2}>
-              What we check, how we choose, and what we do with your information.
-            </h2>
-          </div>
-          <div className={h.trust}>
-            <div className={h.trustCol}>
-              <h3>How a tool gets checked</h3>
-              <ol>
-                <li>Eight automatic checks: who&apos;s behind it, how long its website has existed, its privacy policy, what it does with your data, where data is kept, clear prices, security basics and red flags.</li>
-                <li>A person reviews the results. Tools that copy a brand name or have no privacy policy are blocked.</li>
-                <li>Every approved tool is due for a re-check every 90 days.</li>
-              </ol>
-              <p className={h.small}>
-                {data.approved} real tools approved so far. <a href="/tools">See every one</a>.
-              </p>
-            </div>
-            <div className={h.trustCol}>
-              <h3>How we pick a recommendation</h3>
-              <ul>
-                <li>Only approved tools, never &quot;listed&quot; or blocked ones.</li>
-                <li>Ranked by fit with your problem, whether it works with software you use, your budget, how hard it is to set up, and reviews.</li>
-                <li>The same rules for every tool, shown in plain words on every pick.</li>
-                <li>If no checked tool fits, we say so, and give you the free fix.</li>
-              </ul>
-            </div>
-            <div className={h.trustCol}>
-              <h3>Your information</h3>
-              <ul>
-                <li>We read only public information, plus what you choose to tell us.</li>
-                <li>No account. Your answers stay with your browser session, not in a profile on our servers.</li>
-                <li>A plan you choose to share is kept for 30 days. When AI features are on, we save AI answers about public pages for up to a week so we don&apos;t pay twice.</li>
-                <li>We never log into your accounts. You sign up with each tool yourself.</li>
-              </ul>
-              <p className={h.small}>MainStreet AI is a student prototype. We hold no security certification and don&apos;t claim one.</p>
-            </div>
-          </div>
-        </section>
-
-        {/* 6 · Examples by industry */}
+        {/* Examples by industry (interactive) */}
         <section className={h.section} aria-labelledby="examples-title">
           <div className={h.sectionHead}>
             <span className={h.eyebrow}>Examples</span>
             <h2 id="examples-title" className={h.h2}>
-              What this looks like for businesses like yours.
+              See it for your kind of business.
             </h2>
-            <p className={h.sub}>The HVAC example comes from a real business&apos;s public data. The others are illustrative. Every tool named is a real, checked tool with its published starting price.</p>
           </div>
-          <div className={h.examples}>
-            {data.examples.map((e) => (
-              <ExampleCard key={e.key} e={e} />
-            ))}
-          </div>
+          <IndustryTabs examples={data.examples} />
         </section>
 
-        {/* 7 · The advisor */}
+        {/* The advisor */}
         <section className={h.section} aria-labelledby="advisor-title">
           <div className={h.advisor}>
             <div className={h.advisorCopy}>
-              <span className={h.eyebrow}>MainStreet Business Advisor</span>
+              <span className={h.eyebrow}>
+                <span aria-hidden="true">✳</span> Business Advisor
+              </span>
               <h2 id="advisor-title" className={h.h2}>
-                Ask anything. Get answers from checked tools, not guesses.
+                A personal advisor that knows your business.
               </h2>
-              <p className={h.sub}>
-                The advisor knows your results, your budget and the software you use. It answers from our checked catalog with real prices, tells you what to keep human, and says
-                when you don&apos;t need AI at all.
-              </p>
+              <p className={h.sub}>It knows your results, budget and software, and answers only from checked tools. Ask from the button in the corner, on any page.</p>
               <div className={h.askList}>
-                {["How can I use AI in my HVAC business?", "Can AI help me respond to customer enquiries?", "I don't understand AI. What should I start with?"].map((q) => (
+                {["I have $100 a month. What should I do first?", "Can AI answer calls after hours?", "I don't understand AI. Where do I start?"].map((q) => (
                   <a key={q} className={h.ask} href={`/advisor?q=${encodeURIComponent(q)}`}>
                     {q} <span aria-hidden="true">→</span>
                   </a>
@@ -352,41 +230,59 @@ export function Home({ data }: { data: HomeData }) {
               <figure className={h.chatSample} aria-label="A real answer from the advisor">
                 <div className={h.chatQ}>{data.advisorSample.question}</div>
                 <div className={h.chatA}>
-                  {data.advisorSample.reply.answer.split(/\n{2,}/).slice(0, 2).map((para, i) => (
-                    <p key={i}>{para}</p>
-                  ))}
+                  <p>{data.advisorSample.reply.answer.split(/\n{2,}/)[0]}</p>
                   {data.advisorSample.reply.tools.slice(0, 2).map((t) => (
                     <ToolMini key={t.id} t={t} />
                   ))}
                 </div>
-                <figcaption className={h.small}>A real answer for a heating and cooling business, from the advisor&apos;s rules and our checked catalog.</figcaption>
+                <figcaption className={h.caption}>A real answer for a heating and cooling business.</figcaption>
               </figure>
             )}
           </div>
         </section>
 
-        {/* 8 · Final call to action */}
+        {/* Trust strip */}
+        <section id="trust" className={h.section} aria-labelledby="trust-title">
+          <div className={h.sectionHead}>
+            <span className={h.eyebrow}>Trust</span>
+            <h2 id="trust-title" className={h.h2}>
+              How a tool earns a place here.
+            </h2>
+          </div>
+          <ul className={h.trust}>
+            <li>
+              <b>8</b>
+              <span>automatic checks: owner, privacy policy, data use, prices, security basics, red flags</span>
+            </li>
+            <li>
+              <b>100%</b>
+              <span>of recommended tools approved by a person, not just a script</span>
+            </li>
+            <li>
+              <b>90</b>
+              <span>days between re-checks, with the date shown on every tool</span>
+            </li>
+            <li>
+              <b>0</b>
+              <span>accounts, logins or profiles. You sign up with each tool yourself</span>
+            </li>
+          </ul>
+          <p className={h.small}>
+            Same rules for every tool, and if none fits, we say so. <a href="/tools">See all {data.approved} checked tools</a>. A student prototype with no security certification.
+          </p>
+        </section>
+
+        {/* Closing CTA */}
         <section className={h.final} aria-labelledby="final-title">
           <h2 id="final-title" className={h.h2}>
-            See what&apos;s costing your business time or customers.
+            See what&apos;s costing your business customers.
           </h2>
-          <p className={h.sub}>Free, about three minutes, and nothing to install. You stay in charge of every step.</p>
           <NameForm id="final" />
         </section>
       </main>
 
-      <footer className={h.footer}>
-        <div className={h.footerInner}>
-          <Brand />
-          <nav aria-label="More">
-            <a href="/tools">Checked tools</a>
-            <a href="/advisor">Business Advisor</a>
-            <a href="/submit">Make an AI tool? Apply to be listed</a>
-            <a href="/admin">For reviewers</a>
-          </nav>
-          <p className={h.small}>Built by Team ByteMe, University of Maryland. A prototype, not affiliated with the Maryland SBDC, SCORE or any tool we list. Not legal advice.</p>
-        </div>
-      </footer>
+      <SiteFooter />
+      <SiteAdvisor />
     </div>
   );
 }

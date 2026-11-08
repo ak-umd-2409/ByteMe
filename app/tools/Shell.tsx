@@ -1,28 +1,15 @@
 import s from "../start/start.module.css";
+import { SiteFooter, SiteHeader, type Current } from "../ui/Site.tsx";
+import { SiteAdvisor } from "../ui/SiteAdvisor.tsx";
 
-/** The site frame (sage top bar) for pages outside the guided flow. */
-export function Shell({ children, narrow = false, current }: { children: React.ReactNode; narrow?: boolean; current?: "tools" | "submit" | "advisor" }) {
+/** The site frame for pages outside the guided flow: shared header, footer and the advisor pill. */
+export function Shell({ children, narrow = false, current, advisor = true }: { children: React.ReactNode; narrow?: boolean; current?: Current; advisor?: boolean }) {
   return (
     <div className={s.app}>
-      <header className={s.topbar}>
-        <div className={s.topbarInner}>
-          <a className={s.brand} href="/" style={{ textDecoration: "none" }}>
-            MainStreet AI
-          </a>
-          <span className={s.row} style={{ gap: 18 }}>
-            <a className={s.linkInk} href="/tools" aria-current={current === "tools" ? "page" : undefined}>
-              Browse tools
-            </a>
-            <a className={s.linkInk} href="/advisor" aria-current={current === "advisor" ? "page" : undefined}>
-              Ask the advisor
-            </a>
-            <a className={s.linkInk} href="/start">
-              Find my AI tools
-            </a>
-          </span>
-        </div>
-      </header>
+      <SiteHeader current={current} />
       <main className={`${s.page} ${narrow ? s.narrow : ""}`}>{children}</main>
+      <SiteFooter />
+      {advisor && <SiteAdvisor />}
     </div>
   );
 }
