@@ -12,6 +12,7 @@ import { readyContent } from "@/lib/plan/content.ts";
 import { buildPlan, planText } from "@/lib/plan/plan.ts";
 import type { ProblemKey } from "@/lib/problems/types.ts";
 import type { RecommendationResult } from "@/lib/recommend/types.ts";
+import { ToolLogo } from "@/components/ToolLogo.tsx";
 import s from "./start.module.css";
 import { SampleTag } from "./ToolScreens.tsx";
 import { CopyButton } from "../plan/Copy.tsx";
@@ -139,7 +140,14 @@ export function PlanScreen({
               <span className={s.small}>
                 {i + 1} · {sec.summary}
               </span>
-              <h2 className={s.h3}>{sec.tool ? sec.tool.name : sec.heading}</h2>
+              {sec.tool ? (
+                <span style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                  <ToolLogo id={sec.tool.id} name={sec.tool.name} size={32} />
+                  <h2 className={s.h3}>{sec.tool.name}</h2>
+                </span>
+              ) : (
+                <h2 className={s.h3}>{sec.heading}</h2>
+              )}
               {sec.tool && (
                 <span className={s.row} style={{ gap: 6 }}>
                   <span className={s.small}>For: {sec.heading.toLowerCase()}</span>

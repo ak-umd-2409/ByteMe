@@ -7,6 +7,7 @@
  * from our safety-checked catalog (data/catalog), so every claim has a source.
  */
 import { useState } from "react";
+import { ToolLogo } from "@/components/ToolLogo.tsx";
 import { leftOutReason } from "@/lib/catalog/fit.ts";
 import type { CatalogRecord } from "@/lib/catalog/types.ts";
 import type { BusinessProfile, Recommendation, RecommendationResult, ToolChoice } from "@/lib/recommend/types.ts";
@@ -19,17 +20,9 @@ const date = (iso?: string | null) =>
   iso ? new Date(`${iso.slice(0, 10)}T12:00:00Z`).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric", timeZone: "UTC" }) : "";
 const same = (a: string, b: string) => a.trim().toLowerCase() === b.trim().toLowerCase();
 
-const LOGO_COLORS = ["#1f4e79", "#8a4b14", "#2e6b5e", "#4b3f72", "#6b4f2a", "#1d6a8a", "#5a2a2a"];
+/** The vendor's own logo (or a neutral letter badge when we have none). */
 export function Logo({ id, name, big }: { id: string; name: string; big?: boolean }) {
-  const words = name.replace(/[^A-Za-z ]/g, "").split(/\s+/).filter(Boolean);
-  const initials = (words.length > 1 ? words[0][0] + words[1][0] : name.slice(0, 2)).toUpperCase();
-  let h = 0;
-  for (const ch of id) h = (h * 31 + ch.charCodeAt(0)) >>> 0;
-  return (
-    <span className={cx(t.logo, big && t.logoBig)} style={{ background: LOGO_COLORS[h % LOGO_COLORS.length] }} aria-hidden="true">
-      {initials}
-    </span>
-  );
+  return <ToolLogo id={id} name={name} size={big ? 56 : 40} className={t.logo} />;
 }
 
 export function SafetyBadge({ badge, big }: { badge: CatalogRecord["badge"]; big?: boolean }) {
