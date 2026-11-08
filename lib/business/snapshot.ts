@@ -25,19 +25,29 @@ export interface PublicSnapshot {
   sources: { label: string; url: string; via: "page_fetch" | "search_index"; usedFor: string }[];
 }
 
+/** Words that don't identify a business on their own. */
+const IGNORED = new Set(["the", "and", "near", "inc", "llc", "maryland"]);
+
 const normalize = (text: string) => text.toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
 
 export function snapshotPlacesProvider(snapshots: PublicSnapshot[]): PlacesProvider {
   return {
     kind: "public_snapshot",
     async search(query) {
-      const words = normalize(query).split(" ").filter((w) => w.length > 2);
+      // Saved businesses must actually match what was typed: every meaningful word has to appear
+      // in the name, address or type, and at least one in the name. ("pizza Frederick" must not
+      // return a Frederick HVAC company just because of the town.)
+      const words = normalize(query)
+        .split(" ")
+        .filter((w) => w.length > 2 && !IGNORED.has(w));
       if (words.length === 0) return [];
-      // Rank by matches; a word in the business name counts more than one in the address.
+      const has = (text: string, w: string) => text.includes(w) || text.replace(/ /g, "").includes(w);
       const score = (s: PublicSnapshot) => {
         const name = normalize(s.details.name);
         const rest = normalize(`${s.details.address.formatted} ${s.details.primaryTypeLabel ?? ""}`);
-        return words.reduce((sum, w) => sum + (name.includes(w) ? 2 : rest.includes(w) ? 1 : 0), 0);
+        if (!words.every((w) => has(name, w) || has(rest, w))) return 0;
+        const inName = words.filter((w) => has(name, w)).length;
+        return inName === 0 ? 0 : inName * 2 + (words.length - inName);
       };
       return snapshots
         .map((s) => ({ s, score: score(s) }))

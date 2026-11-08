@@ -17,11 +17,13 @@ import {
   type JourneyQuestion,
   type JourneyStartResponse,
   type Opportunity,
+  type SavedBusiness,
 } from "@/lib/client/parts23.ts";
 import type { BusinessMatch } from "@/lib/business/types.ts";
 import type { RecommendationResult } from "@/lib/recommend/types.ts";
 import type { CatalogRecord } from "@/lib/catalog/types.ts";
 import s from "./start.module.css";
+import { PlanScreen } from "./PlanScreen.tsx";
 import { Compare, ToolDetail, WaysToFix, type Biz } from "./ToolScreens.tsx";
 
 export interface LookupEntry {
@@ -33,7 +35,7 @@ export interface LookupEntry {
   id?: string;
 }
 
-type Screen = "landing" | "find" | "loading" | "check" | "ask" | "problems" | "tools" | "tool" | "compare";
+type Screen = "landing" | "find" | "loading" | "check" | "ask" | "problems" | "tools" | "tool" | "compare" | "plan";
 type Answers = Record<string, Answer>;
 
 const usd = (n: number) => `$${Math.round(n).toLocaleString("en-US")}`;
@@ -44,7 +46,7 @@ const plural = (n: number, one: string, many = `${one}s`) => `${n} ${n === 1 ? o
 /** The questions asked one at a time, in this order (only those the backend asks for this business). */
 const ASK_ORDER = ["problems", "call_recording", "health_data", "budget", "setup", "goals"];
 
-const STEPS = ["Find", "Check", "Questions", "Results", "Tools"];
+const STEPS = ["Find", "Check", "Questions", "Results", "Tools", "Plan"];
 
 function Steps({ n }: { n: number }) {
   return (
@@ -141,7 +143,7 @@ function OptionList({ q, value, onPick }: { q: JourneyQuestion; value: Answer | 
   );
 }
 
-export function Journey({ lookup, catalog }: { lookup: LookupEntry[]; catalog: CatalogRecord[] }) {
+export function Journey({ lookup, catalog, watchCount = 0 }: { lookup: LookupEntry[]; catalog: CatalogRecord[]; watchCount?: number }) {
   const [screen, setScreen] = useState<Screen>("landing");
   const [error, setError] = useState<string | null>(null);
   const top = useRef<HTMLDivElement>(null);
@@ -150,6 +152,8 @@ export function Journey({ lookup, catalog }: { lookup: LookupEntry[]; catalog: C
   const [name, setName] = useState("");
   const [town, setTown] = useState("");
   const [matches, setMatches] = useState<BusinessMatch[] | null>(null);
+  // When live Google search is off, the API says so and lists the real businesses we saved.
+  const [searchInfo, setSearchInfo] = useState<{ liveSearch: boolean; saved: SavedBusiness[] } | null>(null);
   const [searching, setSearching] = useState(false);
   const [manual, setManual] = useState(false);
   const [manualSite, setManualSite] = useState("");
@@ -276,6 +280,7 @@ export function Journey({ lookup, catalog }: { lookup: LookupEntry[]; catalog: C
     try {
       const res = await api.search(name.trim(), town.trim() || undefined);
       setMatches(res.matches.slice(0, 3));
+      setSearchInfo({ liveSearch: res.liveSearch, saved: res.saved ?? [] });
     } catch (e) {
       setError(message(e));
     } finally {
@@ -434,7 +439,9 @@ export function Journey({ lookup, catalog }: { lookup: LookupEntry[]; catalog: C
 
   // ---------- 1 · Landing ----------
   if (screen === "landing") {
-    const counts = { verified: lookup.filter((e) => e.status === "verified").length, blocked: lookup.filter((e) => e.status === "blocked").length };
+    // Only real tools count. Sample (made-up) tools never inflate the numbers.
+    const real = lookup.filter((e) => !e.sample);
+    const counts = { verified: real.filter((e) => e.status === "verified").length, blocked: real.filter((e) => e.status === "blocked").length };
     return frame(
       <>
         <section className={s.heroGrid}>
@@ -450,14 +457,22 @@ export function Journey({ lookup, catalog }: { lookup: LookupEntry[]; catalog: C
             </div>
             <span className={s.small}>Free · about 3 minutes · no sign-up</span>
             <div className={s.stats}>
-              <div><b className={s.num}>{counts.verified}</b><span>tools checked and approved</span></div>
-              <div><b className={s.num}>{counts.blocked}</b><span>scams blocked</span></div>
+              {counts.verified > 0 ? (
+                <div><b className={s.num}>{counts.verified}</b><span>real tools checked and approved</span></div>
+              ) : (
+                <div><b className={s.num}>{watchCount}</b><span>real AI tools on our watch list</span></div>
+              )}
+              {counts.blocked > 0 ? (
+                <div><b className={s.num}>{counts.blocked}</b><span>unsafe tools blocked</span></div>
+              ) : (
+                <div><b className={s.num}>0</b><span>tools recommended before a person checks them</span></div>
+              )}
               <div><b className={s.num}>8</b><span>safety checks on every tool</span></div>
             </div>
           </div>
 
           <div className={s.preview} aria-label="Example of what you'll see">
-            <span className={s.previewTag}>Example result</span>
+            <span className={s.previewTag}>Example of a result · sample tools, not real products</span>
             <div className={s.card}>
               <div className={s.cardTop}>
                 <span className={cx(s.badge, s.ok, s.seal)}>✓ Verified</span>
@@ -576,7 +591,16 @@ export function Journey({ lookup, catalog }: { lookup: LookupEntry[]; catalog: C
 
         {matches && (
           <section className={s.col} aria-live="polite">
-            <h2 className={s.h3}>{matches.length ? "Is it one of these? Tap yours." : `We couldn't find “${name.trim()}”.`}</h2>
+            {searchInfo && !searchInfo.liveSearch && (
+              <div className={s.notice}>
+                <b>Live Google search isn't switched on for this site yet.</b> We can only look up businesses we saved from their public pages
+                {searchInfo.saved.length ? ` (${searchInfo.saved.map((b) => b.name).join(" and ")})` : ""}. Nothing here is made up, and we never
+                swap in a different business for the one you typed.
+              </div>
+            )}
+            <h2 className={s.h3}>
+              {matches.length ? "Is it one of these? Tap yours." : searchInfo && !searchInfo.liveSearch ? `“${name.trim()}” isn't one of our saved businesses.` : `We couldn't find “${name.trim()}”.`}
+            </h2>
             {matches.map((m) => (
               <button key={m.placeId} type="button" className={s.resultRow} onClick={() => void read({ placeId: m.placeId, label: m.name })}>
                 <span className={s.resultText}>
@@ -586,6 +610,22 @@ export function Journey({ lookup, catalog }: { lookup: LookupEntry[]; catalog: C
                 <span className={s.resultGo}>This is me →</span>
               </button>
             ))}
+            {matches.length === 0 && searchInfo && !searchInfo.liveSearch && searchInfo.saved.length > 0 && (
+              <>
+                <span className={s.sub}>Try a saved real Maryland business instead:</span>
+                {searchInfo.saved.map((b) => (
+                  <button key={b.placeId} type="button" className={s.resultRow} onClick={() => void read({ placeId: b.placeId, label: b.name })}>
+                    <span className={s.resultText}>
+                      <b>{b.name}</b>
+                      <span>
+                        {b.address} · saved from public pages on {new Date(`${b.capturedAt.slice(0, 10)}T12:00:00Z`).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric", timeZone: "UTC" })}
+                      </span>
+                    </span>
+                    <span className={s.resultGo}>Use this →</span>
+                  </button>
+                ))}
+              </>
+            )}
             {!manual ? (
               <button type="button" className={s.link} style={{ justifySelf: "start", paddingLeft: 0 }} onClick={() => setManual(true)}>
                 {matches.length ? "Not on the list? Enter it yourself" : "Enter it yourself"}
@@ -1290,9 +1330,15 @@ export function Journey({ lookup, catalog }: { lookup: LookupEntry[]; catalog: C
             {result.recommendation.ready ? `Next: checked tools for ${toolCount === 1 ? "one of these" : `${toolCount} of these`}, within your budget.` : result.recommendation.reason}
           </span>
           {errorBox}
-          <button type="button" className={cx(s.btn, s.primary)} onClick={() => void showTools()} disabled={busy || !result.recommendation.ready}>
-            {busy ? "One moment…" : "Show me tools for these →"}
-          </button>
+          {result.recommendation.ready ? (
+            <button type="button" className={cx(s.btn, s.primary)} onClick={() => void showTools()} disabled={busy}>
+              {busy ? "One moment…" : "Show me tools for these →"}
+            </button>
+          ) : (
+            <button type="button" className={cx(s.btn, s.primary)} onClick={() => go("plan")} disabled={busy || opps.length === 0}>
+              Make my plan →
+            </button>
+          )}
         </div>
       </>,
     );
@@ -1337,6 +1383,17 @@ export function Journey({ lookup, catalog }: { lookup: LookupEntry[]; catalog: C
     );
   }
 
+  // ---------- 6 · Your plan ----------
+  if (screen === "plan")
+    return frame(
+      <>
+        <Steps n={6} />
+        {banner}
+        <PlanScreen answer={result} recs={recs} catalog={catalog} currentTools={req?.currentTools ?? []} back={() => go(recs ? "tools" : "problems")} />
+      </>,
+      { narrow: true },
+    );
+
   return frame(
     <>
       <Steps n={5} />
@@ -1346,6 +1403,12 @@ export function Journey({ lookup, catalog }: { lookup: LookupEntry[]; catalog: C
       ) : (
         <p className={s.notice}>We need a little more about your business before we can suggest tools.</p>
       )}
+      <div className={cx(s.actionBar, s.sticky)}>
+        <span className={s.small}>Next: a step-by-step plan you can print, free fixes first.</span>
+        <button type="button" className={cx(s.btn, s.primary)} onClick={() => go("plan")}>
+          Make my plan →
+        </button>
+      </div>
     </>,
   );
 }

@@ -37,6 +37,33 @@ export function SafetyBadge({ badge, big }: { badge: CatalogRecord["badge"]; big
   return <span className={cx(s.badge, s.grey)}>◷ Not yet reviewed</span>;
 }
 
+/** Fictional demo tools (data/catalog/sample.json) say so wherever they appear. */
+export function SampleTag() {
+  return <span className={cx(s.chip, t.sampleTag)} title="A made-up tool for the demo. The company and website don't exist.">Sample · not a real product</span>;
+}
+
+/** How a tool fits with what the owner already uses: the vendor's own connection, never ours. */
+export function connection(r: CatalogRecord | undefined, currentTools: string[]): string {
+  if (!r) return "";
+  const mine = r.worksWith.filter((w) => w.type !== "none" && currentTools.some((x) => same(x, w.product)));
+  const native = mine.filter((w) => w.type === "native").map((w) => w.product);
+  const zap = mine.filter((w) => w.type === "zapier").map((w) => w.product);
+  if (r.existingProduct && currentTools.some((x) => same(x, r.existingProduct!))) return `Built into your ${r.existingProduct}: switch it on there.`;
+  if (native.length) return `Connects to your ${native.join(" and ")} with the vendor's built-in connection.`;
+  if (zap.length) return `Connects to your ${zap.join(" and ")} through Zapier (a separate service).`;
+  return "Works on its own: no connection to your other tools.";
+}
+
+/** The vendor's own website, never a link for made-up sample tools. */
+export function OfficialLink({ r }: { r: CatalogRecord | undefined }) {
+  if (!r || r.sample) return null;
+  return (
+    <a className={s.link} style={{ paddingLeft: 0, justifySelf: "start" }} href={r.vendor.website} target="_blank" rel="noreferrer">
+      Official site ↗
+    </a>
+  );
+}
+
 const KIND_LABEL: Record<Recommendation["kind"], string> = {
   "already-have": "Use what you have",
   "quick-fix": "Quick fix · best fit",
@@ -103,8 +130,13 @@ export function WaysToFix({
   return (
     <>
       <h1 className={s.title}>Ways to fix it</h1>
+      {recs.problems.some((p) => p.options.some((o) => o.choices.some((c) => byId.get(c.tool.id)?.sample))) && (
+        <p className={s.banner}>
+          These are <b>sample tools for the demo</b>: the companies are made up. Real tools are being checked now, and only ones that pass our Safety Check and a person's review will appear here.
+        </p>
+      )}
       <p className={s.small} style={{ color: "var(--ink)", marginTop: -8 }}>
-        Only ✓ Verified tools. Each one fits {biz.budgetAssumed ? `${usd(biz.monthlyBudget)} a month, the budget we assumed because you skipped that question,` : `your ${usd(biz.monthlyBudget)} a month`} and works with what you already use where it can.
+        You sign up with each company yourself: MainStreet AI doesn't connect to your accounts. Only ✓ Verified tools. Each one fits {biz.budgetAssumed ? `${usd(biz.monthlyBudget)} a month, the budget we assumed because you skipped that question,` : `your ${usd(biz.monthlyBudget)} a month`} and works with what you already use where it can.
       </p>
 
       {kit && (
@@ -117,7 +149,7 @@ export function WaysToFix({
             </div>
             <span className={s.small}>
               {kit.monthlyPrice <= biz.monthlyBudget ? `${usd(biz.monthlyBudget - kit.monthlyPrice)} under ${budgetWord(biz)}` : `${usd(kit.monthlyPrice - biz.monthlyBudget)} over ${budgetWord(biz)}`}
-              {setupMin ? ` · about ${Math.max(1, Math.round(setupMin / 30) / 2)} hours to set up` : ""}
+              {setupMin ? ` · about ${setupMin < 60 ? `${setupMin} minutes` : `${Math.round(setupMin / 30) / 2} ${Math.round(setupMin / 30) / 2 === 1 ? "hour" : "hours"}`} to set up` : ""}
             </span>
           </div>
           <div className={t.kitRows}>
@@ -126,7 +158,7 @@ export function WaysToFix({
                 <Logo id={c.tool.id} name={c.tool.name} />
                 <b>{c.tool.name}</b>
                 <span className={t.meta}>
-                  {[problemFor(c), usd(c.tool.monthlyPrice), worksWith(c) && `works with ${worksWith(c)}`].filter(Boolean).join(" · ")}
+                  {[problemFor(c), usd(c.tool.monthlyPrice), worksWith(c) && `works with ${worksWith(c)}`, byId.get(c.tool.id)?.sample && "sample tool"].filter(Boolean).join(" · ")}
                 </span>
                 <span className={t.chev} aria-hidden="true">›</span>
               </button>
@@ -161,15 +193,20 @@ export function WaysToFix({
                     <div className={t.tname}><Logo id={c.tool.id} name={c.tool.name} /><h3 className={s.h3}>{c.tool.name}</h3></div>
                     <span className={s.price}>{usd(o.monthlyPrice)}<small>/mo</small></span>
                   </div>
-                  <SafetyBadge badge={r?.badge ?? c.tool.status} />
+                  <div className={s.row} style={{ gap: 6 }}>
+                    <SafetyBadge badge={r?.badge ?? c.tool.status} />
+                    {r?.sample && <SampleTag />}
+                  </div>
                 </div>
                 <p className={t.whyPick}>{c.why}</p>
+                <span className={s.small}>{connection(r, biz.currentTools)}</span>
                 {c.badges.filter((b) => !/catalog/i.test(b)).length > 0 && (
                   <div className={s.row}>
                     {c.badges.filter((b) => !/catalog/i.test(b)).slice(0, 3).map((b) => <span className={s.chip} key={b}>{b}</span>)}
                   </div>
                 )}
-                <span className={s.small}>Fit {c.score.total} of 100 · setup about {c.tool.setupMinutes} min</span>
+                <span className={s.small}>Fit {c.score.total} of 100 · setup about {c.tool.setupMinutes} min{r?.setupMode === "needs_help" ? " with help" : r ? ", by yourself" : ""}</span>
+                <OfficialLink r={r} />
                 <div className={t.actions}>
                   <button type="button" className={cx(s.btn, s.primary)} onClick={() => openTool(c.tool.id)}>See details</button>
                   <button type="button" className={cx(s.btn, s.secondary)} aria-pressed={picked} onClick={() => togglePick(c.tool.id)}>
@@ -264,7 +301,10 @@ export function ToolDetail({
       <div className={s.col}>
         <article className={s.card}>
           <div className={s.cardTop}>
-            <SafetyBadge badge={r.badge} big />
+            <div className={s.row} style={{ gap: 6 }}>
+              <SafetyBadge badge={r.badge} big />
+              {r.sample && <SampleTag />}
+            </div>
             <div className={s.cardHead}>
               <div className={t.tname}><Logo id={r.id} name={r.name} big /><h1 className={s.h1}>{r.name}</h1></div>
               {price !== "unknown" && <span className={s.price}>{usd(price)}<small>/mo</small></span>}
@@ -272,7 +312,13 @@ export function ToolDetail({
             <span className={s.small}>{r.category} · by {r.vendor.company} · last checked {date(r.lastChecked)}</span>
           </div>
           <p>{r.description.replace(/^Sample (scam-style )?tool \(fictional\)[.,]?\s*/i, "")}</p>
-          {r.sample && <span className={s.hint}>Sample tool for the demo: the company and website are made up.</span>}
+          {r.sample ? (
+            <p className={s.banner}>Sample tool for the demo: the company and website are made up. You can't sign up for it.</p>
+          ) : (
+            <p className={s.small}>
+              You sign up with {r.vendor.company} yourself; MainStreet AI doesn't connect to your accounts. <OfficialLink r={r} />
+            </p>
+          )}
           <a className={cx(s.btn, s.primary, s.block)} href="#get-help">Get help setting this up</a>
           {togglePick && (
             <div className={t.actions}>
@@ -374,6 +420,7 @@ export function Compare({ rs, choices, biz, openTool }: { rs: CatalogRecord[]; c
     ["Trains AI on your data", (r) => r.privacyCard.trainsOnYourData.plain],
     ["Contract", (r) => (r.pricing.contract === "monthly" ? "None" : r.pricing.contract === "annual" ? "Yearly" : "Not public")],
     ["Last checked", (r) => date(r.lastChecked)],
+    ["Real product?", (r) => (r.sample ? "No: a sample for the demo" : "Yes")],
   ];
   const best = [...rs].sort((a, b) => (choices.get(b.id)?.score.total ?? 0) - (choices.get(a.id)?.score.total ?? 0))[0];
   const cheap = [...rs].filter((r) => price(r) !== null).sort((a, b) => price(a)! - price(b)!)[0];

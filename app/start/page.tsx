@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { loadLiveCatalog } from "@/lib/discovery/index.ts";
+import { loadLiveCatalog, watchListSize } from "@/lib/discovery/index.ts";
 import { Journey, type LookupEntry } from "./Journey.tsx";
 
 export const metadata: Metadata = {
@@ -18,5 +18,5 @@ export default async function StartPage() {
   const lookup: LookupEntry[] = catalog
     .map((r) => ({ name: r.name, domain: r.vendor.domain.replace(/^www\./, "").toLowerCase(), status: r.badge, checked: r.lastChecked ?? null, sample: Boolean(r.sample), id: r.id }))
     .filter((e) => e.domain);
-  return <Journey lookup={lookup} catalog={catalog} />;
+  return <Journey lookup={lookup} catalog={catalog} watchCount={watchListSize()} />;
 }

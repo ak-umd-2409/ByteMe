@@ -19,13 +19,16 @@ export type { DiscoveryStore } from "./store.ts";
 export * from "./types.ts";
 
 /** The catalog owners see: the built-in tools plus everything discovery checked or decided. */
-export async function loadLiveCatalog(store: DiscoveryStore = getStore()): Promise<CatalogRecord[]> {
+export async function loadLiveCatalog(store: DiscoveryStore = getStore(), env: NodeJS.ProcessEnv = process.env): Promise<CatalogRecord[]> {
+  let records: CatalogRecord[];
   try {
-    return liveCatalog(loadCatalog(), await store.load());
+    records = liveCatalog(loadCatalog(), await store.load());
   } catch {
     // Storage down: owners still get the built-in catalog.
-    return loadCatalog();
+    records = loadCatalog();
   }
+  // CATALOG_SAMPLES=hide drops the made-up demo tools once real tools are approved.
+  return env.CATALOG_SAMPLES === "hide" ? records.filter((r) => !r.sample) : records;
 }
 
 export async function submitTool(input: SubmitInput, store: DiscoveryStore = getStore(), now = new Date()) {
@@ -48,6 +51,9 @@ export async function decideTool(id: string, d: Decision, store: DiscoveryStore 
 }
 
 /** What the review page shows. */
+/** How many real tools we track (the watch list). */
+export const watchListSize = () => (watch as unknown[]).length;
+
 export async function queueView(store: DiscoveryStore = getStore()) {
   const state: DiscoveryState = await store.load();
   const catalog = liveCatalog(loadCatalog(), state);

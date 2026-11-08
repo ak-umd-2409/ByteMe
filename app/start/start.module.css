@@ -262,7 +262,7 @@
 .stack { display: grid; gap: 8px; }
 
 /* Stepper: Find · Check · Questions · Results · Tools */
-.stepper ol { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px; }
+.stepper ol { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 6px; }
 .stepper li { display: grid; gap: 6px; justify-items: start; font-size: 14px; color: var(--text-2); position: relative; padding-top: 10px; }
 .stepper li::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 5px; border-radius: 3px; background: var(--card-inner); }
 .stepper li.stepDone::before, .stepper li.stepNow::before { background: var(--accent); }
@@ -330,3 +330,18 @@
 .checkRow:first-of-type { border-top: 0; }
 .inlineForm { display: flex; gap: 10px; flex-wrap: wrap; }
 .inlineForm .input { flex: 1 1 220px; width: auto; }
+
+/* Your plan (step 6) */
+.planList { list-style: none; margin: 0; padding: 0; display: grid; gap: 16px; }
+.planSteps { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+.planSteps li { display: flex; gap: 12px; align-items: flex-start; }
+.box { flex: none; width: 22px; height: 22px; border: 2px solid var(--ink); border-radius: 5px; margin-top: 3px; background: var(--white); }
+.noPrint {}
+@media print {
+  .app { background: #fff; }
+  .topbar, .stepper, .noPrint, .banner + .stepper { display: none !important; }
+  .page { padding: 0; max-width: none; animation: none !important; }
+  .card { break-inside: avoid; border: 1px solid #999; }
+  .cardTop { background: #eee !important; }
+  .app a::after { content: " (" attr(href) ")"; font-size: 12px; color: #444; word-break: break-all; }
+}
