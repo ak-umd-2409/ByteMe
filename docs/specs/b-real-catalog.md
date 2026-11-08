@@ -67,7 +67,7 @@ Same shape as the Safety Check collector:
   - `setupMinutes` (only if the page states a time), `setupMode`, `languages`
   - rules flags: `recordsCalls`, `announcesRecording`, `hipaaReady`, `outboundAiCalls`, `personalizedPricing`
   - `sharesOrSells` (from the privacy page; the other 4 privacy answers already come from the Safety Check)
-- **Quote check:** every answer's quote must pass the Safety Check's `isVerbatim`, and the answer must appear in its quote (numbers for prices). Otherwise the answer is `"unknown"`.
+- **Quote check:** every answer's quote must pass `isVerbatim` (`lib/business/reviews.ts`, the same check the Safety Check uses), and the answer must appear in its quote (numbers for prices). Otherwise the answer is `"unknown"`.
 - **"Contact us for pricing"** → price `"unknown"`. The translator already refuses to recommend a tool with no confirmed small-plan price.
 - **Never throws.** Output: `CardFacts`, saved as `data/catalog/cards/<id>.json`, with each page's `contentHash` so unchanged pages are never asked again.
 - **Reviews** (`rating`, `count`) are left out unless a person adds them from a named public source.
