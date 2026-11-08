@@ -73,8 +73,20 @@
       "quote": "Timothy Young Chief Executive Officer",
       "pageUrl": "https://www.jasper.ai/company"
     },
-    "trainsOnYourData": "unknown",
-    "canDeleteData": "unknown",
+    "trainsOnYourData": {
+      "answer": "no",
+      "quote": "With Jasper, your data stays yours, and is never used for training purposes.",
+      "pageUrl": "https://www.jasper.ai/enterprise",
+      "source": "person",
+      "foundBy": "Claude (drafted for Rishabh to check)"
+    },
+    "canDeleteData": {
+      "answer": "yes",
+      "quote": "You have the right to ask Us to delete or remove Personal Data when there is no good reason for Us to continue processing it.",
+      "pageUrl": "https://www.jasper.ai/legal/privacy",
+      "source": "person",
+      "foundBy": "Claude (drafted for Rishabh to check)"
+    },
     "whereStored": "unknown",
     "securityCertification": "unknown",
     "policyAddress": {

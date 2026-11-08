@@ -67,10 +67,28 @@
       "quote": "© 2026 Notion Labs, Inc.",
       "pageUrl": "https://www.notion.com/about"
     },
-    "address": "unknown",
+    "address": {
+      "answer": "685 Market St.",
+      "quote": "685 Market St.",
+      "pageUrl": "https://www.notion.com/trust/privacy-policy",
+      "source": "person",
+      "foundBy": "Claude (drafted for Rishabh to check)"
+    },
     "leaderName": "unknown",
-    "trainsOnYourData": "unknown",
-    "canDeleteData": "unknown",
+    "trainsOnYourData": {
+      "answer": "opt-in",
+      "quote": "Notion AI will not use your data to train our models unless you opt in to a request to share your data.",
+      "pageUrl": "https://www.notion.com/pricing",
+      "source": "person",
+      "foundBy": "Claude (drafted for Rishabh to check)"
+    },
+    "canDeleteData": {
+      "answer": "yes",
+      "quote": "Request Deletion of your information, subject to certain exceptions prescribed by law.",
+      "pageUrl": "https://www.notion.com/trust/privacy-policy",
+      "source": "person",
+      "foundBy": "Claude (drafted for Rishabh to check)"
+    },
     "whereStored": "unknown",
     "securityCertification": "unknown",
     "policyAddress": "unknown"

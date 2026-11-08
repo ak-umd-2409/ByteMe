@@ -68,7 +68,13 @@
       "quote": "Co-founders Kyle Racki and Kevin Springer spent years toiling over proposals as employees, freelancers, sales reps, and agency owners.",
       "pageUrl": "https://www.proposify.com/company/about"
     },
-    "trainsOnYourData": "unknown",
+    "trainsOnYourData": {
+      "answer": "no",
+      "quote": "We do not use Customer Data, including but not limited to user inputs, activity, or any content provided through our platform, to train, refine, or improve our AI models.",
+      "pageUrl": "https://www.proposify.com/company/terms-of-services",
+      "source": "person",
+      "foundBy": "Claude (drafted for Rishabh to check)"
+    },
     "canDeleteData": {
       "answer": "yes",
       "quote": "In your account, you can review, update, delete, or correct your personal information on file with us at any time.",

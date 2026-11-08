@@ -67,9 +67,21 @@
       "quote": "© 2026 Semrush Holdings. All rights reserved.",
       "pageUrl": "https://www.semrush.com/company/"
     },
-    "address": "unknown",
+    "address": {
+      "answer": "800 Boylston Street, Suite 2475",
+      "quote": "800 Boylston Street, Suite 2475",
+      "pageUrl": "https://www.semrush.com/company/legal/privacy-policy/",
+      "source": "person",
+      "foundBy": "Claude (drafted for Rishabh to check)"
+    },
     "leaderName": "unknown",
-    "trainsOnYourData": "unknown",
+    "trainsOnYourData": {
+      "answer": "no",
+      "quote": "Semrush does not train or develop its models, and does not allow its third-party providers to train or develop its models on User Input.",
+      "pageUrl": "https://www.semrush.com/company/legal/semrush-artificial-intelligence-services-terms/",
+      "source": "person",
+      "foundBy": "Claude (drafted for Rishabh to check)"
+    },
     "canDeleteData": {
       "answer": "yes",
       "quote": "You can delete all your previous emails available due to the integration by deleting the project in the tool during the revocation process, or sending us the relevant request.",

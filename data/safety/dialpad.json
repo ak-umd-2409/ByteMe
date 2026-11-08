@@ -67,13 +67,25 @@
       "quote": "© 2026 DIALPAD, INC.",
       "pageUrl": "https://www.dialpad.com/about-us/"
     },
-    "address": "unknown",
+    "address": {
+      "answer": "2700 Camino Ramon, Suite 490",
+      "quote": "2700 Camino Ramon, Suite 490",
+      "pageUrl": "https://www.dialpad.com/legal/",
+      "source": "person",
+      "foundBy": "Claude (drafted for Rishabh to check)"
+    },
     "leaderName": {
       "answer": "Craig Walker",
       "quote": "Craig Walker is a Silicon Valley fixture with more than 20 years of experience as an entrepreneur, venture capitalist, corporate executive, and attorney.",
       "pageUrl": "https://www.dialpad.com/about-us/"
     },
-    "trainsOnYourData": "unknown",
+    "trainsOnYourData": {
+      "answer": "opt-out",
+      "quote": "The AI Training section of Dialpad’s Privacy Policy explains in straightforward language how customer data processed through Dialpad’s AI products is used to improve the services—and how any customer, from a large company to an individual user, can opt out of this usage.",
+      "pageUrl": "https://www.dialpad.com/blog/how-dialpadgpt-keeps-your-data-secure/",
+      "source": "person",
+      "foundBy": "Claude (drafted for Rishabh to check)"
+    },
     "canDeleteData": {
       "answer": "yes",
       "quote": "We’ll retain data until you choose to delete it.",
