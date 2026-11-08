@@ -3,7 +3,7 @@ import { mkdtempSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { describe, it } from "node:test";
-import { loadCatalog } from "../catalog/index.ts";
+import { loadCatalog as loadRealCatalog, loadTestCatalog as loadCatalog } from "../catalog/index.ts";
 import type { ListEntry } from "../catalog/list.ts";
 import type { CatalogRecord, Verdict } from "../catalog/types.ts";
 import { decide, liveCatalog, runDiscovery, submit, type CheckFn } from "./discovery.ts";
@@ -157,9 +157,11 @@ describe("storage and the service layer", () => {
     assert.equal(view.candidates.length, 1);
     assert.equal(view.storage.kind, "memory");
     assert.ok(view.counts.watchList > 50);
-    const blocked = await decideTool("booknest", { action: "block", reviewer: "R", reason: "test" }, store, NOW);
+    // The live catalog is the real one; block one of its approved tools.
+    const id = loadRealCatalog().find((r) => r.badge === "verified")!.id;
+    const blocked = await decideTool(id, { action: "block", reviewer: "R", reason: "test" }, store, NOW);
     assert.ok(blocked.ok);
-    assert.equal((await loadLiveCatalog(store)).find((r) => r.id === "booknest")!.badge, "blocked");
+    assert.equal((await loadLiveCatalog(store)).find((r) => r.id === id)!.badge, "blocked");
   });
 
   it("file store round-trips", async () => {
@@ -200,6 +202,6 @@ describe("storage and the service layer", () => {
 
   it("owners still get the built-in catalog if storage is down", async () => {
     const broken = { ...memoryStore(), load: async () => Promise.reject(new Error("down")) };
-    assert.equal((await loadLiveCatalog(broken)).length, catalog.length);
+    assert.equal((await loadLiveCatalog(broken)).length, loadRealCatalog().length);
   });
 });

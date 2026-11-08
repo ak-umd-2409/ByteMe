@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
-import { loadCatalog } from "../catalog/index.ts";
+import { loadCatalog as loadRealCatalog, loadTestCatalog as loadCatalog } from "../catalog/index.ts";
 import type { CatalogRecord } from "../catalog/types.ts";
 import type { CheckFn } from "../discovery/index.ts";
 import { memoryStore } from "../discovery/index.ts";
@@ -62,7 +62,8 @@ describe("discovery endpoints", () => {
     assert.equal(ok.status, 200, JSON.stringify(ok.body));
     const q = (await handleQueue(store)).body as { counts: { verified: number }; candidates: { status: string }[] };
     assert.equal(q.candidates[0].status, "approved");
-    assert.equal(q.counts.verified, 4);
+    // The real catalog's approved tools, plus the one just approved.
+    assert.equal(q.counts.verified, loadRealCatalog().filter((r) => r.badge === "verified").length + 1);
     assert.equal((await handleRun({ limit: 99 }, "manual", ready, store, NOW)).status, 400);
   });
 });
