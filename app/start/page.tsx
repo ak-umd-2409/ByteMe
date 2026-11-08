@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
-import { loadLiveCatalog, watchListSize } from "@/lib/discovery/index.ts";
+import { loadLiveCatalog } from "@/lib/discovery/index.ts";
 import { Journey, type LookupEntry } from "./Journey.tsx";
 
 export const metadata: Metadata = {
-  title: "MainStreet AI | Find what's holding your business back",
-  description: "Type your business name. We read your public listings, website and reviews, ask a few questions, and show what's costing you, with the proof.",
+  title: "MainStreet AI | Find your next move",
+  description: "Discover business opportunities, compare trusted AI fixes, and build a practical 30-day plan for your Maryland small business.",
 };
 
 // The catalog changes when reviewers approve or block tools, so read it on each visit.
@@ -18,5 +18,5 @@ export default async function StartPage() {
   const lookup: LookupEntry[] = catalog
     .map((r) => ({ name: r.name, domain: r.vendor.domain.replace(/^www\./, "").toLowerCase(), status: r.badge, checked: r.lastChecked ?? null, sample: Boolean(r.sample), id: r.id }))
     .filter((e) => e.domain);
-  return <Journey lookup={lookup} catalog={catalog} watchCount={watchListSize()} />;
+  return <Journey lookup={lookup} catalog={catalog} />;
 }

@@ -25,3 +25,10 @@
 .hidden li { display: flex; gap: 10px; align-items: flex-start; flex-wrap: wrap; }
 .apply { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; background: var(--card-inner); border-radius: 18px; padding: 20px 24px; }
 .apply > div { display: grid; gap: 4px; }
+
+/* Catalog follows the same calm decision system as the guided journey. */
+.filters { border: 1px solid var(--line); background: #fff; box-shadow: 0 10px 30px #15332f0a; border-radius: 18px; padding: 24px; }
+.tool { border: 1px solid var(--line); background: #fff; border-radius: 17px; box-shadow: 0 6px 22px #15332f08; padding: 20px; }
+.tool:hover { border-color: var(--accent); box-shadow: 0 13px 28px #15332f18; transform: translateY(-2px); }
+.price { font-weight: 800; }
+.apply { border: 1px solid var(--line); background: #edf5e9; }

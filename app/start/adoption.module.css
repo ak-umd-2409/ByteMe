@@ -71,3 +71,23 @@
   .supportGrid a span, .supportGrid .prototype span { font-size: 8px; }
   .legal { font-size: 8px; }
 }
+
+/* Adoption should feel like a usable workspace, not a long document. */
+.flow { gap: 24px; }
+.flow section { border: 1px solid var(--line); border-radius: 18px; background: #fff; box-shadow: 0 10px 30px #15332f0a; padding: 24px; }
+.heading h2 { font-size: 27px; }
+.kicker { letter-spacing: .11em; font-size: 11px; }
+.language { border: 1px solid var(--line); border-radius: 9px; }
+.progress { border-radius: 999px; padding: 8px 12px; }
+.week { gap: 9px; }
+.week h3 { font-size: 15px !important; }
+.step { border-radius: 12px; padding: 15px; }
+.step:hover { border-color: var(--accent); }
+.step:has(input:checked) { background: var(--ok-bg); border-color: #aed6bb; }
+.template, .checkin { border-radius: 13px; }
+.template button, .checkin button { border: 1px solid var(--line); border-radius: 9px; }
+.template button:hover, .checkin button:hover { border-color: var(--accent); box-shadow: none; }
+.supportGrid a, .supportGrid .prototype, .resourceGrid a { border-radius: 11px; }
+.supportGrid a:hover, .resourceGrid a:hover { border-color: var(--accent); background: var(--ok-bg); }
+@media (max-width: 760px) { .flow section { padding: 18px; } }
+@media print { .flow section { box-shadow: none; border: 0; padding: 0; } }
