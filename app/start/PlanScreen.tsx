@@ -1,18 +1,21 @@
 "use client";
 
 /**
- * Step 6 · Your plan (spec §5.1, 5.2, 5.5): free fixes first, then one chosen tool per
- * problem with its setup steps, then who helps. Built by lib/plan (no AI). Printable.
+ * Step 6 · Your plan (spec §5): the first 30 days week by week, free fixes first, then one
+ * chosen tool per problem with its setup steps, words ready to copy, free help and money,
+ * and a read-only link for the owner's SBDC advisor. Built by lib/plan (no AI). Printable.
  */
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import type { CatalogRecord } from "@/lib/catalog/types.ts";
 import type { JourneyAnswerResponse } from "@/lib/journey/types.ts";
-import { buildPlan } from "@/lib/plan/plan.ts";
+import { readyContent } from "@/lib/plan/content.ts";
+import { buildPlan, planText } from "@/lib/plan/plan.ts";
 import type { ProblemKey } from "@/lib/problems/types.ts";
 import type { RecommendationResult } from "@/lib/recommend/types.ts";
 import s from "./start.module.css";
-import t from "./tools.module.css";
 import { SampleTag } from "./ToolScreens.tsx";
+import { CopyButton } from "../plan/Copy.tsx";
+import { FreeHelp, ReadyWords, Weeks } from "../plan/parts.tsx";
 
 const cx = (...names: (string | false | null | undefined)[]) => names.filter(Boolean).join(" ");
 const usd = (n: number) => `$${Math.round(n).toLocaleString("en-US")}`;
@@ -51,6 +54,29 @@ export function PlanScreen({
   );
 
   const plan = buildPlan({ answer, choices, catalog, currentTools });
+  const words = readyContent(answer.business, plan, catalog);
+  const [share, setShare] = useState<{ url: string; stored: boolean; expiresAt: string | null } | { error: string } | "busy" | null>(null);
+  // A link shows the plan as it was when made: changing a tool means making a new one.
+  useEffect(() => setShare(null), [choices]);
+
+  async function makeLink() {
+    setShare("busy");
+    try {
+      const res = await fetch("/api/plan/share", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ context: answer.context, choices: Object.fromEntries(Object.entries(choices).filter(([, v]) => v)), currentTools }),
+      });
+      const body = await res.json();
+      if (!res.ok) throw new Error(body?.error?.message ?? "We couldn't make a link.");
+      setShare({ url: new URL(body.path, window.location.origin).toString(), stored: body.stored, expiresAt: body.expiresAt });
+    } catch (e) {
+      setShare({ error: e instanceof Error ? e.message : "We couldn't make a link." });
+    }
+  }
+  const link = share && typeof share === "object" && "url" in share ? share : null;
+  const advisor = plan.help[0]!;
+  const mail = (subject: string, body: string) => `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
   const toolProblems = answer.opportunities.filter((o) => o.fix.kind !== "free" && (options[o.problemKey]?.length ?? 0) > 0);
   const stepCount = plan.sections.reduce((n, sec) => n + sec.steps.length, 0);
 
@@ -58,7 +84,7 @@ export function PlanScreen({
     <>
       <header className={s.intro}>
         <h1 className={s.title}>Your plan for {plan.business}</h1>
-        <p className={s.lead}>Free fixes first, then one tool at a time. Print it, or take it to a free advisor if you'd like help.</p>
+        <p className={s.lead}>Your first 30 days: free fixes first, then one tool at a time. Print it, copy the ready-made words, or send it to a free advisor.</p>
         <span className={s.small}>
           {stepCount} steps
           {plan.totals.monthly > 0 && ` · ${usd(plan.totals.monthly)} a month${plan.totals.unknownPrices ? " plus prices that aren't public" : ""}`}
@@ -104,6 +130,8 @@ export function PlanScreen({
         </div>
       )}
 
+      <Weeks plan={plan} />
+
       <ol className={s.planList}>
         {plan.sections.map((sec, i) => (
           <li key={sec.id} className={s.card}>
@@ -127,6 +155,7 @@ export function PlanScreen({
                     <b>
                       {st.title}
                       {st.minutes ? <span className={s.small}> · {st.minutes} min</span> : null}
+                      <span className={s.weekChip}>{st.week > 4 ? "After day 30" : `Week ${st.week}`}</span>
                     </b>
                     <span>{st.detail}</span>
                     {st.why && <span className={s.hint}>{st.why}</span>}
@@ -143,23 +172,50 @@ export function PlanScreen({
         ))}
       </ol>
 
-      <section className={s.card}>
+      <ReadyWords items={words} />
+
+      <section className={cx(s.card, s.noPrint)} aria-labelledby="send-h">
         <div className={s.cardTop}>
-          <h2 className={s.h3}>Free help with any of this</h2>
+          <h2 className={s.h3} id="send-h">
+            Send it to your advisor
+          </h2>
+          <span className={s.small}>
+            {advisor.name} is free. Send them your plan so they can look before you meet{advisor.phone ? `, then call ${advisor.phone} to book a time` : ""}.
+          </span>
         </div>
-        {plan.help.map((h) => (
-          <a key={h.name} className={t.helpRow} href={h.url} target="_blank" rel="noreferrer">
-            <b>{h.name}</b>
-            <span>
-              {h.detail}
-              {h.phone ? ` · ${h.phone}` : ""}
-            </span>
-            <span className={t.chev} aria-hidden="true">
-              ›
-            </span>
-          </a>
-        ))}
+        <div className={s.shareBox}>
+          {!link && (
+            <button type="button" className={cx(s.btn, s.primary)} style={{ justifySelf: "start" }} onClick={makeLink} disabled={share === "busy"}>
+              {share === "busy" ? "Making your link…" : "Make a link for my advisor"}
+            </button>
+          )}
+          {share && typeof share === "object" && "error" in share && <p className={s.banner}>{share.error}</p>}
+          {link && (
+            <>
+              <div className={s.shareLink}>
+                <input readOnly value={link.url} aria-label="Link to your plan" onFocus={(e) => e.currentTarget.select()} />
+                <CopyButton text={link.url} label="Copy link" />
+                <a
+                  className={cx(s.btn, s.primary)}
+                  href={mail(`My plan for ${plan.business}`, `Hi,\n\nI'd like help with my business, ${plan.business}. Here's the plan I made with MainStreet AI, so you can look before we meet:\n\n${link.url}\n\nThank you!`)}
+                >
+                  Email it to my advisor
+                </a>
+              </div>
+              <p className={s.hint}>
+                {link.stored && link.expiresAt
+                  ? `Read-only. Anyone with the link can see it until ${new Date(link.expiresAt).toLocaleDateString("en-US", { month: "long", day: "numeric", timeZone: "UTC" })}.`
+                  : "Read-only. This link holds your whole plan, so it's long: if an email cuts it off, print the plan and bring it instead."}
+              </p>
+            </>
+          )}
+        </div>
+        <a className={s.link} style={{ justifySelf: "start", paddingLeft: 0 }} href={mail(`My plan for ${plan.business}`, planText(plan, link?.stored ? link.url : null))}>
+          Email the plan to myself
+        </a>
       </section>
+
+      <FreeHelp plan={plan} />
 
       <p className={s.hint}>
         Estimates and prices come from public pages checked on the dates shown on each tool. Confirm prices with the company before you buy. Not legal advice.
