@@ -6,7 +6,7 @@
 import { getLlmProvider, llmJson } from "../../llm/client.ts";
 import { v } from "../../shared/validate.ts";
 import { isFetched, type AiAnswer, type CollectDeps, type FetchedPageFact, type PageFact } from "../../safety/types.ts";
-import { answerInQuote, keepAnswer } from "./answers.ts";
+import { answerInQuote, keepAnswer, priceInQuote } from "./answers.ts";
 import type { CardAi, CardPageKind, PlanSize, WorksWithFact } from "./types.ts";
 
 const SIZES: PlanSize[] = ["small", "medium", "large"];
@@ -120,7 +120,9 @@ function keepWorksWith(raw: unknown, pages: Record<string, PageFact>): WorksWith
     const kept = keepAnswer({ answer: r.product, quote: r.quote, pageUrl: r.pageUrl }, pages);
     if (kept === "unknown") continue;
     if (out.some((w) => w.product.toLowerCase() === kept.answer.toLowerCase())) continue;
-    out.push({ product: kept.answer, type: r.type, quote: kept.quote, pageUrl: kept.pageUrl });
+    // A quote that says Zapier means a Zapier connection, whatever the AI said.
+    const type = /zapier/i.test(kept.quote) && !/zapier/i.test(kept.answer) ? "zapier" : r.type;
+    out.push({ product: kept.answer, type, quote: kept.quote, pageUrl: kept.pageUrl });
   }
   return out;
 }
@@ -133,7 +135,8 @@ export function verifyReply(reply: Raw, pages: Record<CardPageKind, PageFact>): 
   ai.description = keepAnswer(reply.description, vendorPages);
   const plans = asObj(reply.plans) ?? {};
   for (const size of SIZES) {
-    const kept = keepAnswer<string>(plans[size], vendorPages);
+    let kept = keepAnswer<string>(plans[size], vendorPages);
+    if (kept !== "unknown" && !priceInQuote(kept.answer, kept.quote)) kept = "unknown";
     ai.plans[size] = kept;
     const name = asObj(plans[size])?.plan;
     if (kept !== "unknown" && typeof name === "string" && name.trim().length <= 60 && answerInQuote(name.trim(), kept.quote))

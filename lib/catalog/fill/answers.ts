@@ -26,6 +26,43 @@ export function answerInQuote(answer: string, quote: string): boolean {
   return s.length > 0 && ` ${squash(quote)} `.includes(` ${s} `);
 }
 
+const escapeRe = (text: string) => text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
+/**
+ * Is the quote a whole sentence (or a whole line) on the page? Stops a
+ * yes/no answer being "proved" by a fragment such as "HIPAA compliant" cut
+ * out of "We are not HIPAA compliant."
+ */
+export function isWholeSentence(quote: string, text: string): boolean {
+  const words = quote.trim().split(/\s+/).filter(Boolean);
+  if (!words.length) return false;
+  const pattern = new RegExp(words.map(escapeRe).join("\\s+"), "gi");
+  for (const m of text.matchAll(pattern)) {
+    const before = text.slice(0, m.index);
+    const after = text.slice(m.index + m[0].length);
+    const starts = /(^|\n|[.!?]["')\]]?\s+)$/.test(before);
+    const ends = /[.!?]["')\]]?$/.test(m[0]) || /^(["')\]]?\s*[.!?]|[ \t]*\n|\s*$)/.test(after);
+    if (starts && ends) return true;
+  }
+  return false;
+}
+
+/**
+ * Is the answer a monthly dollar price written in the quote? It must follow a
+ * $ sign and must not be a yearly price ("$588/year", "$1,200 a year").
+ */
+export function priceInQuote(answer: string, quote: string): boolean {
+  if (!NUMBER.test(answer.trim())) return false;
+  const want = Number(answer.trim());
+  for (const m of quote.matchAll(/\$\s*(\d{1,3}(?:,\d{3})+(?:\.\d+)?|\d+(?:\.\d+)?)/g)) {
+    if (Number(m[1].replace(/,/g, "")) !== want) continue;
+    const after = quote.slice(m.index + m[0].length);
+    if (/^\s*(\/\s*(yr|year|annum)\b|per\s+(yr|year|annum)\b|a\s+year\b|annually\b)/i.test(after)) continue;
+    return true;
+  }
+  return false;
+}
+
 /** A monthly price answer as a number, or "unknown" for anything that isn't a plain number. */
 export function parseMonthly(answer: string): number | "unknown" {
   const a = answer.trim();
@@ -52,5 +89,7 @@ export function keepAnswer<T extends string>(raw: unknown, pages: Record<string,
   } else if (!answerInQuote(answer, quote)) return "unknown";
   const page = Object.values(pages).find((p) => isFetched(p) && (p.finalUrl === pageUrl || p.url === pageUrl));
   if (!page || !isFetched(page) || !isVerbatim(quote, page.text)) return "unknown";
+  // A fixed-choice answer isn't written in its quote, so the quote must be a whole sentence.
+  if (allowed && !isWholeSentence(quote, page.text)) return "unknown";
   return { answer: answer as T, quote, pageUrl: page.finalUrl };
 }

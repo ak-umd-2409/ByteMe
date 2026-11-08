@@ -14,7 +14,7 @@ import { verify as verifySafetyAnswer } from "../safety/collect/ai.ts";
 import { SAFETY_CONFIG } from "../safety/config.ts";
 import { contentHash } from "../safety/signals.ts";
 import { isFetched, type AiAnswer, type CollectDeps, type FetchedPageFact, type SafetyFacts } from "../safety/types.ts";
-import { keepAnswer } from "./fill/answers.ts";
+import { keepAnswer, priceInQuote } from "./fill/answers.ts";
 import type { CardAi, CardFacts } from "./fill/types.ts";
 
 export interface FoundFact {
@@ -105,6 +105,25 @@ async function readPage(url: string, deps: CollectDeps): Promise<FetchedPageFact
   }
 }
 
+const ABOUT_FIELDS: SafetyKey[] = ["companyName", "address", "leaderName"];
+const isPerson = (a: unknown) => (a as { source?: string } | null)?.source === "person";
+
+/**
+ * A saved fact sheet, ready to be reused by the next Safety Check: wherever a
+ * person's answer was saved, the AI is asked again, so a fact removed from the
+ * found file (or no longer on its page) never comes back unchecked.
+ */
+export function forReuse(facts: SafetyFacts | null): SafetyFacts | null {
+  if (!facts) return null;
+  const out = structuredClone(facts);
+  for (const key of SAFETY_FIELDS) {
+    if (!isPerson(out.ai[key])) continue;
+    if (ABOUT_FIELDS.includes(key)) out.ai.ran.about = false;
+    else out.ai.ran.privacy = false;
+  }
+  return out;
+}
+
 const isText = (v: unknown): v is string => typeof v === "string" && v.trim().length > 0;
 
 /** Check each found fact against its live page and put the accepted ones in place of "unknown". */
@@ -140,6 +159,14 @@ export async function applyFound(found: FoundFact[], card: CardFacts, safety: Sa
     }
     if (!isVerbatim(f.quote, page.text)) {
       reject(f.field, "That sentence isn't on that page, word for word.");
+      continue;
+    }
+    if ((f.field.startsWith("plans.") || f.field === "setupMinutes") && !/^\d+(\.\d+)?$/.test(f.answer.trim())) {
+      reject(f.field, "Write the number as plain digits, like 49 (no $ sign or words).");
+      continue;
+    }
+    if (f.field.startsWith("plans.") && !priceInQuote(f.answer, f.quote)) {
+      reject(f.field, "That sentence doesn't show this as a monthly dollar price.");
       continue;
     }
     const raw = { answer: f.answer, quote: f.quote, pageUrl: page.finalUrl };

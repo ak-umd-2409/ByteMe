@@ -274,3 +274,33 @@ describe("fillCard: saving AI calls", () => {
     assert.equal(again.llm.calls.length, 1);
   });
 });
+
+describe("fillCard: review fixes", () => {
+  it("drops a yearly price given as a plan price", async () => {
+    const reply = goodReply();
+    reply.plans.small = { ...q("588", "Starter is $588 per year.", "/pricing"), plan: "Starter" };
+    const { card } = await fill(reply, { [`${SITE}/pricing`]: html("Starter is $588 per year. Pro is $99 per month.") });
+    assert.equal(card.ai.plans.small, "unknown");
+  });
+
+  it("a connection whose quote says Zapier is marked zapier, whatever the AI said", async () => {
+    const reply = goodReply();
+    reply.worksWith[1].type = "native";
+    const { card } = await fill(reply);
+    assert.deepEqual(card.ai.worksWith.find((w) => w.product === "Google Calendar")?.type, "zapier");
+  });
+
+  it("a tool listed at a sub-page only reads pages under that sub-page", async () => {
+    const sub = { ...entry, url: `${SITE}/appointments` };
+    const fake = fakeFetch({
+      [`${SITE}/appointments`]: html("Book appointments online.", '<a href="/pricing">Pricing</a><a href="/appointments/features">Features</a>'),
+      [`${SITE}/pricing`]: html("Point of sale: $60 per month."),
+      [`${SITE}/appointments/pricing`]: html("Appointments Plus is $49 per month."),
+      [`${SITE}/appointments/features`]: html("Reminders by text."),
+    });
+    const card = await fillCard(sub, { fetchImpl: fake.impl, resolveHost: publicResolve, llm: fakeLlm(() => "{}").provider, cache: createMemoryCache() });
+    assert.equal((card.pages.pricing as FetchedPageFact).finalUrl, `${SITE}/appointments/pricing`);
+    assert.equal((card.pages.features as FetchedPageFact).finalUrl, `${SITE}/appointments/features`);
+    assert.ok(!fake.calls.some((c) => c.url === `${SITE}/pricing`));
+  });
+});

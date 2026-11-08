@@ -14,7 +14,7 @@ import { parseArgs } from "node:util";
 import { buildRecord } from "../lib/catalog/build.ts";
 import { fillCard } from "../lib/catalog/fill/index.ts";
 import type { CardFacts } from "../lib/catalog/fill/types.ts";
-import { applyFound, loadFound } from "../lib/catalog/found.ts";
+import { applyFound, forReuse, loadFound } from "../lib/catalog/found.ts";
 import { gapsFor } from "../lib/catalog/gaps.ts";
 import { loadList, validateList } from "../lib/catalog/list.ts";
 import type { CatalogRecord } from "../lib/catalog/types.ts";
@@ -64,7 +64,7 @@ for (const entry of entries) {
 
     const { facts } = await checkTool(
       { url: entry.url, name: entry.name, handlesSensitiveData: entry.sensitive },
-      { llm: ai.provider, previous: loadFacts(entry.id) },
+      { llm: ai.provider, previous: forReuse(loadFacts(entry.id)) },
     );
     const card = await fillCard(entry, { llm: ai.provider, previous: readJson<CardFacts>(cardUrl), privacyPage: facts.pages.privacy });
     const found = await applyFound(loadFound(entry.id), card, facts);

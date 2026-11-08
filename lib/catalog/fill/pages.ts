@@ -89,9 +89,13 @@ export async function findCardPages(url: string, deps: CollectDeps): Promise<Rec
   }
   const allowed = (target: string) => robotsAllows(robots, new URL(target).pathname);
 
+  // A tool listed at a sub-page of a big site (squareup.com/us/en/appointments)
+  // only reads pages under that sub-page, so it never gets another product's prices.
+  const scope = new URL(url).pathname.replace(/\/+$/, "");
   const links = extractLinks(home.body, home.finalUrl).filter((link) => {
     try {
-      return registrableDomain(new URL(link.href).hostname) === site;
+      const target = new URL(link.href);
+      return registrableDomain(target.hostname) === site && (!scope || target.pathname.startsWith(`${scope}/`));
     } catch {
       return false;
     }
@@ -129,7 +133,7 @@ export async function findCardPages(url: string, deps: CollectDeps): Promise<Rec
     // Not linked: guess the usual paths. 404 means "not here"; anything else that stops us is remembered.
     let firstProblem: string | null = null;
     for (const path of FALLBACK_PATHS[kind]) {
-      const target = `${origin}${path}`;
+      const target = `${origin}${scope}${path}`;
       if (used.has(target)) continue;
       const outcome = await read(kind, target);
       if (outcome === "ok") break;

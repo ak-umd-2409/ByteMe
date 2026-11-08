@@ -5,7 +5,7 @@ import { judge } from "../safety/judge.ts";
 import { fakeFetch, publicResolve } from "../testing/fakes.ts";
 import { emptyCardAi } from "./fill/index.ts";
 import type { CardFacts } from "./fill/types.ts";
-import { applyFound, loadFound, type FoundFact } from "./found.ts";
+import { applyFound, forReuse, loadFound, type FoundFact } from "./found.ts";
 import type { ListEntry } from "./list.ts";
 
 const SITE = "https://goodtool.example";
@@ -148,5 +148,22 @@ describe("loadFound", () => {
   });
   it("refuses an unsafe id", () => {
     assert.deepEqual(loadFound("../../etc/passwd"), []);
+  });
+});
+
+describe("review fixes", () => {
+  it("rejects a plan price that isn't plain digits, with a reason", async () => {
+    const out = await run([fact({ field: "plans.small", answer: "$29", quote: "Plans start at $29 per month." })]);
+    assert.deepEqual(out.accepted, []);
+    assert.match(out.rejected[0].why, /digits/);
+  });
+
+  it("forReuse makes the AI ask again where a person's answer was saved", () => {
+    const saved = factsFixture({ ai: { whereStored: { answer: "United States", quote: "x", pageUrl: "y", source: "person" } as never } });
+    const reused = forReuse(saved)!;
+    assert.equal(reused.ai.ran.privacy, false);
+    assert.equal(reused.ai.ran.about, true);
+    assert.equal(saved.ai.ran.privacy, true);
+    assert.equal(forReuse(null), null);
   });
 });
