@@ -107,6 +107,7 @@
 /* Notices */
 .banner { background: var(--warn-bg); color: var(--warn-fg); border-radius: 8px; padding: 10px 14px; font-size: 15px; font-weight: 500; max-width: 760px; }
 .notice { background: var(--grey-bg); color: var(--grey-fg); border-radius: 8px; padding: 10px 14px; font-size: 15px; }
+.okNote { background: var(--ok-bg); color: var(--ok-fg); border-radius: 8px; padding: 10px 14px; font-size: 15px; }
 .error { background: var(--bad-bg); color: var(--bad-fg); border-radius: 8px; padding: 10px 14px; font-size: 15px; }
 
 /* Step line */
