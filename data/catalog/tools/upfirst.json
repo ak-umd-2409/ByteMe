@@ -22,8 +22,8 @@
   "pricing": {
     "asOf": "Nov 2026",
     "small": {
-      "monthlyUsd": "unknown",
-      "note": ""
+      "monthlyUsd": 24.95,
+      "note": "Cheapest paid plan"
     },
     "medium": {
       "monthlyUsd": 159.95,
@@ -100,7 +100,7 @@
     "outboundAiCalls": "unknown",
     "personalizedPricing": "unknown"
   },
-  "badge": "verified",
+  "badge": "listed",
   "safetyCheck": {
     "ranAt": "2026-11-08",
     "checks": {
@@ -215,7 +215,6 @@
     "https://upfirst.ai/privacy-policy"
   ],
   "needsVerification": [
-    "pricing.small.monthlyUsd",
     "pricing.freeTier",
     "pricing.cancellation",
     "setupMinutes",
@@ -226,7 +225,5 @@
     "rulesFlags.personalizedPricing",
     "setupMode",
     "languages"
-  ],
-  "reviewedAt": "2026-11-08",
-  "reviewedBy": "Rishabh"
+  ]
 }

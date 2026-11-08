@@ -18,8 +18,8 @@
   "pricing": {
     "asOf": "Nov 2026",
     "small": {
-      "monthlyUsd": "unknown",
-      "note": ""
+      "monthlyUsd": 9,
+      "note": "Cheapest paid plan"
     },
     "medium": {
       "monthlyUsd": "unknown",
@@ -30,18 +30,14 @@
       "note": ""
     },
     "freeTier": "unknown",
-    "contract": "monthly",
+    "contract": "unknown",
     "cancellation": "unknown",
     "pricingUrl": "https://www.brevo.com/pricing/"
   },
   "worksWith": [
     {
-      "product": "Shopify",
-      "type": "zapier"
-    },
-    {
       "product": "WordPress",
-      "type": "zapier"
+      "type": "native"
     },
     {
       "product": "HubSpot",
@@ -52,19 +48,15 @@
       "type": "native"
     },
     {
-      "product": "Gmail",
-      "type": "native"
-    },
-    {
       "product": "Google Sheets",
       "type": "native"
     },
     {
-      "product": "Google Analytics",
+      "product": "Zapier",
       "type": "native"
     },
     {
-      "product": "Mailchimp",
+      "product": "Make",
       "type": "native"
     }
   ],
@@ -112,7 +104,7 @@
     "outboundAiCalls": "unknown",
     "personalizedPricing": "unknown"
   },
-  "badge": "verified",
+  "badge": "listed",
   "safetyCheck": {
     "ranAt": "2026-11-08",
     "checks": {
@@ -225,16 +217,16 @@
   "lastChecked": "2026-11-08",
   "sources": [
     "https://www.brevo.com/",
-    "https://www.brevo.com/pricing/",
+    "https://www.brevo.com/aweber/",
     "https://www.brevo.com/company/about/",
     "https://www.brevo.com/legal/privacypolicy/",
     "https://www.brevo.com/integrations/"
   ],
   "needsVerification": [
-    "pricing.small.monthlyUsd",
     "pricing.medium.monthlyUsd",
     "pricing.large.monthlyUsd",
     "pricing.freeTier",
+    "pricing.contract",
     "pricing.cancellation",
     "setupMinutes",
     "rulesFlags.recordsCalls",
@@ -244,7 +236,5 @@
     "rulesFlags.personalizedPricing",
     "setupMode",
     "languages"
-  ],
-  "reviewedAt": "2026-11-08",
-  "reviewedBy": "Rishabh"
+  ]
 }
