@@ -83,6 +83,23 @@ The only way to make a tool `verified`. Returns `{ ok: false, reason }` unless `
 - `data/safety/<toolId>.json`: the saved fact sheet for each catalog tool, so the demo never needs the internet or the AI. `loadFacts(id)` in `lib/safety/saved.ts` reads one.
 - `npm run safety:check -- <url> [--id <toolId>] [--name "<name>"] [--sensitive]` runs the check and prints it in plain English. `--id` saves the fact sheet (and reuses earlier AI answers for pages that haven't changed). `--sensitive` = takes payments or health info. Keys come from `.env.local`.
 
+## Real catalog (`lib/catalog`, scripts)
+
+Design: [docs/specs/b-real-catalog.md](specs/b-real-catalog.md). Teammates' code doesn't change: `getVerifiedTools()` and `getTool()` keep their signatures and will read `data/catalog/real.json` once batch 1 lands.
+
+- `data/catalog/list.json`: the real tools we track (our own choices: problem types, business types, batch). `validateList()` / `loadList()` in `lib/catalog/list.ts`.
+- **Card-filler** `fillCard(entry, deps?)` (`lib/catalog/fill`): reads the tool's home, pricing, features, integrations and help pages (max 6, robots.txt respected) and asks the AI fixed questions. Every kept answer has a quote found word for word on the page, and the answer is in its quote; anything else is `"unknown"`. "Contact sales" means an unknown price. Never throws.
+- **Facts a person found** `data/catalog/found/<id>.json`: `[{ field, answer, quote, url, foundBy, foundAt }]`. Each is re-checked against the live page (vendor's own site or its own privacy/terms page) before it's used, and marked `source: "person"`.
+- `buildRecord()` makes the tool card: every unknown is in `needsVerification`; the badge is `listed` or `blocked`, never `verified` (only approval does that, and an approved tool keeps it on a re-run only if nothing an owner sees changed).
+
+```bash
+npm run catalog:build -- --batch 1        # or --id <toolId>; prints what's missing per tool
+npm run catalog:approve -- <toolId> --by "Rishabh"   # only "ready" tools
+npm run catalog:combine                   # writes data/catalog/real.json (held tools left out)
+```
+
+`catalog:build` uses `OPENROUTER_STRONG_MODEL` (falls back to `OPENROUTER_MODEL`) and stops after `CATALOG_MAX_CALLS` AI calls (default 600). It prints the calls used.
+
 ## Coming next (signatures fixed, not built yet)
 
 ```ts

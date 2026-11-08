@@ -28,6 +28,12 @@ const run = (p: Record<PageKind, PageFact>, provider: ReturnType<typeof llm>["pr
   askAi(p, { llm: provider, cache: createMemoryCache(), previous });
 
 describe("askAi", () => {
+  it("leaves room for models that think before they answer (their reply was cut off at 700)", async () => {
+    const { provider, calls } = llm();
+    await run(pages(), provider);
+    for (const call of calls) assert.ok((call.maxTokens ?? 0) >= 4_000, call.task);
+  });
+
   it("keeps answers whose quotes are on the page", async () => {
     const { provider, calls } = llm();
     const ai = await run(pages(), provider);

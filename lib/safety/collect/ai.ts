@@ -93,7 +93,7 @@ function trainingQuoteOk(answer: string, quote: string): boolean {
 /** Keep an answer only if its quote is on one of the source pages. */
 type RawAnswer = unknown;
 
-function verify(key: keyof Ai, raw: RawAnswer, sources: FetchedPageFact[]): AiAnswer<string> {
+export function verify(key: keyof Ai, raw: RawAnswer, sources: FetchedPageFact[]): AiAnswer<string> {
   // Only { answer: text, quote: text } counts. Models sometimes write null,
   // { answer: null, quote: null } or a bare word: all mean "couldn't tell".
   if (typeof raw !== "object" || raw === null) return "unknown";
@@ -124,7 +124,7 @@ async function ask<K extends readonly (keyof Ai)[]>(
   deps: CollectDeps,
 ): Promise<Partial<Ai> | null> {
   const user = sources.map((p) => `PAGE ${p.finalUrl}\n"""\n${p.text.slice(0, maxChars)}\n"""`).join("\n\n");
-  const result = await llmJson(deps.llm ?? getLlmProvider(), schema, { task, system, user, maxTokens: 700 }, { cache: deps.cache });
+  const result = await llmJson(deps.llm ?? getLlmProvider(), schema, { task, system, user, maxTokens: 4_000 }, { cache: deps.cache });
   if (!result.ok) return null;
   const value = result.value as Record<string, RawAnswer>;
   const out: Record<string, AiAnswer<string>> = {};

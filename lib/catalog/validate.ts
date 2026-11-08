@@ -32,7 +32,7 @@ const hostOf = (url: string) => {
 };
 
 /** Dotted paths of every "unknown" value, except where unknown is a normal answer. */
-function unknownPaths(value: unknown, path: string, out: string[]) {
+export function unknownPaths(value: unknown, path: string, out: string[]) {
   if (path === "safetyCheck") return;
   if (value === "unknown") {
     if (/^privacyCard\.\w+\.answer$/.test(path)) return;
