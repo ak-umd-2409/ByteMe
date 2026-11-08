@@ -1,5 +1,7 @@
 # Frontend Handoff: Parts 2 & 3 (Onboarding → Problems)
 
+> **Newer, simpler flow:** `docs/JOURNEY_API.md` describes `/api/journey/start` and `/api/journey/answer`. They return a short summary, a few skippable questions, and the top 2–3 problems, already prioritised. Prefer them for new screens. Everything below still works.
+
 A working reference UI is at **`/demo`** (`npm run dev`, then open `http://localhost:3000/demo`). It runs on two real Maryland businesses with no API keys. This doc explains the decisions behind it, so the final screens can be built (or the demo promoted) without losing them. Backend contract: `docs/PARTS_2_3_API.md`.
 
 | File | What it is |

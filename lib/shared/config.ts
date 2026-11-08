@@ -21,6 +21,8 @@ export interface AppConfig {
   userAgent: string;
   /** Also offer the fictional sample businesses in search (DEMO_SAMPLE_BUSINESSES=1). */
   sampleBusinesses: boolean;
+  /** Signs the journey context token (JOURNEY_SECRET). Null = unsigned, still validated on the way back in. */
+  journeySecret: string | null;
 }
 
 type Env = Record<string, string | undefined>;
@@ -46,6 +48,7 @@ export function loadConfig(env: Env = process.env): AppConfig {
     httpTimeoutMs: intOr(env.HTTP_TIMEOUT_MS, 8_000, 1_000, 30_000),
     websiteMaxPages: intOr(env.WEBSITE_MAX_PAGES, 6, 1, 15),
     sampleBusinesses: env.DEMO_SAMPLE_BUSINESSES === "1" || env.DEMO_SAMPLE_BUSINESSES === "true",
+    journeySecret: clean(env.JOURNEY_SECRET),
     userAgent:
       clean(env.SCANNER_USER_AGENT) ??
       "MainStreetAI-Scanner/0.1 (+University of Maryland AI for Small Business prototype)",
