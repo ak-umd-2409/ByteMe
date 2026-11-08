@@ -1,0 +1,887 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MainStreet AI Wireframes</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Tiro+Bangla:ital@0;1&family=Spectral:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+<style>
+/* Layout: a board canvas; each section is a labelled sheet; app pieces sit in phone-width (375px) frames. Single light theme on purpose: the app itself is light-only. */
+:root {
+  color-scheme: light;
+  /* App tokens: palette from Rishabh's reference (sage / cream beige / burgundy) */
+  --ink: #2a1f1d;
+  --text-2: #3f3833;        /* readable on sage, beige and white */
+  --accent: #590907;        /* Deep Burgundy: primary buttons, links */
+  --accent-hover: #43060a;
+  --on-accent: #f6efe4;
+  --sage: #a5a79b;          /* Muted Sage Grey: top bar, chips, quiet surfaces */
+  --sage-soft: #e7e8e2;
+  --beige: #e8d2b5;         /* Warm Cream Beige: highlights, "why this pick" */
+  --paper: #e8d2b5;         /* page background: Warm Cream Beige */
+  --white: #fffdf9;         /* stamps, chips */
+  --card: #a5a79b;          /* card tops, top bar: Muted Sage Grey */
+  --card-inner: #fbf4ea;    /* boxes inside a card */
+  --line: #e2d6c4;
+  --border-input: #8a8c7f;
+  --input-bg: #fbf4ea;      /* light fill for text boxes */
+  --input-edge: #5e4f3b;    /* bottom edge, 3:1+ on sage and beige */
+  --focus: #590907;
+  --ok-fg: #2f5233;  --ok-bg: #e4ebdf;
+  --warn-fg: #7a4b0c; --warn-bg: #f6e7cc;
+  --grey-fg: #4a4f4a; --grey-bg: #e7e8e2;
+  --bad-fg: #b3261e;  --bad-bg: #fde8e6;
+  /* Board-only tokens */
+  --canvas: #d6d7d0;
+  --sheet: #ecede7;
+  --note: #6a5a2e;
+  --note-bg: #fff6d9;
+  /* Type */
+  --display: "Tiro Bangla", Georgia, "Times New Roman", serif;
+  --body: "Spectral", Georgia, "Times New Roman", serif;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0; background: var(--canvas); color: var(--ink);
+  font-family: var(--body); font-size: 17px; line-height: 1.55;
+}
+.wrap {
+  max-width: 1120px; margin: 0 auto;
+  padding-block: 32px 64px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  display: grid; gap: 32px;
+}
+h1, h2, h3 { font-family: var(--display); font-weight: 400; line-height: 1.25; text-wrap: balance; margin: 0; }
+.board-head { display: grid; gap: 8px; }
+.board-head h1 { font-size: 36px; }
+.board-head p { margin: 0; color: var(--text-2); max-width: 64ch; }
+.kicker { font-size: 13px; font-weight: 600; color: var(--text-2); letter-spacing: .02em; }
+
+.sheet { background: var(--sheet); border: 1px solid #dcdbd2; border-radius: 12px; padding: 24px; display: grid; gap: 20px; min-width: 0; }
+.sheet > header { display: grid; gap: 4px; }
+.sheet > header h2 { font-size: 26px; }
+.sheet > header p { margin: 0; color: var(--text-2); max-width: 70ch; }
+.why { background: var(--note-bg); color: var(--note); border-radius: 8px; padding: 10px 14px; font-size: 14px; max-width: 70ch; }
+.why b { color: #4e4220; }
+
+/* Color swatches */
+.swatches { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; }
+.sw { background: var(--white); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; display: grid; }
+.sw .chip { height: 56px; }
+.sw .meta { padding: 8px 10px; display: grid; gap: 2px; font-size: 13px; }
+.sw .meta b { font-size: 14px; }
+.sw .meta span { color: var(--text-2); font-variant-numeric: tabular-nums; }
+
+/* Type specimen */
+.type-rows { display: grid; gap: 14px; }
+.type-row { display: grid; grid-template-columns: 150px 1fr; gap: 16px; align-items: baseline; border-bottom: 1px solid var(--line); padding-bottom: 12px; }
+.type-row .lab { font-size: 13px; color: var(--text-2); }
+@media (max-width: 560px) { .type-row { grid-template-columns: 1fr; gap: 4px; } }
+
+/* Phone frames */
+.phones { display: flex; flex-wrap: wrap; gap: 24px; align-items: flex-start; }
+.phone { width: 375px; max-width: 100%; background: var(--paper); border: 2px solid var(--ink); border-radius: 22px; padding: 20px 16px 24px; display: grid; gap: 16px; align-content: start; }
+.phone-label { font-size: 13px; color: var(--text-2); font-weight: 600; }
+.col { display: grid; gap: 8px; }
+.side-notes { flex: 1 1 280px; min-width: 0; display: grid; gap: 12px; align-content: start; }
+.side-notes ul { margin: 0; padding-left: 20px; display: grid; gap: 6px; color: var(--ink); }
+
+/* ===== App components ===== */
+.a-h1 { font-family: var(--display); font-weight: 400; font-size: 28px; line-height: 1.25; }
+.a-h2 { font-family: var(--display); font-weight: 400; font-size: 23px; line-height: 1.3; }
+.a-h3 { font-family: var(--display); font-weight: 400; font-size: 21px; line-height: 1.3; }
+.a-body { font-size: 17px; }
+.a-small { font-size: 15px; color: var(--text-2); }
+.num { font-variant-numeric: tabular-nums; }
+
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 48px; padding: 0 20px; border-radius: 8px; font: 600 17px/1 var(--body); border: 2px solid transparent; cursor: pointer; text-decoration: none; }
+.btn:focus-visible, .row:focus-visible, .chipsel:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.btn-primary, .btn-secondary { border:3px solid var(--ink); box-shadow:4px 4px 0 var(--ink); min-height:52px; }
+.btn-primary { background: var(--accent); color: var(--on-accent); }
+.btn-primary:hover, .btn-secondary:hover { transform:translate(-2px,-2px); box-shadow:6px 6px 0 var(--ink); }
+.btn-primary:active, .btn-secondary:active { transform:translate(2px,2px); box-shadow:2px 2px 0 var(--ink); }
+@media (prefers-reduced-motion: no-preference) { .btn-primary, .btn-secondary { transition: transform .08s, box-shadow .08s, background-color .12s; } }
+.btn-primary:hover { background: var(--accent-hover); }
+.btn-secondary { background: var(--white); color: var(--ink); }
+.btn-link { background: none; color: var(--accent); padding: 0 4px; text-decoration: underline; text-underline-offset: 3px; min-height: 44px; }
+.btn[disabled] { background: var(--grey-bg); color: var(--grey-fg); border-color: var(--border-input); box-shadow:none; transform:none; cursor: not-allowed; }
+.btn-block { width: 100%; }
+.focus-demo { outline: 2px solid var(--focus); outline-offset: 2px; }
+
+.badge { display: inline-flex; align-items: center; gap: 6px; border: 2px solid currentColor; border-radius: 4px; padding: 2px 9px; font-size: 14px; font-weight: 600; letter-spacing: .02em; line-height: 1.3; white-space: nowrap; background: var(--white); }
+.b-ok { color: var(--ok-fg); }
+.b-conf { color: var(--ok-fg); }
+.b-warn { color: var(--warn-fg); }
+.b-grey { color: var(--grey-fg); }
+.b-bad { color: var(--bad-fg); background: var(--bad-bg); }
+.b-ok.b-big { outline: 1px solid currentColor; outline-offset: 2px; }
+.b-big { font-size: 17px; padding: 5px 12px; }
+.chip { display: inline-flex; align-items: center; gap: 6px; border: 1px dashed var(--border-input); background: var(--white); border-radius: 4px; padding: 3px 9px; font-size: 15px; color: var(--ink); white-space: nowrap; }
+.chip-src { }
+.badge-row { display: flex; flex-wrap: wrap; gap: 8px; }
+
+.card { background: var(--card-inner); border: none; border-radius: 14px; padding: 20px; display: grid; gap: 12px; }
+.card > .a-h2:first-child, .card > .a-h3:first-child { background: var(--card); margin: -20px -20px 4px; padding: 14px 20px; }
+.card-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
+.price { font-family: var(--display); font-weight: 400; font-size: 24px; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.price small { font-family: var(--body); font-weight: 400; font-size: 14px; color: var(--text-2); }
+.why-pick { background: #f1e3cf; border-radius: 8px; padding: 10px 12px; font-size: 15px; }
+.facts { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 12px; font-size: 14px; }
+.facts dt { color: var(--text-2); }
+.facts dd { margin: 0; font-weight: 600; }
+.card-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.card-actions .btn { flex: 1 1 auto; }
+
+.row { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 56px; padding: 10px 16px; background: var(--card-inner); border: none; border-radius: 12px; color: var(--ink); text-decoration: none; font: inherit; width: 100%; text-align: left; cursor: pointer; }
+.row .r-main { display: grid; }
+.row .r-main b { font-weight: 600; }
+.row .r-main span { font-size: 14px; color: var(--text-2); }
+.chev { color: var(--text-2); font-size: 20px; }
+
+.field { display: grid; gap: 6px; }
+.field label { font-weight: 600; font-size: 15px; }
+.field input { min-height: 52px; border: none; border-radius: 14px; padding: 0 16px; font: 500 17px var(--body); color: var(--accent); background: var(--input-bg); box-shadow: 0 4px 0 var(--input-edge); }
+.field input::placeholder { color: var(--text-2); font-weight: 400; }
+.field input:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+.field.old input { border: 1px solid var(--border-input); border-radius: 8px; background: var(--white); color: var(--ink); box-shadow: none; font-weight: 400; min-height: 48px; }
+.field .hint { font-size: 14px; color: var(--text-2); }
+.field.err input { box-shadow: 0 4px 0 var(--bad-fg); background: var(--bad-bg); color: var(--ink); }
+.field .errmsg { font-size: 14px; color: var(--bad-fg); }
+
+.chipsel { min-height: 44px; padding: 0 16px; border-radius: 999px; border: 2px solid var(--ink); background: var(--white); color: var(--ink); font: 600 16px var(--body); box-shadow: 3px 3px 0 var(--ink); cursor: pointer; display: inline-flex; align-items: center; gap: 6px; }
+.chipsel[aria-pressed="true"] { background: var(--accent); color: var(--on-accent); transform: translate(2px,2px); box-shadow: 1px 1px 0 var(--ink); }
+
+.steps { display: grid; gap: 6px; }
+.steps .bar { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; }
+.steps .bar i { height: 6px; border-radius: 3px; background: var(--card-inner); }
+.steps .bar i.on { background: var(--accent); }
+.steps span { font-size: 15px; color: var(--ink); font-weight: 500; }
+
+.banner { background: var(--warn-bg); color: var(--warn-fg); border-radius: 8px; padding: 10px 14px; font-size: 14px; font-weight: 500; }
+.notice { background: var(--grey-bg); color: var(--grey-fg); border-radius: 8px; padding: 10px 14px; font-size: 14px; }
+.privacy { display: grid; gap: 0; }
+.privacy li { list-style: none; display: grid; grid-template-columns: 24px 1fr; gap: 8px; padding: 10px 0; border-top: 1px solid var(--line); font-size: 15px; }
+.privacy li:first-child { border-top: 0; }
+.privacy ul { margin: 0; padding: 0; }
+.ico-ok { color: var(--ok-fg); font-weight: 700; }
+.ico-q { color: var(--grey-fg); font-weight: 700; }
+
+/* Words table */
+.words { width: 100%; border-collapse: collapse; font-size: 15px; background: var(--white); border-radius: 8px; overflow: hidden; }
+.words th, .words td { text-align: left; padding: 10px 12px; border-top: 1px solid var(--line); vertical-align: top; }
+.words th { font-weight: 600; background: var(--sage-soft); border-top: 0; }
+.tbl { overflow-x: auto; }
+
+.decide { display: grid; gap: 8px; background: var(--white); border: 2px solid var(--accent); border-radius: 12px; padding: 20px; }
+.decide h2 { font-size: 24px; }
+.decide ol { margin: 0; padding-left: 20px; display: grid; gap: 6px; }
+@media (prefers-reduced-motion: no-preference) { .btn, .row, .chipsel { transition: background-color .12s, border-color .12s; } }
+.topbar { display:flex; justify-content:space-between; align-items:center; min-height:52px; margin:-20px -16px 0; padding:0 16px; background: var(--card); border-bottom: 2px solid var(--ink); border-radius: 21px 21px 0 0; }
+.topbar .brand { font-family: var(--display); font-weight:400; font-size:21px; color: var(--ink); }
+.topbar .btn-link { color: var(--ink); }
+.fontpair { display:grid; grid-template-columns: repeat(auto-fit, minmax(260px,1fr)); gap:16px; }
+.fontopt { background: var(--white); border:1px solid var(--line); border-radius:8px; padding:16px; display:grid; gap:8px; }
+.fontopt.pick { border:2px solid var(--accent); }
+.fontopt .tag { font-size:13px; font-weight:600; color: var(--text-2); }
+.picker { display:flex; flex-wrap:wrap; gap:8px; }
+.picker button { min-height:44px; padding:0 16px; border-radius:999px; border:1px solid var(--border-input); background:var(--white); color:var(--ink); cursor:pointer; font-size:15px; }
+.picker button[aria-pressed="true"] { background:var(--accent); color:var(--on-accent); border-color:var(--accent); }
+.picker button:focus-visible { outline:2px solid var(--focus); outline-offset:2px; }
+.bodyopts { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:16px; }
+.bodyopt { background:var(--white); border:1px solid var(--line); border-radius:8px; padding:16px; display:grid; gap:8px; align-content:start; }
+.bodyopt.on { border:2px solid var(--accent); }
+.bodyopt .tag { font-family:var(--display); font-size:21px; }
+.bodyopt .eg { font-size:16px; }
+.bodyopt .egs { font-size:14px; color:var(--text-2); }
+/* Hard-shadow buttons (from Rishabh's reference) */
+.hb { display:inline-flex; align-items:center; justify-content:center; gap:8px; min-height:52px; padding:0 22px; border:3px solid var(--ink); border-radius:8px; font:600 18px/1 var(--body); cursor:pointer; box-shadow:4px 4px 0 var(--ink); text-decoration:none; }
+.hb-primary { background:var(--accent); color:var(--on-accent); }
+.hb-secondary { background:var(--beige); color:var(--ink); }
+.hb-quiet { background:var(--white); color:var(--ink); border-width:2px; box-shadow:3px 3px 0 var(--ink); min-height:44px; font-size:16px; }
+.hb:hover { transform:translate(-2px,-2px); box-shadow:6px 6px 0 var(--ink); }
+.hb:active { transform:translate(2px,2px); box-shadow:2px 2px 0 var(--ink); }
+.hb-quiet:hover { box-shadow:5px 5px 0 var(--ink); }
+.hb-quiet:active { box-shadow:1px 1px 0 var(--ink); }
+.hb[disabled] { background:var(--grey-bg); color:var(--grey-fg); border-color:var(--border-input); box-shadow:none; transform:none; cursor:not-allowed; }
+.hb:focus-visible { outline:3px solid var(--focus); outline-offset:4px; }
+.hb-block { width:100%; }
+@media (prefers-reduced-motion: no-preference) { .hb { transition: transform .08s, box-shadow .08s; } }
+.hb-card { background:var(--white); border:2px solid var(--ink); border-radius:8px; padding:16px; display:grid; gap:12px; box-shadow:4px 4px 0 var(--ink); }
+/* ===== Badge & chip options ===== */
+.opt-grid { display:flex; flex-wrap:wrap; gap:24px; align-items:flex-start; }
+.opt-head { display:grid; gap:4px; }
+.opt-head h3 { font-family:var(--display); font-weight:400; font-size:24px; }
+.opt-head p { margin:0; font-size:15px; color:var(--text-2); }
+.sub { font-size:14px; font-weight:600; color:var(--text-2); }
+.flow { display:flex; flex-wrap:wrap; gap:8px; align-items:center; }
+
+/* Option A: Stamp */
+.oA .bdg { display:inline-flex; align-items:center; gap:6px; border:2px solid currentColor; border-radius:4px; padding:3px 10px; font:600 15px/1.3 var(--body); letter-spacing:.02em; background:var(--white); }
+.oA .bdg.ok { color:var(--ok-fg); } .oA .bdg.warn { color:var(--warn-fg); } .oA .bdg.grey { color:var(--grey-fg); } .oA .bdg.bad { color:var(--bad-fg); background:var(--bad-bg); }
+.oA .bdg.big { font-size:17px; padding:5px 12px; border-width:2px; outline:1px solid currentColor; outline-offset:2px; }
+.oA .info { display:inline-flex; align-items:center; gap:6px; border:1px dashed var(--border-input); border-radius:4px; padding:3px 9px; font-size:15px; color:var(--ink); }
+.oA .pick { min-height:44px; padding:0 16px; border:2px solid var(--ink); border-radius:999px; background:var(--white); color:var(--ink); font:600 16px var(--body); box-shadow:3px 3px 0 var(--ink); cursor:pointer; display:inline-flex; align-items:center; gap:6px; }
+.oA .pick[aria-pressed="true"] { background:var(--accent); color:var(--on-accent); transform:translate(2px,2px); box-shadow:1px 1px 0 var(--ink); }
+
+/* Option B: Soft pill (matches the text boxes) */
+.oB .bdg { display:inline-flex; align-items:center; gap:6px; border-radius:999px; padding:4px 12px; font:600 15px/1.3 var(--body); }
+.oB .bdg.ok { color:var(--ok-fg); background:var(--ok-bg); box-shadow:0 3px 0 #9fb59a; }
+.oB .bdg.warn { color:var(--warn-fg); background:var(--warn-bg); box-shadow:0 3px 0 #d6b47f; }
+.oB .bdg.grey { color:var(--grey-fg); background:var(--grey-bg); box-shadow:0 3px 0 #b4b7ad; }
+.oB .bdg.bad { color:var(--bad-fg); background:var(--bad-bg); box-shadow:0 3px 0 #e39a93; }
+.oB .bdg.big { font-size:17px; padding:6px 14px; }
+.oB .info { display:inline-flex; align-items:center; gap:6px; border-radius:999px; padding:3px 11px; font-size:15px; color:var(--ink); background:var(--sage-soft); }
+.oB .pick { min-height:44px; padding:0 18px; border:none; border-radius:14px; background:var(--input-bg); color:var(--ink); font:500 16px var(--body); box-shadow:0 4px 0 var(--input-edge); cursor:pointer; display:inline-flex; align-items:center; gap:6px; }
+.oB .pick[aria-pressed="true"] { background:var(--accent); color:var(--on-accent); box-shadow:0 4px 0 #2a0403; }
+
+/* Option C: Label tag (two-tone) + checkbox tiles */
+.oC .bdg { display:inline-flex; align-items:stretch; border-radius:6px; overflow:hidden; font:600 15px/1.3 var(--body); border:2px solid var(--c); }
+.oC .bdg i { font-style:normal; background:var(--c); color:#fffdf9; padding:3px 8px; display:flex; align-items:center; }
+.oC .bdg span { background:var(--bgc); color:var(--c); padding:3px 10px; }
+.oC .bdg.ok { --c:var(--ok-fg); --bgc:var(--ok-bg); } .oC .bdg.warn { --c:var(--warn-fg); --bgc:var(--warn-bg); } .oC .bdg.grey { --c:var(--grey-fg); --bgc:var(--grey-bg); } .oC .bdg.bad { --c:var(--bad-fg); --bgc:var(--bad-bg); }
+.oC .bdg.big { font-size:17px; } .oC .bdg.big i { padding:5px 10px; } .oC .bdg.big span { padding:5px 12px; }
+.oC .info { display:inline-flex; align-items:center; gap:6px; font-size:15px; color:var(--ink); padding:2px 0; border-bottom:2px solid var(--beige); }
+.oC .tiles { display:grid; grid-template-columns:1fr 1fr; gap:10px; width:100%; }
+.oC .pick { min-height:52px; padding:0 12px; border:2px solid var(--border-input); border-radius:8px; background:var(--white); color:var(--ink); font:500 16px var(--body); cursor:pointer; display:flex; align-items:center; gap:10px; text-align:left; }
+.oC .pick b { width:22px; height:22px; flex:none; border:2px solid var(--ink); border-radius:4px; display:grid; place-items:center; font-size:14px; color:transparent; background:var(--white); }
+.oC .pick[aria-pressed="true"] { border-color:var(--accent); background:#f8ece8; box-shadow:inset 0 0 0 1px var(--accent); }
+.oC .pick[aria-pressed="true"] b { background:var(--accent); border-color:var(--accent); color:var(--on-accent); }
+
+.pick:focus-visible { outline:3px solid var(--focus); outline-offset:3px; }
+@media (prefers-reduced-motion: no-preference) { .pick { transition: transform .08s, box-shadow .08s, background-color .12s; } }
+/* Card options */
+.cA { background:var(--white); border:1px solid var(--line); border-radius:8px; padding:20px; display:grid; gap:12px; }
+.cB { background:var(--card); border:2px solid var(--ink); border-radius:8px; padding:20px; display:grid; gap:12px; }
+.cC { padding:20px 0; display:grid; gap:12px; border-top:2px solid var(--ink); }
+.cC + .cC { border-top:1px solid var(--line); }
+.cC .why-pick { background:none; padding:0 0 0 12px; border-left:3px solid var(--beige); border-radius:0; }
+/* Card options on sage, round 2 */
+.k1 { background:var(--card); border:none; border-radius:14px; padding:20px; display:grid; gap:12px; }
+.k1 .why-pick { background:none; padding:0; border-radius:0; }
+.k2 { background:var(--card-inner); border:none; border-radius:14px; padding:20px; display:grid; gap:12px; }
+.k2 .why-pick { background:var(--card); }
+.k3 { background:var(--card-inner); border:none; border-radius:14px; overflow:hidden; display:grid; }
+.k3 .k3-top { background:var(--card); padding:16px 20px; display:grid; gap:6px; }
+.k3 .k3-body { padding:16px 20px 20px; display:grid; gap:12px; }
+.k3 .why-pick { background:none; padding:0; }
+/* ===== Screens ===== */
+.board-nav { display:flex; gap:8px; flex-wrap:wrap; }
+.board-nav a { min-height:44px; display:inline-flex; align-items:center; padding:0 16px; border-radius:999px; border:2px solid var(--ink); color:var(--ink); background:var(--white); font-weight:600; text-decoration:none; }
+.screens { gap:32px; }
+.scr { display:grid; gap:10px; width:375px; max-width:100%; align-content:start; scroll-margin-top:16px; }
+.scr-label { font-family:var(--display); font-size:22px; }
+.scr-notes { margin:0; padding-left:20px; display:grid; gap:4px; font-size:15px; color:var(--text-2); }
+.scr .phone { width:100%; }
+.sr { position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); }
+.howto { margin:0; padding-left:22px; display:grid; gap:10px; }
+.pickrow[aria-checked="true"] { outline:3px solid var(--accent); outline-offset:-3px; }
+.pickrow .tick { width:28px; height:28px; border-radius:50%; border:2px solid var(--ink); display:grid; place-items:center; color:transparent; flex:none; }
+.pickrow[aria-checked="true"] .tick { background:var(--accent); border-color:var(--accent); color:var(--on-accent); }
+.disc { background:var(--card-inner); border-radius:12px; }
+.card .disc { background:transparent; }
+.disc summary { min-height:48px; display:flex; align-items:center; gap:8px; padding:0 14px; cursor:pointer; font-weight:600; color:var(--accent); list-style:none; }
+.disc summary::-webkit-details-marker { display:none; }
+.disc summary::before { content:"+"; font-size:20px; width:16px; }
+.disc[open] summary::before { content:"–"; }
+.disc > :not(summary) { margin:0 14px 14px; }
+.card .disc summary { padding:0; } .card .disc > :not(summary) { margin:0 0 4px; }
+.wait { font-size:14px; }
+.factlist { margin:0; display:grid; }
+.factlist > div { display:grid; grid-template-columns:1fr auto; gap:2px 8px; padding:10px 0; border-top:1px solid var(--line); align-items:center; }
+.factlist > div:first-child { border-top:0; }
+.factlist dt { grid-column:1; font-size:14px; color:var(--text-2); }
+.factlist dd { grid-column:1; margin:0; font-weight:600; }
+.factlist .chip { grid-column:1; justify-self:start; font-size:13px; }
+.factlist .edit { grid-column:2; grid-row:1 / span 3; min-height:44px; min-width:56px; border:none; background:none; color:var(--accent); font:600 16px var(--body); text-decoration:underline; text-underline-offset:3px; cursor:pointer; }
+.factlist .missing { font-weight:400; font-style:italic; color:var(--text-2); }
+.mismatch { background:var(--warn-bg); color:var(--ink); border-radius:10px; padding:12px; display:grid; gap:10px; }
+.theme { display:grid; gap:2px; padding:10px 0; border-top:1px solid var(--line); }
+.card > h2 + .theme { border-top:0; }
+.theme q { font-style:italic; font-size:17px; margin-top:4px; }
+.theme q::before { content:"\201C"; } .theme q::after { content:"\201D"; }
+.summary { margin:0; font-size:18px; }
+.prob { padding-top:0; }
+.prob .ptop { background:var(--card); margin:0 -20px 4px; padding:14px 20px; display:grid; gap:8px; border-radius:14px 14px 0 0; }
+.prob.maybe { background:transparent; border:2px dashed var(--border-input); }
+.prob.maybe .ptop { background:transparent; }
+.money { margin:0; display:flex; gap:8px; align-items:baseline; flex-wrap:wrap; }
+.money b { font-family:var(--display); font-weight:400; font-size:24px; }
+.evid { list-style:none; margin:0; padding:0; display:grid; gap:10px; }
+.evid li { border-left:3px solid var(--accent); padding-left:12px; display:grid; }
+.evid li.unsure { border-left-style:dashed; border-left-color:var(--border-input); }
+.calc { display:grid; gap:10px; margin-top:12px; }
+.calc-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.calc-grid label { font-size:14px; }
+.todo { margin:0; padding-left:22px; }
+/* ===== Phone / website toggle ===== */
+.viewtoggle { display:flex; gap:8px; flex-wrap:wrap; }
+.viewtoggle button { min-height:44px; padding:0 18px; border-radius:999px; border:2px solid var(--ink); background:var(--white); color:var(--ink); font:600 16px var(--body); cursor:pointer; }
+.viewtoggle button[aria-pressed="true"] { background:var(--ink); color:var(--white); }
+.dcol, .dgrid { display:contents; }
+.desk .scr { width:100%; }
+.desk .scr .phone {
+  --pad: max(32px, calc((100% - 1040px) / 2));
+  width:100%; aspect-ratio:16 / 10; overflow:auto; border-radius:10px; border:2px solid var(--ink);
+  padding:0 var(--pad) 40px; display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:20px 40px; align-content:start;
+}
+.desk .scr .phone > * { grid-column:1 / -1; }
+.desk .scr .phone::before { content:"mainstreet-ai.vercel.app"; grid-column:1 / -1; margin:0 calc(-1 * var(--pad)); padding:8px 16px 8px 70px; font:13px var(--body); color:var(--text-2); background:#d9d2c6 radial-gradient(circle at 18px 50%, #c9564a 5px, transparent 6px), radial-gradient(circle at 36px 50%, #d9a441 5px, transparent 6px), radial-gradient(circle at 54px 50%, #7a9a5c 5px, transparent 6px); background-color:#d9d2c6; border-bottom:1px solid #bfb6a8; }
+.desk .topbar { margin:-20px calc(-1 * var(--pad)) 0; padding:0 var(--pad); border-radius:0; min-height:60px; }
+.desk .dcol { display:grid; gap:16px; align-content:start; grid-column:auto; }
+.desk .scr .phone > .dL { grid-column:1; } .desk .scr .phone > .dR { grid-column:2; }
+.desk #scr-1 .dL > .a-small { text-align:left !important; }
+.desk .dgrid { display:grid; gap:20px; align-items:start; }
+.desk .d3 { grid-template-columns:repeat(3, minmax(0,1fr)); }
+.desk .dgrid > *, .desk .dcol > *, .card > * { min-width:0; }
+.prob .ptop h2, .prob .ptop h3 { overflow-wrap:anywhere; }
+.desk .calc-grid { grid-template-columns:1fr; }
+.desk .d2 { grid-template-columns:repeat(2, minmax(0,1fr)); }
+.desk .scr .btn-block { width:auto; justify-self:start; padding:0 32px; }
+.desk .dR > .btn-block, .desk .scr .phone > .btn-block:last-child { justify-self:end; }
+.desk #scr-1 .a-h1 { font-size:46px !important; }
+.desk #scr-1 .dL { padding-top:32px; }
+.desk .steps, .desk .banner, .desk .summary { max-width:760px; }
+.desk .scr-notes { columns:2; display:block; }
+@media (max-width: 760px) { .desk .scr .phone { aspect-ratio:auto; display:flex; flex-direction:column; } .desk .dcol, .desk .dgrid { display:contents; } }
+/* ===== Click-through player ===== */
+.player-bar { display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; position:sticky; top:env(safe-area-inset-top,0px); z-index:5; background:var(--sheet); padding-block:8px; }
+.pbtn { min-height:44px; padding:0 16px; border-radius:999px; border:2px solid var(--ink); background:var(--white); color:var(--ink); font:600 16px var(--body); cursor:pointer; }
+.pbtn[disabled] { opacity:.4; cursor:default; }
+.p-where { display:grid; justify-items:center; gap:6px; flex:1 1 200px; }
+.p-where b { font-family:var(--display); font-weight:400; font-size:22px; }
+.p-dots { display:flex; gap:6px; }
+.p-dots button { width:44px; height:28px; border-radius:999px; border:2px solid var(--ink); background:var(--white); font:600 13px var(--body); color:var(--ink); cursor:pointer; }
+.p-dots button[aria-current="true"] { background:var(--accent); color:var(--on-accent); border-color:var(--accent); }
+.player { display:block; }
+.player .scr { display:none; margin:0 auto; }
+.player .scr.on { display:grid; }
+.player .scr-label { display:none; }
+.player:not(.desk) .scr { width:375px; }
+.player:not(.desk) .scr .phone { height:760px; overflow:auto; }
+.player .phone { overscroll-behavior:contain; }
+@media (prefers-reduced-motion: no-preference) {
+  .player .scr.on .phone { animation: scr-in .32s cubic-bezier(.2,.7,.2,1); }
+  .player .scr.on.from-back .phone { animation-name: scr-in-back; }
+}
+@keyframes scr-in { from { opacity:0; transform:translateX(24px); } to { opacity:1; transform:none; } }
+@keyframes scr-in-back { from { opacity:0; transform:translateX(-24px); } to { opacity:1; transform:none; } }
+.steps .bar i.half { background:linear-gradient(90deg, var(--accent) 50%, var(--card-inner) 50%); }
+.loadbox { display:grid; gap:16px; align-content:start; max-width:520px; }
+.desk .loadbox { grid-column:1 / -1; justify-self:center; padding-top:40px; }
+.checks { list-style:none; margin:0; padding:20px; display:grid; gap:14px; background:var(--card-inner); border-radius:14px; font-size:18px; }
+.checks li { display:flex; align-items:center; gap:12px; }
+.ck { width:26px; height:26px; flex:none; border-radius:50%; border:3px solid var(--border-input); border-top-color:var(--accent); }
+@media (prefers-reduced-motion: no-preference) { .loading .ck { animation: spin .8s linear infinite; } }
+@keyframes spin { to { transform:rotate(360deg); } }
+.done .ck { border:none; background:var(--ok-fg); position:relative; }
+.done .ck::after { content:"✓"; position:absolute; inset:0; display:grid; place-items:center; color:#fff; font-weight:700; font-size:15px; }
+</style>
+
+<div class="wrap">
+  <header class="board-head">
+    <div class="kicker">Team ByteMe · MainStreet AI · Problem 5 · v1: style board + click-through screens 1–4</div>
+    <h1>Style board and screens</h1>
+    <nav class="board-nav" aria-label="Jump to"><a href="#s-color">Style board</a><a href="#screens">Click-through screens</a></nav>
+    <p>One look for every screen in the demo video. Built on the palette you picked: muted sage grey, warm cream beige and deep burgundy. Everything below is shown at real phone size (375px wide).</p>
+  </header>
+
+  <section class="sheet" aria-labelledby="s-color">
+    <header>
+      <h2 id="s-color">1. Colors</h2>
+      <p>The app sits on beige, card labels and the top bar are sage, burgundy is for buttons and links. No off-white paper anywhere. Every text color passes the 4.5:1 contrast rule (burgundy on cream is 12.5:1).</p>
+    </header>
+    <div class="swatches">
+      <div class="sw"><div class="chip" style="background:var(--accent)"></div><div class="meta"><b>Deep Burgundy</b><span>#590907</span><span>Main buttons, links</span></div></div>
+      <div class="sw"><div class="chip" style="background:var(--sage)"></div><div class="meta"><b>Muted Sage Grey</b><span>#A5A79B</span><span>Card tops, top bar</span></div></div>
+      <div class="sw"><div class="chip" style="background:var(--beige)"></div><div class="meta"><b>Warm Cream Beige</b><span>#E8D2B5</span><span>Page background on every screen</span></div></div>
+      
+      <div class="sw"><div class="chip" style="background:var(--card-inner);border-bottom:1px solid var(--line)"></div><div class="meta"><b>Light fill</b><span>#FBF4EA</span><span>Card bodies, list rows, text boxes</span></div></div>
+      <div class="sw"><div class="chip" style="background:var(--ink)"></div><div class="meta"><b>Ink</b><span>#2A1F1D</span><span>All main text</span></div></div>
+      <div class="sw"><div class="chip" style="background:var(--text-2)"></div><div class="meta"><b>Dark grey</b><span>#3F3833</span><span>Hints, dates, small print</span></div></div>
+      
+      <div class="sw"><div class="chip" style="background:var(--ok-bg);border-bottom:4px solid var(--ok-fg)"></div><div class="meta"><b>Safe green</b><span>#2F5233 on #E4EBDF</span><span>Only ✓ Verified, Confirmed</span></div></div>
+      <div class="sw"><div class="chip" style="background:var(--grey-bg);border-bottom:4px solid var(--grey-fg)"></div><div class="meta"><b>Slate</b><span>#4A4F4A on #E7E8E2</span><span>Not yet reviewed, notices</span></div></div>
+      <div class="sw"><div class="chip" style="background:var(--bad-bg);border-bottom:4px solid var(--bad-fg)"></div><div class="meta"><b>Alert red</b><span>#B3261E on #FDE8E6</span><span>Only ⚠ Blocked and errors</span></div></div>
+    </div>
+    <p class="why"><b>Safe vs scam:</b> green only on ✓ Verified and Confirmed, red only on ⚠ Blocked and errors. Burgundy is just the brand.</p>
+  </section>
+
+  <section class="sheet" aria-labelledby="s-type">
+    <header>
+      <h2 id="s-type">2. Type</h2>
+      <p>Tiro Bangla for headings and prices, Spectral for reading text, buttons and labels. Both are serifs, so the app reads like a printed guide. Spectral runs small, so reading text is 17px and small print 15px; nothing under 13px at all.</p>
+    </header>
+    <div class="fontopt pick"><span class="tag">Headings: Tiro Bangla (your pick)</span><span style="font-family:var(--display);font-size:32px;line-height:1.2">Ways to fix missed calls</span><span style="font-family:var(--display);font-style:italic;font-size:20px">Verified tools, checked by a person.</span><span class="a-small" style="color:var(--ink)">One weight only, so headings get size instead of bold. The italic is there for short quotes, like a line from a customer review.</span></div>
+    <div class="fontopt pick"><span class="tag">Body and small text: Spectral (your pick)</span><span style="font-size:17px">Answers calls you miss on a job and texts you the details. $59/month.</span><span style="font-size:15px;color:var(--text-2)">Last checked Nov 7, 2026 · price as of Nov 2026</span><span style="font-style:italic;font-size:17px">"Never called me back after the first visit." · Google review</span><span class="a-small" style="color:var(--ink)">A serif made for reading on screens. With Tiro Bangla on top, the whole app reads like a printed local guide.</span></div>
+    <div class="type-rows">
+      <div class="type-row"><span class="lab">Page title · Tiro Bangla 28</span><span class="a-h1">Ways to fix missed calls</span></div>
+      <div class="type-row"><span class="lab">Section · Tiro Bangla 23</span><span class="a-h2">What customers say</span></div>
+      <div class="type-row"><span class="lab">Card title · Tiro Bangla 21</span><span class="a-h3">Ringwise Receptionist</span></div>
+      <div class="type-row"><span class="lab">Body · Spectral 17</span><span class="a-body">Answers calls you miss while you're on a job, then texts you the caller's details.</span></div>
+      <div class="type-row"><span class="lab">Small · Spectral 15</span><span class="a-small">Last checked Nov 7, 2026 · price as of Nov 2026</span></div>
+      <div class="type-row"><span class="lab">Money · Tiro Bangla 24</span><span class="price">$59<small>/month</small></span></div>
+    </div>
+    <p class="why"><b>Why:</b> both are free Google fonts, so the app loads them like any other font, nothing to install. One size up from usual keeps Spectral easy to read on a phone.</p>
+  </section>
+
+  <section class="sheet" aria-labelledby="s-btn">
+    <header>
+      <h2 id="s-btn">3. Buttons and inputs</h2>
+      <p>Hard-shadow buttons on everything you tap (approved). One burgundy button per screen: the next step. Every tap target is at least 44px tall; main buttons and list rows are 48–56px.</p>
+    </header>
+    <div class="phones">
+      <div class="phone">
+        <span class="phone-label">Buttons ✓ approved · hover and press them</span>
+        <div class="col" style="gap:14px">
+          <button class="hb hb-primary hb-block" type="button">Find my AI tools</button>
+          <button class="hb hb-secondary hb-block" type="button">Compare</button>
+          <button class="hb hb-quiet hb-block" type="button" style="min-height:52px;font-size:17px;border-width:3px;box-shadow:4px 4px 0 var(--ink)">See details</button>
+          <div style="display:flex;gap:12px;flex-wrap:wrap"><button class="hb hb-quiet" type="button">+ Compare</button><button class="hb hb-quiet" type="button">Start over</button></div>
+          <button class="hb hb-primary hb-block" type="button" disabled>Wait 20 seconds</button>
+        </div>
+      </div>
+      <div class="phone">
+        <span class="phone-label">Text boxes ✓ approved</span>
+        <div class="field">
+          <label for="f-name">Business name</label>
+          <input id="f-name" value="Mike's Heating & Cooling">
+        </div>
+        <div class="field">
+          <label for="f-town">Town or ZIP <span style="font-weight:400;color:var(--text-2)">(optional)</span></label>
+          <input id="f-town" placeholder="Like Frederick or 21701">
+          <span class="hint">Empty box shows a grey example. Tap it to see the focus ring.</span>
+        </div>
+        <div class="field err">
+          <label for="f-budget">Monthly budget for tools</label>
+          <input id="f-budget" value="two hundred">
+          <span class="errmsg">Type a number, like 200.</span>
+        </div>
+        <div class="col">
+          <span style="font-weight:600;font-size:15px">Tools you already use</span>
+          <div class="badge-row">
+            <button class="chipsel" type="button" aria-pressed="true">✓ Square</button>
+            <button class="chipsel" type="button" aria-pressed="true">✓ QuickBooks</button>
+            <button class="chipsel" type="button" aria-pressed="true">✓ Google Business</button>
+            <button class="chipsel" type="button" aria-pressed="false">Jobber</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sheet" aria-labelledby="s-badge">
+    <header>
+      <h2 id="s-badge">4. Badges and chips</h2>
+      <p>Stamp style. Every badge is a symbol plus a word, never color alone. Tap the tool chips to pick and unpick.</p>
+    </header>
+    <div class="opt-grid">
+      <div class="phone oA">
+        <div class="opt-head"><h3>Stamp ✓ approved</h3><p>Badges look like an inspector's stamp: a solid outline, square corners. Verified gets a double line, like a seal. Pick chips use the same hard shadow as the buttons and press in when picked.</p></div>
+        <div class="col"><span class="sub">Tool safety</span><div class="flow"><span class="bdg ok big">✓ Verified</span><span class="bdg grey big">◷ Not yet reviewed</span><span class="bdg bad big">⚠ Blocked</span></div></div>
+        <div class="col"><span class="sub">How sure we are about a problem</span><div class="flow"><span class="bdg ok">● Confirmed</span><span class="bdg warn">◐ Likely</span><span class="bdg grey">○ Not confirmed</span></div></div>
+        <div class="col"><span class="sub">Facts and fit</span><div class="flow"><span class="info">From Google</span><span class="info">You told us</span><span class="info">✓ Works with Square</span><span class="info">✓ OK for Maryland call recording</span></div></div>
+        <div class="col"><span class="sub">Tools you already use (tap to pick)</span><div class="flow"><button type="button" class="pick" aria-pressed="true">✓ Square</button><button type="button" class="pick" aria-pressed="true">✓ QuickBooks</button><button type="button" class="pick" aria-pressed="true">✓ Google Business</button><button type="button" class="pick" aria-pressed="false">Jobber</button><button type="button" class="pick" aria-pressed="false">Paper &amp; phone</button></div></div>
+      </div>
+    </div>
+    <div class="banner">You're looking at a sample business. Nothing here is real.</div>
+    <p class="why"><b>Why:</b> a stamp says "a person checked this", which is the whole promise of ✓ Verified, and the pick chips press in like the buttons.</p>
+  </section>
+
+  <section class="sheet" aria-labelledby="s-card">
+    <header>
+      <h2 id="s-card">5. Cards</h2>
+      <p>Two-part card: beige top for the name and price, light body for the details. No outlines, rounded corners, sits right on the sage.</p>
+    </header>
+    <div class="phones">
+      <div class="phone">
+        <div class="opt-head"><h3>Beige page, sage label ✓ approved</h3><p style="color:var(--ink)">Beige behind everything. Sage moves onto the card top, so you still see lots of it, just not around the card.</p></div>
+        <article class="k3">
+          <div class="k3-top"><span class="badge b-ok" style="justify-self:start">✓ Verified</span><div class="card-top"><h3 class="a-h3">Ringwise Receptionist</h3><div class="price">$59<small>/mo</small></div></div></div>
+          <div class="k3-body"><span class="a-small">AI receptionist · setup about 30 min</span><p class="why-pick" style="margin:0">Answers calls you miss on a job and texts you the details. Works with your Square.</p>
+          <div class="card-actions"><a class="btn btn-primary" href="#">See details</a><button class="btn btn-secondary" type="button">+ Compare</button></div></div>
+        </article>
+      </div>
+    </div>
+    <p class="why"><b>Why:</b> sage stays a main color, but as the card label instead of around the card. You can scan a list by name and price alone.</p>
+    <div class="phones">
+      <div class="phone">
+        <span class="phone-label">List row and privacy card</span>
+        <button class="row" type="button">
+          <span class="r-main"><b>Mike's Heating &amp; Cooling</b><span>118 Market St, Frederick, MD · HVAC · ★ 4.6 (87)</span></span>
+          <span class="chev" aria-hidden="true">›</span>
+        </button>
+        <article class="card">
+          <h3 class="a-h3">What happens to your data</h3>
+          <div class="privacy"><ul>
+            <li><span class="ico-ok">✓</span><span>Does not use your data to train AI.</span></li>
+            <li><span class="ico-ok">✓</span><span>You can delete your data at any time.</span></li>
+            <li><span class="ico-ok">✓</span><span>Stored in the US.</span></li>
+            <li><span class="ico-ok">✓</span><span>Does not sell your data.</span></li>
+            <li><span class="ico-q">?</span><span>We couldn't confirm a security certification.</span></li>
+          </ul></div>
+          <button class="btn btn-link" type="button" style="justify-self:start">Show where we read this</button>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="sheet" aria-labelledby="s-shell">
+    <header>
+      <h2 id="s-shell">6. Page frame and spacing</h2>
+      <p>Same frame on every owner screen: sage top bar, step line, page title, then cards in one column.</p>
+    </header>
+    <div class="phones">
+      <div class="phone">
+        <div class="topbar">
+          <span class="brand">MainStreet AI</span>
+          <button class="btn btn-link" type="button" style="font-weight:500">Start over</button>
+        </div>
+        <div class="steps">
+          <div class="bar"><i class="on"></i><i class="on"></i><i></i><i></i></div>
+          <span>Step 2 of 4: Check what we found</span>
+        </div>
+        <h1 class="a-h1">Is this your business?</h1>
+        <div class="notice">We couldn't read your website, so we skipped the booking and pricing checks.</div>
+        <div class="card" style="min-height:90px"><span class="a-small">Card</span></div>
+        <div class="card" style="min-height:90px"><span class="a-small">Card</span></div>
+        <button class="btn btn-primary btn-block" type="button">Looks right</button>
+      </div>
+      <div class="side-notes">
+        <ul>
+          <li>Spacing steps: 4 · 8 · 12 · 16 · 24 · 32px.</li>
+          <li>16px gap between cards, 24px between sections.</li>
+          <li>Rounded corners 8px on cards, inputs and buttons. Fully round only for badges and chips.</li>
+          <li>No shadows, no gradients, no glowing "AI" effects, no animation beyond a quick color fade.</li>
+          <li>Step line with words ("Step 2 of 4"), not a percentage.</li>
+          <li>One column on phones. On a laptop the column stays max 720px wide and centered; compare can go side by side.</li>
+          <li>Notices are grey and calm. Red is only for things the owner must fix.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="sheet" aria-labelledby="s-words">
+    <header>
+      <h2 id="s-words">7. Words</h2>
+      <p>Grade 8 or lower, talk to "you", sentence case, buttons say exactly what happens next.</p>
+    </header>
+    <div class="tbl">
+      <table class="words">
+        <thead><tr><th>Say</th><th>Don't say</th></tr></thead>
+        <tbody>
+          <tr><td>Tools</td><td>AI solutions, stack, integrations</td></tr>
+          <tr><td>Might be worth about $1,949 a month</td><td>You're losing $1,949/month</td></tr>
+          <tr><td>✓ Verified: a person checked who made it and how it uses your data</td><td>Trust Score 92</td></tr>
+          <tr><td>We found this in 3 reviews</td><td>High-confidence signal</td></tr>
+          <tr><td>Get help setting this up</td><td>Request implementation support</td></tr>
+          <tr><td>Blocked: the website is 2 months old and names no company</td><td>Flagged: anomalous vendor metadata</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="sheet" id="screens" aria-labelledby="s-screens">
+    <header>
+      <h2 id="s-screens">Click-through: screens 1–4</h2>
+      <p>Mike's Heating &amp; Cooling, the video's golden path. Click the burgundy buttons to move through it like the real app, one screen at a time. Switch between Website (16:10) and Phone at the top. Tap rows, chips and "Why we think this" to open things.</p>
+    </header>
+    <div class="player-bar">
+      <button type="button" class="pbtn" id="p-back" aria-label="Previous screen">‹ Back</button>
+      <div class="p-where"><b id="p-title">1 · Landing</b><div class="p-dots" id="p-dots" role="group" aria-label="Jump to screen"></div></div>
+      <div class="viewtoggle" role="group" aria-label="Screen size"><button type="button" data-v="desk" aria-pressed="true">Website</button><button type="button" data-v="phone" aria-pressed="false">Phone</button></div>
+    </div>
+    <div class="phones screens desk player">
+
+      <!-- ============ 1. LANDING ============ -->
+      <div class="scr" id="scr-1" data-title="Landing">
+        <span class="scr-label">1 · Landing</span>
+        <div class="phone">
+          <div class="topbar"><span class="brand">MainStreet AI</span><a class="btn btn-link" href="#scr-8">For reviewers</a></div>
+          <div class="dcol dL"><div class="col" style="gap:12px;padding-top:8px">
+            <span class="badge b-ok" style="justify-self:start">✓ Every tool checked by a person</span>
+            <h1 class="a-h1" style="font-size:34px;line-height:1.15">AI tools you can trust, picked for your business.</h1>
+            <p class="a-body" style="margin:0">Most AI searches give you 50 tools and no way to tell which are safe. We show you the 3 that are checked, work with what you already use, and come with someone to help set them up.</p>
+          </div>
+          <a class="btn btn-primary btn-block" href="#scr-2">Find my AI tools</a>
+          <span class="a-small" style="text-align:center">Free · about 3 minutes · no sign-up</span></div>
+          <div class="dcol dR"><div class="card">
+            <h2 class="a-h2">How it works</h2>
+            <ol class="howto">
+              <li><b>Type your business name.</b> We read your Google listing, website and reviews.</li>
+              <li><b>See what's costing you.</b> Missed calls, slow quotes, with the proof.</li>
+              <li><b>Pick a fix.</b> Only ✓ Verified tools, plus local help to set it up.</li>
+            </ol>
+          </div>
+          <div class="card" style="gap:8px">
+            <h2 class="a-h3">Saw an AI tool in an ad?</h2>
+            <p class="a-small" style="margin:0;color:var(--ink)">Paste the link and we'll tell you if it's safe.</p>
+            <div class="field"><label for="l-check" class="sr">Tool link</label><input id="l-check" placeholder="https://"></div>
+            <button class="btn btn-secondary" type="button">Check this tool</button>
+          </div>
+          </div><p class="a-small" style="margin:0;text-align:center">With help from the Maryland SBDC network · Built by Team ByteMe, University of Maryland</p>
+        </div>
+        <ul class="scr-notes">
+          <li>One promise, one burgundy button. The stamp above the headline says the main idea before anyone reads.</li>
+          <li>"Check any AI tool" sits lower as a second way in.</li>
+          <li>"For reviewers" in the top bar opens the admin queue (screen 8) for judges.</li>
+        </ul>
+      </div>
+
+      <!-- ============ 2. FIND YOUR BUSINESS ============ -->
+      <div class="scr" id="scr-2" data-title="Find your business">
+        <span class="scr-label">2 · Find your business</span>
+        <div class="phone">
+          <div class="topbar"><span class="brand">MainStreet AI</span><a class="btn btn-link" href="#scr-1">Start over</a></div>
+          <div class="banner">Sample business for the demo. Nothing here is real.</div>
+          <div class="steps"><div class="bar"><i class="on"></i><i></i><i></i><i></i></div><span>Step 1 of 4: Find your business</span></div>
+          <h1 class="a-h1">What's your business called?</h1>
+          <div class="dcol dL"><div class="field"><label for="s2-name">Business name</label><input id="s2-name" value="Mike's Heating"></div>
+          <div class="field"><label for="s2-town">Town or ZIP <span style="font-weight:400;color:var(--text-2)">(optional)</span></label><input id="s2-town" value="Frederick, MD"></div>
+          <button class="btn btn-secondary btn-block" type="button">Search</button>
+          <div class="col" role="radiogroup" aria-label="Pick your business">
+            <span class="sub">Pick yours</span>
+            <button class="row pickrow" type="button" role="radio" aria-checked="true"><span class="r-main"><b>Mike's Heating &amp; Cooling</b><span>118 Market St, Frederick · HVAC · ★ 4.6 (87)</span></span><span class="tick" aria-hidden="true">✓</span></button>
+            <button class="row pickrow" type="button" role="radio" aria-checked="false"><span class="r-main"><b>Mike's Heating &amp; Air</b><span>Hagerstown, MD · HVAC · ★ 4.1 (23)</span></span><span class="tick" aria-hidden="true">✓</span></button>
+            <button class="row pickrow" type="button" role="radio" aria-checked="false"><span class="r-main"><b>Mike's Plumbing &amp; Heating</b><span>Westminster, MD · Plumber · ★ 4.8 (140)</span></span><span class="tick" aria-hidden="true">✓</span></button>
+            <a class="btn btn-link" href="#scr-2" style="justify-self:start">Not listed? Enter it yourself</a>
+          </div>
+          </div><div class="dcol dR"><div class="card" style="gap:16px">
+            <h2 class="a-h3">3 quick questions</h2>
+            <div class="field"><label for="s2-budget">How much can you spend on tools each month?</label><input id="s2-budget" value="$200"></div>
+            <div class="col"><span style="font-weight:600;font-size:15px">Want someone to set it up for you?</span>
+              <div class="badge-row"><button class="chipsel" type="button" aria-pressed="false">Yes, help me</button><button class="chipsel" type="button" aria-pressed="true">✓ I'll do it myself</button></div></div>
+            <div class="col"><span style="font-weight:600;font-size:15px">What matters most? <span style="font-weight:400;color:var(--text-2)">Pick up to 2</span></span>
+              <div class="badge-row"><button class="chipsel" type="button" aria-pressed="true">✓ More customers</button><button class="chipsel" type="button" aria-pressed="true">✓ Save time</button><button class="chipsel" type="button" aria-pressed="false">Spend less</button></div></div>
+          </div>
+          <details class="disc"><summary>Paste a few reviews from Yelp or Facebook <span class="a-small">(optional)</span></summary><p class="a-small" style="color:var(--ink)">Google only shares 5 reviews. Pasting more gives a better read.</p></details>
+          <a class="btn btn-primary btn-block" href="#scr-load">Read my business</a>
+          <div class="notice wait"><b>Next, for 2–8 seconds:</b> a short checklist ticks off "Google listing · Your website · Customer reviews · Tools on your site". No spinner orb, no "AI is thinking".</div></div>
+        </div>
+        <ul class="scr-notes">
+          <li>Search runs on tap, not on every key.</li>
+          <li>The whole result row is the button (56px tall).</li>
+          <li>Only 3 questions here. Everything else we find ourselves.</li>
+          <li>The sample-data banner is a team rule. It stays small and amber.</li>
+        </ul>
+      </div>
+
+      <!-- ============ LOADING (between 2 and 3) ============ -->
+      <div class="scr" id="scr-load" data-title="Reading your business (loading)">
+        <span class="scr-label">Reading your business</span>
+        <div class="phone">
+          <div class="topbar"><span class="brand">MainStreet AI</span><a class="btn btn-link" href="#scr-2">Cancel</a></div>
+          <div class="banner">Sample business for the demo. Nothing here is real.</div>
+          <div class="steps"><div class="bar"><i class="on"></i><i class="half"></i><i></i><i></i></div><span>Step 2 of 4: Reading your business</span></div>
+          <div class="loadbox">
+            <h1 class="a-h1">Reading Mike's Heating &amp; Cooling</h1>
+            <ul class="checks">
+              <li><span class="ck"></span>Google listing</li>
+              <li><span class="ck"></span>Your website (up to 6 pages)</li>
+              <li><span class="ck"></span>Customer reviews</li>
+              <li><span class="ck"></span>Tools on your site</li>
+            </ul>
+            <p class="a-small" style="margin:0" aria-live="polite" id="load-msg">This takes up to 8 seconds.</p>
+          </div>
+        </div>
+        <ul class="scr-notes">
+          <li>An honest wait: the real steps we run, all ticked together when the answer comes back. No progress bar, no "AI is thinking".</li>
+          <li>Cancel goes back to search. After 15 seconds we say "Some websites are slow" and keep waiting.</li>
+        </ul>
+      </div>
+
+      <!-- ============ 3. CHECK WHAT WE FOUND ============ -->
+      <div class="scr" id="scr-3" data-title="Check what we found">
+        <span class="scr-label">3 · Check what we found</span>
+        <div class="phone">
+          <div class="topbar"><span class="brand">MainStreet AI</span><a class="btn btn-link" href="#scr-1">Start over</a></div>
+          <div class="banner">Sample business for the demo. Nothing here is real.</div>
+          <div class="steps"><div class="bar"><i class="on"></i><i class="on"></i><i></i><i></i></div><span>Step 2 of 4: Check what we found</span></div>
+          <h1 class="a-h1">Is this right?</h1>
+          <p class="a-small" style="margin:0;color:var(--ink)">Fix anything that's wrong. It takes about a minute.</p>
+
+          <div class="dcol dL"><div class="card">
+            <h2 class="a-h2">Your business</h2>
+            <dl class="factlist">
+              <div><dt>Name</dt><dd>Mike's Heating &amp; Cooling</dd><span class="chip">From Google</span><button class="edit" type="button">Edit</button></div>
+              <div><dt>Type</dt><dd>Heating and air (HVAC)</dd><span class="chip">From Google</span><button class="edit" type="button">Edit</button></div>
+              <div><dt>Address</dt><dd>118 Market St, Frederick, MD 21701</dd><span class="chip">From Google</span><button class="edit" type="button">Edit</button></div>
+              <div><dt>Phone</dt><dd>(301) 555-0142</dd><span class="chip">Your website</span><button class="edit" type="button">Edit</button></div>
+              <div><dt>Team</dt><dd class="missing">We couldn't find this</dd><span></span><button class="edit" type="button">Add</button></div>
+            </dl>
+            <div class="mismatch">
+              <b>Your hours don't match. Which is right?</b>
+              <div class="badge-row"><button class="chipsel" type="button" aria-pressed="false">Closes 5pm <span class="a-small">· Google</span></button><button class="chipsel" type="button" aria-pressed="false">Closes 6pm <span class="a-small">· website</span></button></div>
+            </div>
+          </div>
+
+          </div><div class="dcol dR"><div class="card">
+            <h2 class="a-h2">What customers say</h2>
+            <div class="theme">
+              <b>Hard to reach by phone</b><span class="a-small">from 3 of 5 reviews</span>
+              <q>Called three times, nobody picked up. Went with someone else.</q><span class="a-small">Dana R. · Google review</span>
+            </div>
+            <div class="theme">
+              <b>Quotes are slow</b><span class="a-small">from 2 of 5 reviews</span>
+              <q>Great work, but the quote took a week.</q><span class="a-small">Tom K. · Google review</span>
+            </div>
+            <div class="theme good">
+              <b>Honest, fair techs</b><span class="a-small">from 4 of 5 reviews</span>
+            </div>
+            <p class="a-small" style="margin:0">Google only shares 5 reviews, so this is a small sample.</p>
+          </div>
+
+          <div class="card">
+            <h2 class="a-h2">Tools you use</h2>
+            <div class="badge-row"><span class="chip">✓ Square · found on your website</span></div>
+            <a class="btn btn-link" href="#scr-3" style="justify-self:start;font-size:15px">See where we found it</a>
+            <span style="font-weight:600;font-size:15px">Do you use any of these? We can't see them from outside.</span>
+            <div class="badge-row"><button class="chipsel" type="button" aria-pressed="true">✓ QuickBooks</button><button class="chipsel" type="button" aria-pressed="true">✓ Google Business</button><button class="chipsel" type="button" aria-pressed="false">Jobber</button><button class="chipsel" type="button" aria-pressed="false">Gmail</button></div>
+          </div>
+          <a class="btn btn-primary btn-block" href="#scr-4">Looks right</a></div>
+        </div>
+        <ul class="scr-notes">
+          <li>Every fact shows where it came from, with Edit right next to it. After an edit the chip says "You told us".</li>
+          <li>Mismatches get their own box with a question, instead of being buried in a list.</li>
+          <li>Review quotes in Spectral italic, always with the reviewer's name (a Google rule).</li>
+          <li>Notices are grey, never red. Nothing here is an error.</li>
+        </ul>
+      </div>
+
+      <!-- ============ 4. PROBLEMS ============ -->
+      <div class="scr" id="scr-4" data-title="Problems and what they cost">
+        <span class="scr-label">4 · Problems and what they cost</span>
+        <div class="phone">
+          <div class="topbar"><span class="brand">MainStreet AI</span><a class="btn btn-link" href="#scr-1">Start over</a></div>
+          <div class="banner">Sample business for the demo. Nothing here is real.</div>
+          <div class="steps"><div class="bar"><i class="on"></i><i class="on"></i><i class="on"></i><i></i></div><span>Step 3 of 4: What's costing you</span></div>
+          <h1 class="a-h1">What's costing you</h1>
+          <p class="summary">We found <b>2 confirmed</b> and <b>1 likely</b> problem. Together they might be worth about <b class="num">$4,287 a month</b> in missed business <span class="num">(could be $1,014–$10,393)</span>.</p>
+          <p class="a-small" style="margin:-8px 0 0">Estimated opportunity, not proven lost revenue.</p>
+
+          <div class="dgrid d3"><article class="card prob">
+            <div class="ptop"><span class="badge b-ok" style="justify-self:start">● Confirmed</span><h2 class="a-h3">Calls go unanswered while you're on a job</h2></div>
+            <p class="money"><span class="a-small">Might be worth about</span> <b class="num">$1,949 a month</b></p>
+            <details class="disc" open>
+              <summary>Why we think this</summary>
+              <ul class="evid">
+                <li><b>3 reviews</b> say nobody picked up.<span class="a-small">Google reviews</span></li>
+                <li><b>No answering service</b> on your website.<span class="a-small">Your website · view page</span></li>
+                <li class="unsure"><b>Your hours end at 5pm.</b> Calls after that likely go to voicemail.<span class="a-small">Google listing · not directly seen</span></li>
+              </ul>
+              <div class="calc">
+                <span class="sub">How we got the number</span>
+                <div class="calc-grid">
+                  <div class="field"><label for="c1">Missed calls a week</label><input id="c1" value="8"><span class="hint">Starting guess. Change it.</span></div>
+                  <div class="field"><label for="c2">Average job</label><input id="c2" value="$400"><span class="hint">Starting guess. Change it.</span></div>
+                </div>
+                <p class="a-small" style="margin:0;color:var(--ink)">8 calls × 14% become jobs × $400 × 4.3 weeks</p>
+              </div>
+            </details>
+          </article>
+
+          <article class="card prob">
+            <div class="ptop"><span class="badge b-ok" style="justify-self:start">● Confirmed</span><h2 class="a-h3">Quotes take hours at night</h2></div>
+            <p class="money"><span class="a-small">Might be worth about</span> <b class="num">$1,560 a month</b></p>
+            <details class="disc"><summary>Why we think this</summary><ul class="evid"><li><b>2 reviews</b> say quotes were slow.<span class="a-small">Google reviews</span></li></ul></details>
+          </article>
+
+          <article class="card prob">
+            <div class="ptop"><span class="badge b-warn" style="justify-self:start">◐ Likely</span><h2 class="a-h3">Reviews go unanswered</h2></div>
+            <p class="money"><span class="a-small">Might be worth about</span> <b class="num">$778 a month</b></p>
+            <details class="disc"><summary>Why we think this</summary><ul class="evid"><li><b>0 of 87 reviews</b> have a reply from you.<span class="a-small">Google listing</span></li></ul></details>
+          </article>
+
+          </div><div class="dgrid d2"><div class="col" style="gap:12px">
+            <h2 class="a-h2">Might apply. Tell us.</h2>
+            <article class="card prob maybe">
+            <div class="ptop"><span class="badge b-grey" style="justify-self:start">○ Not confirmed</span><h3 class="a-h3">Customers can't book online</h3></div>
+              <div class="badge-row"><button class="chipsel" type="button" aria-pressed="false">Yes, it does</button><button class="chipsel" type="button" aria-pressed="false">No</button></div>
+            </article>
+          </div>
+
+          <div class="col">
+            <h2 class="a-h2">Also noticed</h2>
+            <ul class="todo"><li>Your Google hours and website hours don't match. A 2-minute fix.</li></ul>
+          </div>
+
+          </div><a class="btn btn-primary btn-block" href="#scr-5">Show me tools for these</a>
+        </div>
+        <ul class="scr-notes">
+          <li>One sentence on top, not a wall of number tiles. The "not proven" label always sits under the total.</li>
+          <li>Proof comes before money inside each card.</li>
+          <li>"Not confirmed" problems sit apart, with a dashed outline and no dollar amount.</li>
+          <li>Problems never use red. They aren't errors.</li>
+        </ul>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="decide" aria-labelledby="s-decide">
+    <h2 id="s-decide">Feedback on screens 1–4</h2>
+    <ol>
+      <li>Does each screen do one clear job?</li>
+      <li>Any words that sound too techy or too long?</li>
+      <li>Anything you'd move, cut or add before I do screens 5–8?</li>
+    </ol>
+  </section>
+</div>
+<script>
+document.querySelectorAll('.pick').forEach(function(b){b.addEventListener('click',function(){
+  var on=b.getAttribute('aria-pressed')!=='true'; b.setAttribute('aria-pressed',on?'true':'false');
+  if(!b.closest('.oC')){ b.textContent=(on?'✓ ':'')+b.textContent.replace(/^✓ /,''); }
+});});
+</script>
+<script>
+document.querySelectorAll('.chipsel').forEach(function(b){b.addEventListener('click',function(){
+  var on=b.getAttribute('aria-pressed')!=='true'; b.setAttribute('aria-pressed',on?'true':'false');
+  var t=b.firstChild; if(t&&t.nodeType===3){ t.textContent=(on?'✓ ':'')+t.textContent.replace(/^✓ /,''); }
+});});
+document.querySelectorAll('.pickrow').forEach(function(b){b.addEventListener('click',function(){
+  b.parentNode.querySelectorAll('.pickrow').forEach(function(o){o.setAttribute('aria-checked',o===b?'true':'false');});
+});});
+</script>
+<script>
+(function(){
+  var box=document.querySelector('.player'); if(!box) return;
+  var scrs=[].slice.call(box.querySelectorAll('.scr'));
+  var main=scrs.filter(function(x){return x.id!=='scr-load';});
+  var cur=0, timer=null;
+  var dots=document.getElementById('p-dots');
+  main.forEach(function(x,i){var b=document.createElement('button');b.type='button';b.textContent=String(i+1);b.setAttribute('aria-label','Screen '+(i+1)+': '+x.dataset.title);b.onclick=function(){go(scrs.indexOf(x));};dots.appendChild(b);});
+  function go(i, back){
+    if(i<0||i>=scrs.length) return;
+    clearTimeout(timer);
+    scrs.forEach(function(x){x.classList.remove('on','from-back');});
+    var el=scrs[i]; el.classList.add('on'); if(back) el.classList.add('from-back');
+    var ph=el.querySelector('.phone'); if(ph) ph.scrollTop=0;
+    cur=i;
+    var mi=main.indexOf(el);
+    document.getElementById('p-title').textContent = el.id==='scr-load' ? 'Loading: '+el.dataset.title.replace(' (loading)','') : (mi+1)+' · '+el.dataset.title;
+    [].forEach.call(dots.children,function(d,k){d.setAttribute('aria-current', k===mi?'true':'false');});
+    document.getElementById('p-back').disabled = (i===0);
+    if(el.id==='scr-load'){
+      var lb=el.querySelector('.checks'); lb.classList.remove('done'); lb.classList.add('loading');
+      document.getElementById('load-msg').textContent='This takes up to 8 seconds.';
+      timer=setTimeout(function(){lb.classList.remove('loading');lb.classList.add('done');document.getElementById('load-msg').textContent='Done. Here is what we found.';
+        timer=setTimeout(function(){go(scrs.indexOf(document.getElementById('scr-3')));},900);},2200);
+    }
+  }
+  box.addEventListener('click',function(e){
+    var a=e.target.closest('a[href^="#scr-"]'); if(!a) return;
+    var t=document.getElementById(a.getAttribute('href').slice(1)); if(!t||scrs.indexOf(t)<0) return;
+    e.preventDefault(); var j=scrs.indexOf(t); go(j, j<cur);
+  });
+  document.getElementById('p-back').onclick=function(){
+    var i=cur-1; if(scrs[i]&&scrs[i].id==='scr-load') i--; go(i,true);
+  };
+  document.querySelectorAll('.viewtoggle button').forEach(function(b){b.addEventListener('click',function(){
+    box.classList.toggle('desk', b.dataset.v==='desk');
+    document.querySelectorAll('.viewtoggle button').forEach(function(o){o.setAttribute('aria-pressed',o===b?'true':'false');});
+    go(cur);
+  });});
+  var h=location.hash.slice(1), start=document.getElementById(h);
+  go(start&&scrs.indexOf(start)>=0?scrs.indexOf(start):0);
+})();
+</script>
