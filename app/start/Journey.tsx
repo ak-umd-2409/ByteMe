@@ -1635,7 +1635,6 @@ export function Journey({ lookup, catalog, watchCount = 0, entry }: { lookup: Lo
         {banner}
         <PlanScreen answer={result} recs={recs} catalog={catalog} currentTools={req?.currentTools ?? []} needsHelp={req?.needsHelp ?? answers.setup === "help"} chosenTools={chosen} back={() => go(recs ? "tools" : "problems")} />
       </>,
-      { narrow: true },
     );
 
   return frame(

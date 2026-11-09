@@ -16,6 +16,9 @@ import { ToolLogo } from "@/components/ToolLogo.tsx";
 import s from "./start.module.css";
 import { SampleTag } from "./ToolScreens.tsx";
 import { CostPayback } from "./CostPayback.tsx";
+import d from "./dash.module.css";
+import { breakEven } from "@/lib/plan/roi.ts";
+import { INDUSTRIES } from "@/lib/business/industry.ts";
 import { CostTable } from "../plan/CostTable.tsx";
 import { costSummary } from "@/lib/plan/roi.ts";
 import { CopyButton } from "../plan/Copy.tsx";
@@ -138,6 +141,12 @@ export function PlanScreen({
   const allSteps = plan.sections.flatMap((sec) => sec.steps.map((st) => st.id));
   const stepCount = allSteps.length;
   const doneCount = allSteps.filter((id) => done.has(id)).length;
+  // Dashboard summary (presentation only: the same plan, costs and break-even as below).
+  const costs = costSummary(plan, catalog);
+  const industryName = answer.recommendation.ready ? answer.recommendation.request.business.industry.trim().toLowerCase() : "";
+  const typical = Object.values(INDUSTRIES).find((i) => i.key === industryName || i.label.toLowerCase() === industryName) ?? INDUSTRIES.other;
+  const be = costs.tools.length ? breakEven(costs.totals.monthly, typical.defaults.averageJobValue, typical.defaults.hourlyValueOfOwnerTime, 0) : null;
+  const stepById = new Map(plan.sections.flatMap((sec) => sec.steps.map((st) => [st.id, { st, sec }] as const)));
 
   return (
     <>
@@ -161,6 +170,14 @@ export function PlanScreen({
         </span>
       </header>
 
+      <section className={d.stats} aria-label="Plan at a glance">
+        <div className={d.stat}><small>Problems</small><b>{plan.sections.filter((sec) => !sec.id.includes("kit-")).length}</b></div>
+        <div className={d.stat}><small>Tools</small><b>{costs.tools.length}</b><small>{costs.tools.length ? costs.tools.map((x) => x.name).join(", ") : "None yet"}</small></div>
+        <div className={d.stat}><small>Each month · first year</small><b>{usd(costs.totals.monthly)}</b><small>{usd(costs.totals.firstYear)} first year</small></div>
+        <div className={d.stat}><small>Breaks even at</small><b>{be ? be.customers : "—"}</b><small>{be ? `extra ${be.customers === 1 ? "customer" : "customers"} a month (typical order)` : "no paid tools"}</small></div>
+        <div className={d.stat}><small>Steps done</small><b>{doneCount} / {stepCount}</b></div>
+      </section>
+
       <p className={cx(s.small, s.noPrint)}>
         Want a different tool?{" "}
         <button type="button" className={s.link} style={{ padding: 0, minHeight: 0 }} onClick={back}>
@@ -168,6 +185,8 @@ export function PlanScreen({
         </button>
       </p>
 
+      <div className={d.grid}>
+      <div className={d.main}>
       {plan.notes.length > 0 && (
         <div className={s.banner}>
           {plan.notes.map((n) => (
@@ -176,57 +195,52 @@ export function PlanScreen({
         </div>
       )}
 
-      <CostPayback plan={plan} catalog={catalog} impactFor={impactFor} industry={answer.recommendation.ready ? answer.recommendation.request.business.industry : null} />
-
-
-      <ol className={s.planList}>
-        {plan.sections.map((sec, i) => (
-          <li key={sec.id} className={s.card}>
-            <div className={s.cardTop}>
-              <span className={s.small}>
-                {i + 1} · {sec.summary}
-              </span>
-              {sec.tool ? (
-                <span style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                  <ToolLogo id={sec.tool.id} name={sec.tool.name} size={32} />
-                  <h2 className={s.h3}>{sec.tool.name}</h2>
-                </span>
-              ) : (
-                <h2 className={s.h3}>{sec.heading}</h2>
-              )}
-              {sec.tool && (
-                <span className={s.row} style={{ gap: 6 }}>
-                  <span className={s.small}>For: {sec.heading.toLowerCase()}</span>
-                  {sec.tool.sample && <SampleTag />}
-                </span>
-              )}
+      {plan.weeks.map((w, wi) => {
+        const rows = w.steps.map((x) => stepById.get(x.stepId)).filter((x): x is NonNullable<typeof x> => Boolean(x));
+        const phaseDone = rows.filter((x) => done.has(x.st.id)).length;
+        return (
+          <details key={w.week} className={d.phase} open={wi < 2}>
+            <summary>
+              <h2 className={s.h3}>{w.label}</h2>
+              <span className={d.count}>{phaseDone} / {rows.length} done</span>
+              {w.minutes > 0 && <span className={s.small}>about {w.minutes} min</span>}
+            </summary>
+            <div className={d.phaseBody}>
+              <ul className={s.planSteps}>
+                {rows.map(({ st, sec }) => (
+                  <li key={st.id} className={done.has(st.id) ? s.stepDoneRow : undefined}>
+                    <input type="checkbox" className={s.tick2} id={`step-${st.id}`} checked={done.has(st.id)} onChange={() => toggleDone(st.id)} aria-label={`Done: ${st.title}`} />
+                    <span className={s.optionText}>
+                      <span className={s.small} style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                        {sec.tool && <ToolLogo id={sec.tool.id} name={sec.tool.name} size={20} />}
+                        {sec.tool ? `${sec.tool.name} · for ${sec.heading.toLowerCase()}` : sec.heading}
+                        {sec.tool?.sample && <SampleTag />}
+                      </span>
+                      <b>
+                        {st.title}
+                        {st.minutes ? <span className={s.small}> · {st.minutes} min</span> : null}
+                      </b>
+                      <span>{st.detail}</span>
+                      {st.who && <span className={s.small}>Who: {st.who}</span>}
+                      {st.outcome && <span className={s.small}>{/^Test:/.test(st.outcome) ? st.outcome : `Done when: ${st.outcome}`}</span>}
+                      {st.why && <span className={s.hint}>{st.why}</span>}
+                      {st.link && (
+                        <a href={st.link.url} target="_blank" rel="noreferrer">
+                          {st.link.label} ↗
+                        </a>
+                      )}
+                    </span>
+                  </li>
+                ))}
+              </ul>
             </div>
-            <ul className={s.planSteps}>
-              {sec.steps.map((st) => (
-                <li key={st.id} className={done.has(st.id) ? s.stepDoneRow : undefined}>
-                  <input type="checkbox" className={s.tick2} id={`step-${st.id}`} checked={done.has(st.id)} onChange={() => toggleDone(st.id)} aria-label={`Done: ${st.title}`} />
-                  <span className={s.optionText}>
-                    <b>
-                      {st.title}
-                      {st.minutes ? <span className={s.small}> · {st.minutes} min</span> : null}
-                      <span className={s.weekChip}>{PHASE_LABEL[st.week] ?? "After day 30"}</span>
-                    </b>
-                    <span>{st.detail}</span>
-                    {st.who && <span className={s.small}>Who: {st.who}</span>}
-                    {st.outcome && <span className={s.small}>{/^Test:/.test(st.outcome) ? st.outcome : `Done when: ${st.outcome}`}</span>}
-                    {st.why && <span className={s.hint}>{st.why}</span>}
-                    {st.link && (
-                      <a href={st.link.url} target="_blank" rel="noreferrer">
-                        {st.link.label} ↗
-                      </a>
-                    )}
-                  </span>
-                </li>
-              ))}
-            </ul>
-          </li>
-        ))}
-      </ol>
+          </details>
+        );
+      })}
+      </div>
+
+      <div className={d.side}>
+      <CostPayback plan={plan} catalog={catalog} impactFor={impactFor} industry={answer.recommendation.ready ? answer.recommendation.request.business.industry : null} />
 
       <ReadyWords items={words} />
 
@@ -276,6 +290,8 @@ export function PlanScreen({
       </section>
 
       {needsHelp && <FreeHelp plan={plan} title="Find help setting this up" />}
+      </div>
+      </div>
 
       <p className={s.hint}>
         Estimates and prices come from public pages checked on the dates shown on each tool. Confirm prices with the company before you buy. Not legal advice.
