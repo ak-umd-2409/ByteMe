@@ -4,6 +4,7 @@
  * plan and what's worth talking through. No hooks, so it renders on the server too.
  */
 import type { AdvisorView as View } from "@/lib/plan/share.ts";
+import { PHASE_LABEL } from "@/lib/plan/plan.ts";
 import s from "../start/start.module.css";
 import { FreeHelp, ReadyWords, Weeks } from "./parts.tsx";
 
@@ -130,7 +131,7 @@ export function AdvisorView({ view }: { view: View }) {
               </b>
               {sec.steps.map((st) => (
                 <span key={st.id}>
-                  Week {st.week > 4 ? "5+" : st.week} · {st.title}: {st.detail}
+                  {PHASE_LABEL[st.week] ?? "After day 30"} · {st.title}: {st.detail}{st.who ? ` (${st.who})` : ""}
                   {st.link && (
                     <>
                       {" "}

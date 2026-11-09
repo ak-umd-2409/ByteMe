@@ -35,18 +35,22 @@ function memoryKv(): Kv & { data: Map<string, { value: string; ttl?: number }> }
 const PHONE = { "problem.missed_inquiries": "yes", "problem.slow_quotes": "yes", "impact.missed_per_week": 4, "impact.average_job_value": 400 };
 
 describe("30-day plan (spec §5.1)", () => {
-  it("free fixes in week 1, then one tool at a time, each checked two weeks later", async () => {
+  it("phases: quick free fixes on day 1, then one tool per phase, each checked about two weeks later", async () => {
     const a = await journey("public-frederick-heating-ac", PHONE);
     const plan = buildPlan({ answer: a, choices: { missed_inquiries: "ringwise-receptionist", slow_quotes: "quotequick" }, catalog, currentTools: [] });
     const tools = plan.sections.filter((s) => s.tool);
     assert.equal(tools.length, 2);
     const weekOf = (sectionIdx: number, suffix: string) => tools[sectionIdx]!.steps.find((s) => s.id.endsWith(suffix))!.week;
-    const hasFree = plan.sections.some((s) => !s.tool);
-    const first = hasFree ? 2 : 1;
-    assert.equal(weekOf(0, "-signup"), first);
-    assert.equal(weekOf(0, "-check"), first + 2);
-    assert.equal(weekOf(1, "-signup"), first + 2, "second tool only starts once the first is in");
-    assert.ok(plan.sections.filter((s) => !s.tool).every((s) => s.steps.every((st) => st.week === 1)));
+    assert.equal(weekOf(0, "-signup"), 2, "first tool in days 2–7");
+    assert.equal(weekOf(0, "-check"), 4, "checked in weeks 3–4");
+    assert.equal(weekOf(1, "-signup"), 3, "second tool only starts in week 2, after the first is in");
+    assert.ok(weekOf(1, "-check") >= 4);
+    // Free fixes are on day 1 when they take under an hour, otherwise days 2–7.
+    assert.ok(plan.sections.filter((s) => !s.tool).every((s) => s.steps.every((st) => st.week === 1 || st.week === 2)));
+    // Every tool step says who does it and what "done" looks like.
+    assert.ok(tools.every((s) => s.steps.every((st) => st.who && st.outcome)));
+    assert.match(plan.order ?? "", /one tool at a time/);
+    assert.equal(plan.weeks[0]!.label.startsWith("Day 1") || plan.weeks[0]!.label === "Days 2–7", true);
     // Weeks list every step exactly once, in order, with "After day 30" for what doesn't fit.
     const all = plan.sections.flatMap((s) => s.steps).length;
     assert.equal(plan.weeks.reduce((n, w) => n + w.steps.length, 0), all);
@@ -59,7 +63,7 @@ describe("30-day plan (spec §5.1)", () => {
     const a = await journey("public-frederick-heating-ac", PHONE);
     const plan = buildPlan({ answer: a, choices: { missed_inquiries: "ringwise-receptionist" }, catalog, currentTools: [] });
     const text = planText(plan, "https://example.org/plan/abc");
-    assert.match(text, /Week 1 · days 1–7/);
+    assert.match(text, /Day 1|Days 2–7/);
     assert.match(text, /Full plan: https:\/\/example.org\/plan\/abc/);
     assert.doesNotMatch(planText(plan, null), /Full plan/);
     assert.ok(text.length < 1800, "short enough for a mailto link");

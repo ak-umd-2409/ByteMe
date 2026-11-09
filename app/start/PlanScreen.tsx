@@ -9,7 +9,7 @@ import { useEffect, useMemo, useState } from "react";
 import type { CatalogRecord } from "@/lib/catalog/types.ts";
 import type { JourneyAnswerResponse } from "@/lib/journey/types.ts";
 import { readyContent } from "@/lib/plan/content.ts";
-import { buildPlan, planText } from "@/lib/plan/plan.ts";
+import { buildPlan, PHASE_LABEL, planText } from "@/lib/plan/plan.ts";
 import type { ProblemKey } from "@/lib/problems/types.ts";
 import type { RecommendationResult } from "@/lib/recommend/types.ts";
 import { ToolLogo } from "@/components/ToolLogo.tsx";
@@ -212,9 +212,11 @@ export function PlanScreen({
                     <b>
                       {st.title}
                       {st.minutes ? <span className={s.small}> · {st.minutes} min</span> : null}
-                      <span className={s.weekChip}>{st.week > 4 ? "After day 30" : `Week ${st.week}`}</span>
+                      <span className={s.weekChip}>{PHASE_LABEL[st.week] ?? "After day 30"}</span>
                     </b>
                     <span>{st.detail}</span>
+                    {st.who && <span className={s.small}>Who: {st.who}</span>}
+                    {st.outcome && <span className={s.small}>{/^Test:/.test(st.outcome) ? st.outcome : `Done when: ${st.outcome}`}</span>}
                     {st.why && <span className={s.hint}>{st.why}</span>}
                     {st.link && (
                       <a href={st.link.url} target="_blank" rel="noreferrer">
