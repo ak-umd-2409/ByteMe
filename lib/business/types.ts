@@ -97,6 +97,11 @@ export interface PlaceDetails {
   reviews: SourceReview[];
   /** Google only: how many reviews Google sent before we dropped any without text (for diagnosing "no reviews"). */
   reviewsSent?: number;
+  /**
+   * Google only: what happened when filling in reviews through SerpApi, e.g. "not_configured",
+   * "ok:8", "no_reviews", "http_401", "error: Invalid API key". Never contains the key.
+   */
+  serpapi?: string;
   provider: "google_places" | "mock" | "public_snapshot";
 }
 

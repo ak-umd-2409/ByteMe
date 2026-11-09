@@ -45,7 +45,7 @@ const intOr = (value: string | undefined, fallback: number, min: number, max: nu
 export function loadConfig(env: Env = process.env): AppConfig {
   return {
     googlePlacesApiKey: clean(env.GOOGLE_PLACES_API_KEY),
-    serpApiKey: clean(env.SERPAPI_KEY) ?? clean(env.SERPAPI_API_KEY),
+    serpApiKey: clean(env.SERPAPI_KEY) ?? clean(env.SERPAPI_API_KEY) ?? clean(env.SERP_API_KEY),
     openRouterApiKey: clean(env.OPENROUTER_API_KEY),
     openRouterModel: clean(env.OPENROUTER_MODEL) ?? "openai/gpt-4o-mini",
     llmDisabled: env.LLM_DISABLED === "1" || env.LLM_DISABLED === "true",
