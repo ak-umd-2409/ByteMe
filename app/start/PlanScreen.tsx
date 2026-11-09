@@ -7,7 +7,7 @@
  */
 import { useEffect, useMemo, useState } from "react";
 import type { CatalogRecord } from "@/lib/catalog/types.ts";
-import type { JourneyAnswerResponse } from "@/lib/journey/types.ts";
+import type { ImpactView, JourneyAnswerResponse } from "@/lib/journey/types.ts";
 import { readyContent } from "@/lib/plan/content.ts";
 import { buildPlan, planText } from "@/lib/plan/plan.ts";
 import type { ProblemKey } from "@/lib/problems/types.ts";
@@ -15,6 +15,7 @@ import type { RecommendationResult } from "@/lib/recommend/types.ts";
 import { ToolLogo } from "@/components/ToolLogo.tsx";
 import s from "./start.module.css";
 import { SampleTag } from "./ToolScreens.tsx";
+import { CostPayback } from "./CostPayback.tsx";
 import { CopyButton } from "../plan/Copy.tsx";
 import { FreeHelp, ReadyWords, Weeks } from "../plan/parts.tsx";
 
@@ -65,9 +66,14 @@ export function PlanScreen({
   );
 
   // Everything else the owner told us, and problems from reviews, so the plan covers all of it.
-  const extras = [...(answer.findings?.yours ?? []), ...(answer.findings?.noticed ?? [])]
-    .filter((f) => !f.problemKey)
-    .map((f) => ({ key: f.id.startsWith("yours-") ? `owner-${f.id.slice(6)}` : f.id.startsWith("noticed-ri") ? `issue-${f.id.slice(8)}` : f.id, heading: f.title, firstStep: f.whatToDo, aiHow: f.ai && f.ai.level !== "no" ? f.ai.how : null }));
+  const extraKey = (id: string) => (id.startsWith("yours-") ? `owner-${id.slice(6)}` : id.startsWith("noticed-ri") ? `issue-${id.slice(8)}` : id);
+  const ownFindings = [...(answer.findings?.yours ?? []), ...(answer.findings?.noticed ?? [])].filter((f) => !f.problemKey);
+  const extras = ownFindings.map((f) => ({ key: extraKey(f.id), heading: f.title, firstStep: f.whatToDo, aiHow: f.ai && f.ai.level !== "no" ? f.ai.how : null }));
+  // What each problem costs the owner (only when they gave the numbers), by plan section, for the payback card.
+  const impactFor: Record<string, ImpactView | null> = {
+    ...Object.fromEntries(ownFindings.map((f) => [`tool-${extraKey(f.id)}`, f.impact])),
+    ...Object.fromEntries(answer.opportunities.map((o) => [`tool-${o.problemKey}`, o.impact])),
+  };
   // Kit tools that don't match one of the problems still go in the plan, as their own section.
   for (const [id, tool] of Object.entries(chosenTools)) {
     if (!id.startsWith("kit-")) continue;
@@ -179,6 +185,8 @@ export function PlanScreen({
           ))}
         </div>
       )}
+
+      <CostPayback plan={plan} catalog={catalog} impactFor={impactFor} />
 
       <Weeks plan={plan} />
 
