@@ -19,8 +19,9 @@ export function Weeks({ plan }: { plan: Plan }) {
         <h2 className={s.h3} id="weeks-h">
           Your first 30 days
         </h2>
-        <span className={s.small}>Free fixes first, then one tool at a time, each checked two weeks after you set it up.</span>
+        <span className={s.small}>Free fixes on day 1, then one tool at a time, each checked about two weeks after you set it up.</span>
       </div>
+      {plan.order && <p className={s.small} style={{ color: "var(--ink)" }}>{plan.order}</p>}
       <ol className={s.weeks}>
         {plan.weeks.map((w) => (
           <li key={w.week} className={s.week}>
