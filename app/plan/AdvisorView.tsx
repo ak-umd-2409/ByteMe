@@ -6,7 +6,7 @@
 import type { AdvisorView as View } from "@/lib/plan/share.ts";
 import { PHASE_LABEL } from "@/lib/plan/plan.ts";
 import s from "../start/start.module.css";
-import { FreeHelp, ReadyWords, Weeks } from "./parts.tsx";
+import { FreeHelp, ReadyWords } from "./parts.tsx";
 import { CostTable } from "./CostTable.tsx";
 
 const day = (iso: string) => new Date(iso).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric", timeZone: "UTC" });
@@ -114,7 +114,6 @@ export function AdvisorView({ view }: { view: View }) {
 
       {view.costs && <CostTable costs={view.costs} />}
 
-      <Weeks plan={view.plan} />
 
       <section className={s.card}>
         <div className={s.cardTop}>

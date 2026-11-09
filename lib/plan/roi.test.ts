@@ -3,7 +3,7 @@ import { describe, it } from "node:test";
 import real from "../../data/catalog/real.json" with { type: "json" };
 import { validRecord } from "../catalog/fixtures.ts";
 import type { CatalogRecord } from "../catalog/types.ts";
-import { costSummary, DEFAULT_FIX_SHARE, payback, paybackWords, priceExtras, priceOf, totals, type PaybackInput } from "./roi.ts";
+import { breakEven, costSummary, DEFAULT_FIX_SHARE, payback, paybackWords, priceExtras, priceOf, totals, type PaybackInput } from "./roi.ts";
 import { answerInQuote, type PricingFact } from "../catalog/pricingDetails.ts";
 
 const catalog = ((real as unknown as { tools?: CatalogRecord[] }).tools ?? (real as unknown as CatalogRecord[])) as CatalogRecord[];
@@ -155,5 +155,18 @@ describe("answerInQuote (the word-for-word check)", () => {
     assert.equal(answerInQuote(f("freeTrialDays", "7", "Start 7 -day trial")), null);
     assert.equal(answerInQuote(f("annualBilled", "20", "$24.95 billed monthly $20 billed annually /mo")), null);
     assert.equal(answerInQuote(f("perUser", "yes", "Essentials $89 user/month")), null);
+  });
+});
+
+describe("breakEven", () => {
+  it("says how many extra customers pay for a tool, at least one", () => {
+    const b = breakEven(32, 45, 30, 3)!; // Chatbase for a restaurant: $45 typical order
+    assert.equal(b.customers, 1);
+    assert.equal(b.firstMonthCustomers, 3); // (32 + 3h × $30) / 45 = 2.7 → 3
+    assert.equal(b.hours, 1.5);
+    assert.equal(breakEven(108, 45, 30, 0)!.customers, 3);
+  });
+  it("won't divide by a zero order value", () => {
+    assert.equal(breakEven(32, 0, 30, 3), null);
   });
 });

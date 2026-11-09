@@ -14,6 +14,7 @@ import {
   DEFAULT_FIX_SHARE,
   DEFAULT_SETUP_HOURS,
   DEFAULT_TIME_TO_MONEY,
+  breakEven,
   PRICE_LABEL,
   payback,
   priceExtras,
@@ -23,6 +24,7 @@ import {
   type Scenario,
 } from "@/lib/plan/roi.ts";
 import { ToolLogo } from "@/components/ToolLogo.tsx";
+import { INDUSTRIES } from "@/lib/business/industry.ts";
 import s from "./start.module.css";
 import c from "./cost.module.css";
 
@@ -46,13 +48,23 @@ function hourlyFrom(impacts: (ImpactView | null)[]): { value: number; theirs: bo
   return { value: 30, theirs: false };
 }
 
-export function CostPayback({ plan, catalog, impactFor }: { plan: Plan; catalog: CatalogRecord[]; impactFor: Record<string, ImpactView | null> }) {
+/** The business type's typical order value and hourly value (labelled estimates), from its label or key. */
+function industryDefaults(industry: string | null) {
+  const v = (industry ?? "").trim().toLowerCase();
+  const found = Object.values(INDUSTRIES).find((i) => i.key === v || i.label.toLowerCase() === v) ?? INDUSTRIES.other;
+  return { label: found.key === "other" ? "small business" : found.label.replace(/^[A-Z][a-z]/, (m) => m.toLowerCase()), order: found.defaults.averageJobValue, hourly: found.defaults.hourlyValueOfOwnerTime };
+}
+
+export function CostPayback({ plan, catalog, impactFor, industry = null }: { plan: Plan; catalog: CatalogRecord[]; impactFor: Record<string, ImpactView | null>; industry?: string | null }) {
   const byId = new Map(catalog.map((r) => [r.id, r]));
   const rows = plan.sections
     .filter((sec) => sec.tool)
     .map((sec) => ({ sec, r: byId.get(sec.tool!.id) }))
     .filter((x): x is { sec: Plan["sections"][number]; r: CatalogRecord } => Boolean(x.r));
-  const startHourly = hourlyFrom(rows.map((x) => impactFor[x.sec.id] ?? null));
+  const typical = industryDefaults(industry);
+  const fromImpact = hourlyFrom(rows.map((x) => impactFor[x.sec.id] ?? null));
+  const startHourly = fromImpact.theirs || rows.some((x) => impactFor[x.sec.id]) ? fromImpact : { value: typical.hourly, theirs: false };
+  const [orderValue, setOrderValue] = useState(typical.order);
   const [hourly, setHourly] = useState(startHourly.value);
   const [setupHours, setSetupHours] = useState(DEFAULT_SETUP_HOURS);
   const [timeToMoney, setTimeToMoney] = useState(DEFAULT_TIME_TO_MONEY);
@@ -73,7 +85,10 @@ export function CostPayback({ plan, catalog, impactFor }: { plan: Plan; catalog:
       <div className={c.totals}>
         <div><small>Each month</small><b>{usd(sum.monthly)}</b></div>
         <div><small>First year</small><b>{usd(sum.firstYear)}</b></div>
-        <div><small>Tools</small><b>{rows.length}</b></div>
+        {(() => {
+          const be = breakEven(sum.monthly, orderValue, hourly, 0);
+          return be ? <div><small>Breaks even at</small><b>{be.customers}</b><small>extra {be.customers === 1 ? "customer" : "customers"} a month</small></div> : <div><small>Tools</small><b>{rows.length}</b></div>;
+        })()}
       </div>
       {sum.missing.length > 0 && (
         <p className={s.banner}>Not in the total: {sum.missing.join(", ")}. {sum.missing.length === 1 ? "Its price isn't" : "Their prices aren't"} published. Ask for a written price before you buy.</p>
@@ -121,9 +136,25 @@ export function CostPayback({ plan, catalog, impactFor }: { plan: Plan; catalog:
               · checked {p.checked}
             </p>
 
+            {!pb.ok && !own[sec.id] && p.monthly !== null && (() => {
+              const be = breakEven(p.monthly, orderValue, hourly, setupHours);
+              if (!be) return null;
+              return (
+                <div className={c.breakEven}>
+                  <p className={c.headline}>
+                    Pays for itself with about <b>{be.customers} extra {be.customers === 1 ? "customer" : "customers"} a month</b>
+                    {be.firstMonthCustomers > be.customers ? ` (${be.firstMonthCustomers} in the first month, to cover about ${setupHours} hours of setup)` : ""}.
+                  </p>
+                  <span className={s.small}>
+                    Or about {be.hours} hours of your time saved a month. Based on a typical {typical.label} order of about {whole(orderValue)} and your time at {whole(hourly)} an hour: industry estimates, not your numbers. Change them under &ldquo;Change the assumptions&rdquo;.
+                  </span>
+                </div>
+              );
+            })()}
+
             {!impact && p.monthly !== null && (
-              <label className={c.field}>
-                <span>We don&apos;t have your numbers for this one. What does &ldquo;{lc(sec.heading)}&rdquo; cost you a month, roughly? (your time or lost sales)</span>
+              <label className={cx(c.field, c.ownField)}>
+                <span>Know what &ldquo;{lc(sec.heading)}&rdquo; costs you a month? Add it for a full payback estimate (optional).</span>
                 <span className={c.money}>$<input inputMode="decimal" value={own[sec.id] ?? ""} placeholder="e.g. 300" aria-label={`Monthly cost of ${sec.heading}`} onChange={(e) => setOwn((o) => ({ ...o, [sec.id]: e.target.value.replace(/[^\d.]/g, "") }))} /></span>
               </label>
             )}
@@ -158,11 +189,11 @@ export function CostPayback({ plan, catalog, impactFor }: { plan: Plan; catalog:
                   </div>
                 </details>
               </>
-            ) : (
+            ) : p.monthly === null ? (
               <div className={c.unknown}>
                 <p>{pb.reason}</p>
               </div>
-            )}
+            ) : null}
           </article>
         );
       })}
@@ -170,6 +201,10 @@ export function CostPayback({ plan, catalog, impactFor }: { plan: Plan; catalog:
       <details className={s.disc}>
         <summary>Change the assumptions</summary>
         <div className={cx(s.discBody, c.knobs)}>
+          <label className={c.field}>
+            <span>A typical order or job for you (industry estimate for a {typical.label}: {whole(typical.order)})</span>
+            <span className={c.money}>$<input inputMode="decimal" value={orderValue} onChange={(e) => setOrderValue(Number(e.target.value.replace(/[^\d.]/g, "")) || 0)} /></span>
+          </label>
           <label className={c.field}>
             <span>What an hour of your time is worth {startHourly.theirs ? "(your number)" : "(a starting guess: change it)"}</span>
             <span className={c.money}>$<input inputMode="decimal" value={hourly} onChange={(e) => setHourly(Number(e.target.value.replace(/[^\d.]/g, "")) || 0)} /></span>
@@ -188,7 +223,7 @@ export function CostPayback({ plan, catalog, impactFor }: { plan: Plan; catalog:
               <input type="range" min={0} max={100} step={5} value={Math.round(share[k] * 100)} onChange={(e) => setShare((x) => ({ ...x, [k]: Number(e.target.value) / 100 }))} />
             </label>
           ))}
-          <button type="button" className={s.link} style={{ justifySelf: "start", paddingLeft: 0 }} onClick={() => { setHourly(startHourly.value); setSetupHours(DEFAULT_SETUP_HOURS); setTimeToMoney(DEFAULT_TIME_TO_MONEY); setShare(DEFAULT_FIX_SHARE); }}>
+          <button type="button" className={s.link} style={{ justifySelf: "start", paddingLeft: 0 }} onClick={() => { setOrderValue(typical.order); setHourly(startHourly.value); setSetupHours(DEFAULT_SETUP_HOURS); setTimeToMoney(DEFAULT_TIME_TO_MONEY); setShare(DEFAULT_FIX_SHARE); }}>
             Reset to our starting numbers
           </button>
         </div>
