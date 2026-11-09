@@ -15,6 +15,7 @@ import { INDUSTRY_TOPICS } from "../advisor/knowledge.ts";
 
 const round = (value: number) => Math.round(value * 10) / 10;
 const money = (value: number) => Math.round(value * 100) / 100;
+const MAX_VISIBLE_TOOLS_PER_PROBLEM = 10;
 const same = (a: string, b: string) =>
   a.trim().toLowerCase() === b.trim().toLowerCase();
 const isFood = (industry: string) =>
@@ -522,15 +523,15 @@ export function recommend(
         helpUrl: "https://www.marylandsbdc.org/locations",
       });
     // Recommendation types can point to the same winner (for example, the best
-    // fit can also be the cheapest). Keep up to three distinct Verified tools
-    // visible so a good candidate never disappears without explanation.
+    // fit can also be the cheapest). Keep many distinct Verified tools visible
+    // so a good candidate never disappears without explanation.
     const surfaced = new Set(
       options
         .filter((option) => option.kind !== "starter-kit")
         .flatMap((option) => option.choices.map((candidate) => candidate.tool.id)),
     );
     for (const candidate of candidates) {
-      if (surfaced.size >= 3) break;
+      if (surfaced.size >= MAX_VISIBLE_TOOLS_PER_PROBLEM) break;
       if (surfaced.has(candidate.tool.id)) continue;
       options.push({
         kind: "alternative",
