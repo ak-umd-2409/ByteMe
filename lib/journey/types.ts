@@ -9,6 +9,7 @@
 import type { ProblemKey } from "../problems/types.ts";
 import type { RecommendationRequest } from "../problems/toRecommendation.ts";
 import type { UseCase } from "../recommend/types.ts";
+import type { ChallengeSuggestion } from "../challenges/match.ts";
 
 /** An answer: one choice, several choices, a number, free text, or null (skipped). */
 export type Answer = string | string[] | number | null;
@@ -106,6 +107,11 @@ export interface JourneyQuestion {
   affects: ("problems" | "recommendations" | "estimate" | "next_step")[];
   /** A source behind the "why", when it rests on a rule or a finding. */
   source?: SourceLink;
+  /**
+   * For "challenges": suggestions built for this business, best first. The owner may pick
+   * several (answer `challenge_picks`, an array of ids) and/or type freely (answer `challenges`).
+   */
+  suggestions?: ChallengeSuggestion[];
 }
 
 // ---------- Step 4: what's holding you back ----------
@@ -219,4 +225,47 @@ export interface JourneyAnswerResponse {
   budget: { value: number; assumed: boolean };
   /** Answers we couldn't use, with a reason (unknown id, out-of-range number…). */
   ignored: { questionId: string; reason: string }[];
+  /** What we found, grouped by where it came from (see Finding). */
+  findings: Findings;
+}
+
+/**
+ * One problem or opportunity, in the order an owner reads it: what's happening, why it matters,
+ * the evidence and where it came from, how sure we are, what to do, and whether AI can help.
+ */
+export interface Finding {
+  id: string;
+  /** yours = the owner told us; noticed = public evidence they didn't mention; consider = common for the industry, not checked. */
+  group: "yours" | "noticed" | "consider";
+  title: string;
+  /** The owner's exact words (yours only). */
+  ownerWords: string[];
+  whatsHappening: string;
+  whyItMatters: string | null;
+  /** When public evidence backs something the owner said: "Several customers also mentioned this." */
+  connection: string | null;
+  evidence: EvidenceItem[];
+  moreEvidence: number;
+  confidence: { level: "high" | "medium" | "low"; label: string };
+  whatToDo: string | null;
+  /** Whether AI can help, honestly; null when we can't say. */
+  ai: { level: "yes" | "partly" | "no"; how: string } | null;
+  problemKey: ProblemKey | null;
+  useCase: UseCase | null;
+  /** Money only when the owner gave the numbers it needs. */
+  impact: ImpactView | null;
+  impactNote: string | null;
+  impactNeeds: string[];
+  /** "ai" = the owner's words were read by AI (and checked); "rules" = keyword match; "evidence" = public information. */
+  by: "ai" | "rules" | "suggestion" | "evidence" | "industry";
+}
+
+export interface Findings {
+  yours: Finding[];
+  noticed: Finding[];
+  consider: Finding[];
+  /** What customers praise: what the business already does well. */
+  strengths: { label: string; countLabel: string; example: { text: string; who: string | null; where: string | null; url: string | null } | null }[];
+  /** Exactly how many reviews we read, and from where. Never more than we actually read. */
+  reviewsRead: { count: number; sources: { name: string; count: number }[] };
 }

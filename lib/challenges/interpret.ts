@@ -1,0 +1,246 @@
+/**
+ * Turns what the owner told us ("What's taking up too much of your time?") into structured
+ * challenges, and links each one to customer reviews that say the same thing.
+ *
+ * AI reads the owner's words (OpenRouter, JSON validated against a schema, cached). Rules check
+ * everything it returns: the owner's quote must be words they actually typed, review quotes must
+ * be copied exactly from that review, problem types and tool categories must be known ones.
+ * Anything that fails is dropped. Text the AI didn't cover (or everything, when AI is off) falls
+ * back to keyword rules, and otherwise stays a challenge in the owner's own words. We never add
+ * detail the owner didn't give.
+ */
+import { GUIDES } from "../advisor/knowledge.ts";
+import { isVerbatim } from "../business/reviews.ts";
+import { industryInfo } from "../business/industry.ts";
+import type { IndustryKey } from "../business/types.ts";
+import { llmJson, type LlmProvider } from "../llm/client.ts";
+import { PROBLEMS } from "../problems/catalog.ts";
+import { PROBLEM_KEYS, type ProblemKey } from "../problems/types.ts";
+import { USE_CASES, type UseCase } from "../recommend/types.ts";
+import { v } from "../shared/validate.ts";
+import type { ChallengeSuggestion } from "./match.ts";
+
+export interface ReviewText {
+  id: string;
+  rating: number | null;
+  text: string;
+  /** "Google", "Google (via SerpApi)", "Pasted by you"… */
+  where: string;
+  author: string | null;
+  url: string | null;
+}
+
+export interface OwnerChallenge {
+  id: string;
+  /** The owner's exact words, or the suggestion they picked. */
+  words: string;
+  from: "typed" | "picked";
+  title: string;
+  whatsHappening: string;
+  whyItMatters: string | null;
+  problem: ProblemKey | null;
+  useCase: UseCase | null;
+  ai: { level: "yes" | "partly" | "no"; how: string } | null;
+  firstStep: string | null;
+  /** Reviews that say the same thing, each quote copied exactly from the review. */
+  reviews: { reviewId: string; quote: string }[];
+  by: "ai" | "rules" | "suggestion";
+}
+
+export const MAX_CHALLENGE_CHARS = 1500;
+const MAX_CHALLENGES = 6;
+
+/** Keyword rules for when AI is off: the taxonomy first, then tool categories outside it. */
+const RULES: { pattern: RegExp; problem?: ProblemKey; useCase?: UseCase }[] = [
+  { pattern: /\b(miss(ed|ing)? calls?|phones?|voicemail|calls? (go|going) unanswered|can'?t answer|answer(ing)? (the )?calls?)\b/i, problem: "missed_inquiries", useCase: "missed-calls" },
+  { pattern: /\b(quotes?|estimates?|bids?|proposals?)\b/i, problem: "slow_quotes", useCase: "quotes" },
+  { pattern: /\b(no[- ]?shows?|cancell?ations?|reschedul\w*|schedul\w* (appointments?|jobs?)|appointments?|bookings?|dispatch\w*|reservations?)\b/i, problem: "scheduling_inefficiency", useCase: "booking" },
+  { pattern: /\b(staff|employee|shift|crew)s?\b.*\b(schedul\w*|cover\w*|shifts?)\b|\bshifts?\b/i, useCase: "staff-scheduling" },
+  { pattern: /\b(invoic\w*|bookkeep\w*|receipts?|accounting|quickbooks|payroll|billing|payments?|taxes)\b/i, problem: "repetitive_admin", useCase: "bookkeeping" },
+  { pattern: /\b(paperwork|forms?|data entry|admin|documents?)\b/i, problem: "repetitive_admin", useCase: "admin-paperwork" },
+  { pattern: /\breviews?\b/i, problem: "poor_review_management", useCase: "reviews" },
+  { pattern: /\b(social media|instagram|facebook|tiktok|posts?|posting|content)\b/i, useCase: "marketing" },
+  { pattern: /\b(newsletters?|email (list|marketing|campaigns?))\b/i, useCase: "email-marketing" },
+  { pattern: /\b(follow[- ]?ups?|following up|repeat customers?|remind\w*|past customers?|come back)\b/i, problem: "no_customer_follow_up", useCase: "marketing" },
+  { pattern: /\b(inventory|stock|supplies|reorder\w*)\b/i, useCase: "inventory" },
+  { pattern: /\b(website|seo|google search|found online|show up on google)\b/i, useCase: "website-seo" },
+  { pattern: /\b(emails?|messages?|texts?|dms?|inquir\w*|enquir\w*|repl(y|ies|ying)|respond\w*|inbox)\b/i, problem: "slow_responses", useCase: "customer-messaging" },
+];
+
+const clip = (s: string, n: number) => (s.length > n ? `${s.slice(0, n - 1).trimEnd()}…` : s);
+const sentence = (s: string) => {
+  const t = s.trim().replace(/^[-*•\d.)\s]+/, "").replace(/\s+/g, " ");
+  return t.charAt(0).toUpperCase() + t.slice(1);
+};
+
+/** One challenge per line, bullet or semicolon; a paragraph is split into sentences. */
+export function splitChallenges(text: string): string[] {
+  const parts = text
+    .split(/\n+|;|•/)
+    .flatMap((p) => (p.length > 120 ? p.split(/(?<=[.!?])\s+/) : [p]))
+    .map((p) => p.trim().replace(/^[-*\d.)\s]+/, "").replace(/[.!?]+$/, "").trim())
+    .filter((p) => p.length >= 4);
+  return [...new Set(parts)].slice(0, MAX_CHALLENGES);
+}
+
+function guideAi(useCase: UseCase | null, problem: ProblemKey | null): OwnerChallenge["ai"] {
+  if (problem === "inconsistent_business_info") return { level: "no", how: "Fixing your listings by hand is free and takes about an hour." };
+  if (!useCase) return null;
+  return { level: "yes", how: GUIDES[useCase].whatAiDoes };
+}
+
+function byRules(item: string, id: string, from: OwnerChallenge["from"] = "typed"): OwnerChallenge {
+  const hit = RULES.find((r) => r.pattern.test(item));
+  const problem = hit?.problem ?? null;
+  const useCase = hit?.useCase ?? null;
+  return {
+    id,
+    words: item,
+    from,
+    title: problem ? PROBLEMS[problem].title : clip(sentence(item), 80),
+    whatsHappening: `In your words: “${clip(item, 200)}”`,
+    whyItMatters: problem ? PROBLEMS[problem].whyItMatters : null,
+    problem,
+    useCase,
+    ai: guideAi(useCase, problem),
+    firstStep: problem ? PROBLEMS[problem].nextStep : useCase ? GUIDES[useCase].freeFirst.title : null,
+    reviews: [],
+    by: "rules",
+  };
+}
+
+function fromSuggestion(s: ChallengeSuggestion, id: string): OwnerChallenge {
+  const problem = s.problem ?? null;
+  const useCase = s.useCase ?? null;
+  return {
+    id,
+    words: s.text,
+    from: "picked",
+    title: problem && s.source !== "industry" && s.source !== "services" ? PROBLEMS[problem].title : s.text,
+    whatsHappening: problem ? PROBLEMS[problem].explanation : `You picked: “${s.text}”`,
+    whyItMatters: problem ? PROBLEMS[problem].whyItMatters : null,
+    problem,
+    useCase,
+    ai: guideAi(useCase, problem),
+    firstStep: problem ? PROBLEMS[problem].nextStep : useCase ? GUIDES[useCase].freeFirst.title : null,
+    reviews: [],
+    by: "suggestion",
+  };
+}
+
+const problemKeys = PROBLEM_KEYS as unknown as [ProblemKey, ...ProblemKey[]];
+const useCases = USE_CASES as unknown as [UseCase, ...UseCase[]];
+const llmSchema = v.object({
+  challenges: v.array(
+    v.object({
+      quote: v.string({ min: 4, max: 400 }),
+      title: v.string({ min: 4, max: 80 }),
+      whatsHappening: v.string({ min: 10, max: 260 }),
+      whyItMatters: v.nullable(v.string({ max: 160 })),
+      problemKey: v.nullable(v.oneOf(problemKeys)),
+      useCase: v.nullable(v.oneOf(useCases)),
+      aiCanHelp: v.oneOf(["yes", "partly", "no"] as ["yes", "partly", "no"]),
+      aiHow: v.string({ min: 4, max: 220 }),
+      firstStep: v.nullable(v.string({ max: 120 })),
+      reviews: v.array(v.object({ reviewId: v.string({ max: 200 }), quote: v.string({ min: 8, max: 300 }) }), { max: 6 }),
+    }),
+    { max: MAX_CHALLENGES },
+  ),
+});
+
+async function byAi(items: string[], text: string, ctx: { industry: string; business: string; reviews: ReviewText[] }, llm: LlmProvider): Promise<OwnerChallenge[] | null> {
+  const result = await llmJson(llm, llmSchema, {
+    task: "owner_challenges",
+    system:
+      "You are a small-business advisor. The owner described what takes up their time. Turn it into separate challenges " +
+      "(one per distinct issue, at most 6). For each: quote = the owner's own words for it, copied EXACTLY from their text; " +
+      "title = a plain 3-8 word name; whatsHappening = one or two plain sentences about what is going on, using only what the " +
+      "owner said (never invent numbers, names or facts); whyItMatters = one short sentence, or null; problemKey = the closest " +
+      `of [${PROBLEM_KEYS.map((k) => `${k} (${PROBLEMS[k].title})`).join("; ")}] or null if none truly fits; ` +
+      `useCase = the closest tool category of [${USE_CASES.join(", ")}] or null; aiCanHelp = yes, partly or no, honestly ` +
+      "(some problems need a person or a free manual fix, not AI); aiHow = one plain sentence on how AI could help, or why it " +
+      "can't; firstStep = one small free thing to do this week, or null. reviews = customer reviews from the list that clearly " +
+      "describe the SAME issue, each with a quote copied EXACTLY from that review's text; leave empty when none clearly do. " +
+      "Write for an owner who is not technical. Reply with JSON only: {\"challenges\":[...]}",
+    user: JSON.stringify({
+      business: ctx.business,
+      industry: ctx.industry,
+      ownerText: text,
+      reviews: ctx.reviews.slice(0, 20).map((r) => ({ reviewId: r.id, rating: r.rating, text: r.text.slice(0, 500) })),
+    }),
+  });
+  if (!result.ok) return null;
+  const byId = new Map(ctx.reviews.map((r) => [r.id, r]));
+  const out: OwnerChallenge[] = [];
+  for (const c of result.value.challenges) {
+    if (!isVerbatim(c.quote, text) && !items.some((i) => isVerbatim(c.quote, i))) continue; // the owner must have said it
+    const reviews = c.reviews.filter((r) => {
+      const review = byId.get(r.reviewId);
+      return review && isVerbatim(r.quote, review.text); // never accept invented evidence
+    });
+    out.push({
+      id: `c${out.length + 1}`,
+      words: c.quote.trim(),
+      from: "typed",
+      title: c.title.trim(),
+      whatsHappening: c.whatsHappening.trim(),
+      whyItMatters: c.whyItMatters?.trim() || (c.problemKey ? PROBLEMS[c.problemKey].whyItMatters : null),
+      problem: c.problemKey,
+      useCase: c.useCase,
+      ai: c.problemKey === "inconsistent_business_info" ? guideAi(null, c.problemKey) : { level: c.aiCanHelp, how: c.aiHow.trim() },
+      firstStep: c.firstStep?.trim() || (c.problemKey ? PROBLEMS[c.problemKey].nextStep : null),
+      reviews: [...new Map(reviews.map((r) => [r.reviewId, { reviewId: r.reviewId, quote: r.quote.trim() }])).values()],
+      by: "ai",
+    });
+  }
+  return out;
+}
+
+const norm = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
+
+/**
+ * The owner's challenges: picked suggestions plus whatever they typed. Duplicates (two
+ * challenges that are the same problem type, or the same words) are merged, owner's words kept.
+ */
+export async function interpretChallenges(input: {
+  text: string | null;
+  picks: string[];
+  suggestions: ChallengeSuggestion[];
+  industry: IndustryKey | string | null;
+  business: string;
+  reviews: ReviewText[];
+  llm?: LlmProvider;
+}): Promise<OwnerChallenge[]> {
+  const text = (input.text ?? "").slice(0, MAX_CHALLENGE_CHARS).trim();
+  const items = text ? splitChallenges(text) : [];
+  let typed: OwnerChallenge[] = [];
+  if (items.length) {
+    const ai =
+      input.llm && input.llm.name !== "disabled"
+        ? await byAi(items, text, { industry: industryInfo((input.industry ?? "other") as IndustryKey).label, business: input.business, reviews: input.reviews }, input.llm)
+        : null;
+    typed = ai ?? [];
+    // Anything the AI didn't cover still counts, by the rules.
+    for (const item of items) {
+      const covered = typed.some((c) => norm(item).includes(norm(c.words)) || norm(c.words).includes(norm(item)));
+      if (!covered) typed.push(byRules(item, `c${typed.length + 1}`));
+    }
+  }
+  const picked = input.picks
+    .map((id) => input.suggestions.find((s) => s.id === id))
+    .filter((s): s is ChallengeSuggestion => Boolean(s))
+    .map((s, i) => fromSuggestion(s, `p${i + 1}`));
+
+  // Merge: the owner's typed words win over a picked suggestion of the same problem type.
+  const out: OwnerChallenge[] = [];
+  for (const c of [...typed, ...picked]) {
+    const same = out.find((o) => (c.problem && o.problem === c.problem) || norm(o.words) === norm(c.words));
+    if (!same) {
+      out.push(c);
+      continue;
+    }
+    if (!norm(same.words).includes(norm(c.words))) same.words = `${same.words} · ${c.words}`;
+    for (const r of c.reviews) if (!same.reviews.some((x) => x.reviewId === r.reviewId)) same.reviews.push(r);
+  }
+  return out.slice(0, MAX_CHALLENGES);
+}

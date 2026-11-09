@@ -13,6 +13,9 @@ import type { DiscoveryResult, ImpactInput, ProblemCard, ProblemKey, Signal } fr
 import type { UseCase } from "../recommend/types.ts";
 import { RULES } from "../rules/maryland.ts";
 import type { JourneyState } from "./context.ts";
+import { GUIDES } from "../advisor/knowledge.ts";
+import { MAX_CHALLENGE_CHARS, type OwnerChallenge } from "../challenges/interpret.ts";
+import { challengeSuggestions } from "../challenges/suggest.ts";
 import type {
   Answer,
   Answers,
@@ -21,6 +24,8 @@ import type {
   BusinessFact,
   CustomersSay,
   EvidenceItem,
+  Finding,
+  Findings,
   ImpactView,
   JourneyAnswerResponse,
   JourneyQuestion,
@@ -152,6 +157,7 @@ export function stateFromAnalysis(analysis: OnboardingAnalysis, now: Date): Jour
     sources: sources.slice(0, 40),
     mode: { places: analysis.mode.places, sampleData: analysis.mode.places === "mock", capturedAt: analysis.snapshot?.capturedAt ?? null },
     answers: {},
+    reviewTexts: analysis.reviewTexts ?? [],
   };
 }
 
@@ -423,6 +429,20 @@ export function buildQuestions(state: JourneyState, base: DiscoveryResult = disc
   const evidenced = base.problems.filter((p) => p.status !== "hypothesis");
   const askable = askableHypotheses(base);
 
+  // Listen first: the owner says what's hard, in their own words, helped by suggestions made for this business.
+  questions.push({
+    id: "challenges",
+    kind: "text",
+    text: "What's taking up too much of your time or making running your business harder?",
+    why: "In your own words. Write as much or as little as you like, or tap a suggestion below.",
+    default: null,
+    ifSkipped: "We'll go by what we found in public information.",
+    optional: false,
+    placeholder: "e.g. I spend too much time answering calls, and customers don't reply after I send a quote",
+    affects: ["problems", "recommendations"],
+    suggestions: state.suggestions ?? challengeSuggestions(state, base),
+  });
+
   if (askable.length) {
     questions.push({
       id: "problems",
@@ -435,7 +455,8 @@ export function buildQuestions(state: JourneyState, base: DiscoveryResult = disc
       ],
       default: null,
       ifSkipped: "We'll only use what we found in public information and list these as “not checked”.",
-      optional: false,
+      // Superseded by "challenges" in the app; still accepted from API clients.
+      optional: true,
       affects: ["problems", "recommendations"],
     });
   }
@@ -536,7 +557,8 @@ export function buildQuestions(state: JourneyState, base: DiscoveryResult = disc
     options: (Object.keys(GOAL_LABEL) as Goal[]).map((g) => ({ value: g, label: GOAL_LABEL[g] })),
     default: null,
     ifSkipped: "We'll rank problems by the evidence alone.",
-    optional: false,
+    // The owner's own challenges now say what matters; kept for API clients.
+    optional: true,
     affects: ["problems"],
   });
 
@@ -612,7 +634,21 @@ export function cleanAnswers(questions: JourneyQuestion[], answers: Answers): { 
   const out: Answers = {};
   const ignored: { questionId: string; reason: string }[] = [];
   const offeredProblems = new Set((byId.get("problems")?.options ?? []).map((o) => o.value).filter((v) => v !== "none"));
+  const suggestionIds = new Set((byId.get("challenges")?.suggestions ?? []).map((s) => s.id));
   for (const [id, value] of Object.entries(answers)) {
+    if (id === "challenges") {
+      if (value === null || value === undefined || (typeof value === "string" && !value.trim())) continue;
+      if (typeof value === "string" && value.length <= MAX_CHALLENGE_CHARS) out[id] = value.trim();
+      else ignored.push({ questionId: id, reason: `Keep it under ${MAX_CHALLENGE_CHARS.toLocaleString("en-US")} characters.` });
+      continue;
+    }
+    if (id === "challenge_picks") {
+      if (value === null || value === undefined) continue;
+      if (Array.isArray(value) && value.length <= 12 && value.every((x) => typeof x === "string" && suggestionIds.has(x))) {
+        if (value.length) out[id] = [...new Set(value as string[])];
+      } else ignored.push({ questionId: id, reason: "Pick from the suggestions." });
+      continue;
+    }
     if (id.startsWith("problem.")) {
       // Per-problem form of the "problems" question: "yes" / "no" for one option.
       if (!offeredProblems.has(id.slice(8))) ignored.push({ questionId: id, reason: "We don't ask about this problem for this business." });
@@ -653,7 +689,7 @@ export function cleanAnswers(questions: JourneyQuestion[], answers: Answers): { 
   return { answers: out, ignored };
 }
 
-export function applyAnswers(state: JourneyState, questions: JourneyQuestion[], answers: Answers): Applied {
+export function applyAnswers(state: JourneyState, questions: JourneyQuestion[], answers: Answers, challenges: OwnerChallenge[] = []): Applied {
   const byId = new Map(questions.map((q) => [q.id, q]));
   const owner: OwnerInputs = {};
   const youToldUs: Applied["youToldUs"] = [];
@@ -689,6 +725,14 @@ export function applyAnswers(state: JourneyState, questions: JourneyQuestion[], 
     if (!Array.isArray(a) && said.length)
       youToldUs.push({ questionId: "problems", label: "Happens at your business", value: said.map((k) => `${label("problems", k)}: ${answers[`problem.${k}`] === "yes" ? "yes" : "no"}`).join("; ") });
   }
+  // The owner's own challenges: those that are a known kind of problem count as confirmed by them.
+  for (const ch of challenges) {
+    if (!ch.problem) continue;
+    confirmed.add(ch.problem);
+    denied.delete(ch.problem);
+    unchecked.delete(ch.problem);
+  }
+  if (challenges.length) youToldUs.unshift({ questionId: "challenges", label: "What's taking your time", value: challenges.map((ch) => ch.words).join("; ") });
   if (confirmed.size) owner.reportedProblems = [...confirmed];
 
   // Listing conflict
@@ -926,8 +970,14 @@ function nextStepFor(card: ProblemCard, applied: Applied, state: JourneyState): 
   return then.length ? `${first} Then ${then.join(", and ")}.` : first;
 }
 
-export function buildAnswer(state: JourneyState, questions: JourneyQuestion[], answers: Answers, now?: Date): Omit<JourneyAnswerResponse, "context" | "ignored"> {
-  const applied = applyAnswers(state, questions, answers);
+export function buildAnswer(
+  state: JourneyState,
+  questions: JourneyQuestion[],
+  answers: Answers,
+  now?: Date,
+  challenges: OwnerChallenge[] = [],
+): Omit<JourneyAnswerResponse, "context" | "ignored"> {
+  const applied = applyAnswers(state, questions, answers, challenges);
   const discovery = discover(state, applied.profile, applied.overrides, now);
 
   // Evidence-backed (or owner-confirmed) problems, minus anything the owner said doesn't happen.
@@ -981,6 +1031,15 @@ export function buildAnswer(state: JourneyState, questions: JourneyQuestion[], a
   const focus = opportunities.map((o) => o.problemKey);
   const focused: DiscoveryResult = { ...discovery, problems: discovery.problems.filter((p) => focus.includes(p.key)) };
   const rec = toRecommendationInput(applied.profile, focused);
+  // Challenges outside the problem list that still have a kind of tool go to Part 4 too, in the owner's words.
+  if (rec.ok) {
+    const used = new Set(rec.request.problems.map((p) => p.useCase));
+    for (const ch of challenges) {
+      if (ch.problem || !ch.useCase || used.has(ch.useCase) || rec.request.problems.length >= 8) continue;
+      used.add(ch.useCase);
+      rec.request.problems.push({ id: `owner-${ch.id}`, useCase: ch.useCase, title: ch.title.slice(0, 140), evidence: `The owner told us: “${ch.words.slice(0, 200)}”` });
+    }
+  }
   const recommendation: JourneyAnswerResponse["recommendation"] = rec.ok
     ? { ready: true, request: rec.request, focus: rec.request.problems.map((p) => p.id.replace(/^problem-/, "") as ProblemKey) }
     : { ready: false, reason: opportunities.some((o) => o.useCase) ? rec.message : "None of the problems we found needs a tool yet. Start with the free fixes above." };
@@ -995,7 +1054,135 @@ export function buildAnswer(state: JourneyState, questions: JourneyQuestion[], a
   const localHelp = sbdc && county ? { name: `Maryland SBDC · ${sbdc.name}`, county, url: sbdc.url, phone: sbdc.phone } : null;
   const budget = { value: applied.profile.owner.monthlyBudget.value ?? DEFAULT_BUDGET, assumed: applied.profile.owner.monthlyBudget.source !== "owner" };
 
-  return { business: businessCard(state, applied.profile), localHelp, budget, headline, opportunities, alsoNoticed, toCheck, followUps, youToldUs: applied.youToldUs, assumptions: applied.assumptions, recommendation };
+  const findings = buildFindings(state, discovery, applied, challenges);
+  const found = findings.yours.length + findings.noticed.length;
+  const headlineNow = challenges.length
+    ? `${plural(findings.yours.length, "thing")} you told us${findings.noticed.length ? `, and ${plural(findings.noticed.length, "more thing")} we noticed` : ""}.`
+    : found
+      ? headline
+      : "We didn't find anything with clear evidence. Tell us what slows you down and we'll take it from there.";
+
+  return { business: businessCard(state, applied.profile), localHelp, budget, headline: headlineNow, opportunities, alsoNoticed, toCheck, followUps, youToldUs: applied.youToldUs, assumptions: applied.assumptions, recommendation, findings };
+}
+
+// ---------- Findings: yours, noticed, worth considering ----------
+
+const MAX_NOTICED = 4;
+const MAX_CONSIDER = 3;
+
+function aiFor(useCase: UseCase | null, key: ProblemKey | null): Finding["ai"] {
+  if (key === "inconsistent_business_info") return { level: "no", how: "Fixing your listings by hand is free and takes about an hour." };
+  return useCase ? { level: "yes", how: GUIDES[useCase].whatAiDoes } : null;
+}
+
+function buildFindings(state: JourneyState, discovery: DiscoveryResult, applied: Applied, challenges: OwnerChallenge[]): Findings {
+  const name = applied.profile.business.name.value ?? "your business";
+  const explain = (key: ProblemKey) => PROBLEMS[key].explanation.replaceAll("{name}", name);
+  const reviewById = new Map((state.reviewTexts ?? []).map((r) => [r.id, r]));
+  const notOwner = (e: EvidenceItem) => e.sourceLabel !== SOURCE_LABEL.owner_reported;
+
+  // 1) What the owner told us, each connected to any public evidence that says the same.
+  const yours: Finding[] = challenges.map((ch) => {
+    const card = ch.problem ? discovery.problems.find((p) => p.key === ch.problem) ?? null : null;
+    const pub = card ? evidenceItems(card, state) : { items: [], total: 0 };
+    const fromCard = pub.items.filter(notOwner);
+    const fromAi: EvidenceItem[] = ch.reviews.map((r) => {
+      const review = reviewById.get(r.reviewId);
+      return {
+        title: null,
+        text: r.quote,
+        isQuote: true,
+        sourceLabel: [review?.where ?? "Review", review?.author].filter(Boolean).join(" · "),
+        url: review?.url ?? null,
+        links: review?.url ? [{ label: review.where, url: review.url }] : [],
+        observed: true,
+      };
+    });
+    const seen = new Set<string>();
+    const evidence = [...fromAi, ...fromCard].filter((e) => {
+      const k = e.text.toLowerCase().slice(0, 80);
+      if (seen.has(k)) return false;
+      seen.add(k);
+      return true;
+    });
+    const reviewCount = new Set([
+      ...ch.reviews.map((r) => r.reviewId),
+      ...(card?.evidence ?? []).filter((s) => s.verified && s.source.endsWith("_review")).map((s) => s.reference?.reviewId ?? s.id),
+    ]).size;
+    const otherPublic = card ? publicBasis(card) : null;
+    const connection = reviewCount
+      ? `This may be bigger than you thought: ${reviewCount === 1 ? "a customer review mentions it too" : `${reviewCount} customer reviews mention it too`}.`
+      : otherPublic && card?.evidence.some((s) => s.verified && (s.source === "website" || s.source === "listing" || s.source === "google_profile"))
+        ? `Public information backs this up: ${lower(otherPublic)}.`
+        : null;
+    const impact = card ? impactView(card, applied.profile, applied.overrides[card.key]) : { impact: null, impactNote: null, impactNeeds: [] };
+    const useCase = ch.useCase ?? card?.useCase ?? null;
+    return {
+      id: `yours-${ch.id}`,
+      group: "yours",
+      title: ch.by === "ai" || !card ? ch.title : card.display.headline,
+      ownerWords: ch.words.split(" · "),
+      whatsHappening: ch.by === "ai" || !ch.problem ? ch.whatsHappening : explain(ch.problem),
+      whyItMatters: ch.whyItMatters ?? card?.display.whyItMatters ?? null,
+      connection,
+      evidence: evidence.slice(0, 3),
+      moreEvidence: Math.max(0, evidence.length - 3) + Math.max(0, pub.total - pub.items.length),
+      confidence: connection ? { level: "high", label: "Backed by public information" } : { level: "medium", label: "Not visible in public information" },
+      whatToDo: card ? nextStepFor(card, applied, state) : ch.firstStep,
+      ai: ch.ai ?? aiFor(useCase, ch.problem),
+      problemKey: ch.problem,
+      useCase,
+      ...impact,
+      by: ch.by,
+    };
+  });
+
+  // 2) What public evidence shows that the owner didn't mention.
+  const mentioned = new Set(challenges.map((ch) => ch.problem).filter(Boolean));
+  const fromCard = (card: ProblemCard, group: Finding["group"]): Finding => {
+    const { items, total } = evidenceItems(card, state);
+    const pub = publicBasis(card);
+    const confidence: Finding["confidence"] =
+      group === "consider"
+        ? { level: "low", label: "Common for businesses like yours · we haven't seen evidence for you" }
+        : card.status === "confirmed"
+          ? { level: "high", label: pub ?? "Seen in public information" }
+          : { level: "medium", label: `Likely · ${lower(pub ?? "seen in public information")}` };
+    return {
+      id: `${group}-${card.key}`,
+      group,
+      title: card.display.headline,
+      ownerWords: [],
+      whatsHappening: group === "consider" ? (card.evidence.find((s) => s.source === "industry_pattern")?.observation ?? explain(card.key)) : explain(card.key),
+      whyItMatters: card.display.whyItMatters,
+      connection: null,
+      evidence: group === "consider" ? [] : items.filter(notOwner),
+      moreEvidence: group === "consider" ? 0 : Math.max(0, total - items.length),
+      confidence,
+      whatToDo: nextStepFor(card, applied, state),
+      ai: aiFor(card.useCase, card.key),
+      problemKey: card.key,
+      useCase: card.useCase,
+      ...(group === "consider" ? { impact: null, impactNote: null, impactNeeds: [] } : impactView(card, applied.profile, applied.overrides[card.key])),
+      by: group === "consider" ? "industry" : "evidence",
+    };
+  };
+  const noticed = discovery.problems
+    .filter((p) => p.status !== "hypothesis" && !mentioned.has(p.key) && !applied.denied.has(p.key) && p.evidence.some((s) => s.verified && s.source !== "owner_reported"))
+    .slice(0, MAX_NOTICED)
+    .map((p) => fromCard(p, "noticed"));
+  const shown = new Set([...mentioned, ...noticed.map((f) => f.problemKey)]);
+  const consider = discovery.problems
+    .filter((p) => !shown.has(p.key) && !applied.denied.has(p.key) && p.status === "hypothesis")
+    .slice(0, MAX_CONSIDER)
+    .map((p) => fromCard(p, "consider"));
+
+  // 3) What customers already like.
+  const strengths = customersSay(state)
+    .themes.filter((t) => t.polarity === "praise")
+    .map((t) => ({ label: t.label, countLabel: t.countLabel, example: t.example ? { text: t.example.text, who: t.example.who, where: t.example.where, url: t.example.url } : null }));
+
+  return { yours, noticed, consider, strengths, reviewsRead: { count: state.reviews.reviewCount, sources: state.reviews.platforms } };
 }
 
 export function startHeadline(base: DiscoveryResult, questions: JourneyQuestion[]): string {

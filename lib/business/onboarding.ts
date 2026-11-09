@@ -51,6 +51,11 @@ export interface OnboardingAnalysis {
   location: LocationContext;
   /** Spec 2.8: rules that affect which AI tools fit. /api/problems/discover returns an updated copy. */
   rules: RulesReport;
+  /**
+   * The review texts we read (deduplicated, at most 25, each up to 500 characters) so the owner's
+   * challenges can be matched to what customers say. Kept only inside the journey context.
+   */
+  reviewTexts?: { id: string; rating: number | null; text: string; where: string; author: string | null; url: string | null }[];
 }
 
 export interface OnboardingDeps {
@@ -86,7 +91,15 @@ export async function analyzeBusiness(request: AnalyzeRequest, deps: OnboardingD
 
   const pasted = request.pastedReviews ? splitPastedReviews(request.pastedReviews) : [];
   const llmOn = Boolean(deps.llm && deps.llm.name !== "disabled");
-  const reviewsPromise = analyzeReviews([...(details?.reviews ?? []), ...pasted], { llm: llmOn ? deps.llm : undefined });
+  // The same review pasted by the owner and sent by Google counts once (Google's copy is kept).
+  const seenReview = new Set<string>();
+  const allReviews = [...(details?.reviews ?? []), ...pasted].filter((r) => {
+    const key = (r.text || r.summary || r.id).toLowerCase().replace(/[^a-z0-9]+/g, " ").trim().slice(0, 200);
+    if (seenReview.has(key)) return false;
+    seenReview.add(key);
+    return true;
+  });
+  const reviewsPromise = analyzeReviews(allReviews, { llm: llmOn ? deps.llm : undefined });
 
   const websiteUrl = request.websiteUrl ?? details?.website ?? request.manual?.website ?? null;
   // Snapshots carry what could be read without crawling (their sites may block scanners).
@@ -146,6 +159,17 @@ export async function analyzeBusiness(request: AnalyzeRequest, deps: OnboardingD
     mode: { places: details ? details.provider : "none", llm: llmOn ? "on" : "off" },
     location: locationContext(profile.business.address.value),
     rules: rulesForProfile(profile),
+    reviewTexts: allReviews
+      .filter((r) => r.text.trim())
+      .slice(0, 25)
+      .map((r) => ({
+        id: r.id.slice(0, 200),
+        rating: r.rating,
+        text: r.text.slice(0, 500),
+        where: r.platform ?? (r.source === "google" ? "Google" : r.source === "owner_pasted" ? "Pasted by you" : r.source === "mock" ? "Sample" : "Public review page"),
+        author: r.author,
+        url: r.url ?? r.authorUrl ?? null,
+      })),
   };
 }
 

@@ -17,6 +17,22 @@ The typed client is in `lib/client/parts23.ts` as `journey.start`, `journey.answ
 
 ---
 
+## 0. Listen first (November 2026)
+
+The journey now starts with the owner's own words. Code: `lib/challenges/`.
+
+- **Start.** `questions[0]` is `challenges` (kind `text`) and carries `suggestions[]`: `{ id, text, why, source, keywords, problem?, useCase? }`. `source` is one of `reviews`, `website`, `listings`, `services` (AI, from what the business sells) or `industry`. Suggestions are made once at start and kept in the context, so they don't change while the owner types. Narrow them with `matchSuggestions()` from `lib/challenges/match.ts`, which is safe to use in the browser.
+- **Answer.** Send `challenges` (free text, up to 1,500 characters) and/or `challenge_picks` (suggestion ids). AI reads the text into separate challenges, linked to reviews that say the same. Rules then check the result: the owner's quote must be their exact words, review quotes must be copied exactly, and problem types and tool categories must be known ones. When AI is off, keyword rules do the reading, and anything they can't place stays a challenge in the owner's own words.
+- **New response block `findings`.**
+  - `yours`: what the owner told us, with `connection` when public evidence backs it.
+  - `noticed`: public evidence the owner didn't mention.
+  - `consider`: common for the industry, with no evidence.
+  - `strengths`: what customers praise.
+  - `reviewsRead`: the exact number of reviews read, and their sources.
+
+  Each finding includes what's happening, why it matters, evidence with sources, confidence, what to do, whether AI can help (`yes`, `partly` or `no`), and a money figure only when the owner gave the numbers. Challenges outside the problem list that have a tool category are added to the Part 4 request as `owner-cN`.
+- **Still accepted.** `problems`, `problem.<key>` and `goals` still work for API clients, but the app no longer asks them. `opportunities` is unchanged for the tools and plan screens.
+
 ## 1. What changed, and why
 
 ### The current journey (live at byte-me-mu.vercel.app, walked through as a first-time owner)
