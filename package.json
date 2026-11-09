@@ -13,7 +13,8 @@
     "catalog:build": "node --experimental-strip-types --no-warnings scripts/catalog-build.ts",
     "catalog:approve": "node --experimental-strip-types --no-warnings scripts/catalog-approve.ts",
     "catalog:combine": "node --experimental-strip-types --no-warnings scripts/catalog-combine.ts",
-    "catalog:logos": "node --experimental-strip-types --no-warnings scripts/fetchLogos.ts"
+    "catalog:logos": "node --experimental-strip-types --no-warnings scripts/fetchLogos.ts",
+    "catalog:pricing": "node --experimental-strip-types --no-warnings scripts/pricing-details.ts"
   },
   "dependencies": {
     "next": "^16.0.0",

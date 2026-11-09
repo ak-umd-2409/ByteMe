@@ -1,0 +1,14 @@
+{
+  "id": "dialpad",
+  "plan": "Essentials",
+  "facts": [
+    {
+      "field": "perUser",
+      "answer": "yes",
+      "quote": "Essentials $89 user/month",
+      "url": "https://www.dialpad.com/pricing/"
+    }
+  ],
+  "foundBy": "Claude (quoted from the vendor's pricing page)",
+  "foundAt": "2026-11-08"
+}

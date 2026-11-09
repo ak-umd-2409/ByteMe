@@ -1,0 +1,374 @@
+{
+  "brevo": {
+    "plan": "Starter",
+    "checkedAt": "2026-11-08",
+    "facts": [
+      {
+        "field": "freePlan",
+        "answer": "yes",
+        "quote": "Brevo Pricing Plans Free forever, no credit card needed",
+        "url": "https://www.brevo.com/pricing/"
+      },
+      {
+        "field": "annualDiscountPct",
+        "answer": "10",
+        "quote": "Monthly Yearly (-10%) Starter",
+        "url": "https://www.brevo.com/pricing/"
+      },
+      {
+        "field": "limit",
+        "answer": "From 5,000 emails per month",
+        "quote": "Features included in Starter: From 5,000 emails per month",
+        "url": "https://www.brevo.com/pricing/"
+      },
+      {
+        "field": "extraCosts",
+        "answer": "SMS credit sold separately",
+        "quote": "Send email & transactional messages. SMS credit sold separately.",
+        "url": "https://www.brevo.com/pricing/"
+      }
+    ]
+  },
+  "calendly": {
+    "plan": "Standard",
+    "checkedAt": "2026-11-08",
+    "facts": [
+      {
+        "field": "freePlan",
+        "answer": "yes",
+        "quote": "Save up to 20% Free Always free Get started",
+        "url": "https://calendly.com/pricing"
+      },
+      {
+        "field": "annualDiscountPct",
+        "answer": "20",
+        "quote": "Billed yearly Billed monthly Billed yearly Save up to 20%",
+        "url": "https://calendly.com/pricing"
+      },
+      {
+        "field": "perUser",
+        "answer": "yes",
+        "quote": "Standard Add Notetaker & Callie $10 /seat/mo",
+        "url": "https://calendly.com/pricing"
+      },
+      {
+        "field": "limit",
+        "answer": "One event type",
+        "quote": "Free Always free Get started Includes: Scheduling One event type One calendar connection",
+        "url": "https://calendly.com/pricing"
+      }
+    ]
+  },
+  "chatbase": {
+    "plan": "Hobby",
+    "checkedAt": "2026-11-08",
+    "facts": [
+      {
+        "field": "annualBilled",
+        "answer": "32",
+        "quote": "Hobby $32 $40 $40 $40 /month billed yearly",
+        "url": "https://www.chatbase.co/pricing"
+      },
+      {
+        "field": "annualDiscountPct",
+        "answer": "20",
+        "quote": "Pricing Yearly 20% off Hobby $32",
+        "url": "https://www.chatbase.co/pricing"
+      },
+      {
+        "field": "limit",
+        "answer": "700 message credits",
+        "quote": "The ideal entry point to Chatbase. 700 message credits",
+        "url": "https://www.chatbase.co/pricing"
+      },
+      {
+        "field": "extraCosts",
+        "answer": "Remove 'Powered By Chatbase'",
+        "quote": "Remove 'Powered By Chatbase' Remove the Chatbase branding from your deployed agents. $99 /month",
+        "url": "https://www.chatbase.co/pricing"
+      }
+    ]
+  },
+  "dialpad": {
+    "plan": "Essentials",
+    "checkedAt": "2026-11-08",
+    "facts": [
+      {
+        "field": "perUser",
+        "answer": "yes",
+        "quote": "Essentials $89 user/month",
+        "url": "https://www.dialpad.com/pricing/"
+      }
+    ]
+  },
+  "grammarly": {
+    "plan": "Pro",
+    "checkedAt": "2026-11-08",
+    "facts": [
+      {
+        "field": "freePlan",
+        "answer": "yes",
+        "quote": "Free $0 USD / month Create account",
+        "url": "https://www.grammarly.com/plans"
+      }
+    ]
+  },
+  "intercom": {
+    "plan": "Essential",
+    "checkedAt": "2026-11-08",
+    "facts": [
+      {
+        "field": "perUser",
+        "answer": "yes",
+        "quote": "$29 $19 per seat/mo New customers save 35%",
+        "url": "https://www.intercom.com/pricing"
+      }
+    ]
+  },
+  "jane": {
+    "plan": "Balance",
+    "checkedAt": "2026-11-08",
+    "facts": [
+      {
+        "field": "monthlyBilled",
+        "answer": "59",
+        "quote": "Choose a plan: Balance / USD $59 per month",
+        "url": "https://jane.app/pricing"
+      },
+      {
+        "field": "freePlan",
+        "answer": "yes",
+        "quote": "Your estimated price: USD $0 / month Limited to one practitioner license and 20 appointments per month.",
+        "url": "https://jane.app/pricing"
+      },
+      {
+        "field": "extraCosts",
+        "answer": "Insurance Billing (USD $20 + $5 / month per license)",
+        "quote": "Insurance Billing (USD $20 + $5 / month per license)",
+        "url": "https://jane.app/pricing"
+      }
+    ]
+  },
+  "jasper": {
+    "plan": "Pro",
+    "checkedAt": "2026-11-08",
+    "facts": [
+      {
+        "field": "annualBilled",
+        "answer": "59",
+        "quote": "Pro: $59/month billed yearly or $69/month billed monthly (cancel anytime).",
+        "url": "https://www.jasper.ai/pricing"
+      },
+      {
+        "field": "monthlyBilled",
+        "answer": "69",
+        "quote": "Pro: $59/month billed yearly or $69/month billed monthly (cancel anytime).",
+        "url": "https://www.jasper.ai/pricing"
+      },
+      {
+        "field": "freeTrialDays",
+        "answer": "7",
+        "quote": "Start Free 7-Day Trial",
+        "url": "https://www.jasper.ai/pricing"
+      },
+      {
+        "field": "perUser",
+        "answer": "yes",
+        "quote": "Pro $ 59 month/ seat",
+        "url": "https://www.jasper.ai/pricing"
+      }
+    ]
+  },
+  "microsoft-copilot": {
+    "plan": "Microsoft 365 Copilot Business (added to a Microsoft 365 plan you already have)",
+    "checkedAt": "2026-11-08",
+    "facts": [
+      {
+        "field": "annualBilled",
+        "answer": "18",
+        "quote": "Originally starting from $21.00 now starting from $18.00 $21.00 $18.00 user/month, paid yearly",
+        "url": "https://www.microsoft.com/en-us/copilot/pricing/business"
+      },
+      {
+        "field": "monthlyBilled",
+        "answer": "25.20",
+        "quote": "$25.20 user/month Monthly subscription",
+        "url": "https://www.microsoft.com/en-us/copilot/pricing/business"
+      },
+      {
+        "field": "perUser",
+        "answer": "yes",
+        "quote": "$25.20 user/month Monthly subscription",
+        "url": "https://www.microsoft.com/en-us/copilot/pricing/business"
+      },
+      {
+        "field": "extraCosts",
+        "answer": "Usage-based billing for select advanced AI features",
+        "quote": "Annual subscription—auto renews. Usage-based billing for select advanced AI features.",
+        "url": "https://www.microsoft.com/en-us/copilot/pricing/business"
+      }
+    ]
+  },
+  "notion": {
+    "plan": "Plus",
+    "checkedAt": "2026-11-08",
+    "facts": [
+      {
+        "field": "freePlan",
+        "answer": "yes",
+        "quote": "Free $0 per seat/month Sign up Plus $10 per seat/month",
+        "url": "https://www.notion.com/pricing"
+      },
+      {
+        "field": "perUser",
+        "answer": "yes",
+        "quote": "Plus $10 per seat/month Get started",
+        "url": "https://www.notion.com/pricing"
+      },
+      {
+        "field": "annualDiscountPct",
+        "answer": "20",
+        "quote": "Save up to 20% with yearly",
+        "url": "https://www.notion.com/pricing"
+      }
+    ]
+  },
+  "proposify": {
+    "plan": "Build",
+    "checkedAt": "2026-11-08",
+    "facts": [
+      {
+        "field": "monthlyBilled",
+        "answer": "49",
+        "quote": "$49/user when billed monthly.",
+        "url": "https://www.proposify.com/pricing"
+      },
+      {
+        "field": "freeTrialDays",
+        "answer": "14",
+        "quote": "Start free trial 14 day trial, no card needed.",
+        "url": "https://www.proposify.com/pricing"
+      },
+      {
+        "field": "perUser",
+        "answer": "yes",
+        "quote": "$49/user when billed monthly.",
+        "url": "https://www.proposify.com/pricing"
+      },
+      {
+        "field": "extraCosts",
+        "answer": "Custom template design $1,500.",
+        "quote": "14 day trial, no card needed. Custom template design $1,500.",
+        "url": "https://www.proposify.com/pricing"
+      }
+    ]
+  },
+  "semrush": {
+    "plan": "SEO",
+    "checkedAt": "2026-11-08",
+    "facts": [
+      {
+        "field": "monthlyBilled",
+        "answer": "139",
+        "quote": "billed annually instead of $ 139 monthly",
+        "url": "https://www.semrush.com/pricing/seo-ai-search/"
+      },
+      {
+        "field": "annualDiscountPct",
+        "answer": "17",
+        "quote": "Monthly Annually save up to 17%",
+        "url": "https://www.semrush.com/pricing/seo-ai-search/"
+      },
+      {
+        "field": "freePlan",
+        "answer": "yes",
+        "quote": "Free. $0 /mo For trying out the platform. No credit card required.",
+        "url": "https://www.semrush.com/pricing/seo-ai-search/"
+      },
+      {
+        "field": "extraUsers",
+        "answer": "Additional Users Starting at $ 45 /mo",
+        "quote": "Additional Users Starting at $ 45 /mo",
+        "url": "https://www.semrush.com/pricing/seo-ai-search/"
+      }
+    ]
+  },
+  "tidio": {
+    "plan": "Starter",
+    "checkedAt": "2026-11-08",
+    "facts": [
+      {
+        "field": "freeTrialDays",
+        "answer": "7",
+        "quote": "$ 24.17 /mo. 100 Billable conversations 7-day free trial",
+        "url": "https://www.tidio.com/pricing/"
+      },
+      {
+        "field": "limit",
+        "answer": "100 Billable conversations",
+        "quote": "$ 24.17 /mo. 100 Billable conversations 7-day free trial",
+        "url": "https://www.tidio.com/pricing/"
+      },
+      {
+        "field": "extraCosts",
+        "answer": "No Tidio branding Add-on (16.67 USD/mo.)",
+        "quote": "No Tidio branding Add-on (16.67 USD/mo.)",
+        "url": "https://www.tidio.com/pricing/"
+      }
+    ]
+  },
+  "upfirst": {
+    "plan": "Starter",
+    "checkedAt": "2026-11-08",
+    "facts": [
+      {
+        "field": "freeTrialDays",
+        "answer": "14",
+        "quote": "Start using Upfirst for free for 14 days — no card required.",
+        "url": "https://upfirst.ai/pricing"
+      },
+      {
+        "field": "monthlyBilled",
+        "answer": "24.95",
+        "quote": "$24.95 billed monthly $20 billed annually /mo",
+        "url": "https://upfirst.ai/pricing"
+      },
+      {
+        "field": "annualBilled",
+        "answer": "20",
+        "quote": "$24.95 billed monthly $20 billed annually /mo",
+        "url": "https://upfirst.ai/pricing"
+      },
+      {
+        "field": "annualDiscountPct",
+        "answer": "20",
+        "quote": "If you pay annually, you get 20% off.",
+        "url": "https://upfirst.ai/pricing"
+      },
+      {
+        "field": "limit",
+        "answer": "30 calls",
+        "quote": "Monthly Annual Save 20% 30 calls Starter",
+        "url": "https://upfirst.ai/pricing"
+      },
+      {
+        "field": "overage",
+        "answer": "$1.50 per extra call",
+        "quote": "30 calls Starter · $1.50 per extra call",
+        "url": "https://upfirst.ai/pricing"
+      }
+    ]
+  },
+  "workiz": {
+    "plan": "All plans",
+    "checkedAt": "2026-11-08",
+    "facts": [
+      {
+        "field": "freeTrialDays",
+        "answer": "7",
+        "quote": "Workiz offers a 7 days free trial",
+        "url": "https://www.workiz.com/pricing-plans/"
+      }
+    ]
+  }
+}

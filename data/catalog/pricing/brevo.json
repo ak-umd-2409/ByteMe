@@ -1,0 +1,32 @@
+{
+  "id": "brevo",
+  "plan": "Starter",
+  "facts": [
+    {
+      "field": "freePlan",
+      "answer": "yes",
+      "quote": "Brevo Pricing Plans Free forever, no credit card needed",
+      "url": "https://www.brevo.com/pricing/"
+    },
+    {
+      "field": "annualDiscountPct",
+      "answer": "10",
+      "quote": "Monthly Yearly (-10%) Starter",
+      "url": "https://www.brevo.com/pricing/"
+    },
+    {
+      "field": "limit",
+      "answer": "From 5,000 emails per month",
+      "quote": "Features included in Starter: From 5,000 emails per month",
+      "url": "https://www.brevo.com/pricing/"
+    },
+    {
+      "field": "extraCosts",
+      "answer": "SMS credit sold separately",
+      "quote": "Send email & transactional messages. SMS credit sold separately.",
+      "url": "https://www.brevo.com/pricing/"
+    }
+  ],
+  "foundBy": "Claude (quoted from the vendor's pricing page)",
+  "foundAt": "2026-11-08"
+}

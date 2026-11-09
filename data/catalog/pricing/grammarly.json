@@ -1,0 +1,14 @@
+{
+  "id": "grammarly",
+  "plan": "Pro",
+  "facts": [
+    {
+      "field": "freePlan",
+      "answer": "yes",
+      "quote": "Free $0 USD / month Create account",
+      "url": "https://www.grammarly.com/plans"
+    }
+  ],
+  "foundBy": "Claude (quoted from the vendor's pricing page)",
+  "foundAt": "2026-11-08"
+}

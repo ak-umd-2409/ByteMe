@@ -1,0 +1,44 @@
+{
+  "id": "upfirst",
+  "plan": "Starter",
+  "facts": [
+    {
+      "field": "freeTrialDays",
+      "answer": "14",
+      "quote": "Start using Upfirst for free for 14 days — no card required.",
+      "url": "https://upfirst.ai/pricing"
+    },
+    {
+      "field": "monthlyBilled",
+      "answer": "24.95",
+      "quote": "$24.95 billed monthly $20 billed annually /mo",
+      "url": "https://upfirst.ai/pricing"
+    },
+    {
+      "field": "annualBilled",
+      "answer": "20",
+      "quote": "$24.95 billed monthly $20 billed annually /mo",
+      "url": "https://upfirst.ai/pricing"
+    },
+    {
+      "field": "annualDiscountPct",
+      "answer": "20",
+      "quote": "If you pay annually, you get 20% off.",
+      "url": "https://upfirst.ai/pricing"
+    },
+    {
+      "field": "limit",
+      "answer": "30 calls",
+      "quote": "Monthly Annual Save 20% 30 calls Starter",
+      "url": "https://upfirst.ai/pricing"
+    },
+    {
+      "field": "overage",
+      "answer": "$1.50 per extra call",
+      "quote": "30 calls Starter · $1.50 per extra call",
+      "url": "https://upfirst.ai/pricing"
+    }
+  ],
+  "foundBy": "Claude (quoted from the vendor's pricing page)",
+  "foundAt": "2026-11-08"
+}

@@ -1,0 +1,32 @@
+{
+  "id": "calendly",
+  "plan": "Standard",
+  "facts": [
+    {
+      "field": "freePlan",
+      "answer": "yes",
+      "quote": "Save up to 20% Free Always free Get started",
+      "url": "https://calendly.com/pricing"
+    },
+    {
+      "field": "annualDiscountPct",
+      "answer": "20",
+      "quote": "Billed yearly Billed monthly Billed yearly Save up to 20%",
+      "url": "https://calendly.com/pricing"
+    },
+    {
+      "field": "perUser",
+      "answer": "yes",
+      "quote": "Standard Add Notetaker & Callie $10 /seat/mo",
+      "url": "https://calendly.com/pricing"
+    },
+    {
+      "field": "limit",
+      "answer": "One event type",
+      "quote": "Free Always free Get started Includes: Scheduling One event type One calendar connection",
+      "url": "https://calendly.com/pricing"
+    }
+  ],
+  "foundBy": "Claude (quoted from the vendor's pricing page)",
+  "foundAt": "2026-11-08"
+}

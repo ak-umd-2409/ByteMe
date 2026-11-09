@@ -2,7 +2,7 @@
  * The chosen tools' prices, each with its label, source page and date, plus the monthly and
  * first-year total. No hooks, so it renders on the server (shared link) and in print.
  */
-import { PRICE_LABEL, type costSummary } from "@/lib/plan/roi.ts";
+import { PRICE_LABEL, priceExtras, type costSummary } from "@/lib/plan/roi.ts";
 import s from "../start/start.module.css";
 
 const usd = (n: number) => `$${(Math.round(n * 100) / 100).toLocaleString("en-US", { minimumFractionDigits: n % 1 ? 2 : 0, maximumFractionDigits: 2 })}`;
@@ -30,6 +30,12 @@ export function CostTable({ costs, title = "What it costs" }: { costs: ReturnTyp
               {t.price.monthly === null ? "Not published" : `${usd(t.price.monthly)} a month (${usd(t.price.monthly * 12)} a year)`} · {PRICE_LABEL[t.price.label]}
               {t.price.plan ? ` · ${t.price.plan}` : ""}
               {t.price.billing === "yearly" ? " · needs a yearly contract" : ""}
+              {priceExtras(t.price).length > 0 && (
+                <>
+                  <br />
+                  {priceExtras(t.price).join(" · ")}
+                </>
+              )}
               <br />
               <span className={s.small}>
                 {t.price.sourceUrl ? (
@@ -39,7 +45,7 @@ export function CostTable({ costs, title = "What it costs" }: { costs: ReturnTyp
                 ) : (
                   "No source: sample tool"
                 )}{" "}
-                · checked {t.price.checked} · not confirmed: {t.price.notConfirmed.join(", ")}
+                · checked {t.price.checked}{t.price.notConfirmed.length ? ` · not confirmed: ${t.price.notConfirmed.join(", ")}` : ""}
               </span>
             </dd>
           </div>

@@ -1,0 +1,32 @@
+{
+  "id": "semrush",
+  "plan": "SEO",
+  "facts": [
+    {
+      "field": "monthlyBilled",
+      "answer": "139",
+      "quote": "billed annually instead of $ 139 monthly",
+      "url": "https://www.semrush.com/pricing/seo-ai-search/"
+    },
+    {
+      "field": "annualDiscountPct",
+      "answer": "17",
+      "quote": "Monthly Annually save up to 17%",
+      "url": "https://www.semrush.com/pricing/seo-ai-search/"
+    },
+    {
+      "field": "freePlan",
+      "answer": "yes",
+      "quote": "Free. $0 /mo For trying out the platform. No credit card required.",
+      "url": "https://www.semrush.com/pricing/seo-ai-search/"
+    },
+    {
+      "field": "extraUsers",
+      "answer": "Additional Users Starting at $ 45 /mo",
+      "quote": "Additional Users Starting at $ 45 /mo",
+      "url": "https://www.semrush.com/pricing/seo-ai-search/"
+    }
+  ],
+  "foundBy": "Claude (quoted from the vendor's pricing page)",
+  "foundAt": "2026-11-08"
+}
