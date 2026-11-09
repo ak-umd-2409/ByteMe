@@ -246,6 +246,18 @@ export const mockPlacesProvider: PlacesProvider = {
   },
 };
 
+/** Marks Google details so "no reviews" can be traced to a missing SerpApi key. */
+function withoutSerp(provider: PlacesProvider): PlacesProvider {
+  return {
+    kind: provider.kind,
+    search: (q, near) => provider.search(q, near),
+    async details(placeId) {
+      const d = await provider.details(placeId);
+      return d && d.provider === "google_places" && d.reviews.length === 0 ? { ...d, serpapi: "not_configured" } : d;
+    },
+  };
+}
+
 /**
  * With a Google key: live Google Places. Without one: real public snapshots (data/real), plus the
  * fictional sample businesses only when DEMO_SAMPLE_BUSINESSES=1.
@@ -254,7 +266,7 @@ export function getPlacesProvider(config: AppConfig = loadConfig()): PlacesProvi
   if (config.googlePlacesApiKey) {
     const google = createGooglePlacesProvider(config.googlePlacesApiKey);
     // Without Google billing, Places sends ratings but no review text; SerpApi fills that gap.
-    return config.serpApiKey ? withSerpReviews(google, config.serpApiKey) : google;
+    return config.serpApiKey ? withSerpReviews(google, config.serpApiKey) : withoutSerp(google);
   }
   const real = snapshotPlacesProvider(PUBLIC_SNAPSHOTS);
   return config.sampleBusinesses ? chainProviders("public_snapshot", [real, mockPlacesProvider]) : real;

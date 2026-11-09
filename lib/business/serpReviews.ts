@@ -4,7 +4,7 @@
  * Google place ID. Reviews are labelled "Google (via SerpApi)", linked to Google, and kept only
  * in the short-lived memory cache, the same as Google's own.
  */
-import { cached, sharedCache, type Cache } from "../shared/cache.ts";
+import { sharedCache, type Cache } from "../shared/cache.ts";
 import { log } from "../shared/logger.ts";
 import type { FetchLike } from "../shared/safeFetch.ts";
 import type { PlaceDetails, SourceReview } from "./types.ts";
@@ -47,6 +47,15 @@ export async function fetchSerpReviews(
   apiKey: string,
   opts: { fetchImpl?: FetchLike; timeoutMs?: number } = {},
 ): Promise<SourceReview[]> {
+  return (await fetchSerpReviewsWithStatus(placeId, apiKey, opts)).reviews;
+}
+
+/** Same as fetchSerpReviews, plus a short status saying what happened (for diagnosing). */
+export async function fetchSerpReviewsWithStatus(
+  placeId: string,
+  apiKey: string,
+  opts: { fetchImpl?: FetchLike; timeoutMs?: number } = {},
+): Promise<{ reviews: SourceReview[]; status: string }> {
   const url = new URL("https://serpapi.com/search.json");
   url.searchParams.set("engine", "google_maps_reviews");
   url.searchParams.set("place_id", placeId);
@@ -59,18 +68,20 @@ export async function fetchSerpReviews(
     const res = await (opts.fetchImpl ?? fetch)(url.toString(), { signal: controller.signal });
     if (!res.ok) {
       // 401: bad key. 429: the month's free searches are used up. Either way, carry on without.
-      log.warn("serpapi.http_error", { status: res.status });
-      return [];
+      const body = (await res.json().catch(() => ({}))) as { error?: string };
+      log.warn("serpapi.http_error", { status: res.status, error: body.error });
+      return { reviews: [], status: `http_${res.status}${body.error ? `: ${body.error.slice(0, 120)}` : ""}` };
     }
     const body = (await res.json()) as { reviews?: SerpReview[]; error?: string };
     if (body.error) {
       log.warn("serpapi.error", { error: body.error });
-      return [];
+      return { reviews: [], status: `error: ${body.error.slice(0, 120)}` };
     }
-    return mapSerpReviews(placeId, body.reviews ?? []);
+    const reviews = mapSerpReviews(placeId, body.reviews ?? []);
+    return { reviews, status: reviews.length ? `ok:${reviews.length}` : "no_reviews" };
   } catch (error) {
     log.warn("serpapi.request_failed", { error });
-    return [];
+    return { reviews: [], status: error instanceof Error && error.name === "AbortError" ? "timeout" : "request_failed" };
   } finally {
     clearTimeout(timer);
   }
@@ -92,9 +103,13 @@ export function withSerpReviews(
     async details(placeId) {
       const details = await provider.details(placeId);
       if (!details || details.provider !== "google_places" || details.reviews.length > 0) return details;
-      const reviews = await cached(cache, `serpapi:reviews:${placeId}`, 30 * 60_000, () => fetchSerpReviews(placeId, apiKey, opts));
-      log.info("serpapi.reviews", { found: reviews.length });
-      return reviews.length ? ({ ...details, reviews } satisfies PlaceDetails) : details;
+      const key = `serpapi:reviews:${placeId}`;
+      const hit = cache.get<{ reviews: SourceReview[]; status: string }>(key);
+      const result = hit ?? (await fetchSerpReviewsWithStatus(placeId, apiKey, opts));
+      // Keep good answers for 30 minutes; retry failures after a minute (e.g. a key added late).
+      if (!hit) cache.set(key, result, result.reviews.length ? 30 * 60_000 : 60_000);
+      log.info("serpapi.reviews", { status: result.status });
+      return { ...details, reviews: result.reviews.length ? result.reviews : details.reviews, serpapi: result.status } satisfies PlaceDetails;
     },
   };
 }
