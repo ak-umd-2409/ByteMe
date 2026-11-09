@@ -252,6 +252,8 @@ export interface Finding {
   ai: { level: "yes" | "partly" | "no"; how: string } | null;
   problemKey: ProblemKey | null;
   useCase: UseCase | null;
+  /** The id of this problem in `recommendation.request.problems`, when there are tools to look for; null otherwise. */
+  toolsFor: string | null;
   /** Money only when the owner gave the numbers it needs. */
   impact: ImpactView | null;
   impactNote: string | null;

@@ -408,8 +408,12 @@ function toolOptions(useCases: Set<UseCase>): string[] {
   const add = (name: string) => counts.set(name, (counts.get(name) ?? 0) + 1);
   for (const r of loadCatalog())
     if (r.badge !== "blocked" && r.useCases.some((u) => useCases.has(u))) r.worksWith.filter((w) => w.type !== "none").forEach((w) => add(w.product));
-  return [...counts.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0])).map(([name]) => name).slice(0, 6);
+  const fromCatalog = [...counts.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0])).map(([name]) => name).slice(0, 6);
+  return [...new Set([...fromCatalog, ...EVERYDAY_TOOLS])].slice(0, 14);
 }
+
+/** Software many small businesses already use, so the owner can tick theirs quickly (any other can be typed). */
+const EVERYDAY_TOOLS = ["Google Workspace", "Microsoft 365", "QuickBooks", "Square", "Facebook", "Instagram", "Mailchimp", "Calendly", "Shopify", "Toast", "Clover", "Jobber"];
 
 /** Hypotheses worth asking about: one per kind of problem, and not one public evidence already covers. */
 function askableHypotheses(discovery: DiscoveryResult): ProblemCard[] {
@@ -511,7 +515,7 @@ export function buildQuestions(state: JourneyState, base: DiscoveryResult = disc
     questions.push({
       id: "tools",
       kind: "multi",
-      text: "Do you already use any of these?",
+      text: "What software do you already use?",
       why: "Tools that work with what you already use are quicker to set up.",
       options: [...options.map((o) => ({ value: o, label: o, ...(preset.includes(o) ? { hint: "We saw this on your website" } : {}) })), { value: "none", label: "None of these" }],
       default: preset.length ? preset : null,
@@ -647,6 +651,15 @@ export function cleanAnswers(questions: JourneyQuestion[], answers: Answers): { 
       if (Array.isArray(value) && value.length <= 12 && value.every((x) => typeof x === "string" && suggestionIds.has(x))) {
         if (value.length) out[id] = [...new Set(value as string[])];
       } else ignored.push({ questionId: id, reason: "Pick from the suggestions." });
+      continue;
+    }
+    if (id === "tools") {
+      // Ticked options plus any software the owner typed in.
+      if (value === null || value === undefined) continue;
+      if (Array.isArray(value) && value.length <= 25 && value.every((x) => typeof x === "string" && x.trim().length > 0 && x.length <= 40)) {
+        const picked = [...new Set((value as string[]).map((x) => x.trim()))];
+        out[id] = picked.includes("none") ? ["none"] : picked;
+      } else ignored.push({ questionId: id, reason: "Pick from the options or type a tool name (up to 40 characters)." });
       continue;
     }
     if (id.startsWith("problem.")) {
@@ -1030,8 +1043,8 @@ export function buildAnswer(
   // Part 4: only the problems we're focusing on, one per kind of tool.
   const focus = opportunities.map((o) => o.problemKey);
   const focused: DiscoveryResult = { ...discovery, problems: discovery.problems.filter((p) => focus.includes(p.key)) };
-  const rec = toRecommendationInput(applied.profile, focused);
-  // Challenges outside the problem list that still have a kind of tool go to Part 4 too, in the owner's words.
+  const rec = toRecommendationInput(applied.profile, focused, { allowNoProblems: true });
+  // Challenges outside the problem list, and problems customers raise in reviews, go to Part 4 too when a kind of tool fits.
   if (rec.ok) {
     const used = new Set(rec.request.problems.map((p) => p.useCase));
     for (const ch of challenges) {
@@ -1039,10 +1052,16 @@ export function buildAnswer(
       used.add(ch.useCase);
       rec.request.problems.push({ id: `owner-${ch.id}`, useCase: ch.useCase, title: ch.title.slice(0, 140), evidence: `The owner told us: “${ch.words.slice(0, 200)}”` });
     }
+    for (const issue of state.reviewIssues ?? []) {
+      if (!issue.useCase || used.has(issue.useCase) || rec.request.problems.length >= 8) continue;
+      used.add(issue.useCase);
+      rec.request.problems.push({ id: `issue-${issue.id}`, useCase: issue.useCase, title: issue.title.slice(0, 140), evidence: `${plural(issue.reviews.length, "customer review")} describe it` });
+    }
   }
-  const recommendation: JourneyAnswerResponse["recommendation"] = rec.ok
+  const recReady = rec.ok && rec.request.problems.length > 0;
+  const recommendation: JourneyAnswerResponse["recommendation"] = rec.ok && recReady
     ? { ready: true, request: rec.request, focus: rec.request.problems.map((p) => p.id.replace(/^problem-/, "") as ProblemKey) }
-    : { ready: false, reason: opportunities.some((o) => o.useCase) ? rec.message : "None of the problems we found needs a tool yet. Start with the free fixes above." };
+    : { ready: false, reason: !rec.ok && opportunities.some((o) => o.useCase) ? rec.message : "None of these needs a tool yet. Start with the free steps above." };
 
   const name = applied.profile.business.name.value ?? "your business";
   const headline = opportunities.length
@@ -1055,6 +1074,15 @@ export function buildAnswer(
   const budget = { value: applied.profile.owner.monthlyBudget.value ?? DEFAULT_BUDGET, assumed: applied.profile.owner.monthlyBudget.source !== "owner" };
 
   const findings = buildFindings(state, discovery, applied, challenges);
+  // Which Part 4 problem each finding is, so the owner can choose which ones to find tools for.
+  if (recommendation.ready) {
+    const ids = new Set(recommendation.request.problems.map((p) => p.id));
+    const byKey = new Map(recommendation.request.problems.map((p) => [p.id.replace(/^problem-/, ""), p.id]));
+    for (const f of [...findings.yours, ...findings.noticed]) {
+      const owner = f.id.startsWith("yours-") ? `owner-${f.id.slice(6)}` : f.id.startsWith("noticed-ri") ? `issue-${f.id.slice(8)}` : null;
+      f.toolsFor = (f.problemKey && byKey.get(f.problemKey)) || (owner && ids.has(owner) ? owner : null);
+    }
+  }
   const found = findings.yours.length + findings.noticed.length;
   const headlineNow = challenges.length
     ? `${plural(findings.yours.length, "thing")} you told us${findings.noticed.length ? `, and ${plural(findings.noticed.length, "more thing")} we noticed` : ""}.`
@@ -1157,6 +1185,7 @@ function buildFindings(state: JourneyState, discovery: DiscoveryResult, applied:
       ai: ch.ai ?? aiFor(useCase, ch.problem),
       problemKey: ch.problem,
       useCase,
+      toolsFor: null,
       ...impact,
       by: ch.by,
     };
@@ -1188,6 +1217,7 @@ function buildFindings(state: JourneyState, discovery: DiscoveryResult, applied:
       ai: aiFor(card.useCase, card.key),
       problemKey: card.key,
       useCase: card.useCase,
+      toolsFor: null,
       ...(group === "consider" ? { impact: null, impactNote: null, impactNeeds: [] } : impactView(card, applied.profile, applied.overrides[card.key])),
       by: group === "consider" ? "industry" : "evidence",
     };
@@ -1216,6 +1246,7 @@ function buildFindings(state: JourneyState, discovery: DiscoveryResult, applied:
       ai: issue.ai ?? aiFor(issue.useCase, null),
       problemKey: null,
       useCase: issue.useCase,
+      toolsFor: null,
       impact: null,
       impactNote: null,
       impactNeeds: [],
@@ -1248,6 +1279,7 @@ function buildFindings(state: JourneyState, discovery: DiscoveryResult, applied:
       ai: { level: "no", how: "This is a people and pricing question first. AI won't fix it on its own." },
       problemKey: null,
       useCase: null,
+      toolsFor: null,
       impact: null,
       impactNote: null,
       impactNeeds: [],

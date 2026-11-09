@@ -72,6 +72,53 @@ function Steps({ n }: { n: number }) {
   );
 }
 
+/** Tick software from the list, or type in any other (shown as its own ticked chip). */
+function ToolsPicker({ options, value, onChange }: { options: string[]; value: string[]; onChange: (v: string[]) => void }) {
+  const [draft, setDraft] = useState("");
+  const listed = options.filter((o) => o !== "none");
+  const custom = value.filter((v) => v !== "none" && !listed.includes(v));
+  const toggle = (name: string) => {
+    if (name === "none") return onChange(value.includes("none") ? [] : ["none"]);
+    const rest = value.filter((x) => x !== "none");
+    onChange(rest.includes(name) ? rest.filter((x) => x !== name) : [...rest, name]);
+  };
+  const add = () => {
+    const name = draft.trim().slice(0, 40);
+    if (!name) return;
+    if (!value.some((v) => v.toLowerCase() === name.toLowerCase())) onChange([...value.filter((x) => x !== "none"), name]);
+    setDraft("");
+  };
+  return (
+    <div className={s.col} style={{ gap: 10 }}>
+      <div className={s.row}>
+        {[...listed, ...custom].map((name) => (
+          <Chip key={name} pressed={value.includes(name)} onClick={() => toggle(name)}>
+            {name}
+          </Chip>
+        ))}
+        <Chip pressed={value.includes("none")} onClick={() => toggle("none")}>
+          None of these
+        </Chip>
+      </div>
+      <form
+        className={s.inlineForm}
+        onSubmit={(e) => {
+          e.preventDefault();
+          add();
+        }}
+      >
+        <label htmlFor="add-tool" className={s.sr}>
+          Add another tool
+        </label>
+        <input id="add-tool" className={s.input} value={draft} onChange={(e) => setDraft(e.target.value)} placeholder="Add another, e.g. Housecall Pro" maxLength={40} />
+        <button type="submit" className={cx(s.btn, s.secondary)} disabled={!draft.trim()}>
+          + Add
+        </button>
+      </form>
+    </div>
+  );
+}
+
 function Chip({ pressed, onClick, children, disabled }: { pressed: boolean; onClick: () => void; children: React.ReactNode; disabled?: boolean }) {
   return (
     <button type="button" className={s.chipsel} aria-pressed={pressed} onClick={onClick} disabled={disabled}>
@@ -188,6 +235,10 @@ export function Journey({ lookup, catalog, watchCount = 0, entry }: { lookup: Lo
   const [context, setContext] = useState<string | null>(null);
   const [answers, setAnswers] = useState<Answers>({});
   // Read by delayed callbacks (auto-advance), so they always see the latest answers.
+  /** Which problems the owner wants tools for (Part 4 problem ids). Starts with all of them. */
+  const [toolPick, setToolPick] = useState<Set<string> | null>(null);
+  const [draftLen, setDraftLen] = useState(0);
+  const draftRef = useRef("");
   const answersRef = useRef<Answers>(answers);
   answersRef.current = answers;
   const [busy, setBusy] = useState(false);
@@ -385,10 +436,13 @@ export function Journey({ lookup, catalog, watchCount = 0, entry }: { lookup: Lo
 
   const showTools = async () => {
     if (!result?.recommendation.ready) return;
+    const request = result.recommendation.request;
+    const chosen = toolPick ? request.problems.filter((p) => toolPick.has(p.id)) : request.problems;
+    if (!chosen.length) return setError("Tick at least one problem to find tools for.");
     setBusy(true);
     setError(null);
     try {
-      const res = await fetch("/api/recommend", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(result.recommendation.request) });
+      const res = await fetch("/api/recommend", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ ...request, problems: chosen }) });
       const body = await res.json();
       if (!res.ok) throw new Error(typeof body?.error === "string" ? body.error : "We couldn't load tools right now.");
       setRecs(body as RecommendationResult);
@@ -960,8 +1014,13 @@ export function Journey({ lookup, catalog, watchCount = 0, entry }: { lookup: Lo
           )}
           {toolsQ && (
             <>
-              <span className={s.sub}>Do you use any of these? We can't see them from outside.</span>
-              <ChoiceQuestion q={toolsQ} value={answers.tools} onChange={(v) => setAnswer("tools", v)} />
+              <span className={s.sub}>What software do you already use?</span>
+              <span className={s.small}>Tick yours, or add any we missed. Tools that work with these are easier to set up.</span>
+              <ToolsPicker
+                options={(toolsQ.options ?? []).map((o) => o.value)}
+                value={Array.isArray(answers.tools) ? (answers.tools as string[]) : []}
+                onChange={(v) => setAnswer("tools", v.length ? v : null)}
+              />
             </>
           )}
         </article>
@@ -1012,12 +1071,24 @@ export function Journey({ lookup, catalog, watchCount = 0, entry }: { lookup: Lo
     const i = Math.min(qIndex, Math.max(flow.length - 1, 0));
     const current = flow[i];
     const last = i >= flow.length - 1;
-    const next = () => (last ? void finishQuestions() : setQIndex(i + 1));
+    const next = () => {
+      // Words still in the box count as added when the owner moves on.
+      if (current?.id === "challenges" && draftRef.current.trim()) {
+        const before = typeof answers.challenges === "string" ? answers.challenges : "";
+        const merged = [before, draftRef.current.trim()].filter(Boolean).join("\n");
+        setAnswer("challenges", merged);
+        answersRef.current = { ...answersRef.current, challenges: merged };
+        draftRef.current = "";
+      }
+      if (last) void finishQuestions();
+      else setQIndex(i + 1);
+    };
     const value = current ? answers[current.id] : undefined;
+    const draftTyped = draftLen > 0;
     const picks = Array.isArray(answers.challenge_picks) ? (answers.challenge_picks as string[]) : [];
     const hasValue =
       current?.id === "challenges"
-        ? (typeof value === "string" && value.trim().length > 0) || picks.length > 0
+        ? (typeof value === "string" && value.trim().length > 0) || picks.length > 0 || draftTyped
         : Array.isArray(value)
           ? value.length > 0
           : value !== undefined && value !== null;
@@ -1069,6 +1140,10 @@ export function Journey({ lookup, catalog, watchCount = 0, entry }: { lookup: Lo
             picks={picks}
             onText={(t) => setAnswer("challenges", t.trim() ? t : null)}
             onPicks={(ids) => setAnswer("challenge_picks", ids.length ? ids : null)}
+            onDraft={(d) => {
+              draftRef.current = d;
+              setDraftLen(d.trim().length);
+            }}
           />
         ) : (
           <OptionList
@@ -1131,7 +1206,10 @@ export function Journey({ lookup, catalog, watchCount = 0, entry }: { lookup: Lo
     const dealQ = q("deal_breakers");
     const counts = [confirmed ? `${confirmed} confirmed` : null, likely ? `${likely} likely` : null].filter(Boolean).join(" and ");
     const followUp = (id: string) => result.followUps.find((f) => f.id === id);
-    const toolCount = result.recommendation.ready ? result.recommendation.focus.length : 0;
+    const allTools = result.recommendation.ready ? result.recommendation.request.problems.map((p) => p.id) : [];
+    // Everything starts ticked; ids that no longer exist (after new answers) drop out.
+    const picked = new Set(toolPick ? allTools.filter((id) => toolPick.has(id)) : allTools);
+    const toolCount = picked.size;
 
     return frame(
       <>
@@ -1161,6 +1239,7 @@ export function Journey({ lookup, catalog, watchCount = 0, entry }: { lookup: Lo
           {(revenue || time) && <span className={s.small}>Estimated opportunity, not proven lost revenue. Only where you gave us the numbers.</span>}
         </header>
 
+        {result.recommendation.ready && <p className={s.small}>Tick the problems you want tools for. The rest stay in your plan with a free first step.</p>}
         <FindingsView
           findings={result.findings}
           industry={start.business.subtitle.split(" · ")[0] ?? "similar"}
@@ -1168,6 +1247,15 @@ export function Journey({ lookup, catalog, watchCount = 0, entry }: { lookup: Lo
             seeMoreBtn.current = el;
             setOpenOpp(f.id);
           }}
+          selected={picked}
+          onToggle={(id) =>
+            setToolPick(() => {
+              const next = new Set(picked);
+              if (next.has(id)) next.delete(id);
+              else next.add(id);
+              return next;
+            })
+          }
         />
 
         <form
@@ -1390,15 +1478,19 @@ export function Journey({ lookup, catalog, watchCount = 0, entry }: { lookup: Lo
 
         <div className={cx(s.actionBar, s.sticky)}>
           <span className={s.small}>
-            {result.recommendation.ready ? `Next: checked tools for ${toolCount === 1 ? "one of these" : `${toolCount} of these`}, within your budget.` : result.recommendation.reason}
+            {result.recommendation.ready
+              ? toolCount
+                ? `Next: checked tools for the ${toolCount === 1 ? "problem" : `${toolCount} problems`} you ticked, within your budget.`
+                : "Tick a problem to find tools for it, or go straight to your plan."
+              : result.recommendation.reason}
           </span>
           {errorBox}
-          {result.recommendation.ready ? (
+          {result.recommendation.ready && toolCount > 0 ? (
             <button type="button" className={cx(s.btn, s.primary)} onClick={() => void showTools()} disabled={busy}>
-              {busy ? "One moment…" : "Show me tools for these →"}
+              {busy ? "One moment…" : `Find tools (${toolCount}) →`}
             </button>
           ) : (
-            <button type="button" className={cx(s.btn, s.primary)} onClick={() => go("plan")} disabled={busy || opps.length === 0}>
+            <button type="button" className={cx(s.btn, s.primary)} onClick={() => go("plan")} disabled={busy || (opps.length === 0 && result.findings.yours.length + result.findings.noticed.length === 0)}>
               Make my plan →
             </button>
           )}

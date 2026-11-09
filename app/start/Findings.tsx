@@ -31,46 +31,84 @@ export function ChallengeStep({
   picks,
   onText,
   onPicks,
+  onDraft,
 }: {
   business: string;
   placeholder?: string;
   suggestions: ChallengeSuggestion[];
+  /** What the owner has added so far, one per line. */
   text: string;
   picks: string[];
   onText: (t: string) => void;
   onPicks: (ids: string[]) => void;
+  /** The words in the box that haven't been added yet (so Continue can add them too). */
+  onDraft?: (d: string) => void;
 }) {
   const [dismissed, setDismissed] = useState<string[]>([]);
-  // Narrow by the line being written, so suggestions follow the owner's current thought.
-  const current = text.split(/\n/).at(-1) ?? "";
+  const [draft, setDraftState] = useState("");
+  const setDraft = (d: string) => {
+    setDraftState(d);
+    onDraft?.(d);
+  };
+  const typed = text.split(/\n+/).map((x) => x.trim()).filter(Boolean);
+  const add = () => {
+    const items = draft.split(/\n+/).map((x) => x.trim()).filter(Boolean);
+    if (!items.length) return;
+    onText([...typed, ...items.filter((x) => !typed.includes(x))].join("\n"));
+    setDraft("");
+  };
   const shown = useMemo(() => {
     const exclude = [...picks, ...dismissed];
-    const near = matchSuggestions(suggestions, current, exclude, 5);
+    const near = matchSuggestions(suggestions, draft, exclude, 5);
     return near.length ? near : matchSuggestions(suggestions, "", exclude, 4);
-  }, [suggestions, current, picks, dismissed]);
+  }, [suggestions, draft, picks, dismissed]);
   const picked = picks.map((id) => suggestions.find((x) => x.id === id)).filter((x): x is ChallengeSuggestion => Boolean(x));
 
   return (
     <div className={s.challenge}>
-      <label htmlFor="challenges" className={s.sr}>
-        What's taking up too much of your time?
-      </label>
-      <textarea
-        id="challenges"
-        className={cx(s.textarea, s.challengeBox)}
-        value={text}
-        onChange={(e) => onText(e.target.value)}
-        placeholder={placeholder}
-        maxLength={1500}
-        rows={4}
-        autoFocus
-      />
-      <span className={s.hint}>One thing per line is easiest, but any way works.</span>
+      <form
+        className={s.addRow}
+        onSubmit={(e) => {
+          e.preventDefault();
+          add();
+        }}
+      >
+        <label htmlFor="challenges" className={s.sr}>
+          What's taking up too much of your time?
+        </label>
+        <textarea
+          id="challenges"
+          className={cx(s.textarea, s.challengeBox)}
+          value={draft}
+          onChange={(e) => setDraft(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && !e.shiftKey) {
+              e.preventDefault();
+              add();
+            }
+          }}
+          placeholder={typed.length || picked.length ? "Anything else? Type it and press Add" : placeholder}
+          maxLength={400}
+          rows={2}
+          autoFocus
+        />
+        <button type="submit" className={cx(s.btn, s.secondary)} disabled={!draft.trim()}>
+          + Add
+        </button>
+      </form>
 
-      {picked.length > 0 && (
+      {(typed.length > 0 || picked.length > 0) && (
         <div className={s.col} style={{ gap: 8 }}>
           <span className={s.sub}>You added</span>
           <ul className={s.picked}>
+            {typed.map((x) => (
+              <li key={`t-${x}`}>
+                <span>✓ {x}</span>
+                <button type="button" className={s.pickedX} onClick={() => onText(typed.filter((y) => y !== x).join("\n"))} aria-label={`Remove “${x}”`}>
+                  ✕
+                </button>
+              </li>
+            ))}
             {picked.map((p) => (
               <li key={p.id}>
                 <span>✓ {p.text}</span>
@@ -85,7 +123,7 @@ export function ChallengeStep({
 
       {shown.length > 0 && (
         <div className={s.col} style={{ gap: 8 }} aria-live="polite">
-          <span className={s.sub}>{current.trim() ? "Does any of these fit?" : `Suggestions for ${business}`}</span>
+          <span className={s.sub}>{draft.trim() ? "Does any of these fit?" : `Suggestions for ${business}`}</span>
           <ul className={s.suggestList}>
             {shown.map((x) => (
               <li key={x.id} className={s.suggest}>
@@ -116,42 +154,46 @@ export function ChallengeStep({
 const GROUP_TAG: Record<Finding["group"], string> = { yours: "You told us", noticed: "We noticed", consider: "Worth considering" };
 const AI_LABEL = { yes: "AI can help", partly: "AI can partly help", no: "No AI needed" } as const;
 
-export function FindingCard({ f, onOpen }: { f: Finding; onOpen: (f: Finding, el: HTMLButtonElement) => void }) {
+export function FindingCard({ f, onOpen, selected, onToggle }: { f: Finding; onOpen: (f: Finding, el: HTMLButtonElement) => void; selected?: boolean; onToggle?: () => void }) {
   return (
-    <article className={cx(s.card, s.finding, f.group === "consider" && s.findingSoft)}>
+    <article className={cx(s.card, s.finding, selected && s.findingOn)}>
       <div className={s.findingTop}>
         <span className={cx(s.badge, f.group === "yours" ? s.ok : s.warn)}>{f.group === "yours" ? "You told us" : f.evidence.some((e) => e.isQuote) ? "From your reviews" : "We noticed"}</span>
-        {/* Say how sure we are only when it adds something: evidence behind the owner's words, or where we saw it. */}
-        {(f.group !== "yours" || f.confidence.level === "high") && <span className={s.small}>{f.confidence.label}</span>}
+        {f.group !== "yours" && <span className={s.small}>{f.confidence.label}</span>}
       </div>
       <h3 className={s.h3}>{f.title}</h3>
-      {f.ownerWords.length > 0 && f.ownerWords.join(" ").toLowerCase() !== f.title.toLowerCase() && <p className={s.ownerWords}>“{f.ownerWords.join("” · “")}”</p>}
-      {f.connection && <p className={s.connection}>{f.connection}</p>}
-      {/* Rule-read challenges only have the owner's words, already quoted above. */}
-      {f.whatsHappening && !f.whatsHappening.startsWith("In your words") ? <p className={s.clamp}>{f.whatsHappening}</p> : f.whyItMatters ? <p className={s.clamp}>{f.whyItMatters}</p> : null}
-      {f.impact && (
-        <p className={s.money}>
-          <span className={s.small}>{f.impact.kind === "time_cost" ? "Your time: about" : "Might be worth about"}</span> <b className={s.num}>{usd(f.impact.monthly.expected)} a month</b>
-        </p>
-      )}
-      {f.whatToDo && (
-        <p className={s.firstStep}>
-          <b>What to do:</b> {f.whatToDo}
-        </p>
-      )}
-      {f.ai && (
-        <p className={cx(s.aiLine, f.ai.level === "no" && s.aiNo)}>
-          <b>{AI_LABEL[f.ai.level]}.</b> {f.ai.how}
-        </p>
-      )}
-      <button type="button" className={cx(s.link, s.findingMore)} aria-haspopup="dialog" onClick={(e) => onOpen(f, e.currentTarget)}>
-        {f.evidence.length ? `Evidence and details (${f.evidence.length + f.moreEvidence})` : "Details"}
-      </button>
+      {f.connection && <p className={s.connectionSmall}>{f.connection.replace(/^This may be bigger than you thought: /, "Also in reviews: ")}</p>}
+      {f.ai && <span className={cx(s.aiTag, f.ai.level === "no" && s.aiTagNo)}>{AI_LABEL[f.ai.level]}</span>}
+      <div className={s.findingFoot}>
+        {f.toolsFor && onToggle ? (
+          <label className={s.toolsPick}>
+            <input type="checkbox" checked={Boolean(selected)} onChange={onToggle} />
+            Find tools for this
+          </label>
+        ) : (
+          <span className={s.small}>{f.ai?.level === "no" ? "Free fix" : f.whatToDo ? "Free first step in details" : "No tool for this yet"}</span>
+        )}
+        <button type="button" className={cx(s.link, s.findingMore)} aria-haspopup="dialog" onClick={(e) => onOpen(f, e.currentTarget)}>
+          Details
+        </button>
+      </div>
     </article>
   );
 }
 
-export function FindingsView({ findings, industry, onOpen }: { findings: Findings; industry: string; onOpen: (f: Finding, el: HTMLButtonElement) => void }) {
+export function FindingsView({
+  findings,
+  industry,
+  onOpen,
+  selected,
+  onToggle,
+}: {
+  findings: Findings;
+  industry: string;
+  onOpen: (f: Finding, el: HTMLButtonElement) => void;
+  selected?: Set<string>;
+  onToggle?: (toolsFor: string) => void;
+}) {
   const { yours, noticed, consider, strengths, reviewsRead } = findings;
   const read = reviewsRead.count
     ? `Based on ${reviewsRead.count} ${reviewsRead.count === 1 ? "review" : "reviews"} we read${reviewsRead.sources.length ? ` (${reviewsRead.sources.map((x) => `${x.count} from ${x.name}`).join(", ")})` : ""}.`
@@ -165,7 +207,7 @@ export function FindingsView({ findings, industry, onOpen }: { findings: Finding
           </h2>
           <div className={s.oppGrid}>
             {yours.map((f) => (
-              <FindingCard key={f.id} f={f} onOpen={onOpen} />
+              <FindingCard key={f.id} f={f} onOpen={onOpen} selected={Boolean(f.toolsFor && selected?.has(f.toolsFor))} onToggle={f.toolsFor && onToggle ? () => onToggle(f.toolsFor!) : undefined} />
             ))}
           </div>
         </section>
@@ -181,7 +223,7 @@ export function FindingsView({ findings, industry, onOpen }: { findings: Finding
           </div>
           <div className={s.oppGrid}>
             {noticed.map((f) => (
-              <FindingCard key={f.id} f={f} onOpen={onOpen} />
+              <FindingCard key={f.id} f={f} onOpen={onOpen} selected={Boolean(f.toolsFor && selected?.has(f.toolsFor))} onToggle={f.toolsFor && onToggle ? () => onToggle(f.toolsFor!) : undefined} />
             ))}
           </div>
         </section>
@@ -222,7 +264,7 @@ export function FindingsView({ findings, industry, onOpen }: { findings: Finding
             <span className={s.small}>Common for businesses like yours. We haven't seen evidence of these for you, so they don't count unless you add them.</span>
             <div className={s.oppGrid}>
               {consider.map((f) => (
-                <FindingCard key={f.id} f={f} onOpen={onOpen} />
+                <FindingCard key={f.id} f={f} onOpen={onOpen} selected={Boolean(f.toolsFor && selected?.has(f.toolsFor))} onToggle={f.toolsFor && onToggle ? () => onToggle(f.toolsFor!) : undefined} />
               ))}
             </div>
           </div>
