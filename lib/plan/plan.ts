@@ -19,9 +19,18 @@ export interface PlanStep {
   link: { label: string; url: string } | null;
   /** A rule the step comes from, e.g. Maryland call recording. */
   why: string | null;
-  /** Which week of the 30-day plan: 1–4, or 5 = after day 30. */
+  /** Which phase of the 30 days: 1 = Day 1, 2 = Days 2–7, 3 = Week 2, 4 = Weeks 3–4, 5 = after day 30 (see PHASE_LABEL). */
   week: number;
+  /** Who does it. */
+  who?: Who;
+  /** What should be true once it's done, so the owner knows it worked. */
+  outcome?: string | null;
 }
+
+export type Who = "You" | "You or a staff member" | "You with a helper" | "The vendor" | "Your advisor";
+
+/** Short phase names, by `PlanStep.week`. */
+export const PHASE_LABEL = ["", "Day 1", "Days 2–7", "Week 2", "Weeks 3–4", "After day 30"] as const;
 
 export interface PlanSection {
   id: string;
@@ -63,14 +72,31 @@ export interface Plan {
   resources: Resource[];
   resourcesChecked: string;
   notes: string[];
+  /** When there's more than one tool: the order to set them up in, and why. Null otherwise. */
+  order: string | null;
+}
+
+/** A challenge outside the problem list (the owner's own, or one customers raise in reviews). */
+export interface PlanExtra {
+  /** The id Part 4 used for it (e.g. "owner-c1"), so a chosen tool can be found; or a local id. */
+  key: string;
+  heading: string;
+  /** The free first step. */
+  firstStep: string | null;
+  /** How AI could help, when it can. */
+  aiHow: string | null;
 }
 
 export interface PlanInput {
   answer: Pick<JourneyAnswerResponse, "opportunities" | "localHelp" | "youToldUs"> & { business: { name: string } };
-  /** Chosen tool per problem key (catalog ids). Missing = decide later. */
-  choices: Partial<Record<ProblemKey, string>>;
+  /** Chosen tool per problem key or extra key (catalog ids). Missing = decide later. */
+  choices: Partial<Record<ProblemKey, string>> & Record<string, string | undefined>;
+  /** The owner's other challenges and problems from reviews, so the plan covers everything they care about. */
+  extras?: PlanExtra[];
   catalog: CatalogRecord[];
   currentTools: string[];
+  /** The owner asked for help setting tools up. False = they'll do it themselves. */
+  needsHelp?: boolean;
 }
 
 const same = (a: string, b: string) => a.trim().toLowerCase() === b.trim().toLowerCase();
@@ -91,20 +117,56 @@ function baseline(o: Opportunity): string | null {
 function freeSection(o: Opportunity): PlanSection {
   const links = o.evidence.flatMap((e) => e.links).filter((l): l is { label: string; url: string } => Boolean(l.url));
   const unique = [...new Map(links.map((l) => [l.url, l])).values()].slice(0, 6);
+  // The time shown is the sum of the steps below, so the two never disagree.
+  const known = unique.length * 10;
   return {
     id: `free-${o.problemKey}`,
     heading: o.headline,
-    summary: `Free · ${o.fix.label.replace(/^Free\s*·?\s*/i, "") || "this week"}`,
+    summary: known ? `Free · about ${known} min` : "Free · this week",
     problem: o.headline,
     tool: null,
     steps: [
-      { id: `${o.problemKey}-do`, title: "Do this", detail: o.fix.nextStep, minutes: null, link: null, why: null, week: 1 },
-      ...unique.map((l, i) => ({ id: `${o.problemKey}-l${i}`, title: `Update ${l.label.replace(/^Your website$/, "your website")}`, detail: "Sign in to this listing and change the details to match.", minutes: 10, link: { label: `Open ${l.label}`, url: l.url }, why: null, week: 1 })),
+      { id: `${o.problemKey}-do`, title: o.fix.nextStep.replace(/\.$/, ""), detail: "Free. No tool needed.", minutes: null, link: null, why: null, week: 1, who: "You" as Who, outcome: null },
+      ...unique.map((l, i) => ({ id: `${o.problemKey}-l${i}`, title: `Update ${l.label.replace(/^Your website$/, "your website")}`, detail: "Sign in to this listing and change the details to match.", minutes: 10, link: { label: `Open ${l.label}`, url: l.url }, why: null, week: 1, who: "You or a staff member" as Who, outcome: `${l.label} shows the same details as everywhere else.` })),
     ],
   };
 }
 
-function toolSection(o: Opportunity, r: CatalogRecord, currentTools: string[]): PlanSection {
+/** What to have to hand before signing up, from the tool's own card. */
+function haveReady(r: CatalogRecord, currentTools: string[]): string {
+  const mine = r.worksWith.filter((w) => w.type !== "none" && currentTools.some((x) => same(x, w.product))).map((w) => w.product);
+  const byUse: Partial<Record<string, string>> = {
+    "missed-calls": "your business hours and the 5 questions callers ask most",
+    booking: "your services, how long each takes, and your hours",
+    "customer-messaging": "answers to your most common questions",
+    reviews: "recent happy customers' emails or phone numbers",
+    "email-marketing": "your customer email list (only people who agreed to hear from you)",
+    quotes: "your price list or a past quote to copy",
+    "admin-paperwork": "one task you repeat every week, to try it on",
+    marketing: "a few past posts, or your menu or service list",
+    "website-seo": "your website login",
+  };
+  const items = ["a card for billing", byUse[r.useCases[0] ?? ""] ?? null, mine.length ? `your ${mine.join(" and ")} login` : null];
+  return items.filter(Boolean).join(", ");
+}
+
+/** How to test that setup worked, by what the tool is for. */
+function testLine(r: CatalogRecord): string {
+  const byUse: Partial<Record<string, string>> = {
+    "missed-calls": "Test: call your business number from another phone after hours. It should answer and take a message.",
+    booking: "Test: book a pretend appointment yourself. It should land on your calendar with a confirmation.",
+    "customer-messaging": "Test: ask it one of your common questions from your phone. The answer should be right.",
+    reviews: "Test: send a review request to yourself. It should arrive and link to your listing.",
+    "email-marketing": "Test: send a test email to yourself. It should look right on your phone.",
+    quotes: "Test: make a quote for a past job. The numbers should match what you charged.",
+    "admin-paperwork": "Test: do one real weekly task with it and time it.",
+    marketing: "Test: write one real post with it and check it sounds like you.",
+    "website-seo": "Test: run its first report on your website.",
+  };
+  return byUse[r.useCases[0] ?? ""] ?? "Test: try it once on a real task.";
+}
+
+function toolSection(o: Opportunity, r: CatalogRecord, currentTools: string[], needsHelp = true): PlanSection {
   const steps: PlanStep[] = [];
   const price = r.pricing.small.monthlyUsd;
   const site = r.sample ? null : { label: `${r.name} official site`, url: r.vendor.website };
@@ -116,11 +178,13 @@ function toolSection(o: Opportunity, r: CatalogRecord, currentTools: string[]): 
     detail:
       price === "unknown"
         ? "Their price isn't public. Ask for it in writing before you start."
-        : `${r.pricing.freeTier === true ? "There's a free plan to try first. " : ""}Start small: ${usd(price)} a month${r.pricing.small.note ? ` (${r.pricing.small.note.replace(/\.$/, "").toLowerCase()})` : ""}${r.pricing.contract === "annual" ? ", yearly contract" : r.pricing.contract === "monthly" ? ", cancel any month" : ""}.`,
+        : `${r.pricing.freeTier === true ? "There's a free plan to try first. " : ""}Pick the ${r.pricing.small.note ? r.pricing.small.note.replace(/\.$/, "").toLowerCase() : "smallest plan"}: ${usd(price)} a month${r.pricing.contract === "annual" ? ", yearly contract" : r.pricing.contract === "monthly" ? ", cancel any month" : ""}. Have ready: ${haveReady(r, currentTools)}.`,
     minutes: 10,
-    link: r.sample ? null : r.pricing.pricingUrl ? { label: "Prices", url: r.pricing.pricingUrl } : site,
+    link: r.sample ? null : r.pricing.pricingUrl ? { label: "Prices and sign-up", url: r.pricing.pricingUrl } : site,
     why: null,
     week: 1,
+    who: "You",
+    outcome: `you have an account with ${r.name} on the smallest plan that does the job.`,
   });
 
   // 2 · Connect it to what the owner already uses (the vendor's connection, not ours).
@@ -133,9 +197,11 @@ function toolSection(o: Opportunity, r: CatalogRecord, currentTools: string[]): 
         ? "This uses Zapier, a separate service that may have its own cost. The vendor's help pages show the steps."
         : `${r.name} has a built-in connection. Look for "Integrations" in its settings.`,
       minutes: 15,
-      link: null,
+      link: site ? { label: `${r.name} website`, url: site.url } : null,
       why: null,
       week: 1,
+      who: "You",
+      outcome: `what happens in ${r.name} shows up in your ${mine.map((w) => w.product).join(" and ")} without retyping.`,
     });
 
   // 3 · Rules that apply to this tool.
@@ -151,6 +217,8 @@ function toolSection(o: Opportunity, r: CatalogRecord, currentTools: string[]): 
       link: { label: "Maryland law", url: RECORDING_LAW },
       why: "Maryland requires everyone on a call to agree to recording. Not legal advice: ask your SBDC advisor.",
       week: 1,
+      who: "You",
+      outcome: "a test call to your own number plays the recording notice first.",
     });
   if (r.rulesFlags.outboundAiCalls === true)
     steps.push({
@@ -161,20 +229,24 @@ function toolSection(o: Opportunity, r: CatalogRecord, currentTools: string[]): 
       link: null,
       why: "FCC ruling, Feb 2024.",
       week: 1,
+      who: "You",
+      outcome: "outbound AI calls are off, or only go to people who said yes.",
     });
 
   // 4 · Set it up.
   steps.push({
     id: `${r.id}-setup`,
-    title: r.setupMode === "needs_help" ? "Book help to set it up" : "Set it up",
+    title: r.setupMode === "needs_help" && needsHelp ? "Book help to set it up" : "Set it up",
     detail:
       r.setupMinutes === "unknown"
-        ? "The vendor doesn't say how long setup takes."
+        ? `The vendor doesn't say how long setup takes.${r.setupMode === "needs_help" && !needsHelp ? " It's easier with help, so if you get stuck, your free SBDC advisor can sit with you." : ""}`
         : `About ${r.setupMinutes} minutes${r.setupMode === "needs_help" ? ", best done with someone who has set it up before" : " on your own"}.`,
     minutes: r.setupMinutes === "unknown" ? null : r.setupMinutes,
     link: null,
     why: null,
     week: 1,
+    who: r.setupMode === "needs_help" && needsHelp ? "You with a helper" : "You",
+    outcome: testLine(r),
   });
 
   // 5 · Check it worked, against the owner's own number when we have one.
@@ -187,6 +259,8 @@ function toolSection(o: Opportunity, r: CatalogRecord, currentTools: string[]): 
     link: null,
     why: null,
     week: 1,
+    who: "You",
+    outcome: "you know whether to keep paying for it.",
   });
 
   return {
@@ -199,34 +273,44 @@ function toolSection(o: Opportunity, r: CatalogRecord, currentTools: string[]): 
   };
 }
 
-const WEEK_LABEL = ["", "Week 1 · days 1–7", "Week 2 · days 8–14", "Week 3 · days 15–21", "Week 4 · days 22–30", "After day 30"];
-
 /**
- * Spread the work over 30 days (spec §5.1): free fixes in week 1, then one tool at a
- * time, two weeks apart, each checked two weeks after it's set up. Tools that don't fit
- * in 30 days, and their checks, land in "After day 30" rather than crowding a week.
+ * Spread the work over 30 days in four phases: Day 1 (free fixes that take under an hour),
+ * Days 2–7 (the first tool), Week 2 (the second), Weeks 3–4 (a third, and checking the first two).
+ * One tool at a time, so the owner can tell which one helped; each is checked about two weeks
+ * after it's set up. Anything that doesn't fit lands in "After day 30" rather than crowding a phase.
  */
 function schedule(sections: PlanSection[]): PlanWeek[] {
-  const hasFree = sections.some((s) => !s.tool);
   let toolIndex = 0;
   for (const sec of sections) {
     if (!sec.tool) {
-      for (const st of sec.steps) st.week = 1;
+      const known = sec.steps.reduce((n, st) => n + (st.minutes ?? 0), 0);
+      const quickFree = sec.id.startsWith("free-") && known <= 60;
+      for (const st of sec.steps) st.week = quickFree ? 1 : 2;
       continue;
     }
-    const start = (hasFree ? 2 : 1) + 2 * toolIndex++;
-    for (const st of sec.steps) st.week = Math.min(5, st.id.endsWith("-check") ? start + 2 : start);
+    const start = Math.min(5, 2 + toolIndex++);
+    for (const st of sec.steps) st.week = st.id.endsWith("-check") ? Math.min(5, Math.max(4, start + 2)) : start;
   }
   const weeks: PlanWeek[] = [];
   for (let w = 1; w <= 5; w++) {
     const steps = sections.flatMap((sec) =>
       sec.steps.filter((st) => st.week === w).map((st) => ({ sectionId: sec.id, stepId: st.id, title: st.title, minutes: st.minutes, tool: sec.tool?.name ?? null })),
     );
-    if (steps.length || w <= 4) weeks.push({ week: w, label: WEEK_LABEL[w]!, minutes: steps.reduce((n, st) => n + (st.minutes ?? 0), 0), steps });
+    if (steps.length || w <= 4) weeks.push({ week: w, label: PHASE_LABEL[w]!, minutes: steps.reduce((n, st) => n + (st.minutes ?? 0), 0), steps });
   }
-  // Drop empty weeks at the end of the 30 days (nothing to do yet is not a week to show).
+  // Drop empty phases at the start and end (nothing to do yet is not a phase to show).
   while (weeks.length && !weeks[weeks.length - 1]!.steps.length) weeks.pop();
+  while (weeks.length && !weeks[0]!.steps.length) weeks.shift();
   return weeks;
+}
+
+/** The order to set tools up in, and why, when there's more than one. */
+function orderNote(sections: PlanSection[]): string | null {
+  const tools = sections.filter((s) => s.tool);
+  if (tools.length < 2) return null;
+  const when = ["in days 2–7", "in week 2", "in weeks 3–4", "after day 30"];
+  const parts = tools.map((s, i) => `${s.tool!.name} ${when[Math.min(i, 3)]}`);
+  return `Set up one tool at a time: ${parts.join(", then ")}. ${tools[0]!.tool!.name} goes first because it's for your most important problem. Spacing them out lets you see which one is helping before you pay for the next.`;
 }
 
 /** Free money and training for this county (spec §5.7). Statewide ones first. */
@@ -252,10 +336,10 @@ export function buildPlan(input: PlanInput): Plan {
       sections.push({
         id: `later-${o.problemKey}`,
         heading: o.headline,
-        summary: "Decide later",
+        summary: "Free to start · no tool yet",
         problem: o.headline,
         tool: null,
-        steps: [{ id: `${o.problemKey}-first`, title: "Start without a tool", detail: o.fix.nextStep, minutes: null, link: null, why: null, week: 1 }],
+        steps: [{ id: `${o.problemKey}-first`, title: o.fix.nextStep.replace(/\.$/, ""), detail: "You can do this yourself. Pick a tool later if you still need one.", minutes: null, link: null, why: null, week: 1, who: "You" }],
       });
       continue;
     }
@@ -264,7 +348,28 @@ export function buildPlan(input: PlanInput): Plan {
       continue;
     }
     if (r.sample) notes.push(`${r.name} is a sample tool for the demo: you can't sign up for it.`);
-    sections.push(toolSection(o, r, currentTools));
+    sections.push(toolSection(o, r, currentTools, input.needsHelp ?? true));
+  }
+
+  // Everything else the owner told us (and problems from reviews): a free first step, or the tool they picked.
+  for (const x of input.extras ?? []) {
+    const r = choices[x.key] ? byId.get(choices[x.key]!) : undefined;
+    if (r && r.badge === "verified") {
+      const pseudo = { problemKey: x.key, headline: x.heading, impact: null } as unknown as Opportunity;
+      sections.push(toolSection(pseudo, r, currentTools, input.needsHelp ?? true));
+      continue;
+    }
+    if (!x.firstStep) continue;
+    sections.push({
+      id: `own-${x.key}`,
+      heading: x.heading,
+      summary: "Free to start",
+      problem: x.heading,
+      tool: null,
+      steps: [
+        { id: `${x.key}-first`, title: x.firstStep.replace(/\.$/, ""), detail: x.aiHow ? `Later, AI could help: ${x.aiHow}` : "You can do this yourself.", minutes: null, link: null, why: null, week: 2, who: "You" },
+      ],
+    });
   }
 
   const tools = sections.map((s) => s.tool && byId.get(s.tool.id)).filter((r): r is CatalogRecord => Boolean(r));
@@ -289,6 +394,7 @@ export function buildPlan(input: PlanInput): Plan {
     resources: resourcesFor(answer.localHelp?.county ?? null),
     resourcesChecked: resources.checked,
     notes,
+    order: orderNote(sections),
   };
 }
 

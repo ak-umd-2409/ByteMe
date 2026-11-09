@@ -4,8 +4,10 @@
  * plan and what's worth talking through. No hooks, so it renders on the server too.
  */
 import type { AdvisorView as View } from "@/lib/plan/share.ts";
+import { PHASE_LABEL } from "@/lib/plan/plan.ts";
 import s from "../start/start.module.css";
-import { FreeHelp, ReadyWords, Weeks } from "./parts.tsx";
+import { FreeHelp, ReadyWords } from "./parts.tsx";
+import { CostTable } from "./CostTable.tsx";
 
 const day = (iso: string) => new Date(iso).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric", timeZone: "UTC" });
 
@@ -110,7 +112,8 @@ export function AdvisorView({ view }: { view: View }) {
         </section>
       )}
 
-      <Weeks plan={view.plan} />
+      {view.costs && <CostTable costs={view.costs} />}
+
 
       <section className={s.card}>
         <div className={s.cardTop}>
@@ -130,7 +133,7 @@ export function AdvisorView({ view }: { view: View }) {
               </b>
               {sec.steps.map((st) => (
                 <span key={st.id}>
-                  Week {st.week > 4 ? "5+" : st.week} · {st.title}: {st.detail}
+                  {PHASE_LABEL[st.week] ?? "After day 30"} · {st.title}: {st.detail}{st.who ? ` (${st.who})` : ""}
                   {st.link && (
                     <>
                       {" "}

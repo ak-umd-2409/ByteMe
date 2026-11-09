@@ -1,0 +1,69 @@
+/* "What it costs and when it pays off" (CostPayback.tsx). Uses the tokens set in start.module.css. */
+.wrap { gap: 16px; }
+.totals { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.totals > div { background: var(--card-inner); border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; display: grid; gap: 2px; min-width: 0; }
+.totals small { font-size: 13px; color: var(--grey-fg); }
+.totals b { font-family: var(--display); font-weight: 400; font-size: 26px; font-variant-numeric: tabular-nums; }
+
+.tool { border-top: 1px solid var(--line); padding-top: 16px; display: grid; gap: 10px; min-width: 0; }
+.toolHead { display: grid; grid-template-columns: auto 1fr auto; gap: 10px; align-items: center; }
+.toolHead > div { display: grid; min-width: 0; }
+
+.facts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px 16px; margin: 0; }
+.facts > div { display: grid; gap: 1px; min-width: 0; }
+.facts dt { font-size: 13px; color: var(--grey-fg); }
+.facts dd { margin: 0; font-weight: 500; }
+
+.label { display: inline-block; font: 600 12px/1 var(--body); padding: 4px 8px; border-radius: 999px; border: 1px solid var(--line); }
+.l_verified { background: var(--ok-bg); color: var(--ok-fg); }
+.l_starting { background: var(--ok-bg); color: var(--ok-fg); }
+.l_estimated { background: var(--warn-bg); color: var(--warn-fg); }
+.l_quote, .l_unavailable { background: var(--grey-bg); color: var(--grey-fg); }
+
+.scen { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.scenCol { border: 1px solid var(--line); border-radius: 12px; padding: 10px 12px; display: grid; gap: 2px; min-width: 0; }
+.scenCol small { font-size: 13px; color: var(--grey-fg); }
+.scenCol b { font-family: var(--display); font-weight: 400; font-size: 22px; font-variant-numeric: tabular-nums; }
+.scenCol b small { font-family: var(--body); font-size: 13px; margin-left: 2px; }
+.mid { background: var(--card-inner); border-color: var(--accent); }
+.neg { color: var(--bad-fg); }
+.headline { margin: 0; }
+.breakEven { background: var(--card-inner); border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; display: grid; gap: 4px; }
+.ownField { font-size: 15px; }
+.extras { margin: 0; padding-left: 20px; display: grid; gap: 2px; font-size: 15px; }
+.steps { margin: 0; padding-left: 20px; display: grid; gap: 6px; }
+
+.unknown { background: var(--grey-bg); color: var(--grey-fg); border-radius: 10px; padding: 10px 14px; }
+.unknown p { margin: 0; }
+
+.knobs { gap: 14px; }
+.field { display: grid; gap: 6px; max-width: 520px; }
+.field input:not([type="range"]) { font: inherit; padding: 8px 10px; border: 1px solid var(--border-input); border-radius: 8px; width: 120px; background: var(--white); }
+.money { display: inline-flex; align-items: center; gap: 4px; }
+.field input[type="range"] { width: 100%; accent-color: var(--accent); }
+
+@media (max-width: 560px) {
+  .totals b { font-size: 20px; }
+  .scen { grid-template-columns: 1fr; }
+  .facts { grid-template-columns: 1fr; }
+}
+@media print {
+  .knobs, .field { display: none !important; }
+}
+
+/* Keep the financial summary in the same visual language as the plan. */
+.totals > div { padding: 20px 16px; gap: 8px; border-radius: 14px; }
+.totals b, .scenCol b { font-family: var(--body); font-weight: 600; letter-spacing: -.04em; }
+.totals small, .scenCol small { font-size: 12px; }
+.facts { gap: 16px; font-size: 14px; }
+.facts > div { gap: 5px; }
+.breakEven { padding: 20px; gap: 10px; border-radius: 14px; }
+.extras, .ownField { font-size: 14px; }
+.scenCol { padding: 20px; gap: 8px; }
+.field input:not([type="range"]) { min-height: 44px; border-radius: 10px; }
+@media (max-width: 560px) {
+  .totals { grid-template-columns: 1fr; }
+  .totals > div { grid-template-columns: 1fr auto; align-items: center; }
+  .toolHead { grid-template-columns: auto minmax(0, 1fr); }
+  .toolHead > :last-child:not(:nth-child(2)) { grid-column: 2; }
+}

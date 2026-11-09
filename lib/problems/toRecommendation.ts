@@ -69,7 +69,8 @@ export function evidenceSummary(signals: Signal[], max = 500): string {
 export function toRecommendationInput(
   profile: OnboardingProfile,
   discovery: DiscoveryResult,
-  opts: { includeHypotheses?: ProblemKey[] } = {},
+  /** allowNoProblems: return a request even with no problems yet, so the caller can add the owner's own. */
+  opts: { includeHypotheses?: ProblemKey[]; allowNoProblems?: boolean } = {},
 ): RecommendationInputResult {
   const missing = [...profile.missingForRecommendations.filter((f) => f !== "owner.techComfort")];
   const budget = profile.owner.monthlyBudget.value;
@@ -114,7 +115,7 @@ export function toRecommendationInput(
       evidence: evidenceSummary(card.evidence),
     });
   }
-  if (problems.length === 0)
+  if (problems.length === 0 && !opts.allowNoProblems)
     return { ok: false, missing: ["problems"], message: "No confirmed problems yet. Confirm one of the suggestions or tell us what takes up your week." };
 
   const county = (profile.business.address.value?.county ?? "").replace(/\s+County$/i, "").trim();

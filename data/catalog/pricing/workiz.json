@@ -1,0 +1,14 @@
+{
+  "id": "workiz",
+  "plan": "All plans",
+  "facts": [
+    {
+      "field": "freeTrialDays",
+      "answer": "7",
+      "quote": "Workiz offers a 7 days free trial",
+      "url": "https://www.workiz.com/pricing-plans/"
+    }
+  ],
+  "foundBy": "Claude (quoted from the vendor's pricing page)",
+  "foundAt": "2026-11-08"
+}

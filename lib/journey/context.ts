@@ -4,6 +4,9 @@ import { listingsSchema, profileSchema, reviewAnalysisSchema, websiteAnalysisSch
 import type { ListingsCheck } from "../business/listings.ts";
 import type { OnboardingProfile, ReviewAnalysis, WebsiteAnalysis } from "../business/types.ts";
 import { v } from "../shared/validate.ts";
+import type { ChallengeSuggestion } from "../challenges/match.ts";
+import type { ReviewText } from "../challenges/interpret.ts";
+import type { ReviewIssue } from "../challenges/reviewIssues.ts";
 import type { Answers } from "./types.ts";
 
 /**
@@ -25,6 +28,12 @@ export interface JourneyState {
   sources: { label: string; url: string | null }[];
   mode: { places: string; sampleData: boolean; capturedAt?: string | null };
   answers: Answers;
+  /** Review texts we read, for matching the owner's challenges to what customers say. */
+  reviewTexts?: ReviewText[];
+  /** Challenge suggestions made for this business at the start (kept so they stay stable). */
+  suggestions?: ChallengeSuggestion[];
+  /** Problems customers describe in reviews (AI-grouped, quotes checked), found at the start. */
+  reviewIssues?: ReviewIssue[];
 }
 
 export const MAX_CONTEXT_CHARS = 150_000;
@@ -41,6 +50,22 @@ const stateSchema = v.object(
     sources: v.array(v.object({ label: v.string({ max: 200 }), url: v.nullable(v.string({ max: 500 })) }), { max: 40 }),
     mode: v.object({ places: v.string({ max: 40 }), sampleData: v.boolean(), capturedAt: v.optional(v.nullable(v.string({ max: 40 }))) }),
     answers: v.record(v.unknown(), { maxKeys: 40 }),
+    reviewTexts: v.optional(
+      v.array(
+        v.object({ id: v.string({ max: 200 }), rating: v.nullable(v.number()), text: v.string({ max: 500 }), where: v.string({ max: 80 }), author: v.nullable(v.string({ max: 200 })), url: v.nullable(v.string({ max: 800 })) }),
+        { max: 25 },
+      ),
+    ),
+    suggestions: v.optional(
+      v.array(
+        v.object(
+          { id: v.string({ max: 40 }), text: v.string({ max: 120 }), why: v.string({ max: 200 }), source: v.string({ max: 20 }), keywords: v.array(v.string({ max: 40 }), { max: 10 }) },
+          { allowUnknown: true },
+        ),
+        { max: 16 },
+      ),
+    ),
+    reviewIssues: v.optional(v.array(v.object({ id: v.string({ max: 20 }), title: v.string({ max: 120 }), whatsHappening: v.string({ max: 300 }) }, { allowUnknown: true }), { max: 6 })),
   },
   { allowUnknown: true },
 );

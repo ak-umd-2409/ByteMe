@@ -1,0 +1,32 @@
+{
+  "id": "microsoft-copilot",
+  "plan": "Microsoft 365 Copilot Business (added to a Microsoft 365 plan you already have)",
+  "facts": [
+    {
+      "field": "annualBilled",
+      "answer": "18",
+      "quote": "Originally starting from $21.00 now starting from $18.00 $21.00 $18.00 user/month, paid yearly",
+      "url": "https://www.microsoft.com/en-us/copilot/pricing/business"
+    },
+    {
+      "field": "monthlyBilled",
+      "answer": "25.20",
+      "quote": "$25.20 user/month Monthly subscription",
+      "url": "https://www.microsoft.com/en-us/copilot/pricing/business"
+    },
+    {
+      "field": "perUser",
+      "answer": "yes",
+      "quote": "$25.20 user/month Monthly subscription",
+      "url": "https://www.microsoft.com/en-us/copilot/pricing/business"
+    },
+    {
+      "field": "extraCosts",
+      "answer": "Usage-based billing for select advanced AI features",
+      "quote": "Annual subscription—auto renews. Usage-based billing for select advanced AI features.",
+      "url": "https://www.microsoft.com/en-us/copilot/pricing/business"
+    }
+  ],
+  "foundBy": "Claude (quoted from the vendor's pricing page)",
+  "foundAt": "2026-11-08"
+}

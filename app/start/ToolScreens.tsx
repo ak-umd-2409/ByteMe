@@ -13,6 +13,30 @@ import type { CatalogRecord } from "@/lib/catalog/types.ts";
 import type { BusinessProfile, Recommendation, RecommendationResult, ToolChoice } from "@/lib/recommend/types.ts";
 import s from "./start.module.css";
 import t from "./tools.module.css";
+import { GUIDES } from "@/lib/advisor/knowledge.ts";
+import { PRICE_LABEL, priceExtras, priceOf } from "@/lib/plan/roi.ts";
+
+/** One line under a tool's price: what kind of price it is, where it's from, when we checked, and what we couldn't confirm. */
+export function PriceLine({ r }: { r: CatalogRecord | undefined }) {
+  if (!r) return null;
+  const p = priceOf(r);
+  return (
+    <span className={s.small}>
+      <b>{PRICE_LABEL[p.label]}</b>
+      {p.plan ? ` · ${p.plan}` : ""}
+      {p.billing === "yearly" ? " · needs a yearly contract" : p.billing === "monthly" ? " · cancel any month" : ""}
+      {" · "}
+      {p.sourceUrl ? (
+        <a href={p.sourceUrl} target="_blank" rel="noreferrer">source</a>
+      ) : (
+        "no source"
+      )}
+      {`, checked ${p.checked}.`}
+      {priceExtras(p).length > 0 && ` ${priceExtras(p).join(" · ")}.`}
+      {p.notConfirmed.length > 0 && ` Not confirmed: ${p.notConfirmed.join(", ")}.`}
+    </span>
+  );
+}
 
 const cx = (...names: (string | false | null | undefined)[]) => names.filter(Boolean).join(" ");
 const usd = (n: number) => `$${Math.round(n).toLocaleString("en-US")}`;
@@ -37,13 +61,24 @@ export function SampleTag() {
 }
 
 /** The same deterministic 0–100 score used to rank this tool, with its five parts on hover. */
+/** Fit Score as a ring that fills to the score: green for a strong fit, amber for okay, red for weak. */
 export function FitScoreBadge({ choice, compact = false }: { choice: ToolChoice; compact?: boolean }) {
   const { total, parts } = choice.score;
-  const detail = `Fit Score ${total}/100: problem ${parts.problem}/35, current tools ${parts.integration}/25, budget ${parts.budget}/20, setup ${parts.setup}/10, reviews ${parts.reviews}/10.`;
+  const n = Math.round(total);
+  const level = n >= 70 ? "high" : n >= 50 ? "mid" : "low";
+  const word = level === "high" ? "Strong fit" : level === "mid" ? "Okay fit" : "Weak fit";
+  const detail = `${word}: ${n} out of 100. Problem ${parts.problem}/35, works with your tools ${parts.integration}/25, budget ${parts.budget}/20, setup ${parts.setup}/10, reviews ${parts.reviews}/10.`;
   return (
-    <span className={cx(t.fitScore, compact && t.fitScoreCompact)} title={detail} aria-label={detail}>
-      <b>{total}</b>
-      <small>{compact ? "fit" : "Fit Score"}</small>
+    <span className={cx(t.fit, compact && t.fitCompact, t[`fit_${level}`])} title={detail} aria-label={detail}>
+      <span className={t.fitRing} style={{ ["--p" as string]: `${n}` } as React.CSSProperties}>
+        <b>{n}</b>
+      </span>
+      {!compact && (
+        <span className={t.fitText}>
+          <b>{word}</b>
+          <small>Fit Score</small>
+        </span>
+      )}
     </span>
   );
 }
@@ -120,8 +155,11 @@ function setupLine(r: CatalogRecord | undefined): string {
   return `Setup about ${r.setupMinutes} min${who ? `, ${who}` : ""}`;
 }
 
+/** Tools the owner chose for their plan: Part 4 problem id → tool id ("kit-<tool>" when a kit tool fits no listed problem). */
+export type Chosen = Record<string, string>;
+
 export function WaysToFix({
-  recs, biz, catalog, picks, togglePick, openTool, openCompare, back,
+  recs, biz, catalog, picks, togglePick, openTool, openCompare, back, chosen = {}, onChosen,
 }: {
   recs: RecommendationResult;
   biz: Biz;
@@ -131,6 +169,8 @@ export function WaysToFix({
   openTool: (id: string) => void;
   openCompare: () => void;
   back: () => void;
+  chosen?: Chosen;
+  onChosen?: (next: Chosen) => void;
 }) {
   const [tab, setTab] = useState(0);
   const byId = new Map(catalog.map((r) => [r.id, r]));
@@ -147,6 +187,23 @@ export function WaysToFix({
     .filter((o) => o.kind !== "starter-kit")
     .filter((o, i, all) => all.findIndex((x) => x.kind !== "starter-kit" && x.choices[0]?.tool.id === o.choices[0]?.tool.id) === i);
   const worksWith = (c: ToolChoice) => Object.keys(c.tool.integrations).find((k) => biz.currentTools.some((x) => same(x, k)));
+  // Which of the owner's problems a kit tool covers; a tool that fits none gets its own slot.
+  const slotFor = (c: ToolChoice) => recs.problems.find((p) => c.tool.useCases.includes(p.problem.useCase))?.problem.id ?? `kit-${c.tool.id}`;
+  const kitChosen = (kit: { choices: ToolChoice[] }) => kit.choices.every((c) => chosen[slotFor(c)] === c.tool.id);
+  const chooseKit = (kit: { choices: ToolChoice[] }) => {
+    if (!onChosen) return;
+    const next = { ...chosen };
+    if (kitChosen(kit)) for (const c of kit.choices) delete next[slotFor(c)];
+    else for (const c of kit.choices) next[slotFor(c)] = c.tool.id;
+    onChosen(next);
+  };
+  const chooseTool = (problemId: string, toolId: string) => {
+    if (!onChosen) return;
+    const next = { ...chosen };
+    if (next[problemId] === toolId) delete next[problemId];
+    else next[problemId] = toolId;
+    onChosen(next);
+  };
 
   // "Why not these?": the engine's exclusions plus blocked catalog tools for this problem.
   const left = new Map<string, { name: string; badge: CatalogRecord["badge"]; reason: string }>();
@@ -167,7 +224,7 @@ export function WaysToFix({
         </p>
       )}
       <p className={s.small} style={{ color: "var(--ink)", marginTop: -8 }}>
-        You sign up with each company yourself: MainStreet AI doesn't connect to your accounts. Only ✓ Verified tools, ranked against {biz.budgetAssumed ? `${usd(biz.monthlyBudget)} a month, the budget we assumed because you skipped that question,` : `your ${usd(biz.monthlyBudget)} monthly budget`}. Prices, fit, and setup cautions are shown plainly.
+        You sign up with each company yourself: MainStreet AI doesn't connect to your accounts. Only ✓ Verified tools, ranked against {biz.budgetAssumed ? `${usd(biz.monthlyBudget)} a month, the budget we assumed because you skipped that question` : `your ${usd(biz.monthlyBudget)} monthly budget`}. Choose a starter kit, or one tool per problem, then make your plan.
       </p>
 
       {kits.length > 0 && (
@@ -207,6 +264,13 @@ export function WaysToFix({
                   ))}
                 </div>
                 <p className={t.whyPick}>{kit.description} {kit.note}</p>
+                {onChosen && (
+                  <div className={t.actions}>
+                    <button type="button" className={cx(s.btn, kitChosen(kit) ? s.secondary : s.primary)} aria-pressed={kitChosen(kit)} onClick={() => chooseKit(kit)}>
+                      {kitChosen(kit) ? "✓ Kit chosen · remove" : `Choose this kit (${kit.choices.length} tools)`}
+                    </button>
+                  </div>
+                )}
               </article>
             );
           })}
@@ -218,7 +282,7 @@ export function WaysToFix({
         <div className={s.row} role="group" aria-label="Problem">
           {recs.problems.map((p, i) => (
             <button key={p.problem.id} type="button" className={s.chipsel} aria-pressed={i === tab} onClick={() => setTab(i)}>
-              {i === tab ? "✓ " : ""}{p.problem.title}
+              {i === tab ? "✓ " : ""}{p.problem.title}{chosen[p.problem.id] ? ` · ${catalog.find((r) => r.id === chosen[p.problem.id])?.name ?? "chosen"}` : ""}
             </button>
           ))}
         </div>
@@ -230,8 +294,9 @@ export function WaysToFix({
             const c = o.choices[0];
             const r = byId.get(c.tool.id);
             const picked = picks.includes(c.tool.id);
+            const isChosen = Boolean(problem) && chosen[problem!.problem.id] === c.tool.id;
             return (
-              <article className={cx(s.card, t.recommendationCard)} key={o.kind + c.tool.id}>
+              <article className={cx(s.card, t.recommendationCard, isChosen && t.chosenCard)} key={o.kind + c.tool.id}>
                 <div className={s.cardTop}>
                   <span className={t.typetag}>{KIND_LABEL[o.kind]}</span>
                   <div className={s.cardHead}>
@@ -244,6 +309,7 @@ export function WaysToFix({
                     {r?.sample && <SampleTag />}
                   </div>
                 </div>
+                <PriceLine r={r} />
                 <p className={t.whyPick}>{plainWhy(c.why, r)}</p>
                 {c.warnings.map((warning) => (
                   <p className={s.banner} key={warning}><b>Before you switch this on:</b> {warning}</p>
@@ -257,25 +323,48 @@ export function WaysToFix({
                 {setupLine(r) && <span className={s.small}>{setupLine(r)}</span>}
                 <OfficialLink r={r} />
                 <div className={t.actions}>
-                  <button type="button" className={cx(s.btn, s.primary)} onClick={() => openTool(c.tool.id)}>See details</button>
-                  <button type="button" className={cx(s.btn, s.secondary)} aria-pressed={picked} onClick={() => togglePick(c.tool.id)}>
-                    {picked ? "✓ Comparing" : "+ Compare"}
-                  </button>
+                  {onChosen && problem ? (
+                    <button type="button" className={cx(s.btn, isChosen ? s.secondary : s.primary)} aria-pressed={isChosen} onClick={() => chooseTool(problem.problem.id, c.tool.id)}>
+                      {isChosen ? "✓ Chosen · remove" : "Choose this tool"}
+                    </button>
+                  ) : null}
+                  <button type="button" className={cx(s.btn, s.secondary)} onClick={() => openTool(c.tool.id)}>See details</button>
                 </div>
+                <button type="button" className={s.link} style={{ justifySelf: "start", paddingLeft: 0 }} aria-pressed={picked} onClick={() => togglePick(c.tool.id)}>
+                  {picked ? "✓ In compare" : "+ Compare"}
+                </button>
               </article>
             );
           })}
         </div>
       ) : (
         <article className={cx(s.card, t.recommendationCard)} style={{ maxWidth: 760 }}>
-          <div className={s.cardTop}>
-            <span className={t.typetag}>No checked tool yet</span>
-            <h3 className={s.h3}>We won't suggest a tool we haven't checked</h3>
-          </div>
-          <p>None of the tools we know for &ldquo;{problem?.problem.title}&rdquo; has passed our safety check yet. The first step on the previous screen works without a tool, and a free advisor can help you choose one.</p>
-          <div className={t.actions}>
-            <a className={cx(s.btn, s.primary)} href={biz.help?.url ?? SBDC_URL} target="_blank" rel="noreferrer">Get free help from the Maryland SBDC</a>
-          </div>
+          {(() => {
+            const guide = problem ? GUIDES[problem.problem.useCase] : null;
+            return (
+              <>
+                <div className={s.cardTop}>
+                  <span className={t.typetag}>No tool needed to start</span>
+                  <h3 className={s.h3}>You can do this yourself</h3>
+                </div>
+                {guide ? (
+                  <p>
+                    <b>{guide.freeFirst.title}.</b> {guide.freeFirst.detail}
+                  </p>
+                ) : (
+                  <p>Start with the free step on the previous screen.</p>
+                )}
+                <span className={s.small}>We haven&apos;t checked a tool for &ldquo;{problem?.problem.title.toLowerCase()}&rdquo; yet, so we won&apos;t suggest one.</span>
+                {biz.needsHelp && (
+                  <div className={t.actions}>
+                    <a className={cx(s.btn, s.secondary)} href={biz.help?.url ?? SBDC_URL} target="_blank" rel="noreferrer">
+                      Find free help setting this up
+                    </a>
+                  </div>
+                )}
+              </>
+            );
+          })()}
         </article>
       )}
 
@@ -466,7 +555,7 @@ export function ToolDetail({
             ))}
             <div><dt>Contract</dt><dd>{r.pricing.contract === "monthly" ? "None, monthly" : r.pricing.contract === "annual" ? "Yearly" : "Not public"}</dd></div>
           </dl>
-          <p className={s.small}>Prices as of {r.pricing.asOf}.</p>
+          <PriceLine r={r} />
         </article>
 
         {help}

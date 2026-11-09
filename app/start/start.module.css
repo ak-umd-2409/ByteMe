@@ -24,7 +24,7 @@
   --line: #e5ded4;
   --border-input: #aaa095;
   --input-edge: #5e4f3b;
-  --ok-fg: #2f5233; --ok-bg: #e4ebdf;
+  --ok-fg: #5a3a22; --ok-bg: #f1e4d3;
   --warn-fg: #7a4b0c; --warn-bg: #f6e7cc;
   --grey-fg: #4a4f4a; --grey-bg: #e7e8e2;
   --bad-fg: #b3261e; --bad-bg: #fde8e6;
@@ -169,7 +169,7 @@
 @media (prefers-reduced-motion: no-preference) { .loading .ck { animation: spin 0.8s linear infinite; } }
 @keyframes spin { to { transform: rotate(360deg); } }
 .done .ck { border: none; background: var(--ok-fg); position: relative; }
-.done .ck::after { content: "✓"; position: absolute; inset: 0; display: grid; place-items: center; color: #fff; font-weight: 700; font-size: 15px; }
+.done .ck::after { content: "✓"; position: absolute; inset: 0; display: grid; place-items: center; color: var(--on-accent); font-weight: 700; font-size: 15px; }
 
 /* Screen 3 */
 .factlist { margin: 0; display: grid; }
@@ -284,6 +284,8 @@
 .stepper .dot { display: none; }
 .stepper li.stepNow { color: var(--ink); font-weight: 700; }
 .stepper li.stepDone { color: var(--ink); }
+.stepper .stepLink { background: none; border: 0; padding: 0; font: inherit; color: var(--accent); text-decoration: underline; text-underline-offset: 3px; cursor: pointer; min-height: 24px; }
+.stepper .stepLink:hover { color: var(--accent-hover); }
 @media (max-width: 600px) {
   .stepper li:not(.stepNow) .stepLabel { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
 }
@@ -345,9 +347,9 @@
 .checkRow:first-of-type { border-top: 0; }
 .inlineForm { display: flex; gap: 10px; flex-wrap: wrap; }
 .inlineForm .input { flex: 1 1 220px; width: auto; }
-.ownerProblemCard { border-color: #9bc7aa; background: #f2faf4; }
+.ownerProblemCard { }
 .ownerProblemForm { display: grid; gap: 10px; }
-.ownerProblemSaved { margin: 0; padding: 10px 12px; border-radius: 10px; background: #e1f1e5; color: var(--ink); }
+.ownerProblemSaved { margin: 0; padding: 10px 12px; border-radius: 10px; background: var(--card-inner); color: var(--ink); }
 
 /* Your plan (step 6) */
 .planList { list-style: none; margin: 0; padding: 0; display: grid; gap: 16px; }
@@ -462,6 +464,8 @@
 @media (max-width: 600px) {
   .stepper li { display: grid; justify-items: center; align-content: start; gap: 6px; }
   .stepper .stepLabel { font-size: 9px; white-space: nowrap; }
+  .stepper li:not(.stepNow) .stepLabel { position: static; width: auto; height: auto; overflow: visible; clip: auto; }
+  .stepper .stepLink { min-height: 44px; margin: -14px 0; display: inline-flex; align-items: center; }
 }
 @media print {
   .app { background: #fff; }
@@ -473,3 +477,52 @@
   .cardTop { background: #eee !important; }
   .app a::after { content: " (" attr(href) ")"; font-size: 12px; color: #444; word-break: break-all; }
 }
+
+/* ================================================================
+ * Listen first: challenges, suggestions, findings
+ * ================================================================ */
+.challenge { display: grid; gap: 16px; }
+.challengeBox { min-height: 132px; font-size: 18px; padding: 14px 16px; }
+.suggestList, .picked { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.suggest { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: stretch; background: var(--white); border: 1.5px solid var(--line); border-radius: 16px; overflow: hidden; }
+.suggest:hover { border-color: var(--ink); }
+.suggestAdd { display: flex; align-items: center; gap: 12px; padding: 10px 14px; min-height: 56px; background: none; border: 0; text-align: left; font: inherit; color: var(--ink); cursor: pointer; }
+.suggestPlus { flex: none; width: 26px; height: 26px; border-radius: 50%; background: var(--card-inner); color: var(--accent); display: grid; place-items: center; font-weight: 700; }
+.suggestAdd:hover .suggestPlus { background: var(--accent); color: var(--on-accent); }
+.suggestX { width: 48px; border: 0; border-left: 1px solid var(--line); background: none; color: var(--text-2); cursor: pointer; font-size: 14px; }
+.suggestX:hover { background: var(--card-inner); color: var(--ink); }
+.picked li { display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 8px 8px 8px 14px; background: #f8ece9; border: 1px solid var(--accent); border-radius: 999px; font-weight: 600; }
+.pickedX { width: 32px; height: 32px; border-radius: 50%; border: 0; background: none; color: var(--accent); cursor: pointer; }
+.pickedX:hover { background: var(--white); }
+
+.finding { align-content: start; gap: 10px; }
+.findingSoft { background: transparent; border-style: dashed; box-shadow: none; }
+.findingTop { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; }
+.ownerWords { font-family: var(--display); font-style: italic; font-size: 17px; color: var(--text-2); border-left: 2px solid var(--accent); padding-left: 10px; }
+.connection { background: var(--ok-bg); color: var(--ok-fg); border-radius: 10px; padding: 8px 12px; font-size: 15px; font-weight: 600; }
+.aiLine { font-size: 15px; color: var(--text-2); }
+.aiLine b { color: var(--accent); }
+.aiNo b { color: var(--ok-fg); }
+.findingMore { justify-self: start; padding-left: 0; }
+.strengths { gap: 10px; }
+.strengthList { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.strengthList li::before { content: "✓ "; color: var(--ok-fg); font-weight: 700; }
+.addMore { gap: 10px; }
+
+/* Plan: real checkboxes */
+.tick2 { flex: none; width: 22px; height: 22px; margin: 3px 0 0; accent-color: var(--accent); cursor: pointer; }
+.stepDoneRow .optionText b { text-decoration: line-through; text-decoration-color: var(--text-2); color: var(--text-2); }
+
+/* Challenges: type and add, one at a time */
+.addRow { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 10px; align-items: end; }
+.addRow .challengeBox { min-height: 64px; }
+@media (max-width: 560px) { .addRow { grid-template-columns: minmax(0, 1fr); } }
+
+/* Concise finding cards; details hold the rest */
+.findingOn { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
+.connectionSmall { font-size: 14px; font-weight: 600; color: var(--ok-fg); }
+.aiTag { justify-self: start; font: 600 13px/1 var(--body); color: var(--accent); background: var(--card-inner); border-radius: 999px; padding: 6px 10px; }
+.aiTagNo { color: var(--ok-fg); }
+.findingFoot { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; margin-top: auto; padding-top: 10px; border-top: 1px solid var(--line); }
+.toolsPick { display: inline-flex; align-items: center; gap: 8px; font-weight: 600; font-size: 15px; cursor: pointer; min-height: 40px; }
+.toolsPick input { width: 20px; height: 20px; accent-color: var(--accent); }

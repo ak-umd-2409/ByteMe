@@ -12,6 +12,7 @@ import type { BusinessCard, JourneyAnswerResponse } from "../journey/types.ts";
 import type { ProblemKey } from "../problems/types.ts";
 import { readyContent, type ReadyText } from "./content.ts";
 import { buildPlan, type Plan } from "./plan.ts";
+import { costSummary } from "./roi.ts";
 
 /** What a share link stores. Small on purpose: the plan is rebuilt from it. */
 export interface SavedShare {
@@ -40,6 +41,8 @@ export interface AdvisorView {
   content: ReadyText[];
   /** Short, factual prompts for the meeting: open decisions, rules, unknowns. */
   talkAbout: string[];
+  /** The chosen tools' labelled prices and totals. No payback: that rests on the owner's own numbers. */
+  costs: ReturnType<typeof costSummary>;
 }
 
 export const SHARE_DAYS = 30;
@@ -80,6 +83,7 @@ export function advisorView(answer: JourneyAnswerResponse, saved: SavedShare, ca
     plan,
     content: readyContent(b, plan, catalog),
     talkAbout: [...new Set(talkAbout)],
+    costs: costSummary(plan, catalog),
   };
 }
 

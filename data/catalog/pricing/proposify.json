@@ -1,0 +1,32 @@
+{
+  "id": "proposify",
+  "plan": "Build",
+  "facts": [
+    {
+      "field": "monthlyBilled",
+      "answer": "49",
+      "quote": "$49/user when billed monthly.",
+      "url": "https://www.proposify.com/pricing"
+    },
+    {
+      "field": "freeTrialDays",
+      "answer": "14",
+      "quote": "Start free trial 14 day trial, no card needed.",
+      "url": "https://www.proposify.com/pricing"
+    },
+    {
+      "field": "perUser",
+      "answer": "yes",
+      "quote": "$49/user when billed monthly.",
+      "url": "https://www.proposify.com/pricing"
+    },
+    {
+      "field": "extraCosts",
+      "answer": "Custom template design $1,500.",
+      "quote": "14 day trial, no card needed. Custom template design $1,500.",
+      "url": "https://www.proposify.com/pricing"
+    }
+  ],
+  "foundBy": "Claude (quoted from the vendor's pricing page)",
+  "foundAt": "2026-11-08"
+}

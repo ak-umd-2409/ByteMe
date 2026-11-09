@@ -316,7 +316,7 @@ describe("journey context: remembers answers safely", () => {
 
   it("reports answers it can't use instead of failing", async () => {
     const s = await start(FREDERICK);
-    const a = await answer(s.context, { budget: "a million", team_size: 4, "impact.average_job_value": -5, tools: ["Notion"] });
+    const a = await answer(s.context, { budget: "a million", team_size: 4, "impact.average_job_value": -5, tools: ["x".repeat(50)] }); // typed tool names are fine; over 40 characters is not
     const ids = a.ignored.map((i) => i.questionId).sort();
     assert.deepEqual(ids, ["budget", "impact.average_job_value", "team_size", "tools"]);
     assert.ok(a.assumptions.some((x) => x.questionId === "budget"));

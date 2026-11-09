@@ -27,7 +27,9 @@ import { PlanScreen } from "./PlanScreen.tsx";
 import { AdvisorPanel } from "../advisor/AdvisorPanel.tsx";
 import { SiteHeader, siteStyles as site } from "../ui/Site.tsx";
 import { saveResults } from "../advisor/saved.ts";
-import { Compare, ToolDetail, WaysToFix, type Biz } from "./ToolScreens.tsx";
+import { Compare, ToolDetail, WaysToFix, type Biz, type Chosen } from "./ToolScreens.tsx";
+import { ChallengeStep, FindingsView } from "./Findings.tsx";
+import type { Finding } from "@/lib/journey/types.ts";
 
 export interface LookupEntry {
   name: string;
@@ -47,25 +49,88 @@ const message = (e: unknown) => (e instanceof ApiError ? e.message : "Something 
 const plural = (n: number, one: string, many = `${one}s`) => `${n} ${n === 1 ? one : many}`;
 
 /** The questions asked one at a time, in this order (only those the backend asks for this business). */
-const ASK_ORDER = ["problems", "call_recording", "health_data", "budget", "setup", "goals"];
+/** Listen first ("challenges"), then only what tools need. "problems" and "goals" are no longer asked. */
+const ASK_ORDER = ["challenges", "call_recording", "health_data", "budget", "setup"];
 
 const STEPS = ["Find", "Check", "Questions", "Results", "Tools", "Plan"];
 
+/**
+ * Set by Journey on every render: which steps the owner can jump to and how. Lets the progress
+ * bar work as navigation (back to any step, or forward to one they've already reached with
+ * up-to-date results) without threading props through every screen.
+ */
+const stepNav: { current: { can: (k: number) => boolean; go: (k: number) => void } | null } = { current: null };
+
 function Steps({ n }: { n: number }) {
+  const nav = stepNav.current;
   return (
     <nav className={s.stepper} aria-label="Progress">
       <ol>
         {STEPS.map((label, i) => {
           const k = i + 1;
+          const can = k !== n && Boolean(nav?.can(k));
           return (
             <li key={label} className={k < n ? s.stepDone : k === n ? s.stepNow : undefined} aria-current={k === n ? "step" : undefined}>
               <span className={s.dot}>{k < n ? "✓" : k}</span>
-              <span className={s.stepLabel}>{label}</span>
+              {can ? (
+                <button type="button" className={cx(s.stepLabel, s.stepLink)} onClick={() => nav!.go(k)} title={`Go to ${label}`}>
+                  {label}
+                </button>
+              ) : (
+                <span className={s.stepLabel}>{label}</span>
+              )}
             </li>
           );
         })}
       </ol>
     </nav>
+  );
+}
+
+/** Tick software from the list, or type in any other (shown as its own ticked chip). */
+function ToolsPicker({ options, value, onChange }: { options: string[]; value: string[]; onChange: (v: string[]) => void }) {
+  const [draft, setDraft] = useState("");
+  const listed = options.filter((o) => o !== "none");
+  const custom = value.filter((v) => v !== "none" && !listed.includes(v));
+  const toggle = (name: string) => {
+    if (name === "none") return onChange(value.includes("none") ? [] : ["none"]);
+    const rest = value.filter((x) => x !== "none");
+    onChange(rest.includes(name) ? rest.filter((x) => x !== name) : [...rest, name]);
+  };
+  const add = () => {
+    const name = draft.trim().slice(0, 40);
+    if (!name) return;
+    if (!value.some((v) => v.toLowerCase() === name.toLowerCase())) onChange([...value.filter((x) => x !== "none"), name]);
+    setDraft("");
+  };
+  return (
+    <div className={s.col} style={{ gap: 10 }}>
+      <div className={s.row}>
+        {[...listed, ...custom].map((name) => (
+          <Chip key={name} pressed={value.includes(name)} onClick={() => toggle(name)}>
+            {name}
+          </Chip>
+        ))}
+        <Chip pressed={value.includes("none")} onClick={() => toggle("none")}>
+          None of these
+        </Chip>
+      </div>
+      <form
+        className={s.inlineForm}
+        onSubmit={(e) => {
+          e.preventDefault();
+          add();
+        }}
+      >
+        <label htmlFor="add-tool" className={s.sr}>
+          Add another tool
+        </label>
+        <input id="add-tool" className={s.input} value={draft} onChange={(e) => setDraft(e.target.value)} placeholder="Add another, e.g. Housecall Pro" maxLength={40} />
+        <button type="submit" className={cx(s.btn, s.secondary)} disabled={!draft.trim()}>
+          + Add
+        </button>
+      </form>
+    </div>
   );
 }
 
@@ -164,6 +229,7 @@ export function Journey({ lookup, catalog, watchCount = 0, entry }: { lookup: Lo
   const [manual, setManual] = useState(false);
   const [manualSite, setManualSite] = useState("");
   const [pasted, setPasted] = useState("");
+  const lastRead = useRef<{ placeId: string; label: string } | { manual: true } | null>(null);
   const [readingName, setReadingName] = useState("");
 
   // Journey
@@ -184,6 +250,12 @@ export function Journey({ lookup, catalog, watchCount = 0, entry }: { lookup: Lo
   const [context, setContext] = useState<string | null>(null);
   const [answers, setAnswers] = useState<Answers>({});
   // Read by delayed callbacks (auto-advance), so they always see the latest answers.
+  /** Which problems the owner wants tools for (Part 4 problem ids). Starts with all of them. */
+  const [toolPick, setToolPick] = useState<Set<string> | null>(null);
+  const [draftLen, setDraftLen] = useState(0);
+  /** Tools the owner chose on the tools screen (problem id → tool id), carried into the plan. */
+  const [chosen, setChosen] = useState<Chosen>({});
+  const draftRef = useRef("");
   const answersRef = useRef<Answers>(answers);
   answersRef.current = answers;
   const [busy, setBusy] = useState(false);
@@ -206,6 +278,8 @@ export function Journey({ lookup, catalog, watchCount = 0, entry }: { lookup: Lo
 
   // Tools
   const [recs, setRecs] = useState<RecommendationResult | null>(null);
+  /** The journey context the tools were found for; when answers change, the tools are out of date. */
+  const [recsFor, setRecsFor] = useState<string | null>(null);
   const [toolId, setToolId] = useState<string | null>(null);
   const [picks, setPicks] = useState<string[]>([]);
   const [cameFrom, setCameFrom] = useState<Screen>("tools");
@@ -237,8 +311,64 @@ export function Journey({ lookup, catalog, watchCount = 0, entry }: { lookup: Lo
     setScreen(next);
   };
 
+  // ---- Keep the owner's place in this tab, so a refresh or a step back never loses their work.
+  // sessionStorage only: it stays in this browser tab and is gone when the tab closes.
+  const SAVE_KEY = "mainstreet.journey.v1";
+  const restored = useRef(false);
+  useEffect(() => {
+    if (restored.current) return;
+    restored.current = true;
+    if (entry?.query || entry?.example) return;
+    try {
+      const raw = sessionStorage.getItem(SAVE_KEY);
+      if (!raw) return;
+      const d = JSON.parse(raw) as Partial<{
+        screen: Screen; start: JourneyStartResponse; result: JourneyAnswerResponse | null; context: string | null; answers: Answers;
+        toolPick: string[] | null; chosen: Chosen; recs: RecommendationResult | null; recsFor: string | null; qIndex: number; toolId: string | null; picks: string[];
+      }>;
+      if (!d.start || !d.screen || d.screen === "loading") return;
+      setStart(d.start);
+      setResult(d.result ?? null);
+      setContext(d.context ?? null);
+      setAnswers(d.answers ?? {});
+      setToolPick(d.toolPick ? new Set(d.toolPick) : null);
+      setChosen(d.chosen ?? {});
+      setRecs(d.recs ?? null);
+      setRecsFor(d.recsFor ?? null);
+      setQIndex(d.qIndex ?? 0);
+      setToolId(d.toolId ?? null);
+      setPicks(d.picks ?? []);
+      setScreen(d.screen);
+    } catch {
+      /* nothing saved, or storage blocked: start fresh */
+    }
+  }, [entry]);
+  useEffect(() => {
+    if (!restored.current) return;
+    try {
+      if (!start || screen === "landing" || screen === "find" || screen === "loading") return;
+      sessionStorage.setItem(SAVE_KEY, JSON.stringify({ screen, start, result, context, answers, toolPick: toolPick ? [...toolPick] : null, chosen, recs, recsFor, qIndex, toolId, picks }));
+    } catch {
+      /* storage full or blocked: the journey still works, it just won't survive a refresh */
+    }
+  }, [screen, start, result, context, answers, toolPick, chosen, recs, recsFor, qIndex, toolId, picks]);
+
+  const recsFresh = Boolean(recs && result && recsFor === result.context);
+  stepNav.current = {
+    can: (k) => (k === 1 ? true : k === 2 || k === 3 ? Boolean(start) : k === 4 ? Boolean(result) : k === 5 ? recsFresh : k === 6 ? Boolean(result) && (recsFresh || !recs) : false),
+    go: (k) => {
+      if (k === 3) setQIndex(0);
+      go((["", "find", "check", "ask", "problems", "tools", "plan"] as const)[k] as Screen);
+    },
+  };
+
   const startOver = () => {
     abort.current?.abort();
+    try {
+      sessionStorage.removeItem("mainstreet.journey.v1");
+    } catch {
+      /* ignore */
+    }
     setStart(null);
     setResult(null);
     setContext(null);
@@ -323,6 +453,7 @@ export function Journey({ lookup, catalog, watchCount = 0, entry }: { lookup: Lo
 
   /** Read a business: a search result (placeId) or one typed in by hand. */
   const read = async (target: { placeId: string; label: string } | { manual: true }) => {
+    lastRead.current = target;
     const label = "placeId" in target ? target.label : name.trim();
     if (!label) return setError("Type your business name first.");
     setReadingName(label);
@@ -370,7 +501,8 @@ export function Journey({ lookup, catalog, watchCount = 0, entry }: { lookup: Lo
     const ids = new Set(start.questions.map((q) => q.id));
     const now = answersRef.current;
     const patch: Answers = {};
-    for (const [k, v] of Object.entries(now)) if (ids.has(k) || k.startsWith("edit.")) patch[k] = v;
+    for (const [k, v] of Object.entries(now)) if (ids.has(k) || k.startsWith("edit.") || k === "challenge_picks") patch[k] = v;
+    if (!("challenge_picks" in now)) patch.challenge_picks = null;
     // Questions the owner skipped are cleared, so the server records them as skipped.
     for (const id of ASK_ORDER) if (ids.has(id) && !(id in now)) patch[id] = null;
     const res = await send(patch, context ?? start.context);
@@ -379,13 +511,27 @@ export function Journey({ lookup, catalog, watchCount = 0, entry }: { lookup: Lo
 
   const showTools = async () => {
     if (!result?.recommendation.ready) return;
+    const request = result.recommendation.request;
+    const chosen = toolPick ? request.problems.filter((p) => toolPick.has(p.id)) : request.problems;
+    if (!chosen.length) return setError("Tick at least one problem to find tools for.");
     setBusy(true);
     setError(null);
     try {
-      const res = await fetch("/api/recommend", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(result.recommendation.request) });
+      const res = await fetch("/api/recommend", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ ...request, problems: chosen }) });
       const body = await res.json();
       if (!res.ok) throw new Error(typeof body?.error === "string" ? body.error : "We couldn't load tools right now.");
-      setRecs(body as RecommendationResult);
+      const next = body as RecommendationResult;
+      setRecs(next);
+      setRecsFor(result.context);
+      // Keep what the owner already chose, where that tool is still offered for that problem.
+      setChosen((prev) =>
+        Object.fromEntries(
+          Object.entries(prev).filter(([problemId, toolId]) =>
+            problemId.startsWith("kit-") ||
+            next.problems.some((p) => p.problem.id === problemId && p.options.some((o) => o.choices.some((c) => c.tool.id === toolId))),
+          ),
+        ),
+      );
       go("tools");
     } catch (e) {
       setError((e as Error).message);
@@ -738,6 +884,13 @@ export function Journey({ lookup, catalog, watchCount = 0, entry }: { lookup: Lo
 
   if (!start) return frame(<p>Start over to pick a business.</p>, { narrow: true });
   const q = (id: string) => start.questions.find((x) => x.id === id);
+  /** Whether the owner's challenges involve the phone (so the call-recording question applies). */
+  const phoneChallenge = () => {
+    const text = typeof answers.challenges === "string" ? answers.challenges : "";
+    const picked = Array.isArray(answers.challenge_picks) ? (answers.challenge_picks as string[]) : [];
+    const sugg = q("challenges")?.suggestions ?? [];
+    return /\b(calls?|phones?|voicemail|answer(ing)? the phone)\b/i.test(text) || picked.some((id) => sugg.find((x) => x.id === id)?.useCase === "missed-calls");
+  };
 
   // ---------- 2 · Check what we found ----------
   if (screen === "check") {
@@ -825,7 +978,7 @@ export function Journey({ lookup, catalog, watchCount = 0, entry }: { lookup: Lo
                 );
               })}
           </dl>
-          {commonSource && <p className={s.small}>Details {/^from /i.test(commonSource) ? commonSource.toLowerCase() : `from ${commonSource.toLowerCase()}`} unless marked.</p>}
+          {commonSource && <p className={s.small}>Details from {commonSource.replace(/^from /i, "").toLowerCase().replace(/\bgoogle\b/, "Google")} unless marked.</p>}
           {listingQ && (
             <div className={s.mismatch}>
               <b>{listingQ.text}</b>
@@ -855,7 +1008,13 @@ export function Journey({ lookup, catalog, watchCount = 0, entry }: { lookup: Lo
             <h2 className={s.h3}>What customers say</h2>
             {start.customersSay.reviewCount > 0 && <span className={s.small}>From {plural(start.customersSay.reviewCount, "review")} we read</span>}
           </div>
-          {start.customersSay.themes.length === 0 && <p className={s.small}>We didn't find reviews to read.</p>}
+          {start.customersSay.themes.length === 0 && (
+            <p className={s.small}>
+              {start.customersSay.reviewCount > 0
+                ? `We read ${plural(start.customersSay.reviewCount, "review")}; none pointed to a clear pattern yet.`
+                : "We didn't find reviews to read."}
+            </p>
+          )}
           {start.customersSay.themes.map((t) => (
             <div className={s.theme} key={t.key}>
               <div className={s.themeHead}>
@@ -882,6 +1041,38 @@ export function Journey({ lookup, catalog, watchCount = 0, entry }: { lookup: Lo
             </div>
           ))}
           {start.customersSay.note && <p className={s.small}>{start.customersSay.note}</p>}
+          <details className={s.disc}>
+            <summary>{start.customersSay.reviewCount < 5 ? "Add reviews you have" : "Add more reviews"} <span className={s.opt}>(paste or upload)</span></summary>
+            <div className={s.discBody}>
+              <span className={s.small}>
+                Copy reviews from Google, Yelp, Facebook or anywhere else, one per paragraph, or upload a .txt or .csv file. We read them alongside the others and count each review once.
+              </span>
+              <label htmlFor="more-reviews" className={s.sr}>
+                Reviews to add
+              </label>
+              <textarea id="more-reviews" className={s.textarea} value={pasted} onChange={(e) => setPasted(e.target.value)} maxLength={20000} rows={5} />
+              <div className={s.row}>
+                <label className={cx(s.btn, s.secondary)} style={{ cursor: "pointer" }}>
+                  Upload a file
+                  <input
+                    type="file"
+                    accept=".txt,.csv,text/plain,text/csv"
+                    className={s.sr}
+                    onChange={async (e) => {
+                      const file = e.target.files?.[0];
+                      if (!file) return;
+                      if (file.size > 200_000) return setError("That file is too big. Keep it under 200 KB.");
+                      const text = await file.text();
+                      setPasted((p) => `${p.trim() ? `${p.trim()}\n\n` : ""}${text}`.slice(0, 20000));
+                    }}
+                  />
+                </label>
+                <button type="button" className={cx(s.btn, s.primary)} disabled={!pasted.trim() || !lastRead.current} onClick={() => lastRead.current && void read(lastRead.current)}>
+                  Read these reviews
+                </button>
+              </div>
+            </div>
+          </details>
         </article>
 
         <article className={s.card}>
@@ -909,8 +1100,13 @@ export function Journey({ lookup, catalog, watchCount = 0, entry }: { lookup: Lo
           )}
           {toolsQ && (
             <>
-              <span className={s.sub}>Do you use any of these? We can't see them from outside.</span>
-              <ChoiceQuestion q={toolsQ} value={answers.tools} onChange={(v) => setAnswer("tools", v)} />
+              <span className={s.sub}>What software do you already use?</span>
+              <span className={s.small}>Tick yours, or add any we missed. Tools that work with these are easier to set up.</span>
+              <ToolsPicker
+                options={(toolsQ.options ?? []).map((o) => o.value)}
+                value={Array.isArray(answers.tools) ? (answers.tools as string[]) : []}
+                onChange={(v) => setAnswer("tools", v.length ? v : null)}
+              />
             </>
           )}
         </article>
@@ -956,13 +1152,32 @@ export function Journey({ lookup, catalog, watchCount = 0, entry }: { lookup: Lo
 
   // ---------- 3 · A few questions, one at a time ----------
   if (screen === "ask") {
-    const flow = ASK_ORDER.map((id) => q(id)).filter((x): x is JourneyQuestion => Boolean(x) && journey.visible(x!, answers));
+    const visibleNow = (x: JourneyQuestion) => journey.visible(x, answers) || (x.id === "call_recording" && phoneChallenge());
+    const flow = ASK_ORDER.map((id) => q(id)).filter((x): x is JourneyQuestion => Boolean(x) && visibleNow(x!));
     const i = Math.min(qIndex, Math.max(flow.length - 1, 0));
     const current = flow[i];
     const last = i >= flow.length - 1;
-    const next = () => (last ? void finishQuestions() : setQIndex(i + 1));
+    const next = () => {
+      // Words still in the box count as added when the owner moves on.
+      if (current?.id === "challenges" && draftRef.current.trim()) {
+        const before = typeof answers.challenges === "string" ? answers.challenges : "";
+        const merged = [before, draftRef.current.trim()].filter(Boolean).join("\n");
+        setAnswer("challenges", merged);
+        answersRef.current = { ...answersRef.current, challenges: merged };
+        draftRef.current = "";
+      }
+      if (last) void finishQuestions();
+      else setQIndex(i + 1);
+    };
     const value = current ? answers[current.id] : undefined;
-    const hasValue = Array.isArray(value) ? value.length > 0 : value !== undefined && value !== null;
+    const draftTyped = draftLen > 0;
+    const picks = Array.isArray(answers.challenge_picks) ? (answers.challenge_picks as string[]) : [];
+    const hasValue =
+      current?.id === "challenges"
+        ? (typeof value === "string" && value.trim().length > 0) || picks.length > 0 || draftTyped
+        : Array.isArray(value)
+          ? value.length > 0
+          : value !== undefined && value !== null;
     if (!current) {
       return frame(
         <>
@@ -1002,14 +1217,30 @@ export function Journey({ lookup, catalog, watchCount = 0, entry }: { lookup: Lo
           {current.kind === "multi" && <span className={s.small}>{current.maxSelect ? `Pick up to ${current.maxSelect}.` : "Pick all that apply."}</span>}
         </header>
 
-        <OptionList
-          q={current}
-          value={value}
-          onPick={(v, done) => {
-            setAnswer(current.id, v);
-            if (done) setTimeout(next, 220);
-          }}
-        />
+        {current.id === "challenges" ? (
+          <ChallengeStep
+            business={start.business.name}
+            placeholder={current.placeholder}
+            suggestions={current.suggestions ?? []}
+            text={typeof value === "string" ? value : ""}
+            picks={picks}
+            onText={(t) => setAnswer("challenges", t.trim() ? t : null)}
+            onPicks={(ids) => setAnswer("challenge_picks", ids.length ? ids : null)}
+            onDraft={(d) => {
+              draftRef.current = d;
+              setDraftLen(d.trim().length);
+            }}
+          />
+        ) : (
+          <OptionList
+            q={current}
+            value={value}
+            onPick={(v, done) => {
+              setAnswer(current.id, v);
+              if (done) setTimeout(next, 220);
+            }}
+          />
+        )}
         {errorBox}
 
         <div className={s.actionBar}>
@@ -1022,14 +1253,15 @@ export function Journey({ lookup, catalog, watchCount = 0, entry }: { lookup: Lo
               className={s.link}
               onClick={() => {
                 setAnswer(current.id, null);
+                if (current.id === "challenges") setAnswer("challenge_picks", null);
                 next();
               }}
               title={current.ifSkipped}
             >
               Skip
             </button>
-            {(current.kind === "multi" || (last && hasValue)) && (
-              <button type="button" className={cx(s.btn, s.primary)} onClick={next} disabled={busy || (current.kind === "multi" && !hasValue)}>
+            {(current.kind === "multi" || current.kind === "text" || (last && hasValue)) && (
+              <button type="button" className={cx(s.btn, s.primary)} onClick={next} disabled={busy || ((current.kind === "multi" || current.kind === "text") && !hasValue)}>
                 {busy ? "One moment…" : last ? "See results →" : "Continue →"}
               </button>
             )}
@@ -1049,7 +1281,7 @@ export function Journey({ lookup, catalog, watchCount = 0, entry }: { lookup: Lo
     const confirmed = opps.filter((o) => o.status === "confirmed").length;
     const likely = opps.filter((o) => o.status === "likely").length;
     const sum = (kind: "revenue_opportunity" | "time_cost") => {
-      const list = opps.filter((o) => o.impact?.kind === kind).map((o) => o.impact!.monthly);
+      const list = [...result.findings.yours, ...result.findings.noticed].filter((o) => o.impact?.kind === kind).map((o) => o.impact!.monthly);
       return list.length ? list.reduce((a, m) => ({ expected: a.expected + m.expected, low: a.low + m.low, high: a.high + m.high }), { expected: 0, low: 0, high: 0 }) : null;
     };
     const revenue = sum("revenue_opportunity");
@@ -1060,113 +1292,83 @@ export function Journey({ lookup, catalog, watchCount = 0, entry }: { lookup: Lo
     const dealQ = q("deal_breakers");
     const counts = [confirmed ? `${confirmed} confirmed` : null, likely ? `${likely} likely` : null].filter(Boolean).join(" and ");
     const followUp = (id: string) => result.followUps.find((f) => f.id === id);
-    const toolCount = result.recommendation.ready ? result.recommendation.focus.length : 0;
+    const allTools = result.recommendation.ready ? result.recommendation.request.problems.map((p) => p.id) : [];
+    // Everything starts ticked; ids that no longer exist (after new answers) drop out.
+    const picked = new Set(toolPick ? allTools.filter((id) => toolPick.has(id)) : allTools);
+    const toolCount = picked.size;
 
     return frame(
       <>
         <Steps n={4} />
         {banner}
         <header className={s.intro}>
-          <h1 className={s.title}>What's holding {start.business.name} back</h1>
+          <h1 className={s.title}>What we found at {start.business.name}</h1>
           <p className={s.lead}>
-            {opps.length ? (
+            {result.headline}
+            {revenue && (
               <>
-                We found <b>{counts}</b> {opps.length === 1 ? "problem" : "problems"}, most important first.
-                {revenue && (
-                  <>
-                    {" "}
-                    Together they might be worth about <b className={s.num}>{usd(revenue.expected)} a month</b> in missed business{" "}
-                    <span className={s.num}>
-                      ({usd(revenue.low)}–{usd(revenue.high)})
-                    </span>
-                    .
-                  </>
-                )}
-                {time && (
-                  <>
-                    {" "}
-                    {revenue ? "Plus" : "That's"} about <b className={s.num}>{usd(time.expected)} a month</b> of your time.
-                  </>
-                )}
+                {" "}
+                Together they might be worth about <b className={s.num}>{usd(revenue.expected)} a month</b>{" "}
+                <span className={s.num}>
+                  ({usd(revenue.low)}–{usd(revenue.high)})
+                </span>
+                .
               </>
-            ) : (
-              result.headline
+            )}
+            {time && (
+              <>
+                {" "}
+                {revenue ? "Plus" : "That's"} about <b className={s.num}>{usd(time.expected)} a month</b> of your time.
+              </>
             )}
           </p>
-          {revenue || time ? (
-            <span className={s.small}>Estimated opportunity, not proven lost revenue.</span>
-          ) : opps.some((o) => o.impactNeeds.length) ? (
-            <span className={s.small}>Want a dollar figure? Open a card and add a couple of numbers only you know.</span>
-          ) : null}
+          {(revenue || time) && <span className={s.small}>Estimated opportunity, not proven lost revenue. Only where you gave us the numbers.</span>}
         </header>
 
-        <section className={cx(s.card, s.ownerProblemCard)}>
-          <div className={s.cardTop}>
-            <span className={cx(s.badge, s.ok)}>Start with your words</span>
-            <h2 className={s.h2}>What problem do you want help with?</h2>
-            <p className={s.small}>Tell us first. We’ll match it to a checked solution, then show common problems we noticed below.</p>
-          </div>
-          <form
-            className={s.ownerProblemForm}
-            onSubmit={(e) => {
-              e.preventDefault();
-              void send({ anything_else: elseText.trim() || null });
-            }}
-          >
-            <label htmlFor="primary-problem" className={s.sr}>Your problem</label>
-            <textarea id="primary-problem" className={s.textarea} value={elseText} onChange={(e) => setElseText(e.target.value)} placeholder="e.g. I spend every evening writing quotes and chasing replies" maxLength={300} rows={3} />
-            <button type="submit" className={cx(s.btn, s.primary)} disabled={busy || !elseText.trim()}>
-              {busy ? "Adding…" : "Add my problem"}
+        {result.recommendation.ready && <p className={s.small}>Tick the problems you want tools for. The rest stay in your plan with a free first step.</p>}
+        <FindingsView
+          findings={result.findings}
+          industry={start.business.subtitle.split(" · ")[0] ?? "similar"}
+          onOpen={(f, el) => {
+            seeMoreBtn.current = el;
+            setOpenOpp(f.id);
+          }}
+          selected={picked}
+          onToggle={(id) =>
+            setToolPick(() => {
+              const next = new Set(picked);
+              if (next.has(id)) next.delete(id);
+              else next.add(id);
+              return next;
+            })
+          }
+        />
+
+        <form
+          className={cx(s.card, s.addMore)}
+          onSubmit={(e) => {
+            e.preventDefault();
+            const before = typeof answers.challenges === "string" ? answers.challenges.trim() : "";
+            const added = elseText.trim();
+            if (!added) return;
+            void send({ challenges: before ? `${before}\n${added}` : added }).then(() => setElseText(""));
+          }}
+        >
+          <label htmlFor="add-challenge" className={s.sub}>
+            {result.findings.yours.length ? "Anything else taking your time?" : "What's taking up too much of your time?"}
+          </label>
+          <div className={s.inlineForm}>
+            <input id="add-challenge" className={s.input} value={elseText} onChange={(e) => setElseText(e.target.value)} placeholder="e.g. chasing unpaid invoices" maxLength={300} />
+            <button type="submit" className={cx(s.btn, s.secondary)} disabled={busy || !elseText.trim()}>
+              {busy ? "Adding…" : "Add"}
             </button>
-          </form>
-          {typeof answers.anything_else === "string" && answers.anything_else.trim() && <p className={s.ownerProblemSaved}><b>Your problem:</b> {answers.anything_else}</p>}
-        </section>
-
-        <h2 className={s.h2}>Suggested/common problems</h2>
-
-        <div className={s.oppGrid}>
-          {opps.map((o) => (
-            <article className={cx(s.card, s.pcard)} key={o.id}>
-              <div className={cx(s.cardTop, s.pcTop)}>
-                <div className={s.row} style={{ justifyContent: "space-between" }}>
-                  <StatusBadge status={o.status} />
-                  <span className={s.rank}>#{o.rank}</span>
-                </div>
-                <h2 className={s.h3}>{o.headline}</h2>
-                <span className={s.small}>{o.statusLabel}</span>
-              </div>
-              <div className={s.pcBody}>
-                {o.impact ? (
-                  <p className={s.money}>
-                    <span className={s.small}>{o.impact.kind === "time_cost" ? "Your time: about" : "Might be worth about"}</span>{" "}
-                    <b className={s.num}>{usd(o.impact.monthly.expected)} a month</b>
-                  </p>
-                ) : (
-                  <span className={s.small}>{o.impactNeeds.length ? "Add a number to see what it's worth" : o.fix.kind === "free" ? "Free to fix" : "No dollar figure for this one"}</span>
-                )}
-                <p className={s.clamp}>{o.whyItMatters}</p>
-                <p className={s.firstStep}>
-                  <b>First step:</b> {o.fix.nextStep}
-                </p>
-              </div>
-              <button
-                type="button"
-                className={cx(s.btn, s.secondary, s.seeMore)}
-                aria-haspopup="dialog"
-                onClick={(e) => {
-                  seeMoreBtn.current = e.currentTarget;
-                  setOpenOpp(o.id);
-                }}
-              >
-                See the proof
-              </button>
-            </article>
-          ))}
-        </div>
+          </div>
+        </form>
 
         {(() => {
-          const o = opps.find((x) => x.id === openOpp);
-          if (!o) return null;
+          const all = [...result.findings.yours, ...result.findings.noticed, ...result.findings.consider];
+          const f: Finding | undefined = all.find((x) => x.id === openOpp);
+          if (!f) return null;
           return (
             <div
               className={s.overlay}
@@ -1177,91 +1379,97 @@ export function Journey({ lookup, catalog, watchCount = 0, entry }: { lookup: Lo
               <div className={s.dialog} role="dialog" aria-modal="true" aria-labelledby="opp-title">
                 <div className={s.dialogTop}>
                   <div className={s.col} style={{ gap: 6 }}>
-                    <StatusBadge status={o.status} />
+                    <span className={s.small}>{f.confidence.label}</span>
                     <h2 className={s.h2} id="opp-title">
-                      {o.headline}
+                      {f.title}
                     </h2>
-                    <span className={s.small}>{o.statusLabel}</span>
                   </div>
                   <button type="button" className={cx(s.btn, s.secondary, s.closeBtn)} onClick={() => setOpenOpp(null)} autoFocus>
                     Close ✕
                   </button>
                 </div>
                 <div className={s.dialogBody}>
-                  <p>{o.whyItMatters}</p>
+                  {f.ownerWords.length > 0 && <p className={s.ownerWords}>You said: “{f.ownerWords.join("” · “")}”</p>}
+                  <p>{f.whatsHappening}</p>
+                  {f.whyItMatters && !f.whatsHappening.includes(f.whyItMatters) && <p className={s.small}>{f.whyItMatters}</p>}
+                  {f.connection && <p className={s.connection}>{f.connection}</p>}
                   <div className={s.col} style={{ gap: 10 }}>
-                    <h3 className={s.h3}>Why we think this</h3>
-                    <ul className={s.evid}>
-                      {o.evidence.map((e, k) => (
-                        <li key={k} className={e.observed ? undefined : s.unsure}>
-                          {e.title && <b>{e.title}</b>}
-                          {e.isQuote ? <q className={s.quote}>{e.text}</q> : <span>{e.text}</span>}
-                          <span className={s.small}>
-                            {e.sourceLabel}
-                            {!e.observed && " · not directly seen"}
-                            {e.links.slice(0, 4).map((l, n) => (
-                              <span key={n}>
-                                {" · "}
-                                <a href={l.url!} target="_blank" rel="noreferrer">
-                                  {l.label === e.sourceLabel || e.links.length === 1 ? "view page" : l.label}
-                                </a>
-                              </span>
-                            ))}
-                          </span>
-                        </li>
-                      ))}
-                      {o.counterEvidence && (
-                        <li className={s.against}>
-                          <span>But: {o.counterEvidence}.</span>
-                          <span className={s.small}>Customer reviews</span>
-                        </li>
-                      )}
-                    </ul>
-                    {o.moreEvidence > 0 && <span className={s.small}>And {o.moreEvidence} more.</span>}
+                    <h3 className={s.h3}>Evidence</h3>
+                    {f.evidence.length ? (
+                      <ul className={s.evid}>
+                        {f.evidence.map((e, k) => (
+                          <li key={k} className={e.observed ? undefined : s.unsure}>
+                            {e.title && <b>{e.title}</b>}
+                            {e.isQuote ? <q className={s.quote}>{e.text}</q> : <span>{e.text}</span>}
+                            <span className={s.small}>
+                              {e.sourceLabel}
+                              {!e.observed && " · not directly seen"}
+                              {e.links.slice(0, 4).map((l, n) => (
+                                <span key={n}>
+                                  {" · "}
+                                  <a href={l.url!} target="_blank" rel="noreferrer">
+                                    {l.label === e.sourceLabel || e.links.length === 1 ? "view page" : l.label}
+                                  </a>
+                                </span>
+                              ))}
+                            </span>
+                          </li>
+                        ))}
+                      </ul>
+                    ) : (
+                      <p className={s.small}>
+                        {f.group === "yours"
+                          ? "This comes from you. We couldn't see it in your reviews, website or listings, which is normal for things that happen behind the scenes."
+                          : f.group === "consider"
+                            ? "No direct evidence for your business. It's common for businesses like yours."
+                            : "No details to show."}
+                      </p>
+                    )}
+                    {f.moreEvidence > 0 && <span className={s.small}>And {f.moreEvidence} more.</span>}
                   </div>
-                  {o.impact ? (
+                  {f.impact ? (
                     <div className={s.calc}>
                       <p className={s.money}>
-                        <span className={s.small}>{o.impact.kind === "time_cost" ? "Your time: about" : "Might be worth about"}</span>{" "}
-                        <b className={s.num}>{usd(o.impact.monthly.expected)} a month</b>
+                        <span className={s.small}>{f.impact.kind === "time_cost" ? "Your time: about" : "Might be worth about"}</span>{" "}
+                        <b className={s.num}>{usd(f.impact.monthly.expected)} a month</b>
                       </p>
                       <span className={s.sub}>How we got the number</span>
-                      <p className={s.small}>{o.impact.math}</p>
-                      {o.impact.assumed.length > 0 && (
+                      <p className={s.small}>{f.impact.math}</p>
+                      {f.impact.assumed.length > 0 && (
                         <span className={s.hint}>
                           Our assumption:{" "}
-                          {o.impact.assumed
+                          {f.impact.assumed
                             .map((a) => `${a.label.toLowerCase()} ${a.unit === "percent" ? `${Math.round(a.value * 100)}%` : a.unit === "usd" || a.unit === "usd_per_hour" ? usd(a.value) : a.value}`)
                             .join("; ")}
                           .
                         </span>
                       )}
                     </div>
-                  ) : o.impactNeeds.length ? (
+                  ) : f.impactNeeds.length ? (
                     <form
                       className={cx(s.calc, s.calcBox)}
                       onSubmit={(e) => {
                         e.preventDefault();
                         const patch: Answers = {};
-                        for (const id of o.impactNeeds) {
+                        for (const id of f.impactNeeds) {
                           const raw = numbers[id]?.replace(/[$,\s]/g, "");
                           if (raw) patch[id] = Number(raw);
                         }
                         if (Object.keys(patch).length) void send(patch);
                       }}
                     >
-                      <span className={s.sub}>What might this be worth?</span>
-                      {o.impactNeeds.map((id) => {
-                        const f = followUp(id);
-                        if (!f) return null;
+                      <span className={s.sub}>What might this be worth? (optional)</span>
+                      {f.impactNeeds.map((id) => {
+                        const fq = followUp(id);
+                        if (!fq) return null;
                         return (
                           <div className={s.field} key={id}>
-                            <label htmlFor={`${o.id}-${id}`}>{f.text}</label>
+                            <label htmlFor={`${f.id}-${id}`}>{fq.text}</label>
                             <input
-                              id={`${o.id}-${id}`}
+                              id={`${f.id}-${id}`}
                               className={s.input}
                               inputMode="decimal"
-                              placeholder={f.placeholder}
+                              placeholder={fq.placeholder}
                               value={numbers[id] ?? (typeof answers[id] === "number" ? String(answers[id]) : "")}
                               onChange={(e) => setNumbers((n) => ({ ...n, [id]: e.target.value }))}
                             />
@@ -1275,40 +1483,32 @@ export function Journey({ lookup, catalog, watchCount = 0, entry }: { lookup: Lo
                       {errorBox}
                     </form>
                   ) : (
-                    o.impactNote && <p className={s.small}>{o.impactNote}</p>
+                    f.impactNote && <p className={s.small}>{f.impactNote}</p>
                   )}
-                  <p className={s.firstStep}>
-                    <b>First step:</b> {o.fix.nextStep} <span className={s.small}>· {o.fix.label}</span>
-                  </p>
-                  {o.alsoCovers.length > 0 && <span className={s.small}>Also covers: {o.alsoCovers.map((c) => c.headline.toLowerCase()).join(", ")}.</span>}
+                  {f.whatToDo && (
+                    <p className={s.firstStep}>
+                      <b>What to do:</b> {f.whatToDo}
+                    </p>
+                  )}
+                  {f.ai && (
+                    <p className={s.aiLine}>
+                      <b>{f.ai.level === "yes" ? "AI can help." : f.ai.level === "partly" ? "AI can partly help." : "No AI needed."}</b> {f.ai.how}
+                    </p>
+                  )}
                 </div>
               </div>
             </div>
           );
         })()}
 
-        {(result.toCheck.length > 0 || extra.length > 0) && (
+        {/* The yes/no problem list is replaced by "Worth considering"; only the tool questions that now apply remain. */}
+        {extra.length > 0 && (
           <section className={s.card}>
             <div className={s.cardTop}>
-              <h2 className={s.h3}>Do any of these happen too?</h2>
-              <span className={s.small}>You skipped these. We can't see them from outside, so we haven't counted them.</span>
+              <h2 className={s.h3}>A quick question for picking tools</h2>
+              <span className={s.small}>So we only suggest tools that fit how you work.</span>
             </div>
-            {result.toCheck.map((t) => (
-              <div className={s.checkRow} key={t.problemKey}>
-                <span className={s.optionText}>
-                  <b>{hints.get(t.problemKey)?.label ?? t.headline}</b>
-                  {hints.get(t.problemKey)?.hint && <span>{hints.get(t.problemKey)!.hint}</span>}
-                </span>
-                <div className={s.row}>
-                  <Chip pressed={false} disabled={busy} onClick={() => void send({ [`problem.${t.problemKey}`]: "yes" })}>
-                    Yes
-                  </Chip>
-                  <Chip pressed={false} disabled={busy} onClick={() => void send({ [`problem.${t.problemKey}`]: "no" })}>
-                    No
-                  </Chip>
-                </div>
-              </div>
-            ))}
+
             {extra.map((x) => (
               <div className={s.checkRow} key={x.id}>
                 <span className={s.optionText}>
@@ -1318,19 +1518,6 @@ export function Journey({ lookup, catalog, watchCount = 0, entry }: { lookup: Lo
                 <ChoiceQuestion q={x} value={answers[x.id]} onChange={(v) => void send({ [x.id]: v })} />
               </div>
             ))}
-          </section>
-        )}
-
-        {result.alsoNoticed.length > 0 && (
-          <section className={s.col} style={{ gap: 8 }}>
-            <h2 className={s.h3}>Also noticed</h2>
-            <ul className={s.todo}>
-              {result.alsoNoticed.map((a) => (
-                <li key={a.problemKey}>
-                  {a.headline} <span className={s.small}>· {a.statusLabel}</span>
-                </li>
-              ))}
-            </ul>
           </section>
         )}
 
@@ -1377,15 +1564,19 @@ export function Journey({ lookup, catalog, watchCount = 0, entry }: { lookup: Lo
 
         <div className={cx(s.actionBar, s.sticky)}>
           <span className={s.small}>
-            {result.recommendation.ready ? `Next: checked tools for ${toolCount === 1 ? "one of these" : `${toolCount} of these`}, within your budget.` : result.recommendation.reason}
+            {result.recommendation.ready
+              ? toolCount
+                ? `Next: checked tools for the ${toolCount === 1 ? "problem" : `${toolCount} problems`} you ticked, within your budget.`
+                : "Tick a problem to find tools for it, or go straight to your plan."
+              : result.recommendation.reason}
           </span>
           {errorBox}
-          {result.recommendation.ready ? (
+          {result.recommendation.ready && toolCount > 0 ? (
             <button type="button" className={cx(s.btn, s.primary)} onClick={() => void showTools()} disabled={busy}>
-              {busy ? "One moment…" : "Show me tools for these →"}
+              {busy ? "One moment…" : `Find tools (${toolCount}) →`}
             </button>
           ) : (
-            <button type="button" className={cx(s.btn, s.primary)} onClick={() => go("plan")} disabled={busy || opps.length === 0}>
+            <button type="button" className={cx(s.btn, s.primary)} onClick={() => go("plan")} disabled={busy || (opps.length === 0 && result.findings.yours.length + result.findings.noticed.length === 0)}>
               Make my plan →
             </button>
           )}
@@ -1442,7 +1633,7 @@ export function Journey({ lookup, catalog, watchCount = 0, entry }: { lookup: Lo
       <>
         <Steps n={6} />
         {banner}
-        <PlanScreen answer={result} recs={recs} catalog={catalog} currentTools={req?.currentTools ?? []} back={() => go(recs ? "tools" : "problems")} />
+        <PlanScreen answer={result} recs={recs} catalog={catalog} currentTools={req?.currentTools ?? []} needsHelp={req?.needsHelp ?? answers.setup === "help"} chosenTools={chosen} back={() => go(recs ? "tools" : "problems")} />
       </>,
       { narrow: true },
     );
@@ -1452,14 +1643,18 @@ export function Journey({ lookup, catalog, watchCount = 0, entry }: { lookup: Lo
       <Steps n={5} />
       {banner}
       {recs && biz ? (
-        <WaysToFix recs={recs} biz={biz} catalog={catalog} picks={picks} togglePick={togglePick} openTool={openTool} openCompare={openCompare} back={() => go("problems")} />
+        <WaysToFix recs={recs} biz={biz} catalog={catalog} picks={picks} togglePick={togglePick} openTool={openTool} openCompare={openCompare} back={() => go("problems")} chosen={chosen} onChosen={setChosen} />
       ) : (
         <p className={s.notice}>We need a little more about your business before we can suggest tools.</p>
       )}
       <div className={cx(s.actionBar, s.sticky)}>
-        <span className={s.small}>Next: a step-by-step plan you can print, free fixes first.</span>
+        <span className={s.small}>
+          {Object.keys(chosen).length
+            ? `${Object.keys(chosen).length} ${Object.keys(chosen).length === 1 ? "tool" : "tools"} chosen: ${Object.values(chosen).map((id) => catalog.find((r) => r.id === id)?.name ?? id).join(", ")}.`
+            : "Choose a kit or a tool for any problem, or skip straight to your plan with free first steps."}
+        </span>
         <button type="button" className={cx(s.btn, s.primary)} onClick={() => go("plan")}>
-          Make my plan →
+          {Object.keys(chosen).length ? `Make my plan with ${Object.keys(chosen).length} ${Object.keys(chosen).length === 1 ? "tool" : "tools"} →` : "Make my plan →"}
         </button>
       </div>
     </>,

@@ -14,6 +14,41 @@ export function AdvisorPanel({ context, known, floating = false, raised = false 
   const closeBtn = useRef<HTMLButtonElement>(null);
   const opener = useRef<HTMLButtonElement>(null);
   const wasOpen = useRef(false);
+  // A floating pill steps aside while it sits on top of a button or link, so it never hides the next step.
+  const [tucked, setTucked] = useState(false);
+  useEffect(() => {
+    if (!floating) return;
+    let frame = 0;
+    const check = () => {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(() => {
+        const pill = opener.current;
+        if (!pill) return;
+        const box = pill.getBoundingClientRect();
+        if (!box.width) return;
+        const pad = 8;
+        const points: [number, number][] = [
+          [box.left - pad, box.top - pad], [box.right + pad, box.top - pad], [box.left - pad, box.bottom + pad], [box.right + pad, box.bottom + pad],
+          [box.left + box.width / 2, box.top + box.height / 2], [box.left + 4, box.top + box.height / 2], [box.right - 4, box.top + box.height / 2],
+        ];
+        const hit = points.some(([x, y]) =>
+          document.elementsFromPoint(x, y).some((el) => el !== pill && !pill.contains(el) && el.closest("button, a, input, select, textarea, label") !== null && !pill.contains(el.closest("button, a, input, select, textarea, label"))),
+        );
+        setTucked(hit);
+      });
+    };
+    check();
+    window.addEventListener("scroll", check, { passive: true });
+    window.addEventListener("resize", check);
+    const mo = new MutationObserver(check);
+    mo.observe(document.body, { childList: true, subtree: true });
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener("scroll", check);
+      window.removeEventListener("resize", check);
+      mo.disconnect();
+    };
+  }, [floating]);
 
   useEffect(() => {
     if (!open) {
@@ -36,7 +71,7 @@ export function AdvisorPanel({ context, known, floating = false, raised = false 
       <button
         ref={opener}
         type="button"
-        className={[a.launch, floating && a.launchFloat, raised && a.launchRaised].filter(Boolean).join(" ")}
+        className={[a.launch, floating && a.launchFloat, raised && a.launchRaised, floating && tucked && a.launchTucked].filter(Boolean).join(" ")}
         onClick={() => setOpen(true)}
         aria-haspopup="dialog"
         aria-expanded={open}

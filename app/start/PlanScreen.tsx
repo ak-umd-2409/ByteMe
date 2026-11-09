@@ -7,16 +7,19 @@
  */
 import { useEffect, useMemo, useState } from "react";
 import type { CatalogRecord } from "@/lib/catalog/types.ts";
-import type { JourneyAnswerResponse } from "@/lib/journey/types.ts";
+import type { ImpactView, JourneyAnswerResponse } from "@/lib/journey/types.ts";
 import { readyContent } from "@/lib/plan/content.ts";
-import { buildPlan, planText } from "@/lib/plan/plan.ts";
+import { buildPlan, PHASE_LABEL, planText } from "@/lib/plan/plan.ts";
 import type { ProblemKey } from "@/lib/problems/types.ts";
 import type { RecommendationResult } from "@/lib/recommend/types.ts";
 import { ToolLogo } from "@/components/ToolLogo.tsx";
 import s from "./start.module.css";
 import { SampleTag } from "./ToolScreens.tsx";
+import { CostPayback } from "./CostPayback.tsx";
+import { CostTable } from "../plan/CostTable.tsx";
+import { costSummary } from "@/lib/plan/roi.ts";
 import { CopyButton } from "../plan/Copy.tsx";
-import { FreeHelp, ReadyWords, Weeks } from "../plan/parts.tsx";
+import { FreeHelp, ReadyWords } from "../plan/parts.tsx";
 
 const cx = (...names: (string | false | null | undefined)[]) => names.filter(Boolean).join(" ");
 const usd = (n: number) => `$${Math.round(n).toLocaleString("en-US")}`;
@@ -28,12 +31,18 @@ export function PlanScreen({
   recs,
   catalog,
   currentTools,
+  needsHelp = false,
+  chosenTools = {},
   back,
 }: {
   answer: JourneyAnswerResponse;
   recs: RecommendationResult | null;
   catalog: CatalogRecord[];
   currentTools: string[];
+  /** The owner asked for help setting tools up: show where to get it. */
+  needsHelp?: boolean;
+  /** What the owner chose on the tools screen (Part 4 problem id → tool id). Empty = suggest the best fit. */
+  chosenTools?: Record<string, string>;
   back: () => void;
 }) {
   const byId = new Map(catalog.map((r) => [r.id, r]));
@@ -50,15 +59,63 @@ export function PlanScreen({
     }
     return out;
   }, [recs]);
+  const fromToolsScreen = Object.keys(chosenTools).length > 0;
   const [choices, setChoices] = useState<Partial<Record<ProblemKey, string>>>(() =>
-    Object.fromEntries(Object.entries(options).map(([k, list]) => [k, list?.[0]?.id]).filter(([, v]) => v)),
+    fromToolsScreen
+      ? // Exactly what the owner chose; everything else starts with its free first step.
+        Object.fromEntries(Object.entries(chosenTools).map(([id, tool]) => [keyOf(id), tool]))
+      : Object.fromEntries(Object.entries(options).map(([k, list]) => [k, list?.[0]?.id]).filter(([, v]) => v)),
   );
 
-  const plan = buildPlan({ answer, choices, catalog, currentTools });
+  // Everything else the owner told us, and problems from reviews, so the plan covers all of it.
+  const extraKey = (id: string) => (id.startsWith("yours-") ? `owner-${id.slice(6)}` : id.startsWith("noticed-ri") ? `issue-${id.slice(8)}` : id);
+  const ownFindings = [...(answer.findings?.yours ?? []), ...(answer.findings?.noticed ?? [])].filter((f) => !f.problemKey);
+  const extras = ownFindings.map((f) => ({ key: extraKey(f.id), heading: f.title, firstStep: f.whatToDo, aiHow: f.ai && f.ai.level !== "no" ? f.ai.how : null }));
+  // What each problem costs the owner (only when they gave the numbers), by plan section, for the payback card.
+  const impactFor: Record<string, ImpactView | null> = {
+    ...Object.fromEntries(ownFindings.map((f) => [`tool-${extraKey(f.id)}`, f.impact])),
+    ...Object.fromEntries(answer.opportunities.map((o) => [`tool-${o.problemKey}`, o.impact])),
+  };
+  // Kit tools that don't match one of the problems still go in the plan, as their own section.
+  for (const [id, tool] of Object.entries(chosenTools)) {
+    if (!id.startsWith("kit-")) continue;
+    const r = catalog.find((x) => x.id === tool);
+    if (r) extras.push({ key: id, heading: `${r.category} (starter kit)`, firstStep: null, aiHow: null });
+  }
+  const plan = buildPlan({ answer, choices, catalog, currentTools, extras, needsHelp });
+
+  // Ticked steps, remembered in this browser for this business.
+  const doneKey = `mainstreet.plan.done.${plan.business}`;
+  const [done, setDone] = useState<Set<string>>(new Set());
+  useEffect(() => {
+    try {
+      setDone(new Set(JSON.parse(localStorage.getItem(doneKey) ?? "[]") as string[]));
+    } catch {
+      /* storage blocked: ticks just won't be remembered */
+    }
+  }, [doneKey]);
+  const toggleDone = (id: string) =>
+    setDone((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      try {
+        localStorage.setItem(doneKey, JSON.stringify([...next]));
+      } catch {
+        /* ignore */
+      }
+      return next;
+    });
   const words = readyContent(answer.business, plan, catalog);
   const [share, setShare] = useState<{ url: string; stored: boolean; expiresAt: string | null } | { error: string } | "busy" | null>(null);
   // A link shows the plan as it was when made: changing a tool means making a new one.
   useEffect(() => setShare(null), [choices]);
+  // A printed or saved PDF shows every "How we calculated this" and "Change the assumptions" box open.
+  useEffect(() => {
+    const open = () => document.querySelectorAll("main details").forEach((d) => ((d as HTMLDetailsElement).open = true));
+    window.addEventListener("beforeprint", open);
+    return () => window.removeEventListener("beforeprint", open);
+  }, []);
 
   async function makeLink() {
     setShare("busy");
@@ -78,50 +135,38 @@ export function PlanScreen({
   const link = share && typeof share === "object" && "url" in share ? share : null;
   const advisor = plan.help[0]!;
   const mail = (subject: string, body: string) => `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-  const toolProblems = answer.opportunities.filter((o) => o.fix.kind !== "free" && (options[o.problemKey]?.length ?? 0) > 0);
-  const stepCount = plan.sections.reduce((n, sec) => n + sec.steps.length, 0);
+  const allSteps = plan.sections.flatMap((sec) => sec.steps.map((st) => st.id));
+  const stepCount = allSteps.length;
+  const doneCount = allSteps.filter((id) => done.has(id)).length;
 
   return (
     <>
+      <section hidden className={cx(s.card, s.printShow)} aria-label="Report cover">
+        <span className={s.small}>Technology plan · prepared {new Date().toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })} with MainStreet AI</span>
+        <b>{plan.business}</b>
+        <span className={s.small}>
+          Problems: {plan.sections.map((sec) => sec.heading).join("; ") || "none listed"}.
+          {" "}Tools: {costSummary(plan, catalog).tools.map((t) => t.name).join(", ") || "none yet"}.
+        </span>
+        <span className={s.small}>Prices come from each company&apos;s own pricing page, checked on the date shown. Savings are estimates, not promises. Not legal or financial advice.</span>
+      </section>
       <header className={s.intro}>
         <h1 className={s.title}>Your plan for {plan.business}</h1>
-        <p className={s.lead}>Your first 30 days: free fixes first, then one tool at a time. Print it, copy the ready-made words, or send it to a free advisor.</p>
+        <p className={s.lead}>Free fixes first, then one tool at a time. Print it, copy the ready-made words, or send it to a free advisor.</p>
         <span className={s.small}>
-          {stepCount} steps
+          {stepCount} {stepCount === 1 ? "step" : "steps"}
+          {doneCount > 0 && ` · ${doneCount} done`}
           {plan.totals.monthly > 0 && ` · ${usd(plan.totals.monthly)} a month${plan.totals.unknownPrices ? " plus prices that aren't public" : ""}`}
           {plan.totals.setupMinutes > 0 && ` · about ${hours(plan.totals.setupMinutes)} of setup`}
         </span>
       </header>
 
-      {toolProblems.length > 0 && (
-        <section className={cx(s.card, s.noPrint)}>
-          <div className={s.cardTop}>
-            <h2 className={s.h3}>Pick one fix for each problem</h2>
-            <span className={s.small}>Best fit first. Only ✓ Verified tools.</span>
-          </div>
-          {toolProblems.map((o) => (
-            <div className={s.checkRow} key={o.problemKey}>
-              <span className={s.optionText}>
-                <b>{o.headline}</b>
-              </span>
-              <div className={s.row}>
-                {options[o.problemKey]!.map((opt) => {
-                  const on = choices[o.problemKey] === opt.id;
-                  return (
-                    <button key={opt.id} type="button" className={s.chipsel} aria-pressed={on} onClick={() => setChoices((c) => ({ ...c, [o.problemKey]: opt.id }))}>
-                      {on ? "✓ " : ""}
-                      {opt.name} · {usd(opt.price)}/mo{byId.get(opt.id)?.sample ? " (sample)" : ""}
-                    </button>
-                  );
-                })}
-                <button type="button" className={s.chipsel} aria-pressed={!choices[o.problemKey]} onClick={() => setChoices((c) => ({ ...c, [o.problemKey]: undefined }))}>
-                  {!choices[o.problemKey] ? "✓ " : ""}Decide later
-                </button>
-              </div>
-            </div>
-          ))}
-        </section>
-      )}
+      <p className={cx(s.small, s.noPrint)}>
+        Want a different tool?{" "}
+        <button type="button" className={s.link} style={{ padding: 0, minHeight: 0 }} onClick={back}>
+          Change it on the tools screen
+        </button>
+      </p>
 
       {plan.notes.length > 0 && (
         <div className={s.banner}>
@@ -131,7 +176,8 @@ export function PlanScreen({
         </div>
       )}
 
-      <Weeks plan={plan} />
+      <CostPayback plan={plan} catalog={catalog} impactFor={impactFor} industry={answer.recommendation.ready ? answer.recommendation.request.business.industry : null} />
+
 
       <ol className={s.planList}>
         {plan.sections.map((sec, i) => (
@@ -157,15 +203,17 @@ export function PlanScreen({
             </div>
             <ul className={s.planSteps}>
               {sec.steps.map((st) => (
-                <li key={st.id}>
-                  <span className={s.box} aria-hidden="true" />
+                <li key={st.id} className={done.has(st.id) ? s.stepDoneRow : undefined}>
+                  <input type="checkbox" className={s.tick2} id={`step-${st.id}`} checked={done.has(st.id)} onChange={() => toggleDone(st.id)} aria-label={`Done: ${st.title}`} />
                   <span className={s.optionText}>
                     <b>
                       {st.title}
                       {st.minutes ? <span className={s.small}> · {st.minutes} min</span> : null}
-                      <span className={s.weekChip}>{st.week > 4 ? "After day 30" : `Week ${st.week}`}</span>
+                      <span className={s.weekChip}>{PHASE_LABEL[st.week] ?? "After day 30"}</span>
                     </b>
                     <span>{st.detail}</span>
+                    {st.who && <span className={s.small}>Who: {st.who}</span>}
+                    {st.outcome && <span className={s.small}>{/^Test:/.test(st.outcome) ? st.outcome : `Done when: ${st.outcome}`}</span>}
                     {st.why && <span className={s.hint}>{st.why}</span>}
                     {st.link && (
                       <a href={st.link.url} target="_blank" rel="noreferrer">
@@ -182,19 +230,23 @@ export function PlanScreen({
 
       <ReadyWords items={words} />
 
+      <div hidden className={s.printShow}>
+        <CostTable costs={costSummary(plan, catalog)} title="Sources and prices" />
+      </div>
+
       <section className={cx(s.card, s.noPrint)} aria-labelledby="send-h">
         <div className={s.cardTop}>
           <h2 className={s.h3} id="send-h">
-            Send it to your advisor
+            Share your plan
           </h2>
           <span className={s.small}>
-            {advisor.name} is free. Send them your plan so they can look before you meet{advisor.phone ? `, then call ${advisor.phone} to book a time` : ""}.
+            Send it to yourself, or to someone helping you. {advisor.name} advises for free{advisor.phone ? ` (${advisor.phone})` : ""}: send them the link so they can look before you meet.
           </span>
         </div>
         <div className={s.shareBox}>
           {!link && (
             <button type="button" className={cx(s.btn, s.primary)} style={{ justifySelf: "start" }} onClick={makeLink} disabled={share === "busy"}>
-              {share === "busy" ? "Making your link…" : "Make a link for my advisor"}
+              {share === "busy" ? "Making your link…" : "Make a link to share"}
             </button>
           )}
           {share && typeof share === "object" && "error" in share && <p className={s.banner}>{share.error}</p>}
@@ -223,7 +275,7 @@ export function PlanScreen({
         </a>
       </section>
 
-      <FreeHelp plan={plan} />
+      {needsHelp && <FreeHelp plan={plan} title="Find help setting this up" />}
 
       <p className={s.hint}>
         Estimates and prices come from public pages checked on the dates shown on each tool. Confirm prices with the company before you buy. Not legal advice.

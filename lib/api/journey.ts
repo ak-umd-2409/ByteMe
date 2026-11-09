@@ -3,6 +3,9 @@ import { PlacesError } from "../business/places.ts";
 import { decodeContext, encodeContext, MAX_CONTEXT_CHARS } from "../journey/context.ts";
 import { buildAnswer, buildQuestions, businessCard, cleanAnswers, couldNotCheck, customersSay, discoverForJourney, learned, startHeadline, stateFromAnalysis, toolsFound } from "../journey/journey.ts";
 import type { Answers, JourneyAnswerResponse, JourneyStartResponse } from "../journey/types.ts";
+import { interpretChallenges } from "../challenges/interpret.ts";
+import { challengeSuggestions, serviceSuggestions } from "../challenges/suggest.ts";
+import { reviewIssues } from "../challenges/reviewIssues.ts";
 import { log } from "../shared/logger.ts";
 import { v } from "../shared/validate.ts";
 import { errorResponse, type ApiDeps, type ApiResponse } from "./handlers.ts";
@@ -66,8 +69,16 @@ export async function handleJourneyStart(body: unknown, deps: ApiDeps): Promise<
       },
     );
     const now = deps.now?.() ?? new Date();
-    const state = stateFromAnalysis(analysis, now);
-    const base = discoverForJourney(state, state.profile, undefined, now);
+    const baseState = stateFromAnalysis(analysis, now);
+    const base = discoverForJourney(baseState, baseState.profile, undefined, now);
+    // Suggestions are made once here and travel in the context, so they stay the same while the owner types.
+    const ctx = { industry: baseState.profile.business.industryLabel, business: baseState.profile.business.name.value ?? "the business" };
+    const [fromServices, issues] = await Promise.all([
+      serviceSuggestions(baseState, deps.llm).catch(() => []),
+      reviewIssues(baseState.reviewTexts ?? [], deps.llm, ctx).catch(() => []),
+    ]);
+    const withIssues = { ...baseState, reviewIssues: issues };
+    const state = { ...withIssues, suggestions: challengeSuggestions(withIssues, base, fromServices) };
     const questions = buildQuestions(state, base);
     const response: JourneyStartResponse = {
       context: encodeContext(state, deps.config.journeySecret),
@@ -108,7 +119,20 @@ export async function handleJourneyAnswer(body: unknown, deps: ApiDeps): Promise
   }
   const { answers, ignored } = cleanAnswers(questions, merged);
   const incomingIgnored = ignored.filter((i) => i.questionId in incoming);
-  const result = buildAnswer(state, questions, answers, now);
+  // The owner's challenges, read by AI when it's on (checked and cached), by keyword rules otherwise.
+  const challenges = await interpretChallenges({
+    text: typeof answers.challenges === "string" ? answers.challenges : null,
+    picks: Array.isArray(answers.challenge_picks) ? answers.challenge_picks : [],
+    suggestions: questions.find((q) => q.id === "challenges")?.suggestions ?? [],
+    industry: state.profile.business.industry.value,
+    business: state.profile.business.name.value ?? "the business",
+    reviews: state.reviewTexts ?? [],
+    llm: deps.llm,
+  }).catch((error) => {
+    log.warn("journey.challenges_failed", { error });
+    return [];
+  });
+  const result = buildAnswer(state, questions, answers, now, challenges);
   const response: JourneyAnswerResponse = {
     ...result,
     context: encodeContext({ ...state, answers }, deps.config.journeySecret),
