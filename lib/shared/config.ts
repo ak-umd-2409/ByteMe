@@ -8,6 +8,8 @@
 export interface AppConfig {
   /** Google Places API (New) key. Null means "use the mock Places provider". */
   googlePlacesApiKey: string | null;
+  /** SerpApi key. Used only to fill in Google review text when Google's own API sends none. */
+  serpApiKey: string | null;
   /** OpenRouter key. Null means "LLM disabled; rules only". */
   openRouterApiKey: string | null;
   openRouterModel: string;
@@ -43,6 +45,7 @@ const intOr = (value: string | undefined, fallback: number, min: number, max: nu
 export function loadConfig(env: Env = process.env): AppConfig {
   return {
     googlePlacesApiKey: clean(env.GOOGLE_PLACES_API_KEY),
+    serpApiKey: clean(env.SERPAPI_KEY) ?? clean(env.SERPAPI_API_KEY),
     openRouterApiKey: clean(env.OPENROUTER_API_KEY),
     openRouterModel: clean(env.OPENROUTER_MODEL) ?? "openai/gpt-4o-mini",
     llmDisabled: env.LLM_DISABLED === "1" || env.LLM_DISABLED === "true",
