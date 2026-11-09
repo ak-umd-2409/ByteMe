@@ -54,16 +54,31 @@ const ASK_ORDER = ["challenges", "call_recording", "health_data", "budget", "set
 
 const STEPS = ["Find", "Check", "Questions", "Results", "Tools", "Plan"];
 
+/**
+ * Set by Journey on every render: which steps the owner can jump to and how. Lets the progress
+ * bar work as navigation (back to any step, or forward to one they've already reached with
+ * up-to-date results) without threading props through every screen.
+ */
+const stepNav: { current: { can: (k: number) => boolean; go: (k: number) => void } | null } = { current: null };
+
 function Steps({ n }: { n: number }) {
+  const nav = stepNav.current;
   return (
     <nav className={s.stepper} aria-label="Progress">
       <ol>
         {STEPS.map((label, i) => {
           const k = i + 1;
+          const can = k !== n && Boolean(nav?.can(k));
           return (
             <li key={label} className={k < n ? s.stepDone : k === n ? s.stepNow : undefined} aria-current={k === n ? "step" : undefined}>
               <span className={s.dot}>{k < n ? "✓" : k}</span>
-              <span className={s.stepLabel}>{label}</span>
+              {can ? (
+                <button type="button" className={cx(s.stepLabel, s.stepLink)} onClick={() => nav!.go(k)} title={`Go to ${label}`}>
+                  {label}
+                </button>
+              ) : (
+                <span className={s.stepLabel}>{label}</span>
+              )}
             </li>
           );
         })}
@@ -263,6 +278,8 @@ export function Journey({ lookup, catalog, watchCount = 0, entry }: { lookup: Lo
 
   // Tools
   const [recs, setRecs] = useState<RecommendationResult | null>(null);
+  /** The journey context the tools were found for; when answers change, the tools are out of date. */
+  const [recsFor, setRecsFor] = useState<string | null>(null);
   const [toolId, setToolId] = useState<string | null>(null);
   const [picks, setPicks] = useState<string[]>([]);
   const [cameFrom, setCameFrom] = useState<Screen>("tools");
@@ -294,8 +311,64 @@ export function Journey({ lookup, catalog, watchCount = 0, entry }: { lookup: Lo
     setScreen(next);
   };
 
+  // ---- Keep the owner's place in this tab, so a refresh or a step back never loses their work.
+  // sessionStorage only: it stays in this browser tab and is gone when the tab closes.
+  const SAVE_KEY = "mainstreet.journey.v1";
+  const restored = useRef(false);
+  useEffect(() => {
+    if (restored.current) return;
+    restored.current = true;
+    if (entry?.query || entry?.example) return;
+    try {
+      const raw = sessionStorage.getItem(SAVE_KEY);
+      if (!raw) return;
+      const d = JSON.parse(raw) as Partial<{
+        screen: Screen; start: JourneyStartResponse; result: JourneyAnswerResponse | null; context: string | null; answers: Answers;
+        toolPick: string[] | null; chosen: Chosen; recs: RecommendationResult | null; recsFor: string | null; qIndex: number; toolId: string | null; picks: string[];
+      }>;
+      if (!d.start || !d.screen || d.screen === "loading") return;
+      setStart(d.start);
+      setResult(d.result ?? null);
+      setContext(d.context ?? null);
+      setAnswers(d.answers ?? {});
+      setToolPick(d.toolPick ? new Set(d.toolPick) : null);
+      setChosen(d.chosen ?? {});
+      setRecs(d.recs ?? null);
+      setRecsFor(d.recsFor ?? null);
+      setQIndex(d.qIndex ?? 0);
+      setToolId(d.toolId ?? null);
+      setPicks(d.picks ?? []);
+      setScreen(d.screen);
+    } catch {
+      /* nothing saved, or storage blocked: start fresh */
+    }
+  }, [entry]);
+  useEffect(() => {
+    if (!restored.current) return;
+    try {
+      if (!start || screen === "landing" || screen === "find" || screen === "loading") return;
+      sessionStorage.setItem(SAVE_KEY, JSON.stringify({ screen, start, result, context, answers, toolPick: toolPick ? [...toolPick] : null, chosen, recs, recsFor, qIndex, toolId, picks }));
+    } catch {
+      /* storage full or blocked: the journey still works, it just won't survive a refresh */
+    }
+  }, [screen, start, result, context, answers, toolPick, chosen, recs, recsFor, qIndex, toolId, picks]);
+
+  const recsFresh = Boolean(recs && result && recsFor === result.context);
+  stepNav.current = {
+    can: (k) => (k === 1 ? true : k === 2 || k === 3 ? Boolean(start) : k === 4 ? Boolean(result) : k === 5 ? recsFresh : k === 6 ? Boolean(result) && (recsFresh || !recs) : false),
+    go: (k) => {
+      if (k === 3) setQIndex(0);
+      go((["", "find", "check", "ask", "problems", "tools", "plan"] as const)[k] as Screen);
+    },
+  };
+
   const startOver = () => {
     abort.current?.abort();
+    try {
+      sessionStorage.removeItem("mainstreet.journey.v1");
+    } catch {
+      /* ignore */
+    }
     setStart(null);
     setResult(null);
     setContext(null);
@@ -447,8 +520,18 @@ export function Journey({ lookup, catalog, watchCount = 0, entry }: { lookup: Lo
       const res = await fetch("/api/recommend", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ ...request, problems: chosen }) });
       const body = await res.json();
       if (!res.ok) throw new Error(typeof body?.error === "string" ? body.error : "We couldn't load tools right now.");
-      setRecs(body as RecommendationResult);
-      setChosen({});
+      const next = body as RecommendationResult;
+      setRecs(next);
+      setRecsFor(result.context);
+      // Keep what the owner already chose, where that tool is still offered for that problem.
+      setChosen((prev) =>
+        Object.fromEntries(
+          Object.entries(prev).filter(([problemId, toolId]) =>
+            problemId.startsWith("kit-") ||
+            next.problems.some((p) => p.problem.id === problemId && p.options.some((o) => o.choices.some((c) => c.tool.id === toolId))),
+          ),
+        ),
+      );
       go("tools");
     } catch (e) {
       setError((e as Error).message);
