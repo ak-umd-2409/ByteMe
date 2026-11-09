@@ -107,7 +107,9 @@ export const PROBLEMS: Record<ProblemKey, ProblemDefinition> = {
     title: "Paperwork and admin eat up time",
     explanation: "Invoices, receipts and data entry at {name} take hours that could go to customers.",
     category: { key: "admin", label: "Admin and bookkeeping" },
-    useCase: "bookkeeping",
+    // "admin-paperwork", not "bookkeeping": no checked tool is bookkeeping-only, while admin tools
+    // (Notion, Google Workspace, Grammarly, Proposify…) do help with paperwork, proposals and letters.
+    useCase: "admin-paperwork",
     impactModel: "time_cost_admin",
     whyItMatters: "Hours of paperwork take you away from paid work.",
     nextStep: "Automate invoices and receipts",
