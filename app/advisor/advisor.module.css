@@ -106,6 +106,22 @@
   .panel { animation: slideIn 0.2s cubic-bezier(0.2, 0.7, 0.2, 1); }
 }
 @keyframes slideIn { from { transform: translateX(24px); opacity: 0; } to { transform: none; opacity: 1; } }
+.launch { min-height: 48px; border-width: 1px; border-color: var(--line); font: 600 13px/1 var(--body); padding: 0 18px; gap: 8px; }
+.launchFloat { box-shadow: 0 4px 20px #30272118, 0 1px 3px #3027210c; }
+.welcome, .sideCard, .answer { border-radius: 18px; box-shadow: var(--shadow-card); }
+.starter { background: #f7f3ed; font-size: 14px; padding: 14px 16px; line-height: 1.6; }
+.composer { border: 1px solid var(--border-input); padding: 10px 10px 10px 16px; box-shadow: var(--shadow-card); }
+.composer textarea { font-size: 16px; min-width: 0; }
+.side { top: 96px; }
+.sideCard { font-size: 13px; padding: 22px; }
+.panelHead { padding: 20px; }
+.panelBody { padding: 20px 20px 16px; }
+.toolWhat, .notice { font-size: 13px; }
+.toolPrice { font-family: var(--body); font-size: 20px; font-weight: 600; }
+.fine { font-size: 11px; }
+.starters { grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); }
+@media (prefers-reduced-motion: no-preference) { .starter, .launch, .choice, .suggest { transition: background 180ms, border-color 180ms, box-shadow 180ms; } }
+@media (max-width: 760px) { .launchFloat { min-height: 44px; font-size: 12px; } .panelBody { padding: 14px; } }
 @media print {
   .launch, .launchFloat, .panel, .scrim { display: none !important; }
 }

@@ -88,3 +88,38 @@
 @media (prefers-reduced-motion: no-preference) { .appear { animation: appear 0.4s ease-out; } }
 @keyframes appear { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
 .sampleTag { border-color: var(--warn-fg); color: var(--warn-fg); background: var(--warn-bg); font-weight: 600; }
+
+/* Recommendation surfaces use sage without competing with the warm brand. */
+.recommendationCard { background: linear-gradient(145deg, #f4faf5, #fcfdfa); border-color: #d0e1d4; }
+.recommendationCard .whyPick { background: #eaf3ec; border: 1px solid #dce9df; }
+.typetag { font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: #42664f; }
+.fitScore { width: 64px; height: 64px; border-color: #508365; background: #f5fbf6; box-shadow: inset 0 0 0 4px #fffefa; }
+.fitScore b { font-size: 19px; font-weight: 650; letter-spacing: -.05em; }
+.fitScore small { font-size: 8px; margin-top: 5px; letter-spacing: .04em; }
+.fitScoreCompact { width: 48px; height: 48px; }
+.fitScoreCompact b { font-size: 14px; }
+.fitScoreCompact small { font-size: 8px; margin-top: 3px; }
+.whyPick { padding: 16px; border-radius: 12px; font-size: 14px; line-height: 1.75; }
+.tname { gap: 12px; }
+.tname h2, .tname h3 { letter-spacing: -.02em; }
+.kitRow { background: var(--white); padding: 14px; gap: 6px 10px; font-size: 13px; min-width: 0; }
+.kitRow .meta { font-size: 12px; }
+.kitName { flex-wrap: wrap; }
+.kitRows { grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); }
+.recommendedPlan { padding: 20px; gap: 8px; border-color: #c4d9ca; background: #edf6ef; font-size: 14px; }
+.recommendedPlan strong { font-size: 16px; }
+.recommendedTier { background: #edf6ef; outline: 1px solid #c4d9ca; }
+.recommendedLabel { font-size: 9px; display: inline-block; }
+.facts { font-size: 14px; gap: 14px 20px; }
+.facts dd { overflow-wrap: anywhere; }
+.facts > div { padding: 14px; border: 1px solid var(--line); border-radius: 10px; display: grid; gap: 6px; align-content: start; }
+.cmpwrap { max-width: 100%; box-shadow: var(--shadow-card); }
+.cmpT { font-size: 14px; }
+.cmpT th, .cmpT td { padding: 20px; line-height: 1.65; }
+.cmpT tbody th { font-size: 13px; }
+.cmpbar { border-radius: 16px; box-shadow: 0 8px 28px #30272124; }
+.leftout { gap: 20px; font-size: 13px; }
+.helpRow { padding: 16px; }
+.helpRow b { font-size: 14px; }
+.helpRow span { font-size: 13px; }
+@media (max-width: 760px) { .cmpT th, .cmpT td { padding: 12px; } .actions { gap: 8px; } }

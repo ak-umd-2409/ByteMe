@@ -43,7 +43,6 @@ export function FitScoreBadge({ choice, compact = false }: { choice: ToolChoice;
   return (
     <span className={cx(t.fitScore, compact && t.fitScoreCompact)} title={detail} aria-label={detail}>
       <b>{total}</b>
-      <span>/100</span>
       <small>{compact ? "fit" : "Fit Score"}</small>
     </span>
   );
@@ -456,7 +455,7 @@ export function ToolDetail({
               <strong>{recommendedPlan.label} plan</strong>
               <span>
                 {recommendedPlan.price === "unknown" ? "Pricing isn't public." : `${usd(recommendedPlan.price)}/mo`}
-                {biz && typeof recommendedPlan.price === "number" && (recommendedPlan.price <= biz.monthlyBudget ? ` · fits your ${budgetWord(biz)}` : ` · ${usd(recommendedPlan.price - biz.monthlyBudget)} over ${budgetWord(biz)}`)}
+                {biz && typeof recommendedPlan.price === "number" && (recommendedPlan.price <= biz.monthlyBudget ? ` · fits ${budgetWord(biz)}` : ` · ${usd(recommendedPlan.price - biz.monthlyBudget)} over ${budgetWord(biz)}`)}
               </span>
               <span className={s.small}>The Fit Score uses this plan's listed small-business price when it is available.</span>
             </div>
