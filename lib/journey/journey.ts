@@ -1120,7 +1120,8 @@ function buildFindings(state: JourneyState, discovery: DiscoveryResult, applied:
     return {
       id: `yours-${ch.id}`,
       group: "yours",
-      title: ch.by === "ai" || !card ? ch.title : card.display.headline,
+      // The owner's own framing comes first; the taxonomy only links it to a fix.
+      title: ch.from === "picked" && card ? card.display.headline : ch.title,
       ownerWords: ch.words.split(" · "),
       whatsHappening: ch.by === "ai" || !ch.problem ? ch.whatsHappening : explain(ch.problem),
       whyItMatters: ch.whyItMatters ?? card?.display.whyItMatters ?? null,
