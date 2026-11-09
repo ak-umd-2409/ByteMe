@@ -42,7 +42,9 @@ export function FitScoreBadge({ choice, compact = false }: { choice: ToolChoice;
   const detail = `Fit Score ${total}/100: problem ${parts.problem}/35, current tools ${parts.integration}/25, budget ${parts.budget}/20, setup ${parts.setup}/10, reviews ${parts.reviews}/10.`;
   return (
     <span className={cx(t.fitScore, compact && t.fitScoreCompact)} title={detail} aria-label={detail}>
-      <b>{total}</b>/100 {compact ? "fit" : "Fit Score"}
+      <b>{total}</b>
+      <span>/100</span>
+      <small>{compact ? "fit" : "Fit Score"}</small>
     </span>
   );
 }
@@ -179,7 +181,7 @@ export function WaysToFix({
             const setupKnown = kit.choices.every((c) => typeof byId.get(c.tool.id)?.setupMinutes === "number");
             const setupMin = setupKnown ? kit.choices.reduce((n, c) => n + (byId.get(c.tool.id)?.setupMinutes as number), 0) : 0;
             return (
-              <article className={s.card} style={{ maxWidth: "none" }} key={`${kit.kitType}-${kit.kitFor}`}>
+              <article className={cx(s.card, t.recommendationCard)} style={{ maxWidth: "none" }} key={`${kit.kitType}-${kit.kitFor}`}>
                 <div className={s.cardTop}>
                   <span className={cx(s.badge, kit.kitType === "industry" ? s.ok : s.grey)}>
                     {kit.kitType === "industry" ? "Industry kit" : "Problem kit"} · {kit.choices.length} tools bundled
@@ -230,7 +232,7 @@ export function WaysToFix({
             const r = byId.get(c.tool.id);
             const picked = picks.includes(c.tool.id);
             return (
-              <article className={s.card} key={o.kind + c.tool.id}>
+              <article className={cx(s.card, t.recommendationCard)} key={o.kind + c.tool.id}>
                 <div className={s.cardTop}>
                   <span className={t.typetag}>{KIND_LABEL[o.kind]}</span>
                   <div className={s.cardHead}>
@@ -266,7 +268,7 @@ export function WaysToFix({
           })}
         </div>
       ) : (
-        <article className={s.card} style={{ maxWidth: 760 }}>
+        <article className={cx(s.card, t.recommendationCard)} style={{ maxWidth: 760 }}>
           <div className={s.cardTop}>
             <span className={t.typetag}>No checked tool yet</span>
             <h3 className={s.h3}>We won't suggest a tool we haven't checked</h3>
@@ -325,6 +327,14 @@ export function ToolDetail({
   canCompare: boolean;
 }) {
   const price = r.pricing.small.monthlyUsd;
+  const planTiers = ([
+    ["small", "Small business"],
+    ["medium", "Medium"],
+    ["large", "Large"],
+  ] as const).map(([key, label]) => ({ key, label, price: r.pricing[key].monthlyUsd }));
+  const recommendedPlan = biz
+    ? planTiers.find((tier) => typeof tier.price === "number" && tier.price <= biz.monthlyBudget) ?? planTiers.find((tier) => typeof tier.price === "number")
+    : planTiers[0];
   const ww = r.worksWith.filter((w) => w.type !== "none");
   const yours = biz ? ww.filter((w) => biz.currentTools.some((x) => same(x, w.product))) : [];
   const p = r.privacyCard;
@@ -438,11 +448,22 @@ export function ToolDetail({
           </details>
         </article>
 
-        <article className={s.card}>
-          <div className={s.cardTop}><h2 className={s.h3}>Price</h2></div>
+        <article className={cx(s.card, t.recommendationCard)}>
+          <div className={s.cardTop}><h2 className={s.h3}>Pricing and our recommendation</h2></div>
+          {recommendedPlan && (
+            <div className={t.recommendedPlan}>
+              <span className={cx(s.badge, s.ok)}>Recommended for you</span>
+              <strong>{recommendedPlan.label} plan</strong>
+              <span>
+                {recommendedPlan.price === "unknown" ? "Pricing isn't public." : `${usd(recommendedPlan.price)}/mo`}
+                {biz && typeof recommendedPlan.price === "number" && (recommendedPlan.price <= biz.monthlyBudget ? ` · fits your ${budgetWord(biz)}` : ` · ${usd(recommendedPlan.price - biz.monthlyBudget)} over ${budgetWord(biz)}`)}
+              </span>
+              <span className={s.small}>The Fit Score uses this plan's listed small-business price when it is available.</span>
+            </div>
+          )}
           <dl className={t.facts}>
-            {(["small", "medium", "large"] as const).map((k) => (
-              <div key={k}><dt>{k === "small" ? "Small business" : k === "medium" ? "Medium" : "Large"}</dt><dd>{r.pricing[k].monthlyUsd === "unknown" ? "Not public" : `${usd(r.pricing[k].monthlyUsd as number)}/mo`}</dd></div>
+            {planTiers.map((tier) => (
+              <div className={tier.key === recommendedPlan?.key ? t.recommendedTier : undefined} key={tier.key}><dt>{tier.label}{tier.key === recommendedPlan?.key && <span className={t.recommendedLabel}>Recommended</span>}</dt><dd>{tier.price === "unknown" ? "Not public" : `${usd(tier.price)}/mo`}</dd></div>
             ))}
             <div><dt>Contract</dt><dd>{r.pricing.contract === "monthly" ? "None, monthly" : r.pricing.contract === "annual" ? "Yearly" : "Not public"}</dd></div>
           </dl>

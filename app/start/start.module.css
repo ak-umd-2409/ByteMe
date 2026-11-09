@@ -342,6 +342,9 @@
 .checkRow:first-of-type { border-top: 0; }
 .inlineForm { display: flex; gap: 10px; flex-wrap: wrap; }
 .inlineForm .input { flex: 1 1 220px; width: auto; }
+.ownerProblemCard { border-color: #9bc7aa; background: #f2faf4; }
+.ownerProblemForm { display: grid; gap: 10px; }
+.ownerProblemSaved { margin: 0; padding: 10px 12px; border-radius: 10px; background: #e1f1e5; color: var(--ink); }
 
 /* Your plan (step 6) */
 .planList { list-style: none; margin: 0; padding: 0; display: grid; gap: 16px; }

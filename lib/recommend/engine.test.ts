@@ -267,6 +267,22 @@ test("surfaces other verified candidates when best fit is also the cheapest", ()
   assert.ok(result.problems[0].options.some((option) => option.kind === "alternative"));
 });
 
+test("keeps a broad set of verified alternatives visible", () => {
+  const result = recommend(
+    business,
+    [problems[0]],
+    Array.from({ length: 12 }, (_, index) =>
+      tool(`verified-${index + 1}`, { monthlyPrice: 40 + index * 5, reviewRating: 4.5 }),
+    ),
+  );
+  const ids = new Set(
+    result.problems[0].options
+      .filter((option) => option.kind !== "starter-kit")
+      .flatMap((option) => option.choices.map((candidate) => candidate.tool.id)),
+  );
+  assert.equal(ids.size, 10);
+});
+
 test("shows an above-budget verified alternative with a clear warning", () => {
   const result = recommend(
     business,

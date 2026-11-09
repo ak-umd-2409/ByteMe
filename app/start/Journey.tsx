@@ -1100,6 +1100,30 @@ export function Journey({ lookup, catalog, watchCount = 0, entry }: { lookup: Lo
           ) : null}
         </header>
 
+        <section className={cx(s.card, s.ownerProblemCard)}>
+          <div className={s.cardTop}>
+            <span className={cx(s.badge, s.ok)}>Start with your words</span>
+            <h2 className={s.h2}>What problem do you want help with?</h2>
+            <p className={s.small}>Tell us first. We’ll match it to a checked solution, then show common problems we noticed below.</p>
+          </div>
+          <form
+            className={s.ownerProblemForm}
+            onSubmit={(e) => {
+              e.preventDefault();
+              void send({ anything_else: elseText.trim() || null });
+            }}
+          >
+            <label htmlFor="primary-problem" className={s.sr}>Your problem</label>
+            <textarea id="primary-problem" className={s.textarea} value={elseText} onChange={(e) => setElseText(e.target.value)} placeholder="e.g. I spend every evening writing quotes and chasing replies" maxLength={300} rows={3} />
+            <button type="submit" className={cx(s.btn, s.primary)} disabled={busy || !elseText.trim()}>
+              {busy ? "Adding…" : "Add my problem"}
+            </button>
+          </form>
+          {typeof answers.anything_else === "string" && answers.anything_else.trim() && <p className={s.ownerProblemSaved}><b>Your problem:</b> {answers.anything_else}</p>}
+        </section>
+
+        <h2 className={s.h2}>Suggested/common problems</h2>
+
         <div className={s.oppGrid}>
           {opps.map((o) => (
             <article className={cx(s.card, s.pcard)} key={o.id}>
@@ -1311,35 +1335,13 @@ export function Journey({ lookup, catalog, watchCount = 0, entry }: { lookup: Lo
         )}
 
         <div className={s.grid2}>
-          <details className={s.disc}>
-            <summary>Something else slowing you down?</summary>
+          {dealQ && <details className={s.disc}>
+            <summary>Anything a tool must have?</summary>
             <div className={s.discBody}>
-              <form
-                className={s.col}
-                style={{ gap: 10 }}
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  void send({ anything_else: elseText.trim() || null });
-                }}
-              >
-                <label htmlFor="else" className={s.sr}>
-                  Something else slowing you down?
-                </label>
-                <div className={s.inlineForm}>
-                  <input id="else" className={s.input} value={elseText} onChange={(e) => setElseText(e.target.value)} placeholder="e.g. chasing unpaid invoices" maxLength={300} />
-                  <button type="submit" className={cx(s.btn, s.secondary)} disabled={busy || !elseText.trim()}>
-                    Add
-                  </button>
-                </div>
-              </form>
-              {dealQ && (
-                <>
-                  <span className={s.sub}>{dealQ.text}</span>
-                  <ChoiceQuestion q={dealQ} value={answers.deal_breakers} onChange={(v) => void send({ deal_breakers: v })} />
-                </>
-              )}
+              <span className={s.sub}>{dealQ.text}</span>
+              <ChoiceQuestion q={dealQ} value={answers.deal_breakers} onChange={(v) => void send({ deal_breakers: v })} />
             </div>
-          </details>
+          </details>}
           <details className={s.disc}>
             <summary>
               Your answers{result.assumptions.length > 0 ? ` and ${plural(result.assumptions.length, "assumption")}` : ""}
