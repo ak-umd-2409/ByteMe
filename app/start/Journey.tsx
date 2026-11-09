@@ -895,7 +895,7 @@ export function Journey({ lookup, catalog, watchCount = 0, entry }: { lookup: Lo
                 );
               })}
           </dl>
-          {commonSource && <p className={s.small}>Details {/^from /i.test(commonSource) ? commonSource.toLowerCase() : `from ${commonSource.toLowerCase()}`} unless marked.</p>}
+          {commonSource && <p className={s.small}>Details from {commonSource.replace(/^from /i, "").toLowerCase().replace(/\bgoogle\b/, "Google")} unless marked.</p>}
           {listingQ && (
             <div className={s.mismatch}>
               <b>{listingQ.text}</b>

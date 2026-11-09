@@ -84,6 +84,8 @@ export interface PlanInput {
   extras?: PlanExtra[];
   catalog: CatalogRecord[];
   currentTools: string[];
+  /** The owner asked for help setting tools up. False = they'll do it themselves. */
+  needsHelp?: boolean;
 }
 
 const same = (a: string, b: string) => a.trim().toLowerCase() === b.trim().toLowerCase();
@@ -104,10 +106,12 @@ function baseline(o: Opportunity): string | null {
 function freeSection(o: Opportunity): PlanSection {
   const links = o.evidence.flatMap((e) => e.links).filter((l): l is { label: string; url: string } => Boolean(l.url));
   const unique = [...new Map(links.map((l) => [l.url, l])).values()].slice(0, 6);
+  // The time shown is the sum of the steps below, so the two never disagree.
+  const known = unique.length * 10;
   return {
     id: `free-${o.problemKey}`,
     heading: o.headline,
-    summary: `Free · ${o.fix.label.replace(/^Free\s*·?\s*/i, "") || "this week"}`,
+    summary: known ? `Free · about ${known} min` : "Free · this week",
     problem: o.headline,
     tool: null,
     steps: [
@@ -117,7 +121,7 @@ function freeSection(o: Opportunity): PlanSection {
   };
 }
 
-function toolSection(o: Opportunity, r: CatalogRecord, currentTools: string[]): PlanSection {
+function toolSection(o: Opportunity, r: CatalogRecord, currentTools: string[], needsHelp = true): PlanSection {
   const steps: PlanStep[] = [];
   const price = r.pricing.small.monthlyUsd;
   const site = r.sample ? null : { label: `${r.name} official site`, url: r.vendor.website };
@@ -179,10 +183,10 @@ function toolSection(o: Opportunity, r: CatalogRecord, currentTools: string[]): 
   // 4 · Set it up.
   steps.push({
     id: `${r.id}-setup`,
-    title: r.setupMode === "needs_help" ? "Book help to set it up" : "Set it up",
+    title: r.setupMode === "needs_help" && needsHelp ? "Book help to set it up" : "Set it up",
     detail:
       r.setupMinutes === "unknown"
-        ? "The vendor doesn't say how long setup takes."
+        ? `The vendor doesn't say how long setup takes.${r.setupMode === "needs_help" && !needsHelp ? " It's easier with help, so if you get stuck, your free SBDC advisor can sit with you." : ""}`
         : `About ${r.setupMinutes} minutes${r.setupMode === "needs_help" ? ", best done with someone who has set it up before" : " on your own"}.`,
     minutes: r.setupMinutes === "unknown" ? null : r.setupMinutes,
     link: null,
@@ -277,7 +281,7 @@ export function buildPlan(input: PlanInput): Plan {
       continue;
     }
     if (r.sample) notes.push(`${r.name} is a sample tool for the demo: you can't sign up for it.`);
-    sections.push(toolSection(o, r, currentTools));
+    sections.push(toolSection(o, r, currentTools, input.needsHelp ?? true));
   }
 
   // Everything else the owner told us (and problems from reviews): a free first step, or the tool they picked.
@@ -285,7 +289,7 @@ export function buildPlan(input: PlanInput): Plan {
     const r = choices[x.key] ? byId.get(choices[x.key]!) : undefined;
     if (r && r.badge === "verified") {
       const pseudo = { problemKey: x.key, headline: x.heading, impact: null } as unknown as Opportunity;
-      sections.push(toolSection(pseudo, r, currentTools));
+      sections.push(toolSection(pseudo, r, currentTools, input.needsHelp ?? true));
       continue;
     }
     if (!x.firstStep) continue;

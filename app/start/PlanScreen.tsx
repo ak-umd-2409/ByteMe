@@ -74,7 +74,7 @@ export function PlanScreen({
     const r = catalog.find((x) => x.id === tool);
     if (r) extras.push({ key: id, heading: `${r.name} (from your starter kit)`, firstStep: null, aiHow: null });
   }
-  const plan = buildPlan({ answer, choices, catalog, currentTools, extras });
+  const plan = buildPlan({ answer, choices, catalog, currentTools, extras, needsHelp });
 
   // Ticked steps, remembered in this browser for this business.
   const doneKey = `mainstreet.plan.done.${plan.business}`;
