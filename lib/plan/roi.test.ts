@@ -3,7 +3,8 @@ import { describe, it } from "node:test";
 import real from "../../data/catalog/real.json" with { type: "json" };
 import { validRecord } from "../catalog/fixtures.ts";
 import type { CatalogRecord } from "../catalog/types.ts";
-import { costSummary, DEFAULT_FIX_SHARE, payback, paybackWords, priceOf, totals, type PaybackInput } from "./roi.ts";
+import { costSummary, DEFAULT_FIX_SHARE, payback, paybackWords, priceExtras, priceOf, totals, type PaybackInput } from "./roi.ts";
+import { answerInQuote, type PricingFact } from "../catalog/pricingDetails.ts";
 
 const catalog = ((real as unknown as { tools?: CatalogRecord[] }).tools ?? (real as unknown as CatalogRecord[])) as CatalogRecord[];
 const tool = (over: Partial<CatalogRecord["pricing"]["small"]>, pricing: Partial<CatalogRecord["pricing"]> = {}): CatalogRecord => {
@@ -35,7 +36,9 @@ describe("priceOf", () => {
     for (const r of catalog) {
       const p = priceOf(r);
       assert.ok(p.label);
-      if (r.pricing.small.monthlyUsd === "unknown") assert.equal(p.monthly, null, r.id);
+      // No invented prices: a price is either the approved catalog's, or a checked pricing-page fact.
+      if (r.pricing.small.monthlyUsd === "unknown") assert.ok(p.monthly === null || p.monthly === p.monthlyBilled || p.monthly === p.annualBilled, r.id);
+      else assert.equal(p.monthly, r.pricing.small.monthlyUsd, r.id);
       assert.match(p.sourceUrl ?? "", /^https:\/\//, r.id);
     }
   });
@@ -115,5 +118,42 @@ describe("costSummary", () => {
     assert.equal(out.tools.length, 1);
     assert.equal(out.tools[0]!.price.label, "starting");
     assert.equal(out.totals.firstYear, 144);
+  });
+});
+
+describe("checked pricing-page details", () => {
+  const byId = (id: string) => catalog.find((r) => r.id === id)!;
+  it("adds the trial, monthly vs yearly price, limits and extra-use charges for Upfirst", () => {
+    const p = priceOf(byId("upfirst"));
+    assert.equal(p.trialDays, 14);
+    assert.equal(p.monthlyBilled, 24.95);
+    assert.equal(p.annualBilled, 20);
+    assert.deepEqual(p.overage, ["$1.50 per extra call"]);
+    assert.ok(!p.notConfirmed.includes("free plan or trial"));
+    assert.ok(priceExtras(p).includes("14-day free trial"));
+  });
+  it("gives a starting price, from its own page, to a tool the catalog had no price for", () => {
+    const p = priceOf(byId("semrush"));
+    assert.equal(p.monthly, 139);
+    assert.equal(p.label, "starting");
+  });
+  it("still says setup fees aren't confirmed when the page doesn't say", () => {
+    assert.ok(priceOf(byId("upfirst")).notConfirmed.includes("setup fee"));
+  });
+});
+
+describe("answerInQuote (the word-for-word check)", () => {
+  const f = (field: PricingFact["field"], answer: string, quote: string): PricingFact => ({ field, answer, quote, url: "https://x.example" });
+  it("rejects answers the quote doesn't say", () => {
+    assert.ok(answerInQuote(f("freeTrialDays", "30", "Start your 14-day free trial")));
+    assert.ok(answerInQuote(f("annualBilled", "20", "$24.95 billed monthly")));
+    assert.ok(answerInQuote(f("setupFee", "0", "Onboarding is quick")));
+    assert.ok(answerInQuote(f("freePlan", "no", "There's no free plan")), "a page can't confirm 'no'");
+    assert.ok(answerInQuote(f("limit", "500 calls", "30 calls Starter")));
+  });
+  it("accepts answers the quote does say", () => {
+    assert.equal(answerInQuote(f("freeTrialDays", "7", "Start 7 -day trial")), null);
+    assert.equal(answerInQuote(f("annualBilled", "20", "$24.95 billed monthly $20 billed annually /mo")), null);
+    assert.equal(answerInQuote(f("perUser", "yes", "Essentials $89 user/month")), null);
   });
 });

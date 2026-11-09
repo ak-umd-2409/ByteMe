@@ -1,0 +1,26 @@
+{
+  "id": "jane",
+  "plan": "Balance",
+  "facts": [
+    {
+      "field": "monthlyBilled",
+      "answer": "59",
+      "quote": "Choose a plan: Balance / USD $59 per month",
+      "url": "https://jane.app/pricing"
+    },
+    {
+      "field": "freePlan",
+      "answer": "yes",
+      "quote": "Your estimated price: USD $0 / month Limited to one practitioner license and 20 appointments per month.",
+      "url": "https://jane.app/pricing"
+    },
+    {
+      "field": "extraCosts",
+      "answer": "Insurance Billing (USD $20 + $5 / month per license)",
+      "quote": "Insurance Billing (USD $20 + $5 / month per license)",
+      "url": "https://jane.app/pricing"
+    }
+  ],
+  "foundBy": "Claude (quoted from the vendor's pricing page)",
+  "foundAt": "2026-11-08"
+}

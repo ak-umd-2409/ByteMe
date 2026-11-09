@@ -1,0 +1,32 @@
+{
+  "id": "jasper",
+  "plan": "Pro",
+  "facts": [
+    {
+      "field": "annualBilled",
+      "answer": "59",
+      "quote": "Pro: $59/month billed yearly or $69/month billed monthly (cancel anytime).",
+      "url": "https://www.jasper.ai/pricing"
+    },
+    {
+      "field": "monthlyBilled",
+      "answer": "69",
+      "quote": "Pro: $59/month billed yearly or $69/month billed monthly (cancel anytime).",
+      "url": "https://www.jasper.ai/pricing"
+    },
+    {
+      "field": "freeTrialDays",
+      "answer": "7",
+      "quote": "Start Free 7-Day Trial",
+      "url": "https://www.jasper.ai/pricing"
+    },
+    {
+      "field": "perUser",
+      "answer": "yes",
+      "quote": "Pro $ 59 month/ seat",
+      "url": "https://www.jasper.ai/pricing"
+    }
+  ],
+  "foundBy": "Claude (quoted from the vendor's pricing page)",
+  "foundAt": "2026-11-08"
+}

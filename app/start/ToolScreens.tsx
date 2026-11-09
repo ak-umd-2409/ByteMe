@@ -14,7 +14,7 @@ import type { BusinessProfile, Recommendation, RecommendationResult, ToolChoice 
 import s from "./start.module.css";
 import t from "./tools.module.css";
 import { GUIDES } from "@/lib/advisor/knowledge.ts";
-import { PRICE_LABEL, priceOf } from "@/lib/plan/roi.ts";
+import { PRICE_LABEL, priceExtras, priceOf } from "@/lib/plan/roi.ts";
 
 /** One line under a tool's price: what kind of price it is, where it's from, when we checked, and what we couldn't confirm. */
 export function PriceLine({ r }: { r: CatalogRecord | undefined }) {
@@ -31,7 +31,9 @@ export function PriceLine({ r }: { r: CatalogRecord | undefined }) {
       ) : (
         "no source"
       )}
-      {`, checked ${p.checked}. Not confirmed: ${p.notConfirmed.join(", ")}.`}
+      {`, checked ${p.checked}.`}
+      {priceExtras(p).length > 0 && ` ${priceExtras(p).join(" · ")}.`}
+      {p.notConfirmed.length > 0 && ` Not confirmed: ${p.notConfirmed.join(", ")}.`}
     </span>
   );
 }

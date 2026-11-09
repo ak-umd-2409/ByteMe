@@ -1,0 +1,26 @@
+{
+  "id": "notion",
+  "plan": "Plus",
+  "facts": [
+    {
+      "field": "freePlan",
+      "answer": "yes",
+      "quote": "Free $0 per seat/month Sign up Plus $10 per seat/month",
+      "url": "https://www.notion.com/pricing"
+    },
+    {
+      "field": "perUser",
+      "answer": "yes",
+      "quote": "Plus $10 per seat/month Get started",
+      "url": "https://www.notion.com/pricing"
+    },
+    {
+      "field": "annualDiscountPct",
+      "answer": "20",
+      "quote": "Save up to 20% with yearly",
+      "url": "https://www.notion.com/pricing"
+    }
+  ],
+  "foundBy": "Claude (quoted from the vendor's pricing page)",
+  "foundAt": "2026-11-08"
+}

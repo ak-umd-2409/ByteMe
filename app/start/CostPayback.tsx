@@ -16,6 +16,7 @@ import {
   DEFAULT_TIME_TO_MONEY,
   PRICE_LABEL,
   payback,
+  priceExtras,
   paybackWords,
   priceOf,
   totals,
@@ -77,7 +78,7 @@ export function CostPayback({ plan, catalog, impactFor }: { plan: Plan; catalog:
       {sum.missing.length > 0 && (
         <p className={s.banner}>Not in the total: {sum.missing.join(", ")}. {sum.missing.length === 1 ? "Its price isn't" : "Their prices aren't"} published. Ask for a written price before you buy.</p>
       )}
-      <p className={s.small}>First year = 12 months of the prices below. Setup fees, extra users and usage charges aren&apos;t included because we couldn&apos;t confirm them.</p>
+      <p className={s.small}>First year = 12 months of the prices below, billed monthly. Setup fees, extra users and going over a plan's limits aren&apos;t included.</p>
 
       {rows.map(({ sec, r }) => {
         const p = priceOf(r);
@@ -103,12 +104,17 @@ export function CostPayback({ plan, catalog, impactFor }: { plan: Plan; catalog:
 
             <dl className={c.facts}>
               <div><dt>Price</dt><dd><span className={cx(c.label, c[`l_${p.label}`])}>{PRICE_LABEL[p.label]}</span>{p.plan && ` · ${p.plan}`}</dd></div>
-              <div><dt>Per year</dt><dd>{p.monthly === null ? "Not published" : usd(p.monthly * 12)}</dd></div>
-              <div><dt>Billing</dt><dd>{p.billing === "yearly" ? "Needs a yearly contract" : p.billing === "monthly" ? "Monthly, cancel any month" : "Not confirmed"}</dd></div>
-              <div><dt>Free plan or trial</dt><dd>{p.freePlan === "yes" ? "Yes" : p.freePlan === "no" ? "No" : "Not confirmed"}</dd></div>
+              <div><dt>Per year</dt><dd>{p.monthly === null ? "Not published" : usd(p.monthly * 12)}{p.annualBilled !== null && p.annualBilled !== p.monthly ? ` (${usd(p.annualBilled * 12)} if paid yearly)` : ""}</dd></div>
+              <div><dt>Billing</dt><dd>{p.monthlyBilled !== null || p.annualBilled !== null ? [p.monthlyBilled !== null && `${usd(p.monthlyBilled)}/mo monthly`, p.annualBilled !== null && `${usd(p.annualBilled)}/mo yearly`].filter(Boolean).join(" · ") : p.billing === "yearly" ? "Needs a yearly contract" : p.billing === "monthly" ? "Monthly, cancel any month" : "Not confirmed"}</dd></div>
+              <div><dt>Free plan or trial</dt><dd>{[p.trialDays !== null && `${p.trialDays}-day free trial`, p.freePlan === "yes" && "Free plan"].filter(Boolean).join(" · ") || (p.freePlan === "no" ? "No" : "Not confirmed")}</dd></div>
             </dl>
+            {priceExtras(p).filter((x) => !/free trial|free plan|billed (monthly|yearly)/i.test(x)).length > 0 && (
+              <ul className={c.extras}>
+                {priceExtras(p).filter((x) => !/free trial|free plan|billed (monthly|yearly)/i.test(x)).map((x) => <li key={x}>{x}</li>)}
+              </ul>
+            )}
             <p className={s.small}>
-              Not confirmed: {p.notConfirmed.filter((x) => x !== "free plan or trial" && x !== "monthly or yearly billing").join(", ")}.{" "}
+              {p.notConfirmed.filter((x) => x !== "free plan or trial" && x !== "monthly or yearly billing").length > 0 && `Not confirmed: ${p.notConfirmed.filter((x) => x !== "free plan or trial" && x !== "monthly or yearly billing").join(", ")}. `}
               {p.sourceUrl && (
                 <a href={p.sourceUrl} target="_blank" rel="noreferrer">Source: {new URL(p.sourceUrl).hostname.replace(/^www\./, "")} pricing ↗</a>
               )}{" "}

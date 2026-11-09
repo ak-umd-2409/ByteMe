@@ -1,0 +1,32 @@
+{
+  "id": "chatbase",
+  "plan": "Hobby",
+  "facts": [
+    {
+      "field": "annualBilled",
+      "answer": "32",
+      "quote": "Hobby $32 $40 $40 $40 /month billed yearly",
+      "url": "https://www.chatbase.co/pricing"
+    },
+    {
+      "field": "annualDiscountPct",
+      "answer": "20",
+      "quote": "Pricing Yearly 20% off Hobby $32",
+      "url": "https://www.chatbase.co/pricing"
+    },
+    {
+      "field": "limit",
+      "answer": "700 message credits",
+      "quote": "The ideal entry point to Chatbase. 700 message credits",
+      "url": "https://www.chatbase.co/pricing"
+    },
+    {
+      "field": "extraCosts",
+      "answer": "Remove 'Powered By Chatbase'",
+      "quote": "Remove 'Powered By Chatbase' Remove the Chatbase branding from your deployed agents. $99 /month",
+      "url": "https://www.chatbase.co/pricing"
+    }
+  ],
+  "foundBy": "Claude (quoted from the vendor's pricing page)",
+  "foundAt": "2026-11-08"
+}

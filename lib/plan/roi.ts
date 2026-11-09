@@ -10,6 +10,8 @@
  * - When we don't know what the problem costs, we say so instead of showing a payback figure.
  */
 import type { CatalogRecord } from "../catalog/types.ts";
+import type { PricingDetails, PricingFact } from "../catalog/pricingDetails.ts";
+import pricingDetails from "../../data/catalog/pricing.json" with { type: "json" };
 
 export type PriceLabel = "verified" | "starting" | "estimated" | "quote" | "unavailable";
 
@@ -30,44 +32,103 @@ export interface ToolPrice {
   /** "yearly" when the listed price needs a yearly contract. */
   billing: "monthly" | "yearly" | "unknown";
   freePlan: "yes" | "no" | "unknown";
+  /** Days of free trial, from the vendor's page. Null = not confirmed. */
+  trialDays: number | null;
+  /** The plan's price per month when billed monthly / when billed yearly. Null = not confirmed. */
+  monthlyBilled: number | null;
+  annualBilled: number | null;
+  /** "Save up to 20%" on yearly billing, as a number. */
+  annualDiscountPct: number | null;
+  perUser: boolean;
+  /** The page's own words: what's included, what going over costs, extra users, other costs. */
+  limits: string[];
+  overage: string[];
+  extraUsers: string[];
+  extraCosts: string[];
   sourceUrl: string | null;
   checked: string;
   /** Pricing facts we couldn't confirm, in plain words. */
   notConfirmed: string[];
 }
 
-/** One tool's price, labelled, from its catalog card only. */
+const DETAILS = pricingDetails as Record<string, PricingDetails>;
+
+/** One tool's price, labelled, from its catalog card plus checked details from its pricing page. */
 export function priceOf(r: CatalogRecord): ToolPrice {
   const tier = r.pricing.small;
-  const monthly = tier.monthlyUsd === "unknown" ? null : tier.monthlyUsd;
-  const note = tier.note.trim();
+  const d = r.sample ? undefined : DETAILS[r.id];
+  const facts = d?.facts ?? [];
+  const one = (f: PricingFact["field"]) => facts.find((x) => x.field === f)?.answer ?? null;
+  const all = (f: PricingFact["field"]) => facts.filter((x) => x.field === f).map((x) => x.answer);
+  const n = (s: string | null) => (s === null ? null : Number(s));
+  const monthlyBilled = n(one("monthlyBilled"));
+  const annualBilled = n(one("annualBilled"));
+  const catalogMonthly = tier.monthlyUsd === "unknown" ? null : tier.monthlyUsd;
+  // The headline price comes from the approved catalog. Only when that's missing do we use the
+  // checked pricing-page price, preferring the monthly-billed one (no yearly commitment).
+  const monthly = catalogMonthly ?? monthlyBilled ?? annualBilled;
+  const note = catalogMonthly === null && monthly !== null && d ? d.plan : tier.note.trim();
   const label: PriceLabel = r.sample
     ? "estimated"
     : monthly === null
       ? /quote|contact sales|custom/i.test(note)
         ? "quote"
         : "unavailable"
-      : /cheapest|starter|from|starting/i.test(note)
+      : catalogMonthly === null || /cheapest|starter|from|starting/i.test(note)
         ? "starting"
         : "verified";
   const billing = r.pricing.contract === "annual" ? "yearly" : r.pricing.contract === "monthly" ? "monthly" : "unknown";
+  const freePlan = one("freePlan") === "yes" ? "yes" : r.pricing.freeTier === "unknown" ? "unknown" : r.pricing.freeTier ? "yes" : "no";
+  const trialDays = n(one("freeTrialDays"));
+  const perUser = one("perUser") === "yes" || all("extraUsers").length > 0;
+  const limits = all("limit");
+  const overage = all("overage");
   const notConfirmed = [
-    "setup fee",
-    r.pricing.freeTier === "unknown" ? "free plan or trial" : null,
-    "price per extra user",
-    "usage limits and overage charges",
-    billing === "unknown" ? "monthly or yearly billing" : null,
+    one("setupFee") === null ? "setup fee" : null,
+    freePlan === "unknown" && trialDays === null ? "free plan or trial" : null,
+    perUser ? null : "price per extra user",
+    limits.length || overage.length ? null : "usage limits and overage charges",
+    billing === "unknown" && monthlyBilled === null && annualBilled === null ? "monthly or yearly billing" : null,
   ].filter((x): x is string => Boolean(x));
   return {
     label,
     monthly,
     plan: note.replace(/\.$/, ""),
     billing,
-    freePlan: r.pricing.freeTier === "unknown" ? "unknown" : r.pricing.freeTier ? "yes" : "no",
+    freePlan,
+    trialDays,
+    monthlyBilled,
+    annualBilled,
+    annualDiscountPct: n(one("annualDiscountPct")),
+    perUser,
+    limits,
+    overage,
+    extraUsers: all("extraUsers"),
+    extraCosts: all("extraCosts"),
     sourceUrl: r.sample ? null : r.pricing.pricingUrl || null,
-    checked: r.pricing.asOf,
+    checked: d ? new Date(`${d.checkedAt}T12:00:00Z`).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric", timeZone: "UTC" }) : r.pricing.asOf,
     notConfirmed,
   };
+}
+
+/** Plain lines for the extra price facts we confirmed, e.g. "14-day free trial", "$20/mo billed yearly". */
+export function priceExtras(p: ToolPrice): string[] {
+  const usd = (x: number) => `$${x % 1 ? x.toFixed(2) : x}`;
+  return [
+    p.trialDays !== null ? `${p.trialDays}-day free trial` : null,
+    p.freePlan === "yes" ? "Has a free plan" : null,
+    p.monthlyBilled !== null ? `${usd(p.monthlyBilled)}/mo billed monthly` : null,
+    p.annualBilled !== null
+      ? `${usd(p.annualBilled)}/mo billed yearly${p.annualDiscountPct !== null ? ` (up to ${p.annualDiscountPct}% off)` : ""}`
+      : p.annualDiscountPct !== null
+        ? `Up to ${p.annualDiscountPct}% off if you pay yearly`
+        : null,
+    p.perUser ? "Priced per user" : null,
+    ...p.limits.map((x) => `Includes: ${x}`),
+    ...p.overage.map((x) => `Extra use: ${x}`),
+    ...p.extraUsers.map((x) => `Extra users: ${x}`),
+    ...p.extraCosts.map((x) => `Costs extra: ${x}`),
+  ].filter((x): x is string => Boolean(x));
 }
 
 export interface CostTotals {

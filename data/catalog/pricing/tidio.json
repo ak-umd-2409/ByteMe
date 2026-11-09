@@ -1,0 +1,26 @@
+{
+  "id": "tidio",
+  "plan": "Starter",
+  "facts": [
+    {
+      "field": "freeTrialDays",
+      "answer": "7",
+      "quote": "$ 24.17 /mo. 100 Billable conversations 7-day free trial",
+      "url": "https://www.tidio.com/pricing/"
+    },
+    {
+      "field": "limit",
+      "answer": "100 Billable conversations",
+      "quote": "$ 24.17 /mo. 100 Billable conversations 7-day free trial",
+      "url": "https://www.tidio.com/pricing/"
+    },
+    {
+      "field": "extraCosts",
+      "answer": "No Tidio branding Add-on (16.67 USD/mo.)",
+      "quote": "No Tidio branding Add-on (16.67 USD/mo.)",
+      "url": "https://www.tidio.com/pricing/"
+    }
+  ],
+  "foundBy": "Claude (quoted from the vendor's pricing page)",
+  "foundAt": "2026-11-08"
+}

@@ -1,0 +1,20 @@
+{
+  "id": "intercom",
+  "plan": "Essential",
+  "facts": [
+    {
+      "field": "perUser",
+      "answer": "yes",
+      "quote": "$29 $19 per seat/mo New customers save 35%",
+      "url": "https://www.intercom.com/pricing"
+    },
+    {
+      "field": "overage",
+      "answer": "From $0.99 per Fin outcome",
+      "quote": "Customer support for individuals, startups, and small businesses. From $0.99 per Fin outcome",
+      "url": "https://www.intercom.com/pricing"
+    }
+  ],
+  "foundBy": "Claude (quoted from the vendor's pricing page)",
+  "foundAt": "2026-11-08"
+}
