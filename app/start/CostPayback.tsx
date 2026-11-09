@@ -28,6 +28,8 @@ import c from "./cost.module.css";
 const cx = (...names: (string | false | null | undefined)[]) => names.filter(Boolean).join(" ");
 const usd = (n: number) => `$${(Math.round(n * 100) / 100).toLocaleString("en-US", { minimumFractionDigits: n % 1 ? 2 : 0, maximumFractionDigits: 2 })}`;
 const whole = (n: number) => `${n < 0 ? "−" : ""}$${Math.abs(Math.round(n)).toLocaleString("en-US")}`;
+/** "missed calls" from "Missed calls", but "I spend…" keeps its capital I. */
+const lc = (h: string) => (/^I\b/.test(h) ? h : h.charAt(0).toLowerCase() + h.slice(1));
 const SC_WORD: Record<Scenario, string> = { conservative: "If it helps a little", expected: "Expected", optimistic: "If it helps a lot" };
 
 /** A starting value for an hour of the owner's time: theirs if they gave one, else a labelled guess. */
@@ -94,7 +96,7 @@ export function CostPayback({ plan, catalog, impactFor }: { plan: Plan; catalog:
               <ToolLogo id={r.id} name={r.name} size={32} />
               <div>
                 <b>{r.name}</b>
-                <span className={s.small}>For: {sec.heading.toLowerCase()}</span>
+                <span className={s.small}>For: {lc(sec.heading)}</span>
               </div>
               <span className={s.price}>{p.monthly === null ? "—" : usd(p.monthly)}<small>{p.monthly === null ? "" : "/mo"}</small></span>
             </header>
@@ -115,7 +117,7 @@ export function CostPayback({ plan, catalog, impactFor }: { plan: Plan; catalog:
 
             {!impact && p.monthly !== null && (
               <label className={c.field}>
-                <span>We don&apos;t have your numbers for this one. What does &ldquo;{sec.heading.toLowerCase()}&rdquo; cost you a month, roughly? (your time or lost sales)</span>
+                <span>We don&apos;t have your numbers for this one. What does &ldquo;{lc(sec.heading)}&rdquo; cost you a month, roughly? (your time or lost sales)</span>
                 <span className={c.money}>$<input inputMode="decimal" value={own[sec.id] ?? ""} placeholder="e.g. 300" aria-label={`Monthly cost of ${sec.heading}`} onChange={(e) => setOwn((o) => ({ ...o, [sec.id]: e.target.value.replace(/[^\d.]/g, "") }))} /></span>
               </label>
             )}
