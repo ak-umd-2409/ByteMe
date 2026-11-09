@@ -24,7 +24,7 @@ export function CostTable({ costs, title = "What it costs" }: { costs: ReturnTyp
             <dt>
               {t.name}
               <br />
-              <span className={s.small}>For: {t.heading.toLowerCase()}</span>
+              <span className={s.small}>For: {/^I\b/.test(t.heading) ? t.heading : t.heading.charAt(0).toLowerCase() + t.heading.slice(1)}</span>
             </dt>
             <dd>
               {t.price.monthly === null ? "Not published" : `${usd(t.price.monthly)} a month (${usd(t.price.monthly * 12)} a year)`} · {PRICE_LABEL[t.price.label]}
