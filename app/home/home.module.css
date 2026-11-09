@@ -222,3 +222,12 @@
   .toolMini { grid-template-columns: auto minmax(0, 1fr); }
   .verified { grid-column: 2; }
 }
+
+/* Centered hero: one column, copy and form in the middle, the real example below. */
+.hero { grid-template-columns: minmax(0, 1fr); justify-items: center; text-align: center; }
+.heroCopy { justify-items: center; max-width: 760px; width: 100%; }
+.heroTitle { max-width: 18ch; margin-inline: auto; }
+.lead { margin-inline: auto; }
+.heroCopy .nameForm { width: 100%; text-align: left; }
+.trustRow { justify-content: center; width: 100%; max-width: 600px; }
+.hero .preview { max-width: 640px; width: 100%; text-align: left; }
