@@ -1068,7 +1068,6 @@ export function buildAnswer(
 // ---------- Findings: yours, noticed, worth considering ----------
 
 const MAX_NOTICED = 4;
-const MAX_CONSIDER = 3;
 
 function aiFor(useCase: UseCase | null, key: ProblemKey | null): Finding["ai"] {
   if (key === "inconsistent_business_info") return { level: "no", how: "Fixing your listings by hand is free and takes about an hour." };
@@ -1080,13 +1079,37 @@ function buildFindings(state: JourneyState, discovery: DiscoveryResult, applied:
   const explain = (key: ProblemKey) => PROBLEMS[key].explanation.replaceAll("{name}", name);
   const reviewById = new Map((state.reviewTexts ?? []).map((r) => [r.id, r]));
   const notOwner = (e: EvidenceItem) => e.sourceLabel !== SOURCE_LABEL.owner_reported;
+  const issues = state.reviewIssues ?? [];
+  const usedIssues = new Set<string>();
+  const words = (t: string) => new Set(t.toLowerCase().match(/[a-z]{4,}/g) ?? []);
+  const matchIssue = (useCase: UseCase | null, title: string) => {
+    const w = words(title);
+    return issues.find((i) => !usedIssues.has(i.id) && ((useCase && i.useCase === useCase) || [...words(i.title)].filter((x) => w.has(x)).length >= 2)) ?? null;
+  };
+  const reviewEvidence = (refs: { reviewId: string; quote: string }[]): EvidenceItem[] =>
+    refs.map((r) => {
+      const review = reviewById.get(r.reviewId);
+      return {
+        title: null,
+        text: r.quote,
+        isQuote: true,
+        sourceLabel: [review?.where ?? "Review", review?.author].filter(Boolean).join(" · "),
+        url: review?.url ?? null,
+        links: review?.url ? [{ label: review.where, url: review.url }] : [],
+        observed: true,
+      };
+    });
 
   // 1) What the owner told us, each connected to any public evidence that says the same.
   const yours: Finding[] = challenges.map((ch) => {
     const card = ch.problem ? discovery.problems.find((p) => p.key === ch.problem) ?? null : null;
     const pub = card ? evidenceItems(card, state) : { items: [], total: 0 };
     const fromCard = pub.items.filter(notOwner);
-    const fromAi: EvidenceItem[] = ch.reviews.map((r) => {
+    // A problem customers raise in reviews that matches this challenge backs it up.
+    const issue = matchIssue(ch.useCase ?? card?.useCase ?? null, ch.title);
+    if (issue) usedIssues.add(issue.id);
+    const reviewRefs = [...ch.reviews, ...(issue?.reviews ?? []).filter((r) => !ch.reviews.some((x) => x.reviewId === r.reviewId))];
+    const fromAi: EvidenceItem[] = reviewRefs.map((r) => {
       const review = reviewById.get(r.reviewId);
       return {
         title: null,
@@ -1106,7 +1129,7 @@ function buildFindings(state: JourneyState, discovery: DiscoveryResult, applied:
       return true;
     });
     const reviewCount = new Set([
-      ...ch.reviews.map((r) => r.reviewId),
+      ...reviewRefs.map((r) => r.reviewId),
       ...(card?.evidence ?? []).filter((s) => s.verified && s.source.endsWith("_review")).map((s) => s.reference?.reviewId ?? s.id),
     ]).size;
     const otherPublic = card ? publicBasis(card) : null;
@@ -1122,7 +1145,8 @@ function buildFindings(state: JourneyState, discovery: DiscoveryResult, applied:
       group: "yours",
       // The owner's own framing comes first; the taxonomy only links it to a fix.
       title: ch.from === "picked" && card ? card.display.headline : ch.title,
-      ownerWords: ch.words.split(" · "),
+      // A picked suggestion is already the title; only quote words the owner typed.
+      ownerWords: ch.from === "picked" ? [] : ch.words.split(" · "),
       whatsHappening: ch.by === "ai" || !ch.problem ? ch.whatsHappening : explain(ch.problem),
       whyItMatters: ch.whyItMatters ?? card?.display.whyItMatters ?? null,
       connection,
@@ -1172,11 +1196,66 @@ function buildFindings(state: JourneyState, discovery: DiscoveryResult, applied:
     .filter((p) => p.status !== "hypothesis" && !mentioned.has(p.key) && !applied.denied.has(p.key) && p.evidence.some((s) => s.verified && s.source !== "owner_reported"))
     .slice(0, MAX_NOTICED)
     .map((p) => fromCard(p, "noticed"));
-  const shown = new Set([...mentioned, ...noticed.map((f) => f.problemKey)]);
-  const consider = discovery.problems
-    .filter((p) => !shown.has(p.key) && !applied.denied.has(p.key) && p.status === "hypothesis")
-    .slice(0, MAX_CONSIDER)
-    .map((p) => fromCard(p, "consider"));
+  // Problems customers describe in reviews, as their own cards.
+  for (const issue of issues) {
+    if (usedIssues.has(issue.id) || noticed.length >= MAX_NOTICED + 2) continue;
+    usedIssues.add(issue.id);
+    const evidence = reviewEvidence(issue.reviews);
+    noticed.push({
+      id: `noticed-${issue.id}`,
+      group: "noticed",
+      title: issue.title,
+      ownerWords: [],
+      whatsHappening: issue.whatsHappening,
+      whyItMatters: null,
+      connection: null,
+      evidence: evidence.slice(0, 3),
+      moreEvidence: Math.max(0, evidence.length - 3),
+      confidence: { level: issue.reviews.length >= 2 ? "high" : "medium", label: `From ${plural(issue.reviews.length, "review")} we read` },
+      whatToDo: issue.firstStep ?? (issue.useCase ? GUIDES[issue.useCase].freeFirst.title : null),
+      ai: issue.ai ?? aiFor(issue.useCase, null),
+      problemKey: null,
+      useCase: issue.useCase,
+      impact: null,
+      impactNote: null,
+      impactNeeds: [],
+      by: "evidence",
+    });
+  }
+  // Review complaint themes outside the problem list (prices, how staff come across), when AI didn't already cover them.
+  const OTHER_THEMES: Partial<Record<string, string>> = {
+    pricing_unclear: "Customers are unsure about prices",
+    price_concerns: "Some customers feel prices are high",
+    rude_service: "Some customers felt the service wasn't friendly",
+  };
+  for (const theme of state.reviews.complaints) {
+    const title = OTHER_THEMES[theme.key];
+    if (!title || noticed.some((f) => f.title === title) || issues.length) continue;
+    const evidence = theme.evidence.filter((e) => e.quote).map((e) => ({ reviewId: e.reviewId, quote: e.quote! }));
+    if (!evidence.length) continue;
+    noticed.push({
+      id: `noticed-theme-${theme.key}`,
+      group: "noticed",
+      title,
+      ownerWords: [],
+      whatsHappening: `${theme.mentions} of ${plural(state.reviews.reviewCount, "review")} we read mention ${theme.label.toLowerCase()}.`,
+      whyItMatters: "New customers read reviews before they choose.",
+      connection: null,
+      evidence: reviewEvidence(evidence).slice(0, 3),
+      moreEvidence: Math.max(0, evidence.length - 3),
+      confidence: { level: theme.mentions >= 2 ? "high" : "medium", label: `From ${plural(theme.mentions, "review")} we read` },
+      whatToDo: theme.key === "rude_service" ? "Reply to these reviews and talk with your team" : "Put your main prices on your website and listings",
+      ai: { level: "no", how: "This is a people and pricing question first. AI won't fix it on its own." },
+      problemKey: null,
+      useCase: null,
+      impact: null,
+      impactNote: null,
+      impactNeeds: [],
+      by: "evidence",
+    });
+  }
+  // "Worth considering" (common for the industry, no evidence) is no longer shown: only evidence or the owner's word count.
+  const consider: Finding[] = [];
 
   // 3) What customers already like.
   const strengths = customersSay(state)

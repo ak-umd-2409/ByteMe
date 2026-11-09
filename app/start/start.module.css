@@ -23,7 +23,7 @@
   --line: #e2d6c4;
   --border-input: #8a8c7f;
   --input-edge: #5e4f3b;
-  --ok-fg: #2f5233; --ok-bg: #e4ebdf;
+  --ok-fg: #5a3a22; --ok-bg: #f1e4d3;
   --warn-fg: #7a4b0c; --warn-bg: #f6e7cc;
   --grey-fg: #4a4f4a; --grey-bg: #e7e8e2;
   --bad-fg: #b3261e; --bad-bg: #fde8e6;
@@ -166,7 +166,7 @@
 @media (prefers-reduced-motion: no-preference) { .loading .ck { animation: spin 0.8s linear infinite; } }
 @keyframes spin { to { transform: rotate(360deg); } }
 .done .ck { border: none; background: var(--ok-fg); position: relative; }
-.done .ck::after { content: "✓"; position: absolute; inset: 0; display: grid; place-items: center; color: #fff; font-weight: 700; font-size: 15px; }
+.done .ck::after { content: "✓"; position: absolute; inset: 0; display: grid; place-items: center; color: var(--on-accent); font-weight: 700; font-size: 15px; }
 
 /* Screen 3 */
 .factlist { margin: 0; display: grid; }
@@ -342,9 +342,9 @@
 .checkRow:first-of-type { border-top: 0; }
 .inlineForm { display: flex; gap: 10px; flex-wrap: wrap; }
 .inlineForm .input { flex: 1 1 220px; width: auto; }
-.ownerProblemCard { border-color: #9bc7aa; background: #f2faf4; }
+.ownerProblemCard { }
 .ownerProblemForm { display: grid; gap: 10px; }
-.ownerProblemSaved { margin: 0; padding: 10px 12px; border-radius: 10px; background: #e1f1e5; color: var(--ink); }
+.ownerProblemSaved { margin: 0; padding: 10px 12px; border-radius: 10px; background: var(--card-inner); color: var(--ink); }
 
 /* Your plan (step 6) */
 .planList { list-style: none; margin: 0; padding: 0; display: grid; gap: 16px; }
@@ -416,3 +416,7 @@
 .strengthList { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
 .strengthList li::before { content: "✓ "; color: var(--ok-fg); font-weight: 700; }
 .addMore { gap: 10px; }
+
+/* Plan: real checkboxes */
+.tick2 { flex: none; width: 22px; height: 22px; margin: 3px 0 0; accent-color: var(--accent); cursor: pointer; }
+.stepDoneRow .optionText b { text-decoration: line-through; text-decoration-color: var(--text-2); color: var(--text-2); }

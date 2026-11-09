@@ -65,10 +65,23 @@ export interface Plan {
   notes: string[];
 }
 
+/** A challenge outside the problem list (the owner's own, or one customers raise in reviews). */
+export interface PlanExtra {
+  /** The id Part 4 used for it (e.g. "owner-c1"), so a chosen tool can be found; or a local id. */
+  key: string;
+  heading: string;
+  /** The free first step. */
+  firstStep: string | null;
+  /** How AI could help, when it can. */
+  aiHow: string | null;
+}
+
 export interface PlanInput {
   answer: Pick<JourneyAnswerResponse, "opportunities" | "localHelp" | "youToldUs"> & { business: { name: string } };
-  /** Chosen tool per problem key (catalog ids). Missing = decide later. */
-  choices: Partial<Record<ProblemKey, string>>;
+  /** Chosen tool per problem key or extra key (catalog ids). Missing = decide later. */
+  choices: Partial<Record<ProblemKey, string>> & Record<string, string | undefined>;
+  /** The owner's other challenges and problems from reviews, so the plan covers everything they care about. */
+  extras?: PlanExtra[];
   catalog: CatalogRecord[];
   currentTools: string[];
 }
@@ -98,7 +111,7 @@ function freeSection(o: Opportunity): PlanSection {
     problem: o.headline,
     tool: null,
     steps: [
-      { id: `${o.problemKey}-do`, title: "Do this", detail: o.fix.nextStep, minutes: null, link: null, why: null, week: 1 },
+      { id: `${o.problemKey}-do`, title: o.fix.nextStep.replace(/\.$/, ""), detail: "Free. No tool needed.", minutes: null, link: null, why: null, week: 1 },
       ...unique.map((l, i) => ({ id: `${o.problemKey}-l${i}`, title: `Update ${l.label.replace(/^Your website$/, "your website")}`, detail: "Sign in to this listing and change the details to match.", minutes: 10, link: { label: `Open ${l.label}`, url: l.url }, why: null, week: 1 })),
     ],
   };
@@ -252,10 +265,10 @@ export function buildPlan(input: PlanInput): Plan {
       sections.push({
         id: `later-${o.problemKey}`,
         heading: o.headline,
-        summary: "Decide later",
+        summary: "Free to start · no tool yet",
         problem: o.headline,
         tool: null,
-        steps: [{ id: `${o.problemKey}-first`, title: "Start without a tool", detail: o.fix.nextStep, minutes: null, link: null, why: null, week: 1 }],
+        steps: [{ id: `${o.problemKey}-first`, title: o.fix.nextStep.replace(/\.$/, ""), detail: "You can do this yourself. Pick a tool later if you still need one.", minutes: null, link: null, why: null, week: 1 }],
       });
       continue;
     }
@@ -265,6 +278,27 @@ export function buildPlan(input: PlanInput): Plan {
     }
     if (r.sample) notes.push(`${r.name} is a sample tool for the demo: you can't sign up for it.`);
     sections.push(toolSection(o, r, currentTools));
+  }
+
+  // Everything else the owner told us (and problems from reviews): a free first step, or the tool they picked.
+  for (const x of input.extras ?? []) {
+    const r = choices[x.key] ? byId.get(choices[x.key]!) : undefined;
+    if (r && r.badge === "verified") {
+      const pseudo = { problemKey: x.key, headline: x.heading, impact: null } as unknown as Opportunity;
+      sections.push(toolSection(pseudo, r, currentTools));
+      continue;
+    }
+    if (!x.firstStep) continue;
+    sections.push({
+      id: `own-${x.key}`,
+      heading: x.heading,
+      summary: "Free to start",
+      problem: x.heading,
+      tool: null,
+      steps: [
+        { id: `${x.key}-first`, title: x.firstStep.replace(/\.$/, ""), detail: x.aiHow ? `Later, AI could help: ${x.aiHow}` : "You can do this yourself.", minutes: null, link: null, why: null, week: x.aiHow ? 1 : 2 },
+      ],
+    });
   }
 
   const tools = sections.map((s) => s.tool && byId.get(s.tool.id)).filter((r): r is CatalogRecord => Boolean(r));

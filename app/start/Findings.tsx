@@ -120,14 +120,15 @@ export function FindingCard({ f, onOpen }: { f: Finding; onOpen: (f: Finding, el
   return (
     <article className={cx(s.card, s.finding, f.group === "consider" && s.findingSoft)}>
       <div className={s.findingTop}>
-        <span className={cx(s.badge, f.group === "yours" ? s.ok : f.group === "noticed" ? s.warn : s.grey)}>{GROUP_TAG[f.group]}</span>
-        <span className={s.small}>{f.confidence.label}</span>
+        <span className={cx(s.badge, f.group === "yours" ? s.ok : s.warn)}>{f.group === "yours" ? "You told us" : f.evidence.some((e) => e.isQuote) ? "From your reviews" : "We noticed"}</span>
+        {/* Say how sure we are only when it adds something: evidence behind the owner's words, or where we saw it. */}
+        {(f.group !== "yours" || f.confidence.level === "high") && <span className={s.small}>{f.confidence.label}</span>}
       </div>
       <h3 className={s.h3}>{f.title}</h3>
-      {f.ownerWords.length > 0 && <p className={s.ownerWords}>“{f.ownerWords.join("” · “")}”</p>}
+      {f.ownerWords.length > 0 && f.ownerWords.join(" ").toLowerCase() !== f.title.toLowerCase() && <p className={s.ownerWords}>“{f.ownerWords.join("” · “")}”</p>}
       {f.connection && <p className={s.connection}>{f.connection}</p>}
       {/* Rule-read challenges only have the owner's words, already quoted above. */}
-      {f.whatsHappening.startsWith("In your words") ? f.whyItMatters && <p className={s.clamp}>{f.whyItMatters}</p> : <p className={s.clamp}>{f.whatsHappening}</p>}
+      {f.whatsHappening && !f.whatsHappening.startsWith("In your words") ? <p className={s.clamp}>{f.whatsHappening}</p> : f.whyItMatters ? <p className={s.clamp}>{f.whyItMatters}</p> : null}
       {f.impact && (
         <p className={s.money}>
           <span className={s.small}>{f.impact.kind === "time_cost" ? "Your time: about" : "Might be worth about"}</span> <b className={s.num}>{usd(f.impact.monthly.expected)} a month</b>

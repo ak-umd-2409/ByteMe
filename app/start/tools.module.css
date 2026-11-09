@@ -10,7 +10,7 @@
 
 /* Fix-type label on top of an option card */
 .typetag { font-size: 13px; font-weight: 700; letter-spacing: 0.04em; color: var(--ink); }
-.fitScore { display: inline-flex; flex-direction: column; align-items: center; justify-content: center; flex: none; width: 60px; height: 60px; padding: 0; border: 2px solid #2f7d54; border-radius: 50%; background: #eaf7ee; color: #185c3b; font-size: 10px; line-height: 1; font-weight: 650; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.fitScore { display: inline-flex; flex-direction: column; align-items: center; justify-content: center; flex: none; width: 60px; height: 60px; padding: 0; border: 1.5px solid var(--accent); border-radius: 50%; background: var(--white); color: var(--accent); font-size: 10px; line-height: 1; font-weight: 650; font-variant-numeric: tabular-nums; white-space: nowrap; }
 .fitScore b { font-size: 17px; line-height: 1; }
 .fitScore span { font-size: 10px; margin-top: 2px; }
 .fitScore small { font-size: 9px; margin-top: 3px; text-transform: uppercase; letter-spacing: .06em; }
@@ -19,12 +19,12 @@
 .fitScoreCompact span { font-size: 9px; }
 .fitScoreCompact small { font-size: 8px; margin-top: 2px; }
 
-.recommendationCard { background: #f2faf4; border-color: #b8d9c1; }
-.recommendationCard .whyPick { background: #e7f5eb; }
-.recommendedPlan { display: grid; gap: 6px; margin: 0 0 16px; padding: 14px; border: 1px solid #9bc7aa; border-radius: 14px; background: #e7f5eb; color: #185c3b; }
+.recommendationCard { background: var(--white); border-color: var(--line); }
+.recommendationCard .whyPick { background: var(--card-inner); }
+.recommendedPlan { display: grid; gap: 6px; margin: 0 0 16px; padding: 14px; border: 1px solid var(--line); border-radius: 14px; background: var(--card-inner); color: var(--ink); }
 .recommendedPlan strong { font-size: 18px; }
-.recommendedTier { background: #e7f5eb; border-radius: 8px; outline: 2px solid #9bc7aa; outline-offset: -2px; }
-.recommendedLabel { margin-left: 8px; font-size: 11px; color: #185c3b; text-transform: uppercase; letter-spacing: .04em; }
+.recommendedTier { background: var(--card-inner); border-radius: 8px; outline: 2px solid var(--accent); outline-offset: -2px; }
+.recommendedLabel { margin-left: 8px; font-size: 11px; color: var(--accent); text-transform: uppercase; letter-spacing: .04em; }
 
 /* Starter Kit */
 .kitStack { display: grid; gap: 14px; }

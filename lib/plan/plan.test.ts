@@ -25,7 +25,7 @@ describe("your plan", () => {
     const first = plan.sections[0];
     assert.equal(first.tool, null);
     assert.match(first.summary, /^Free/);
-    assert.match(first.steps[0].detail, /Change BBB/);
+    assert.match(first.steps[0].title, /Change BBB/);
     assert.ok(first.steps.slice(1).every((st) => st.link?.url.startsWith("https://")));
   });
 
@@ -49,7 +49,7 @@ describe("your plan", () => {
     const a = await journey("public-frederick-heating-ac", {});
     const booking = a.opportunities.find((o) => o.problemKey === "no_online_booking")!;
     const later = buildPlan({ answer: a, choices: {}, catalog: loadCatalog(), currentTools: [] });
-    assert.equal(later.sections.find((x) => x.problem === booking.headline)!.summary, "Decide later");
+    assert.equal(later.sections.find((x) => x.problem === booking.headline)!.summary, "Free to start · no tool yet");
     const listed = buildPlan({ answer: a, choices: { no_online_booking: "booknest" }, catalog: loadCatalog(), currentTools: [] });
     assert.ok(!listed.sections.some((x) => x.tool?.id === "booknest"));
     assert.ok(listed.notes.some((n) => /isn't Verified/.test(n)));

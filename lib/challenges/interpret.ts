@@ -49,7 +49,7 @@ export interface OwnerChallenge {
 }
 
 export const MAX_CHALLENGE_CHARS = 1500;
-const MAX_CHALLENGES = 6;
+const MAX_CHALLENGES = 8;
 
 /** Keyword rules for when AI is off: the taxonomy first, then tool categories outside it. */
 const RULES: { pattern: RegExp; problem?: ProblemKey; useCase?: UseCase }[] = [
@@ -117,8 +117,9 @@ function fromSuggestion(s: ChallengeSuggestion, id: string): OwnerChallenge {
     id,
     words: s.text,
     from: "picked",
-    title: problem && s.source !== "industry" && s.source !== "services" ? PROBLEMS[problem].title : s.text,
-    whatsHappening: problem ? PROBLEMS[problem].explanation : `You picked: “${s.text}”`,
+    title: s.text,
+    // Only say what's happening when we know; never restate the suggestion.
+    whatsHappening: problem ? PROBLEMS[problem].explanation : "",
     whyItMatters: problem ? PROBLEMS[problem].whyItMatters : null,
     problem,
     useCase,
@@ -245,25 +246,32 @@ export async function interpretChallenges(input: {
   reviews: ReviewText[];
   llm?: LlmProvider;
 }): Promise<OwnerChallenge[]> {
-  const text = (input.text ?? "").slice(0, MAX_CHALLENGE_CHARS).trim();
+  const typedText = (input.text ?? "").slice(0, MAX_CHALLENGE_CHARS).trim();
+  const pickedS = input.picks.map((id) => input.suggestions.find((s) => s.id === id)).filter((s): s is ChallengeSuggestion => Boolean(s));
+  // Picked suggestions are read together with what the owner typed, so they get real explanations too.
+  const text = [typedText, ...pickedS.map((s) => s.text)].filter(Boolean).join("\n");
   const items = text ? splitChallenges(text) : [];
+  const pickFor = (words: string) => pickedS.find((s) => norm(s.text) === norm(words) || norm(words).includes(norm(s.text)) || norm(s.text).includes(norm(words)));
   let typed: OwnerChallenge[] = [];
   if (items.length) {
     const ai =
       input.llm && input.llm.name !== "disabled"
         ? await byAi(items, text, { industry: industryInfo((input.industry ?? "other") as IndustryKey).label, business: input.business, reviews: input.reviews }, input.llm)
         : null;
-    typed = ai ?? [];
-    // Anything the AI didn't cover still counts, by the rules.
+    typed = (ai ?? []).map((ch) => {
+      const s = pickFor(ch.words);
+      if (!s) return ch;
+      return { ...ch, from: "picked" as const, problem: ch.problem ?? s.problem ?? null, useCase: ch.useCase ?? s.useCase ?? null };
+    });
+    // Anything the AI didn't cover still counts: a picked suggestion as itself, typed text by the rules.
     for (const item of items) {
       const covered = typed.some((c) => norm(item).includes(norm(c.words)) || norm(c.words).includes(norm(item)));
-      if (!covered) typed.push(byRules(item, `c${typed.length + 1}`));
+      if (covered) continue;
+      const s = pickFor(item);
+      typed.push(s ? fromSuggestion(s, `c${typed.length + 1}`) : byRules(item, `c${typed.length + 1}`));
     }
   }
-  const picked = input.picks
-    .map((id) => input.suggestions.find((s) => s.id === id))
-    .filter((s): s is ChallengeSuggestion => Boolean(s))
-    .map((s, i) => fromSuggestion(s, `p${i + 1}`));
+  const picked: OwnerChallenge[] = [];
 
   // Merge: the owner's typed words win over a picked suggestion of the same problem type.
   const out: OwnerChallenge[] = [];
