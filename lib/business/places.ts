@@ -1,4 +1,5 @@
 import { PUBLIC_SNAPSHOTS } from "../../data/real/index.ts";
+import { withSerpReviews } from "./serpReviews.ts";
 import { chainProviders, snapshotPlacesProvider } from "./snapshot.ts";
 import { mockPlaces } from "../../data/mock/onboarding.ts";
 import { cached, hashKey, sharedCache, type Cache } from "../shared/cache.ts";
@@ -250,7 +251,11 @@ export const mockPlacesProvider: PlacesProvider = {
  * fictional sample businesses only when DEMO_SAMPLE_BUSINESSES=1.
  */
 export function getPlacesProvider(config: AppConfig = loadConfig()): PlacesProvider {
-  if (config.googlePlacesApiKey) return createGooglePlacesProvider(config.googlePlacesApiKey);
+  if (config.googlePlacesApiKey) {
+    const google = createGooglePlacesProvider(config.googlePlacesApiKey);
+    // Without Google billing, Places sends ratings but no review text; SerpApi fills that gap.
+    return config.serpApiKey ? withSerpReviews(google, config.serpApiKey) : google;
+  }
   const real = snapshotPlacesProvider(PUBLIC_SNAPSHOTS);
   return config.sampleBusinesses ? chainProviders("public_snapshot", [real, mockPlacesProvider]) : real;
 }
