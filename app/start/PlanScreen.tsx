@@ -29,6 +29,7 @@ export function PlanScreen({
   catalog,
   currentTools,
   needsHelp = false,
+  chosenTools = {},
   back,
 }: {
   answer: JourneyAnswerResponse;
@@ -37,6 +38,8 @@ export function PlanScreen({
   currentTools: string[];
   /** The owner asked for help setting tools up: show where to get it. */
   needsHelp?: boolean;
+  /** What the owner chose on the tools screen (Part 4 problem id → tool id). Empty = suggest the best fit. */
+  chosenTools?: Record<string, string>;
   back: () => void;
 }) {
   const byId = new Map(catalog.map((r) => [r.id, r]));
@@ -53,14 +56,24 @@ export function PlanScreen({
     }
     return out;
   }, [recs]);
+  const fromToolsScreen = Object.keys(chosenTools).length > 0;
   const [choices, setChoices] = useState<Partial<Record<ProblemKey, string>>>(() =>
-    Object.fromEntries(Object.entries(options).map(([k, list]) => [k, list?.[0]?.id]).filter(([, v]) => v)),
+    fromToolsScreen
+      ? // Exactly what the owner chose; everything else starts with its free first step.
+        Object.fromEntries(Object.entries(chosenTools).map(([id, tool]) => [keyOf(id), tool]))
+      : Object.fromEntries(Object.entries(options).map(([k, list]) => [k, list?.[0]?.id]).filter(([, v]) => v)),
   );
 
   // Everything else the owner told us, and problems from reviews, so the plan covers all of it.
   const extras = [...(answer.findings?.yours ?? []), ...(answer.findings?.noticed ?? [])]
     .filter((f) => !f.problemKey)
-    .map((f) => ({ key: f.id.startsWith("yours-") ? `owner-${f.id.slice(6)}` : f.id, heading: f.title, firstStep: f.whatToDo, aiHow: f.ai && f.ai.level !== "no" ? f.ai.how : null }));
+    .map((f) => ({ key: f.id.startsWith("yours-") ? `owner-${f.id.slice(6)}` : f.id.startsWith("noticed-ri") ? `issue-${f.id.slice(8)}` : f.id, heading: f.title, firstStep: f.whatToDo, aiHow: f.ai && f.ai.level !== "no" ? f.ai.how : null }));
+  // Kit tools that don't match one of the problems still go in the plan, as their own section.
+  for (const [id, tool] of Object.entries(chosenTools)) {
+    if (!id.startsWith("kit-")) continue;
+    const r = catalog.find((x) => x.id === tool);
+    if (r) extras.push({ key: id, heading: `${r.name} (from your starter kit)`, firstStep: null, aiHow: null });
+  }
   const plan = buildPlan({ answer, choices, catalog, currentTools, extras });
 
   // Ticked steps, remembered in this browser for this business.

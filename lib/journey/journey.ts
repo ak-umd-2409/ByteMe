@@ -1081,6 +1081,8 @@ export function buildAnswer(
     for (const f of [...findings.yours, ...findings.noticed]) {
       const owner = f.id.startsWith("yours-") ? `owner-${f.id.slice(6)}` : f.id.startsWith("noticed-ri") ? `issue-${f.id.slice(8)}` : null;
       f.toolsFor = (f.problemKey && byKey.get(f.problemKey)) || (owner && ids.has(owner) ? owner : null);
+      // Same kind of tool as another problem we're already finding tools for: share its selection.
+      if (!f.toolsFor && f.useCase) f.toolsFor = recommendation.request.problems.find((p) => p.useCase === f.useCase)?.id ?? null;
     }
   }
   const found = findings.yours.length + findings.noticed.length;

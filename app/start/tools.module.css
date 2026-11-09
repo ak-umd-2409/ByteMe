@@ -10,14 +10,6 @@
 
 /* Fix-type label on top of an option card */
 .typetag { font-size: 13px; font-weight: 700; letter-spacing: 0.04em; color: var(--ink); }
-.fitScore { display: inline-flex; flex-direction: column; align-items: center; justify-content: center; flex: none; width: 60px; height: 60px; padding: 0; border: 1.5px solid var(--accent); border-radius: 50%; background: var(--white); color: var(--accent); font-size: 10px; line-height: 1; font-weight: 650; font-variant-numeric: tabular-nums; white-space: nowrap; }
-.fitScore b { font-size: 17px; line-height: 1; }
-.fitScore span { font-size: 10px; margin-top: 2px; }
-.fitScore small { font-size: 9px; margin-top: 3px; text-transform: uppercase; letter-spacing: .06em; }
-.fitScoreCompact { width: 44px; height: 44px; border-width: 1px; }
-.fitScoreCompact b { font-size: 13px; }
-.fitScoreCompact span { font-size: 9px; }
-.fitScoreCompact small { font-size: 8px; margin-top: 2px; }
 
 .recommendationCard { background: var(--white); border-color: var(--line); }
 .recommendationCard .whyPick { background: var(--card-inner); }
@@ -88,3 +80,19 @@
 @media (prefers-reduced-motion: no-preference) { .appear { animation: appear 0.4s ease-out; } }
 @keyframes appear { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
 .sampleTag { border-color: var(--warn-fg); color: var(--warn-fg); background: var(--warn-bg); font-weight: 600; }
+
+/* Fit Score ring: fills to the score; green strong, amber okay, red weak */
+.fit { --c: #2f7d4f; --bg: #e3f1e7; display: inline-flex; align-items: center; gap: 10px; flex: none; }
+.fit_mid { --c: #b7791f; --bg: #f8ecd5; }
+.fit_low { --c: #b3261e; --bg: #fbe4e2; }
+.fitRing { --p: 0; width: 52px; height: 52px; border-radius: 50%; display: grid; place-items: center; background: conic-gradient(var(--c) calc(var(--p) * 1%), var(--bg) 0); position: relative; flex: none; }
+.fitRing::before { content: ""; position: absolute; inset: 5px; border-radius: 50%; background: var(--white); }
+.fitRing b { position: relative; font: 700 17px/1 var(--body); color: var(--c); font-variant-numeric: tabular-nums; }
+.fitText { display: grid; line-height: 1.2; }
+.fitText b { font-size: 14px; color: var(--c); }
+.fitText small { font-size: 11px; color: var(--text-2); text-transform: uppercase; letter-spacing: .06em; }
+.fitCompact .fitRing { width: 38px; height: 38px; }
+.fitCompact .fitRing::before { inset: 4px; }
+.fitCompact .fitRing b { font-size: 13px; }
+
+.chosenCard { border-color: var(--accent); box-shadow: inset 0 0 0 1.5px var(--accent); }
