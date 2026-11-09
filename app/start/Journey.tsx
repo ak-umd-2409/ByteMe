@@ -27,7 +27,7 @@ import { PlanScreen } from "./PlanScreen.tsx";
 import { AdvisorPanel } from "../advisor/AdvisorPanel.tsx";
 import { SiteHeader, siteStyles as site } from "../ui/Site.tsx";
 import { saveResults } from "../advisor/saved.ts";
-import { Compare, ToolDetail, WaysToFix, type Biz } from "./ToolScreens.tsx";
+import { Compare, ToolDetail, WaysToFix, type Biz, type Chosen } from "./ToolScreens.tsx";
 import { ChallengeStep, FindingsView } from "./Findings.tsx";
 import type { Finding } from "@/lib/journey/types.ts";
 
@@ -238,6 +238,8 @@ export function Journey({ lookup, catalog, watchCount = 0, entry }: { lookup: Lo
   /** Which problems the owner wants tools for (Part 4 problem ids). Starts with all of them. */
   const [toolPick, setToolPick] = useState<Set<string> | null>(null);
   const [draftLen, setDraftLen] = useState(0);
+  /** Tools the owner chose on the tools screen (problem id → tool id), carried into the plan. */
+  const [chosen, setChosen] = useState<Chosen>({});
   const draftRef = useRef("");
   const answersRef = useRef<Answers>(answers);
   answersRef.current = answers;
@@ -446,6 +448,7 @@ export function Journey({ lookup, catalog, watchCount = 0, entry }: { lookup: Lo
       const body = await res.json();
       if (!res.ok) throw new Error(typeof body?.error === "string" ? body.error : "We couldn't load tools right now.");
       setRecs(body as RecommendationResult);
+      setChosen({});
       go("tools");
     } catch (e) {
       setError((e as Error).message);
@@ -1547,7 +1550,7 @@ export function Journey({ lookup, catalog, watchCount = 0, entry }: { lookup: Lo
       <>
         <Steps n={6} />
         {banner}
-        <PlanScreen answer={result} recs={recs} catalog={catalog} currentTools={req?.currentTools ?? []} needsHelp={req?.needsHelp ?? answers.setup === "help"} back={() => go(recs ? "tools" : "problems")} />
+        <PlanScreen answer={result} recs={recs} catalog={catalog} currentTools={req?.currentTools ?? []} needsHelp={req?.needsHelp ?? answers.setup === "help"} chosenTools={chosen} back={() => go(recs ? "tools" : "problems")} />
       </>,
       { narrow: true },
     );
@@ -1557,14 +1560,18 @@ export function Journey({ lookup, catalog, watchCount = 0, entry }: { lookup: Lo
       <Steps n={5} />
       {banner}
       {recs && biz ? (
-        <WaysToFix recs={recs} biz={biz} catalog={catalog} picks={picks} togglePick={togglePick} openTool={openTool} openCompare={openCompare} back={() => go("problems")} />
+        <WaysToFix recs={recs} biz={biz} catalog={catalog} picks={picks} togglePick={togglePick} openTool={openTool} openCompare={openCompare} back={() => go("problems")} chosen={chosen} onChosen={setChosen} />
       ) : (
         <p className={s.notice}>We need a little more about your business before we can suggest tools.</p>
       )}
       <div className={cx(s.actionBar, s.sticky)}>
-        <span className={s.small}>Next: a step-by-step plan you can print, free fixes first.</span>
+        <span className={s.small}>
+          {Object.keys(chosen).length
+            ? `${Object.keys(chosen).length} ${Object.keys(chosen).length === 1 ? "tool" : "tools"} chosen: ${Object.values(chosen).map((id) => catalog.find((r) => r.id === id)?.name ?? id).join(", ")}.`
+            : "Choose a kit or a tool for any problem, or skip straight to your plan with free first steps."}
+        </span>
         <button type="button" className={cx(s.btn, s.primary)} onClick={() => go("plan")}>
-          Make my plan →
+          {Object.keys(chosen).length ? `Make my plan with ${Object.keys(chosen).length} ${Object.keys(chosen).length === 1 ? "tool" : "tools"} →` : "Make my plan →"}
         </button>
       </div>
     </>,

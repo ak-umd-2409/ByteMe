@@ -171,7 +171,7 @@ export function FindingCard({ f, onOpen, selected, onToggle }: { f: Finding; onO
             Find tools for this
           </label>
         ) : (
-          <span className={s.small}>{f.ai?.level === "no" ? "Free fix" : f.whatToDo ? "Free first step in details" : "No tool for this yet"}</span>
+          <span className={s.small}>{f.ai?.level === "no" ? "Free fix · no tool needed" : "No checked tool for this yet · free first step in Details"}</span>
         )}
         <button type="button" className={cx(s.link, s.findingMore)} aria-haspopup="dialog" onClick={(e) => onOpen(f, e.currentTarget)}>
           Details
