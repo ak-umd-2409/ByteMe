@@ -14,6 +14,27 @@ import type { BusinessProfile, Recommendation, RecommendationResult, ToolChoice 
 import s from "./start.module.css";
 import t from "./tools.module.css";
 import { GUIDES } from "@/lib/advisor/knowledge.ts";
+import { PRICE_LABEL, priceOf } from "@/lib/plan/roi.ts";
+
+/** One line under a tool's price: what kind of price it is, where it's from, when we checked, and what we couldn't confirm. */
+export function PriceLine({ r }: { r: CatalogRecord | undefined }) {
+  if (!r) return null;
+  const p = priceOf(r);
+  return (
+    <span className={s.small}>
+      <b>{PRICE_LABEL[p.label]}</b>
+      {p.plan ? ` · ${p.plan}` : ""}
+      {p.billing === "yearly" ? " · needs a yearly contract" : p.billing === "monthly" ? " · cancel any month" : ""}
+      {" · "}
+      {p.sourceUrl ? (
+        <a href={p.sourceUrl} target="_blank" rel="noreferrer">source</a>
+      ) : (
+        "no source"
+      )}
+      {`, checked ${p.checked}. Not confirmed: ${p.notConfirmed.join(", ")}.`}
+    </span>
+  );
+}
 
 const cx = (...names: (string | false | null | undefined)[]) => names.filter(Boolean).join(" ");
 const usd = (n: number) => `$${Math.round(n).toLocaleString("en-US")}`;
@@ -286,6 +307,7 @@ export function WaysToFix({
                     {r?.sample && <SampleTag />}
                   </div>
                 </div>
+                <PriceLine r={r} />
                 <p className={t.whyPick}>{plainWhy(c.why, r)}</p>
                 {c.warnings.map((warning) => (
                   <p className={s.banner} key={warning}><b>Before you switch this on:</b> {warning}</p>
@@ -531,7 +553,7 @@ export function ToolDetail({
             ))}
             <div><dt>Contract</dt><dd>{r.pricing.contract === "monthly" ? "None, monthly" : r.pricing.contract === "annual" ? "Yearly" : "Not public"}</dd></div>
           </dl>
-          <p className={s.small}>Prices as of {r.pricing.asOf}.</p>
+          <PriceLine r={r} />
         </article>
 
         {help}
