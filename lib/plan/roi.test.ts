@@ -3,7 +3,7 @@ import { describe, it } from "node:test";
 import real from "../../data/catalog/real.json" with { type: "json" };
 import { validRecord } from "../catalog/fixtures.ts";
 import type { CatalogRecord } from "../catalog/types.ts";
-import { DEFAULT_FIX_SHARE, payback, paybackWords, priceOf, totals, type PaybackInput } from "./roi.ts";
+import { costSummary, DEFAULT_FIX_SHARE, payback, paybackWords, priceOf, totals, type PaybackInput } from "./roi.ts";
 
 const catalog = ((real as unknown as { tools?: CatalogRecord[] }).tools ?? (real as unknown as CatalogRecord[])) as CatalogRecord[];
 const tool = (over: Partial<CatalogRecord["pricing"]["small"]>, pricing: Partial<CatalogRecord["pricing"]> = {}): CatalogRecord => {
@@ -105,5 +105,15 @@ describe("paybackWords", () => {
     assert.equal(paybackWords(0), "Right away");
     assert.equal(paybackWords(16), "About 16 days");
     assert.equal(paybackWords(122), "About 4 months");
+  });
+});
+
+describe("costSummary", () => {
+  it("lists only sections with a tool, with labelled prices and totals", () => {
+    const r = { ...validRecord(), id: "x", name: "X", pricing: { ...validRecord().pricing, small: { monthlyUsd: 12, note: "Cheapest paid plan" } } } as CatalogRecord;
+    const out = costSummary({ sections: [{ heading: "Free fix", tool: null }, { heading: "Missed calls", tool: { id: "x" } }] }, [r]);
+    assert.equal(out.tools.length, 1);
+    assert.equal(out.tools[0]!.price.label, "starting");
+    assert.equal(out.totals.firstYear, 144);
   });
 });

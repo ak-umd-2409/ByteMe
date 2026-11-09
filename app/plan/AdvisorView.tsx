@@ -6,6 +6,7 @@
 import type { AdvisorView as View } from "@/lib/plan/share.ts";
 import s from "../start/start.module.css";
 import { FreeHelp, ReadyWords, Weeks } from "./parts.tsx";
+import { CostTable } from "./CostTable.tsx";
 
 const day = (iso: string) => new Date(iso).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric", timeZone: "UTC" });
 
@@ -109,6 +110,8 @@ export function AdvisorView({ view }: { view: View }) {
           {view.assumptions.length > 0 && <p className={s.small}>Skipped, so we assumed: {view.assumptions.join(" ")}</p>}
         </section>
       )}
+
+      {view.costs && <CostTable costs={view.costs} />}
 
       <Weeks plan={view.plan} />
 

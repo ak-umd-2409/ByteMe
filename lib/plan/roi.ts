@@ -190,3 +190,18 @@ export function paybackWords(days: number | null): string {
   if (days <= 60) return `About ${days} days`;
   return `About ${Math.round(days / DAYS_PER_MONTH)} months`;
 }
+
+/** Each chosen tool's labelled price plus totals, for a plan (used by the shared view and the printed report). */
+export function costSummary(
+  plan: { sections: { heading: string; tool: { id: string } | null }[] },
+  catalog: CatalogRecord[],
+): { tools: { id: string; name: string; heading: string; price: ToolPrice }[]; totals: CostTotals } {
+  const byId = new Map(catalog.map((r) => [r.id, r]));
+  const rows = plan.sections
+    .map((sec) => ({ sec, r: sec.tool ? byId.get(sec.tool.id) : undefined }))
+    .filter((x): x is { sec: (typeof plan.sections)[number]; r: CatalogRecord } => Boolean(x.r));
+  return {
+    tools: rows.map(({ sec, r }) => ({ id: r.id, name: r.name, heading: sec.heading, price: priceOf(r) })),
+    totals: totals(rows.map((x) => x.r)),
+  };
+}

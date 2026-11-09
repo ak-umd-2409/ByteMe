@@ -16,6 +16,8 @@ import { ToolLogo } from "@/components/ToolLogo.tsx";
 import s from "./start.module.css";
 import { SampleTag } from "./ToolScreens.tsx";
 import { CostPayback } from "./CostPayback.tsx";
+import { CostTable } from "../plan/CostTable.tsx";
+import { costSummary } from "@/lib/plan/roi.ts";
 import { CopyButton } from "../plan/Copy.tsx";
 import { FreeHelp, ReadyWords, Weeks } from "../plan/parts.tsx";
 
@@ -108,6 +110,12 @@ export function PlanScreen({
   const [share, setShare] = useState<{ url: string; stored: boolean; expiresAt: string | null } | { error: string } | "busy" | null>(null);
   // A link shows the plan as it was when made: changing a tool means making a new one.
   useEffect(() => setShare(null), [choices]);
+  // A printed or saved PDF shows every "How we calculated this" and "Change the assumptions" box open.
+  useEffect(() => {
+    const open = () => document.querySelectorAll("main details").forEach((d) => ((d as HTMLDetailsElement).open = true));
+    window.addEventListener("beforeprint", open);
+    return () => window.removeEventListener("beforeprint", open);
+  }, []);
 
   async function makeLink() {
     setShare("busy");
@@ -137,6 +145,15 @@ export function PlanScreen({
 
   return (
     <>
+      <section hidden className={cx(s.card, s.printShow)} aria-label="Report cover">
+        <span className={s.small}>Technology plan · prepared {new Date().toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })} with MainStreet AI</span>
+        <b>{plan.business}</b>
+        <span className={s.small}>
+          Problems: {plan.sections.map((sec) => sec.heading).join("; ") || "none listed"}.
+          {" "}Tools: {costSummary(plan, catalog).tools.map((t) => t.name).join(", ") || "none yet"}.
+        </span>
+        <span className={s.small}>Prices come from each company&apos;s own pricing page, checked on the date shown. Savings are estimates, not promises. Not legal or financial advice.</span>
+      </section>
       <header className={s.intro}>
         <h1 className={s.title}>Your plan for {plan.business}</h1>
         <p className={s.lead}>Your first 30 days: free fixes first, then one tool at a time. Print it, copy the ready-made words, or send it to a free advisor.</p>
@@ -238,6 +255,10 @@ export function PlanScreen({
       </ol>
 
       <ReadyWords items={words} />
+
+      <div hidden className={s.printShow}>
+        <CostTable costs={costSummary(plan, catalog)} title="Sources and prices" />
+      </div>
 
       <section className={cx(s.card, s.noPrint)} aria-labelledby="send-h">
         <div className={s.cardTop}>
