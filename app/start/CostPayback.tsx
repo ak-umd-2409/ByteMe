@@ -1,0 +1,190 @@
+"use client";
+
+/**
+ * "What it costs and when it pays off" on the plan: every chosen tool's price with its label,
+ * source page and date, the monthly and first-year total, and a payback range the owner can
+ * change. All math is in lib/plan/roi.ts (code, not AI). Nothing is shown as a figure when
+ * we don't have what it needs.
+ */
+import { useState } from "react";
+import type { CatalogRecord } from "@/lib/catalog/types.ts";
+import type { ImpactView } from "@/lib/journey/types.ts";
+import type { Plan } from "@/lib/plan/plan.ts";
+import {
+  DEFAULT_FIX_SHARE,
+  DEFAULT_SETUP_HOURS,
+  DEFAULT_TIME_TO_MONEY,
+  PRICE_LABEL,
+  payback,
+  paybackWords,
+  priceOf,
+  totals,
+  type Scenario,
+} from "@/lib/plan/roi.ts";
+import { ToolLogo } from "@/components/ToolLogo.tsx";
+import s from "./start.module.css";
+import c from "./cost.module.css";
+
+const cx = (...names: (string | false | null | undefined)[]) => names.filter(Boolean).join(" ");
+const usd = (n: number) => `$${(Math.round(n * 100) / 100).toLocaleString("en-US", { minimumFractionDigits: n % 1 ? 2 : 0, maximumFractionDigits: 2 })}`;
+const whole = (n: number) => `${n < 0 ? "−" : ""}$${Math.abs(Math.round(n)).toLocaleString("en-US")}`;
+const SC_WORD: Record<Scenario, string> = { conservative: "If it helps a little", expected: "Expected", optimistic: "If it helps a lot" };
+
+/** A starting value for an hour of the owner's time: theirs if they gave one, else a labelled guess. */
+function hourlyFrom(impacts: (ImpactView | null)[]): { value: number; theirs: boolean } {
+  for (const i of impacts) {
+    const own = i?.yourNumbers.find((n) => /hour/i.test(n.label) && /usd|\$/.test(n.unit));
+    if (own) return { value: own.value, theirs: true };
+  }
+  for (const i of impacts) {
+    const a = i?.assumed.find((n) => /hour/i.test(n.label) && /usd|\$/.test(n.unit));
+    if (a) return { value: a.value, theirs: false };
+  }
+  return { value: 30, theirs: false };
+}
+
+export function CostPayback({ plan, catalog, impactFor }: { plan: Plan; catalog: CatalogRecord[]; impactFor: Record<string, ImpactView | null> }) {
+  const byId = new Map(catalog.map((r) => [r.id, r]));
+  const rows = plan.sections
+    .filter((sec) => sec.tool)
+    .map((sec) => ({ sec, r: byId.get(sec.tool!.id) }))
+    .filter((x): x is { sec: Plan["sections"][number]; r: CatalogRecord } => Boolean(x.r));
+  const startHourly = hourlyFrom(rows.map((x) => impactFor[x.sec.id] ?? null));
+  const [hourly, setHourly] = useState(startHourly.value);
+  const [setupHours, setSetupHours] = useState(DEFAULT_SETUP_HOURS);
+  const [timeToMoney, setTimeToMoney] = useState(DEFAULT_TIME_TO_MONEY);
+  const [share, setShare] = useState(DEFAULT_FIX_SHARE);
+  /** Owner's own "this problem costs me $X a month", by section, when we had no estimate. */
+  const [own, setOwn] = useState<Record<string, string>>({});
+
+  if (!rows.length) return null;
+  const sum = totals(rows.map((x) => x.r));
+
+  return (
+    <section className={cx(s.card, c.wrap)} aria-labelledby="cost-h">
+      <div className={s.cardTop}>
+        <h2 className={s.h3} id="cost-h">What it costs and when it pays off</h2>
+        <span className={s.small}>Prices come from each company&apos;s own pricing page. Payback is an estimate you can change, never a promise.</span>
+      </div>
+
+      <div className={c.totals}>
+        <div><small>Each month</small><b>{usd(sum.monthly)}</b></div>
+        <div><small>First year</small><b>{usd(sum.firstYear)}</b></div>
+        <div><small>Tools</small><b>{rows.length}</b></div>
+      </div>
+      {sum.missing.length > 0 && (
+        <p className={s.banner}>Not in the total: {sum.missing.join(", ")}. {sum.missing.length === 1 ? "Its price isn't" : "Their prices aren't"} published. Ask for a written price before you buy.</p>
+      )}
+      <p className={s.small}>First year = 12 months of the prices below. Setup fees, extra users and usage charges aren&apos;t included because we couldn&apos;t confirm them.</p>
+
+      {rows.map(({ sec, r }) => {
+        const p = priceOf(r);
+        const impact = impactFor[sec.id] ?? null;
+        const ownN = Number(own[sec.id]);
+        const problemMonthly = impact
+          ? impact.monthly
+          : own[sec.id] && Number.isFinite(ownN) && ownN > 0
+            ? { low: ownN, expected: ownN, high: ownN }
+            : null;
+        const kind = impact?.kind ?? "time_cost";
+        const pb = payback({ problemMonthly, kind, toolMonthly: p.monthly, fixShare: share, setupHours, hourlyValue: hourly, timeToMoney });
+        return (
+          <article className={c.tool} key={sec.id}>
+            <header className={c.toolHead}>
+              <ToolLogo id={r.id} name={r.name} size={32} />
+              <div>
+                <b>{r.name}</b>
+                <span className={s.small}>For: {sec.heading.toLowerCase()}</span>
+              </div>
+              <span className={s.price}>{p.monthly === null ? "—" : usd(p.monthly)}<small>{p.monthly === null ? "" : "/mo"}</small></span>
+            </header>
+
+            <dl className={c.facts}>
+              <div><dt>Price</dt><dd><span className={cx(c.label, c[`l_${p.label}`])}>{PRICE_LABEL[p.label]}</span>{p.plan && ` · ${p.plan}`}</dd></div>
+              <div><dt>Per year</dt><dd>{p.monthly === null ? "Not published" : usd(p.monthly * 12)}</dd></div>
+              <div><dt>Billing</dt><dd>{p.billing === "yearly" ? "Needs a yearly contract" : p.billing === "monthly" ? "Monthly, cancel any month" : "Not confirmed"}</dd></div>
+              <div><dt>Free plan or trial</dt><dd>{p.freePlan === "yes" ? "Yes" : p.freePlan === "no" ? "No" : "Not confirmed"}</dd></div>
+            </dl>
+            <p className={s.small}>
+              Not confirmed: {p.notConfirmed.filter((x) => x !== "free plan or trial" && x !== "monthly or yearly billing").join(", ")}.{" "}
+              {p.sourceUrl && (
+                <a href={p.sourceUrl} target="_blank" rel="noreferrer">Source: {new URL(p.sourceUrl).hostname.replace(/^www\./, "")} pricing ↗</a>
+              )}{" "}
+              · checked {p.checked}
+            </p>
+
+            {!impact && p.monthly !== null && (
+              <label className={c.field}>
+                <span>We don&apos;t have your numbers for this one. What does &ldquo;{sec.heading.toLowerCase()}&rdquo; cost you a month, roughly? (your time or lost sales)</span>
+                <span className={c.money}>$<input inputMode="decimal" value={own[sec.id] ?? ""} placeholder="e.g. 300" aria-label={`Monthly cost of ${sec.heading}`} onChange={(e) => setOwn((o) => ({ ...o, [sec.id]: e.target.value.replace(/[^\d.]/g, "") }))} /></span>
+              </label>
+            )}
+
+            {pb.ok ? (
+              <>
+                <div className={c.scen} role="table" aria-label={`Payback for ${r.name}`}>
+                  {pb.scenarios.map((x) => (
+                    <div key={x.scenario} className={cx(c.scenCol, x.scenario === "expected" && c.mid)} role="row">
+                      <small role="cell">{SC_WORD[x.scenario]}</small>
+                      <b role="cell" className={x.net < 0 ? c.neg : undefined}>{whole(x.net)}<small>/mo net</small></b>
+                      <span role="cell" className={s.small}>{paybackWords(x.paybackDays)}</span>
+                    </div>
+                  ))}
+                </div>
+                {(() => {
+                  const e = pb.scenarios[1]!;
+                  return (
+                    <p className={c.headline}>
+                      Estimated payback period: <b>{paybackWords(e.paybackDays).toLowerCase()}</b>.{" "}
+                      {kind === "time_cost"
+                        ? `About ${e.hoursSaved ?? "?"} hours of your time back a month (worth ${whole(e.timeValue)}); we count ${Math.round(timeToMoney * 100)}% of that as money.`
+                        : `About ${whole(e.revenue)} a month in new business is possible, not promised.`}
+                    </p>
+                  );
+                })()}
+                <details className={s.disc}>
+                  <summary>How we calculated this</summary>
+                  <div className={s.discBody}>
+                    <ol className={c.steps}>{pb.steps.map((st) => <li key={st}>{st}</li>)}</ol>
+                    {impact && <p className={s.small}>Where the problem&apos;s cost comes from: {impact.math}</p>}
+                  </div>
+                </details>
+              </>
+            ) : (
+              <div className={c.unknown}>
+                <p>{pb.reason}</p>
+              </div>
+            )}
+          </article>
+        );
+      })}
+
+      <details className={s.disc}>
+        <summary>Change the assumptions</summary>
+        <div className={cx(s.discBody, c.knobs)}>
+          <label className={c.field}>
+            <span>What an hour of your time is worth {startHourly.theirs ? "(your number)" : "(a starting guess: change it)"}</span>
+            <span className={c.money}>$<input inputMode="decimal" value={hourly} onChange={(e) => setHourly(Number(e.target.value.replace(/[^\d.]/g, "")) || 0)} /></span>
+          </label>
+          <label className={c.field}>
+            <span>Hours to set up each tool (we couldn&apos;t confirm setup times, so this is a guess)</span>
+            <input inputMode="decimal" value={setupHours} onChange={(e) => setSetupHours(Number(e.target.value.replace(/[^\d.]/g, "")) || 0)} />
+          </label>
+          <label className={c.field}>
+            <span>Share of saved time that really turns into money: {Math.round(timeToMoney * 100)}%</span>
+            <input type="range" min={0} max={100} step={5} value={Math.round(timeToMoney * 100)} onChange={(e) => setTimeToMoney(Number(e.target.value) / 100)} />
+          </label>
+          {(["conservative", "expected", "optimistic"] as Scenario[]).map((k) => (
+            <label className={c.field} key={k}>
+              <span>{SC_WORD[k]}: the tool fixes {Math.round(share[k] * 100)}% of the problem</span>
+              <input type="range" min={0} max={100} step={5} value={Math.round(share[k] * 100)} onChange={(e) => setShare((x) => ({ ...x, [k]: Number(e.target.value) / 100 }))} />
+            </label>
+          ))}
+          <button type="button" className={s.link} style={{ justifySelf: "start", paddingLeft: 0 }} onClick={() => { setHourly(startHourly.value); setSetupHours(DEFAULT_SETUP_HOURS); setTimeToMoney(DEFAULT_TIME_TO_MONEY); setShare(DEFAULT_FIX_SHARE); }}>
+            Reset to our starting numbers
+          </button>
+        </div>
+      </details>
+    </section>
+  );
+}
