@@ -298,8 +298,9 @@ function schedule(sections: PlanSection[]): PlanWeek[] {
     );
     if (steps.length || w <= 4) weeks.push({ week: w, label: PHASE_LABEL[w]!, minutes: steps.reduce((n, st) => n + (st.minutes ?? 0), 0), steps });
   }
-  // Drop empty phases at the end (nothing to do yet is not a phase to show).
+  // Drop empty phases at the start and end (nothing to do yet is not a phase to show).
   while (weeks.length && !weeks[weeks.length - 1]!.steps.length) weeks.pop();
+  while (weeks.length && !weeks[0]!.steps.length) weeks.shift();
   return weeks;
 }
 
