@@ -281,6 +281,8 @@
 .stepper .dot { display: none; }
 .stepper li.stepNow { color: var(--ink); font-weight: 700; }
 .stepper li.stepDone { color: var(--ink); }
+.stepper .stepLink { background: none; border: 0; padding: 0; font: inherit; color: var(--accent); text-decoration: underline; text-underline-offset: 3px; cursor: pointer; min-height: 24px; }
+.stepper .stepLink:hover { color: var(--accent-hover); }
 @media (max-width: 600px) {
   .stepper li:not(.stepNow) .stepLabel { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
 }
