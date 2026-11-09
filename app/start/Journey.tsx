@@ -1455,7 +1455,7 @@ export function Journey({ lookup, catalog, watchCount = 0, entry }: { lookup: Lo
       <>
         <Steps n={6} />
         {banner}
-        <PlanScreen answer={result} recs={recs} catalog={catalog} currentTools={req?.currentTools ?? []} back={() => go(recs ? "tools" : "problems")} />
+        <PlanScreen answer={result} recs={recs} catalog={catalog} currentTools={req?.currentTools ?? []} needsHelp={req?.needsHelp ?? answers.setup === "help"} back={() => go(recs ? "tools" : "problems")} />
       </>,
       { narrow: true },
     );

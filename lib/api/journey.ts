@@ -5,6 +5,7 @@ import { buildAnswer, buildQuestions, businessCard, cleanAnswers, couldNotCheck,
 import type { Answers, JourneyAnswerResponse, JourneyStartResponse } from "../journey/types.ts";
 import { interpretChallenges } from "../challenges/interpret.ts";
 import { challengeSuggestions, serviceSuggestions } from "../challenges/suggest.ts";
+import { reviewIssues } from "../challenges/reviewIssues.ts";
 import { log } from "../shared/logger.ts";
 import { v } from "../shared/validate.ts";
 import { errorResponse, type ApiDeps, type ApiResponse } from "./handlers.ts";
@@ -71,8 +72,13 @@ export async function handleJourneyStart(body: unknown, deps: ApiDeps): Promise<
     const baseState = stateFromAnalysis(analysis, now);
     const base = discoverForJourney(baseState, baseState.profile, undefined, now);
     // Suggestions are made once here and travel in the context, so they stay the same while the owner types.
-    const fromServices = await serviceSuggestions(baseState, deps.llm).catch(() => []);
-    const state = { ...baseState, suggestions: challengeSuggestions(baseState, base, fromServices) };
+    const ctx = { industry: baseState.profile.business.industryLabel, business: baseState.profile.business.name.value ?? "the business" };
+    const [fromServices, issues] = await Promise.all([
+      serviceSuggestions(baseState, deps.llm).catch(() => []),
+      reviewIssues(baseState.reviewTexts ?? [], deps.llm, ctx).catch(() => []),
+    ]);
+    const withIssues = { ...baseState, reviewIssues: issues };
+    const state = { ...withIssues, suggestions: challengeSuggestions(withIssues, base, fromServices) };
     const questions = buildQuestions(state, base);
     const response: JourneyStartResponse = {
       context: encodeContext(state, deps.config.journeySecret),

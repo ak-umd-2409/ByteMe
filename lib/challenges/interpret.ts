@@ -17,6 +17,7 @@ import { llmJson, type LlmProvider } from "../llm/client.ts";
 import { PROBLEMS } from "../problems/catalog.ts";
 import { PROBLEM_KEYS, type ProblemKey } from "../problems/types.ts";
 import { USE_CASES, type UseCase } from "../recommend/types.ts";
+import { log } from "../shared/logger.ts";
 import { v } from "../shared/validate.ts";
 import type { ChallengeSuggestion } from "./match.ts";
 
@@ -48,7 +49,7 @@ export interface OwnerChallenge {
 }
 
 export const MAX_CHALLENGE_CHARS = 1500;
-const MAX_CHALLENGES = 6;
+const MAX_CHALLENGES = 8;
 
 /** Keyword rules for when AI is off: the taxonomy first, then tool categories outside it. */
 const RULES: { pattern: RegExp; problem?: ProblemKey; useCase?: UseCase }[] = [
@@ -97,7 +98,7 @@ function byRules(item: string, id: string, from: OwnerChallenge["from"] = "typed
     id,
     words: item,
     from,
-    title: problem ? PROBLEMS[problem].title : clip(sentence(item), 80),
+    title: clip(sentence(item), 80),
     whatsHappening: `In your words: “${clip(item, 200)}”`,
     whyItMatters: problem ? PROBLEMS[problem].whyItMatters : null,
     problem,
@@ -116,8 +117,9 @@ function fromSuggestion(s: ChallengeSuggestion, id: string): OwnerChallenge {
     id,
     words: s.text,
     from: "picked",
-    title: problem && s.source !== "industry" && s.source !== "services" ? PROBLEMS[problem].title : s.text,
-    whatsHappening: problem ? PROBLEMS[problem].explanation : `You picked: “${s.text}”`,
+    title: s.text,
+    // Only say what's happening when we know; never restate the suggestion.
+    whatsHappening: problem ? PROBLEMS[problem].explanation : "",
     whyItMatters: problem ? PROBLEMS[problem].whyItMatters : null,
     problem,
     useCase,
@@ -130,23 +132,44 @@ function fromSuggestion(s: ChallengeSuggestion, id: string): OwnerChallenge {
 
 const problemKeys = PROBLEM_KEYS as unknown as [ProblemKey, ...ProblemKey[]];
 const useCases = USE_CASES as unknown as [UseCase, ...UseCase[]];
-const llmSchema = v.object({
-  challenges: v.array(
-    v.object({
-      quote: v.string({ min: 4, max: 400 }),
-      title: v.string({ min: 4, max: 80 }),
-      whatsHappening: v.string({ min: 10, max: 260 }),
-      whyItMatters: v.nullable(v.string({ max: 160 })),
-      problemKey: v.nullable(v.oneOf(problemKeys)),
-      useCase: v.nullable(v.oneOf(useCases)),
-      aiCanHelp: v.oneOf(["yes", "partly", "no"] as ["yes", "partly", "no"]),
-      aiHow: v.string({ min: 4, max: 220 }),
-      firstStep: v.nullable(v.string({ max: 120 })),
-      reviews: v.array(v.object({ reviewId: v.string({ max: 200 }), quote: v.string({ min: 8, max: 300 }) }), { max: 6 }),
-    }),
-    { max: MAX_CHALLENGES },
-  ),
-});
+// Lenient on purpose: one long sentence or an unknown label must not throw away the whole answer.
+// Every value is checked and clipped below; anything unknown becomes null.
+const text = (max: number) => v.string({ max });
+const llmSchema = v.object(
+  {
+    challenges: v.array(
+      v.object(
+        {
+          quote: text(2000),
+          title: text(500),
+          whatsHappening: text(2000),
+          whyItMatters: v.optional(v.nullable(text(1000))),
+          problemKey: v.optional(v.nullable(text(100))),
+          useCase: v.optional(v.nullable(text(100))),
+          aiCanHelp: v.optional(v.nullable(text(40))),
+          aiHow: v.optional(v.nullable(text(1000))),
+          firstStep: v.optional(v.nullable(text(500))),
+          reviews: v.optional(v.array(v.object({ reviewId: text(300), quote: text(1000) }, { allowUnknown: true }), { max: 20 })),
+        },
+        { allowUnknown: true },
+      ),
+      { max: 12 },
+    ),
+  },
+  { allowUnknown: true },
+);
+const asProblem = (x: string | null | undefined): ProblemKey | null => ((problemKeys as string[]).includes(x ?? "") ? (x as ProblemKey) : null);
+const asUseCase = (x: string | null | undefined): UseCase | null => ((useCases as string[]).includes(x ?? "") ? (x as UseCase) : null);
+const asLevel = (x: string | null | undefined): "yes" | "partly" | "no" => (x === "yes" || x === "no" || x === "partly" ? x : "partly");
+const words = (s: string | null | undefined, max: number) => {
+  const t = (s ?? "").trim();
+  if (!t) return null;
+  if (t.length <= max) return t;
+  // Cut at a sentence or word boundary.
+  const cut = t.slice(0, max);
+  const end = Math.max(cut.lastIndexOf(". "), cut.lastIndexOf("! "), cut.lastIndexOf("? "));
+  return end > max * 0.5 ? cut.slice(0, end + 1) : `${cut.slice(0, cut.lastIndexOf(" ")).trimEnd()}…`;
+};
 
 async function byAi(items: string[], text: string, ctx: { industry: string; business: string; reviews: ReviewText[] }, llm: LlmProvider): Promise<OwnerChallenge[] | null> {
   const result = await llmJson(llm, llmSchema, {
@@ -169,26 +192,38 @@ async function byAi(items: string[], text: string, ctx: { industry: string; busi
       reviews: ctx.reviews.slice(0, 20).map((r) => ({ reviewId: r.id, rating: r.rating, text: r.text.slice(0, 500) })),
     }),
   });
-  if (!result.ok) return null;
+  if (!result.ok) {
+    log.warn("challenges.ai_unavailable", { reason: result.reason });
+    return null;
+  }
   const byId = new Map(ctx.reviews.map((r) => [r.id, r]));
   const out: OwnerChallenge[] = [];
-  for (const c of result.value.challenges) {
-    if (!isVerbatim(c.quote, text) && !items.some((i) => isVerbatim(c.quote, i))) continue; // the owner must have said it
-    const reviews = c.reviews.filter((r) => {
+  for (const c of result.value.challenges.slice(0, MAX_CHALLENGES)) {
+    const quote = c.quote.trim();
+    // The owner must have said it (short fragments are matched against the items they wrote).
+    const said = quote.length >= 8 ? isVerbatim(quote, text) : items.some((i) => i.toLowerCase().includes(quote.toLowerCase()));
+    const title = words(c.title, 80);
+    const happening = words(c.whatsHappening, 260);
+    if (!said || !title || !happening) {
+      log.info("challenges.ai_item_dropped", { reason: !said ? "quote_not_owner_words" : "missing_text" });
+      continue;
+    }
+    const problem = asProblem(c.problemKey);
+    const reviews = (c.reviews ?? []).filter((r) => {
       const review = byId.get(r.reviewId);
       return review && isVerbatim(r.quote, review.text); // never accept invented evidence
     });
     out.push({
       id: `c${out.length + 1}`,
-      words: c.quote.trim(),
+      words: quote,
       from: "typed",
-      title: c.title.trim(),
-      whatsHappening: c.whatsHappening.trim(),
-      whyItMatters: c.whyItMatters?.trim() || (c.problemKey ? PROBLEMS[c.problemKey].whyItMatters : null),
-      problem: c.problemKey,
-      useCase: c.useCase,
-      ai: c.problemKey === "inconsistent_business_info" ? guideAi(null, c.problemKey) : { level: c.aiCanHelp, how: c.aiHow.trim() },
-      firstStep: c.firstStep?.trim() || (c.problemKey ? PROBLEMS[c.problemKey].nextStep : null),
+      title,
+      whatsHappening: happening,
+      whyItMatters: words(c.whyItMatters, 160) ?? (problem ? PROBLEMS[problem].whyItMatters : null),
+      problem,
+      useCase: asUseCase(c.useCase),
+      ai: problem === "inconsistent_business_info" ? guideAi(null, problem) : words(c.aiHow, 220) ? { level: asLevel(c.aiCanHelp), how: words(c.aiHow, 220)! } : guideAi(asUseCase(c.useCase), problem),
+      firstStep: words(c.firstStep, 120) ?? (problem ? PROBLEMS[problem].nextStep : null),
       reviews: [...new Map(reviews.map((r) => [r.reviewId, { reviewId: r.reviewId, quote: r.quote.trim() }])).values()],
       by: "ai",
     });
@@ -211,25 +246,32 @@ export async function interpretChallenges(input: {
   reviews: ReviewText[];
   llm?: LlmProvider;
 }): Promise<OwnerChallenge[]> {
-  const text = (input.text ?? "").slice(0, MAX_CHALLENGE_CHARS).trim();
+  const typedText = (input.text ?? "").slice(0, MAX_CHALLENGE_CHARS).trim();
+  const pickedS = input.picks.map((id) => input.suggestions.find((s) => s.id === id)).filter((s): s is ChallengeSuggestion => Boolean(s));
+  // Picked suggestions are read together with what the owner typed, so they get real explanations too.
+  const text = [typedText, ...pickedS.map((s) => s.text)].filter(Boolean).join("\n");
   const items = text ? splitChallenges(text) : [];
+  const pickFor = (words: string) => pickedS.find((s) => norm(s.text) === norm(words) || norm(words).includes(norm(s.text)) || norm(s.text).includes(norm(words)));
   let typed: OwnerChallenge[] = [];
   if (items.length) {
     const ai =
       input.llm && input.llm.name !== "disabled"
         ? await byAi(items, text, { industry: industryInfo((input.industry ?? "other") as IndustryKey).label, business: input.business, reviews: input.reviews }, input.llm)
         : null;
-    typed = ai ?? [];
-    // Anything the AI didn't cover still counts, by the rules.
+    typed = (ai ?? []).map((ch) => {
+      const s = pickFor(ch.words);
+      if (!s) return ch;
+      return { ...ch, from: "picked" as const, problem: ch.problem ?? s.problem ?? null, useCase: ch.useCase ?? s.useCase ?? null };
+    });
+    // Anything the AI didn't cover still counts: a picked suggestion as itself, typed text by the rules.
     for (const item of items) {
       const covered = typed.some((c) => norm(item).includes(norm(c.words)) || norm(c.words).includes(norm(item)));
-      if (!covered) typed.push(byRules(item, `c${typed.length + 1}`));
+      if (covered) continue;
+      const s = pickFor(item);
+      typed.push(s ? fromSuggestion(s, `c${typed.length + 1}`) : byRules(item, `c${typed.length + 1}`));
     }
   }
-  const picked = input.picks
-    .map((id) => input.suggestions.find((s) => s.id === id))
-    .filter((s): s is ChallengeSuggestion => Boolean(s))
-    .map((s, i) => fromSuggestion(s, `p${i + 1}`));
+  const picked: OwnerChallenge[] = [];
 
   // Merge: the owner's typed words win over a picked suggestion of the same problem type.
   const out: OwnerChallenge[] = [];

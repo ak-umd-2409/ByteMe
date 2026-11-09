@@ -108,6 +108,33 @@ describe("the owner's challenges", () => {
     assert.equal(out[0]!.ai?.level, "partly");
   });
 
+  it("with AI: a long or oddly labelled answer is trimmed, not thrown away", async () => {
+    const llm = fakeLlm({
+      challenges: [
+        {
+          quote: "catering orders by text get lost",
+          title: "Catering orders sent by text get lost between messages and nobody can find them later on",
+          whatsHappening: `${"Large catering orders arrive as texts. ".repeat(12)}`,
+          whyItMatters: null,
+          problemKey: "catering_orders",
+          useCase: "customer-messaging",
+          aiCanHelp: "maybe",
+          aiHow: "A shared inbox can collect texts and orders in one place.",
+          firstStep: null,
+          reviews: [{ reviewId: "nope", quote: "x" }],
+        },
+      ],
+    });
+    const out = await interpretChallenges({ text: "Our catering orders by text get lost", picks: [], suggestions: [], industry: "restaurant", business: "X", reviews: [], llm });
+    assert.equal(out.length, 1);
+    assert.equal(out[0]!.by, "ai");
+    assert.ok(out[0]!.title.length <= 80 && out[0]!.whatsHappening.length <= 261);
+    assert.equal(out[0]!.problem, null, "unknown problem labels become null");
+    assert.equal(out[0]!.useCase, "customer-messaging");
+    assert.equal(out[0]!.ai?.level, "partly");
+    assert.deepEqual(out[0]!.reviews, []);
+  });
+
   it("merges a picked suggestion with the same problem the owner typed", async () => {
     const suggestions: ChallengeSuggestion[] = [{ id: "s1", text: "Writing quotes at night", why: "", source: "industry", keywords: [], problem: "slow_quotes", useCase: "quotes" }];
     const out = await interpretChallenges({ text: "quotes take forever", picks: ["s1"], suggestions, industry: "hvac", business: "X", reviews: [] });

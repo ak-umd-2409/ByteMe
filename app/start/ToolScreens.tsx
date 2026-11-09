@@ -13,6 +13,7 @@ import type { CatalogRecord } from "@/lib/catalog/types.ts";
 import type { BusinessProfile, Recommendation, RecommendationResult, ToolChoice } from "@/lib/recommend/types.ts";
 import s from "./start.module.css";
 import t from "./tools.module.css";
+import { GUIDES } from "@/lib/advisor/knowledge.ts";
 
 const cx = (...names: (string | false | null | undefined)[]) => names.filter(Boolean).join(" ");
 const usd = (n: number) => `$${Math.round(n).toLocaleString("en-US")}`;
@@ -269,14 +270,32 @@ export function WaysToFix({
         </div>
       ) : (
         <article className={cx(s.card, t.recommendationCard)} style={{ maxWidth: 760 }}>
-          <div className={s.cardTop}>
-            <span className={t.typetag}>No checked tool yet</span>
-            <h3 className={s.h3}>We won't suggest a tool we haven't checked</h3>
-          </div>
-          <p>None of the tools we know for &ldquo;{problem?.problem.title}&rdquo; has passed our safety check yet. The first step on the previous screen works without a tool, and a free advisor can help you choose one.</p>
-          <div className={t.actions}>
-            <a className={cx(s.btn, s.primary)} href={biz.help?.url ?? SBDC_URL} target="_blank" rel="noreferrer">Get free help from the Maryland SBDC</a>
-          </div>
+          {(() => {
+            const guide = problem ? GUIDES[problem.problem.useCase] : null;
+            return (
+              <>
+                <div className={s.cardTop}>
+                  <span className={t.typetag}>No tool needed to start</span>
+                  <h3 className={s.h3}>You can do this yourself</h3>
+                </div>
+                {guide ? (
+                  <p>
+                    <b>{guide.freeFirst.title}.</b> {guide.freeFirst.detail}
+                  </p>
+                ) : (
+                  <p>Start with the free step on the previous screen.</p>
+                )}
+                <span className={s.small}>We haven&apos;t checked a tool for &ldquo;{problem?.problem.title.toLowerCase()}&rdquo; yet, so we won&apos;t suggest one.</span>
+                {biz.needsHelp && (
+                  <div className={t.actions}>
+                    <a className={cx(s.btn, s.secondary)} href={biz.help?.url ?? SBDC_URL} target="_blank" rel="noreferrer">
+                      Find free help setting this up
+                    </a>
+                  </div>
+                )}
+              </>
+            );
+          })()}
         </article>
       )}
 

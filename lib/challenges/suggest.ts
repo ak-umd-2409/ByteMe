@@ -57,6 +57,17 @@ function fromReviews(state: JourneyState): ChallengeSuggestion[] {
     });
 }
 
+function fromReviewIssues(state: JourneyState): ChallengeSuggestion[] {
+  return (state.reviewIssues ?? []).map((i) => ({
+    id: `issue-${i.id}`,
+    text: i.title,
+    why: `${plural(i.reviews.length, "review")} we read ${i.reviews.length === 1 ? "describes" : "describe"} this`,
+    source: "reviews" as const,
+    keywords: i.title.toLowerCase().match(/[a-z]{4,}/g) ?? [],
+    ...(i.useCase ? { useCase: i.useCase } : {}),
+  }));
+}
+
 function fromPublicInfo(state: JourneyState, base: DiscoveryResult): ChallengeSuggestion[] {
   const out: ChallengeSuggestion[] = [];
   const site = state.website;
@@ -135,7 +146,7 @@ export async function serviceSuggestions(state: JourneyState, llm: LlmProvider |
 export function challengeSuggestions(state: JourneyState, base: DiscoveryResult, fromServices: ChallengeSuggestion[] = []): ChallengeSuggestion[] {
   const industry = (state.profile.business.industry.value ?? "other") as IndustryKey;
   const label = industryInfo(industry).label;
-  const evidence = [...fromReviews(state), ...fromPublicInfo(state, base)];
+  const evidence = [...fromReviewIssues(state), ...fromReviews(state), ...fromPublicInfo(state, base)];
   const everyday: ChallengeSuggestion[] = libraryFor(industry).map((e) => ({
     id: e.id,
     text: e.text,

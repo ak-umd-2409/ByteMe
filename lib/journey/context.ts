@@ -6,6 +6,7 @@ import type { OnboardingProfile, ReviewAnalysis, WebsiteAnalysis } from "../busi
 import { v } from "../shared/validate.ts";
 import type { ChallengeSuggestion } from "../challenges/match.ts";
 import type { ReviewText } from "../challenges/interpret.ts";
+import type { ReviewIssue } from "../challenges/reviewIssues.ts";
 import type { Answers } from "./types.ts";
 
 /**
@@ -31,6 +32,8 @@ export interface JourneyState {
   reviewTexts?: ReviewText[];
   /** Challenge suggestions made for this business at the start (kept so they stay stable). */
   suggestions?: ChallengeSuggestion[];
+  /** Problems customers describe in reviews (AI-grouped, quotes checked), found at the start. */
+  reviewIssues?: ReviewIssue[];
 }
 
 export const MAX_CONTEXT_CHARS = 150_000;
@@ -62,6 +65,7 @@ const stateSchema = v.object(
         { max: 16 },
       ),
     ),
+    reviewIssues: v.optional(v.array(v.object({ id: v.string({ max: 20 }), title: v.string({ max: 120 }), whatsHappening: v.string({ max: 300 }) }, { allowUnknown: true }), { max: 6 })),
   },
   { allowUnknown: true },
 );

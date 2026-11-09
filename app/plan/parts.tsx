@@ -58,7 +58,7 @@ export function ReadyWords({ items, title = "Words ready to use" }: { items: Rea
   );
 }
 
-export function FreeHelp({ plan }: { plan: Plan }) {
+export function FreeHelp({ plan, title = "Free help, money and classes" }: { plan: Plan; title?: string }) {
   // The local advisor and the next most useful link first; the rest one tap away.
   const rows = [
     ...plan.help.map((h) => (
@@ -90,11 +90,11 @@ export function FreeHelp({ plan }: { plan: Plan }) {
     <section className={s.card} aria-labelledby="help-h">
       <div className={s.cardTop}>
         <h2 className={s.h3} id="help-h">
-          Free help, money and classes
+          {title}
         </h2>
       </div>
       {rows.slice(0, 2)}
-      {rows.length > 2 && <ShowMore label={`More free help, money and classes (${rows.length - 2})`}>{rows.slice(2)}</ShowMore>}
+      {rows.length > 2 && <ShowMore label={`Grants, loans and classes (${rows.length - 2})`}>{rows.slice(2)}</ShowMore>}
       <p className={s.hint}>
         Links checked {shortDate(plan.resourcesChecked)}. Programs change, so check you qualify on each page. We don't apply for anything for you.
       </p>

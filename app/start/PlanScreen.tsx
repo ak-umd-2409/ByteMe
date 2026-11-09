@@ -28,12 +28,15 @@ export function PlanScreen({
   recs,
   catalog,
   currentTools,
+  needsHelp = false,
   back,
 }: {
   answer: JourneyAnswerResponse;
   recs: RecommendationResult | null;
   catalog: CatalogRecord[];
   currentTools: string[];
+  /** The owner asked for help setting tools up: show where to get it. */
+  needsHelp?: boolean;
   back: () => void;
 }) {
   const byId = new Map(catalog.map((r) => [r.id, r]));
@@ -54,7 +57,34 @@ export function PlanScreen({
     Object.fromEntries(Object.entries(options).map(([k, list]) => [k, list?.[0]?.id]).filter(([, v]) => v)),
   );
 
-  const plan = buildPlan({ answer, choices, catalog, currentTools });
+  // Everything else the owner told us, and problems from reviews, so the plan covers all of it.
+  const extras = [...(answer.findings?.yours ?? []), ...(answer.findings?.noticed ?? [])]
+    .filter((f) => !f.problemKey)
+    .map((f) => ({ key: f.id.startsWith("yours-") ? `owner-${f.id.slice(6)}` : f.id, heading: f.title, firstStep: f.whatToDo, aiHow: f.ai && f.ai.level !== "no" ? f.ai.how : null }));
+  const plan = buildPlan({ answer, choices, catalog, currentTools, extras });
+
+  // Ticked steps, remembered in this browser for this business.
+  const doneKey = `mainstreet.plan.done.${plan.business}`;
+  const [done, setDone] = useState<Set<string>>(new Set());
+  useEffect(() => {
+    try {
+      setDone(new Set(JSON.parse(localStorage.getItem(doneKey) ?? "[]") as string[]));
+    } catch {
+      /* storage blocked: ticks just won't be remembered */
+    }
+  }, [doneKey]);
+  const toggleDone = (id: string) =>
+    setDone((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      try {
+        localStorage.setItem(doneKey, JSON.stringify([...next]));
+      } catch {
+        /* ignore */
+      }
+      return next;
+    });
   const words = readyContent(answer.business, plan, catalog);
   const [share, setShare] = useState<{ url: string; stored: boolean; expiresAt: string | null } | { error: string } | "busy" | null>(null);
   // A link shows the plan as it was when made: changing a tool means making a new one.
@@ -78,8 +108,13 @@ export function PlanScreen({
   const link = share && typeof share === "object" && "url" in share ? share : null;
   const advisor = plan.help[0]!;
   const mail = (subject: string, body: string) => `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-  const toolProblems = answer.opportunities.filter((o) => o.fix.kind !== "free" && (options[o.problemKey]?.length ?? 0) > 0);
-  const stepCount = plan.sections.reduce((n, sec) => n + sec.steps.length, 0);
+  const toolProblems = [
+    ...answer.opportunities.filter((o) => o.fix.kind !== "free" && (options[o.problemKey]?.length ?? 0) > 0).map((o) => ({ problemKey: o.problemKey as string, headline: o.headline })),
+    ...extras.filter((x) => (options[x.key as ProblemKey]?.length ?? 0) > 0).map((x) => ({ problemKey: x.key, headline: x.heading })),
+  ];
+  const allSteps = plan.sections.flatMap((sec) => sec.steps.map((st) => st.id));
+  const stepCount = allSteps.length;
+  const doneCount = allSteps.filter((id) => done.has(id)).length;
 
   return (
     <>
@@ -87,7 +122,8 @@ export function PlanScreen({
         <h1 className={s.title}>Your plan for {plan.business}</h1>
         <p className={s.lead}>Your first 30 days: free fixes first, then one tool at a time. Print it, copy the ready-made words, or send it to a free advisor.</p>
         <span className={s.small}>
-          {stepCount} steps
+          {stepCount} {stepCount === 1 ? "step" : "steps"}
+          {doneCount > 0 && ` · ${doneCount} done`}
           {plan.totals.monthly > 0 && ` · ${usd(plan.totals.monthly)} a month${plan.totals.unknownPrices ? " plus prices that aren't public" : ""}`}
           {plan.totals.setupMinutes > 0 && ` · about ${hours(plan.totals.setupMinutes)} of setup`}
         </span>
@@ -105,8 +141,8 @@ export function PlanScreen({
                 <b>{o.headline}</b>
               </span>
               <div className={s.row}>
-                {options[o.problemKey]!.map((opt) => {
-                  const on = choices[o.problemKey] === opt.id;
+                {options[o.problemKey as ProblemKey]!.map((opt) => {
+                  const on = (choices as Record<string, string | undefined>)[o.problemKey] === opt.id;
                   return (
                     <button key={opt.id} type="button" className={s.chipsel} aria-pressed={on} onClick={() => setChoices((c) => ({ ...c, [o.problemKey]: opt.id }))}>
                       {on ? "✓ " : ""}
@@ -114,8 +150,8 @@ export function PlanScreen({
                     </button>
                   );
                 })}
-                <button type="button" className={s.chipsel} aria-pressed={!choices[o.problemKey]} onClick={() => setChoices((c) => ({ ...c, [o.problemKey]: undefined }))}>
-                  {!choices[o.problemKey] ? "✓ " : ""}Decide later
+                <button type="button" className={s.chipsel} aria-pressed={!(choices as Record<string, string | undefined>)[o.problemKey]} onClick={() => setChoices((c) => ({ ...c, [o.problemKey]: undefined }))}>
+                  {!(choices as Record<string, string | undefined>)[o.problemKey] ? "✓ " : ""}No tool for now
                 </button>
               </div>
             </div>
@@ -157,8 +193,8 @@ export function PlanScreen({
             </div>
             <ul className={s.planSteps}>
               {sec.steps.map((st) => (
-                <li key={st.id}>
-                  <span className={s.box} aria-hidden="true" />
+                <li key={st.id} className={done.has(st.id) ? s.stepDoneRow : undefined}>
+                  <input type="checkbox" className={s.tick2} id={`step-${st.id}`} checked={done.has(st.id)} onChange={() => toggleDone(st.id)} aria-label={`Done: ${st.title}`} />
                   <span className={s.optionText}>
                     <b>
                       {st.title}
@@ -185,16 +221,16 @@ export function PlanScreen({
       <section className={cx(s.card, s.noPrint)} aria-labelledby="send-h">
         <div className={s.cardTop}>
           <h2 className={s.h3} id="send-h">
-            Send it to your advisor
+            Share your plan
           </h2>
           <span className={s.small}>
-            {advisor.name} is free. Send them your plan so they can look before you meet{advisor.phone ? `, then call ${advisor.phone} to book a time` : ""}.
+            Send it to yourself, or to someone helping you. {advisor.name} advises for free{advisor.phone ? ` (${advisor.phone})` : ""}: send them the link so they can look before you meet.
           </span>
         </div>
         <div className={s.shareBox}>
           {!link && (
             <button type="button" className={cx(s.btn, s.primary)} style={{ justifySelf: "start" }} onClick={makeLink} disabled={share === "busy"}>
-              {share === "busy" ? "Making your link…" : "Make a link for my advisor"}
+              {share === "busy" ? "Making your link…" : "Make a link to share"}
             </button>
           )}
           {share && typeof share === "object" && "error" in share && <p className={s.banner}>{share.error}</p>}
@@ -223,7 +259,7 @@ export function PlanScreen({
         </a>
       </section>
 
-      <FreeHelp plan={plan} />
+      {needsHelp && <FreeHelp plan={plan} title="Find help setting this up" />}
 
       <p className={s.hint}>
         Estimates and prices come from public pages checked on the dates shown on each tool. Confirm prices with the company before you buy. Not legal advice.
