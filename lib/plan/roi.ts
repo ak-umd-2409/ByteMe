@@ -266,3 +266,26 @@ export function costSummary(
     totals: totals(rows.map((x) => x.r)),
   };
 }
+
+export interface BreakEven {
+  /** Extra customers (orders, jobs) a month that cover the tool's monthly price. */
+  customers: number;
+  /** Extra customers in the first month to also cover setup time. */
+  firstMonthCustomers: number;
+  /** Hours of the owner's time a month that would cover the price instead. */
+  hours: number;
+}
+
+/**
+ * When we don't know what a problem costs the owner, the honest number is the bar the tool
+ * has to clear: how many extra customers (at a typical order value) or saved hours pay for it.
+ * Never fewer than 1 customer.
+ */
+export function breakEven(toolMonthly: number, orderValue: number, hourlyValue: number, setupHours: number): BreakEven | null {
+  if (!(toolMonthly >= 0) || !(orderValue > 0) || !(hourlyValue > 0)) return null;
+  return {
+    customers: Math.max(1, Math.ceil(toolMonthly / orderValue)),
+    firstMonthCustomers: Math.max(1, Math.ceil((toolMonthly + Math.max(0, setupHours) * hourlyValue) / orderValue)),
+    hours: Math.max(0.5, Math.ceil((toolMonthly / hourlyValue) * 2) / 2),
+  };
+}

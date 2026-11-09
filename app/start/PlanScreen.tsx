@@ -19,7 +19,7 @@ import { CostPayback } from "./CostPayback.tsx";
 import { CostTable } from "../plan/CostTable.tsx";
 import { costSummary } from "@/lib/plan/roi.ts";
 import { CopyButton } from "../plan/Copy.tsx";
-import { FreeHelp, ReadyWords, Weeks } from "../plan/parts.tsx";
+import { FreeHelp, ReadyWords } from "../plan/parts.tsx";
 
 const cx = (...names: (string | false | null | undefined)[]) => names.filter(Boolean).join(" ");
 const usd = (n: number) => `$${Math.round(n).toLocaleString("en-US")}`;
@@ -80,7 +80,7 @@ export function PlanScreen({
   for (const [id, tool] of Object.entries(chosenTools)) {
     if (!id.startsWith("kit-")) continue;
     const r = catalog.find((x) => x.id === tool);
-    if (r) extras.push({ key: id, heading: `${r.name} (from your starter kit)`, firstStep: null, aiHow: null });
+    if (r) extras.push({ key: id, heading: `${r.category} (starter kit)`, firstStep: null, aiHow: null });
   }
   const plan = buildPlan({ answer, choices, catalog, currentTools, extras, needsHelp });
 
@@ -135,10 +135,6 @@ export function PlanScreen({
   const link = share && typeof share === "object" && "url" in share ? share : null;
   const advisor = plan.help[0]!;
   const mail = (subject: string, body: string) => `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-  const toolProblems = [
-    ...answer.opportunities.filter((o) => o.fix.kind !== "free" && (options[o.problemKey]?.length ?? 0) > 0).map((o) => ({ problemKey: o.problemKey as string, headline: o.headline })),
-    ...extras.filter((x) => (options[x.key as ProblemKey]?.length ?? 0) > 0).map((x) => ({ problemKey: x.key, headline: x.heading })),
-  ];
   const allSteps = plan.sections.flatMap((sec) => sec.steps.map((st) => st.id));
   const stepCount = allSteps.length;
   const doneCount = allSteps.filter((id) => done.has(id)).length;
@@ -156,7 +152,7 @@ export function PlanScreen({
       </section>
       <header className={s.intro}>
         <h1 className={s.title}>Your plan for {plan.business}</h1>
-        <p className={s.lead}>Your first 30 days: free fixes first, then one tool at a time. Print it, copy the ready-made words, or send it to a free advisor.</p>
+        <p className={s.lead}>Free fixes first, then one tool at a time. Print it, copy the ready-made words, or send it to a free advisor.</p>
         <span className={s.small}>
           {stepCount} {stepCount === 1 ? "step" : "steps"}
           {doneCount > 0 && ` · ${doneCount} done`}
@@ -165,35 +161,12 @@ export function PlanScreen({
         </span>
       </header>
 
-      {toolProblems.length > 0 && (
-        <section className={cx(s.card, s.noPrint)}>
-          <div className={s.cardTop}>
-            <h2 className={s.h3}>Pick one fix for each problem</h2>
-            <span className={s.small}>Best fit first. Only ✓ Verified tools.</span>
-          </div>
-          {toolProblems.map((o) => (
-            <div className={s.checkRow} key={o.problemKey}>
-              <span className={s.optionText}>
-                <b>{o.headline}</b>
-              </span>
-              <div className={s.row}>
-                {options[o.problemKey as ProblemKey]!.map((opt) => {
-                  const on = (choices as Record<string, string | undefined>)[o.problemKey] === opt.id;
-                  return (
-                    <button key={opt.id} type="button" className={s.chipsel} aria-pressed={on} onClick={() => setChoices((c) => ({ ...c, [o.problemKey]: opt.id }))}>
-                      {on ? "✓ " : ""}
-                      {opt.name} · {usd(opt.price)}/mo{byId.get(opt.id)?.sample ? " (sample)" : ""}
-                    </button>
-                  );
-                })}
-                <button type="button" className={s.chipsel} aria-pressed={!(choices as Record<string, string | undefined>)[o.problemKey]} onClick={() => setChoices((c) => ({ ...c, [o.problemKey]: undefined }))}>
-                  {!(choices as Record<string, string | undefined>)[o.problemKey] ? "✓ " : ""}No tool for now
-                </button>
-              </div>
-            </div>
-          ))}
-        </section>
-      )}
+      <p className={cx(s.small, s.noPrint)}>
+        Want a different tool?{" "}
+        <button type="button" className={s.link} style={{ padding: 0, minHeight: 0 }} onClick={back}>
+          Change it on the tools screen
+        </button>
+      </p>
 
       {plan.notes.length > 0 && (
         <div className={s.banner}>
@@ -203,9 +176,8 @@ export function PlanScreen({
         </div>
       )}
 
-      <CostPayback plan={plan} catalog={catalog} impactFor={impactFor} />
+      <CostPayback plan={plan} catalog={catalog} impactFor={impactFor} industry={answer.recommendation.ready ? answer.recommendation.request.business.industry : null} />
 
-      <Weeks plan={plan} />
 
       <ol className={s.planList}>
         {plan.sections.map((sec, i) => (
