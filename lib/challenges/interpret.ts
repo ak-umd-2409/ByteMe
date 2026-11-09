@@ -90,6 +90,16 @@ function guideAi(useCase: UseCase | null, problem: ProblemKey | null): OwnerChal
   return { level: "yes", how: GUIDES[useCase].whatAiDoes };
 }
 
+/** A short card title from the owner's sentence: the part before "because", "so", a comma or a dash. */
+export function shortTitle(item: string): string {
+  const s = sentence(item).replace(/^(we|i)('re| are| am)? (are )?(struggling|having trouble) (with|to) /i, "");
+  const head = s.split(/\s+(?:because|since|so that|so|which|but)\s+|[,;:–—]\s*|\s-\s/i)[0] ?? s;
+  const t = head.length >= 12 ? head : s;
+  if (t.length <= 60) return t.charAt(0).toUpperCase() + t.slice(1);
+  const cut = t.slice(0, 60);
+  return `${cut.slice(0, cut.lastIndexOf(" ")).trimEnd()}…`;
+}
+
 function byRules(item: string, id: string, from: OwnerChallenge["from"] = "typed"): OwnerChallenge {
   const hit = RULES.find((r) => r.pattern.test(item));
   const problem = hit?.problem ?? null;
@@ -98,7 +108,7 @@ function byRules(item: string, id: string, from: OwnerChallenge["from"] = "typed
     id,
     words: item,
     from,
-    title: clip(sentence(item), 80),
+    title: shortTitle(item),
     whatsHappening: `In your words: “${clip(item, 200)}”`,
     whyItMatters: problem ? PROBLEMS[problem].whyItMatters : null,
     problem,
@@ -199,10 +209,20 @@ async function byAi(items: string[], text: string, ctx: { industry: string; busi
   const byId = new Map(ctx.reviews.map((r) => [r.id, r]));
   const out: OwnerChallenge[] = [];
   for (const c of result.value.challenges.slice(0, MAX_CHALLENGES)) {
-    const quote = c.quote.trim();
-    // The owner must have said it (short fragments are matched against the items they wrote).
-    const said = quote.length >= 8 ? isVerbatim(quote, text) : items.some((i) => i.toLowerCase().includes(quote.toLowerCase()));
-    const title = words(c.title, 80);
+    let quote = c.quote.trim();
+    // The owner must have said it. If the AI rephrased, use the owner's own sentence that it's clearly about.
+    let said = quote.length >= 8 ? isVerbatim(quote, text) : items.some((i) => i.toLowerCase().includes(quote.toLowerCase()));
+    if (!said) {
+      const qw = new Set(norm(quote).split(" ").filter((w) => w.length > 3));
+      const best = items
+        .map((i) => ({ i, n: norm(i).split(" ").filter((w) => qw.has(w)).length }))
+        .sort((a, b) => b.n - a.n)[0];
+      if (best && qw.size && best.n / qw.size >= 0.5) {
+        quote = best.i;
+        said = true;
+      }
+    }
+    const title = words(c.title, 60);
     const happening = words(c.whatsHappening, 260);
     if (!said || !title || !happening) {
       log.info("challenges.ai_item_dropped", { reason: !said ? "quote_not_owner_words" : "missing_text" });
